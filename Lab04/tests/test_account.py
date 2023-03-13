@@ -1,4 +1,3 @@
-import traceback
 import unittest
 from unittest.mock import MagicMock
 
@@ -40,9 +39,7 @@ class TestAccount(unittest.TestCase):
 
         try:
             source.transfer_funds(destination, 300.0)
-        except Exception as e:
-            print(e)
-            traceback.print_exc()
+        except Exception as _:
             pass
 
         self.assertEqual(150.0, destination.balance(), "Incorrect destination balance!")
@@ -70,6 +67,8 @@ class TestAccount(unittest.TestCase):
 
         self.assertEqual(53.0, italian_account.balance(), "Incorrect destination balance!")
         self.assertEqual(297.0, canadian_account.balance(), "Incorrect source balance!")
+
+        currency_service.get_conversion_rate.assert_called_once_with('EUR', 'CAD')
 
 
 # run the test
