@@ -1,7 +1,7 @@
 import unittest
 import datetime
 
-from account import Date
+from date import Date
 
 
 class TestDate(unittest.TestCase):
