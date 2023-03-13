@@ -1,3 +1,4 @@
+import traceback
 import unittest
 from unittest.mock import MagicMock
 
@@ -40,7 +41,8 @@ class TestAccount(unittest.TestCase):
         try:
             source.transfer_funds(destination, 300.0)
         except Exception as e:
-            # print(e)
+            print(e)
+            traceback.print_exc()
             pass
 
         self.assertEqual(150.0, destination.balance(), "Incorrect destination balance!")
