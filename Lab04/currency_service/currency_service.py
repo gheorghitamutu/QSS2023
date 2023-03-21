@@ -3,7 +3,7 @@ class CurrencyService:
         pass
 
     @staticmethod
-    def get_conversion_rate(self, a, b):
+    def get_conversion_rate(a, b):
         if a == b:
             return 1.0
 

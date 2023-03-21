@@ -24,8 +24,17 @@ class Account:
 
         self.withdraw(amount)
 
-    def balance(self):
-        return self._balance
+    def balance(self, currency=None):
+        if currency is None:
+            return self._balance
+
+        balance = self.balance()
+        if self._currency != currency:
+            conversion_rate = self._currency_service.get_conversion_rate(self._currency, currency)
+            balance = conversion_rate * balance
+
+        return balance
+
 
     def minimum_balance(self):
         return self._minimum_balance
@@ -35,3 +44,4 @@ class Account:
 
     def get_currency(self):
         return self._currency
+
