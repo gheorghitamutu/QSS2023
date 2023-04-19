@@ -22,6 +22,10 @@ jobs:
       - name: Run the Maven verify phase
         working-directory: ./Project/SchoolTimetable
         run: mvn --batch-mode --update-snapshots -e -X verify
+      
+      - name: Run the Maven test phase
+        working-directory: ./Project/SchoolTimetable
+        run: mvn --batch-mode --update-snapshots -e -X test
         
       - run: mkdir staging && cp ./Project/SchoolTimetable/target/*.jar staging
       - uses: actions/upload-artifact@v3
