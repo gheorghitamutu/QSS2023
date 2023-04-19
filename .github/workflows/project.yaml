@@ -41,6 +41,7 @@ jobs:
         uses: mikepenz/action-junit-report@v3
         if: success() || failure() # always run even if the previous step fails
         with:
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
           report_paths: '**/Project/SchoolTimetable/target/surefire-reports/TEST-*.xml'
         
       - run: mkdir staging && cp ./Project/SchoolTimetable/target/*.jar staging
