@@ -3,7 +3,7 @@ name: Java CI
 on:
   push:
     branches:
-      - release
+      - main
   workflow_dispatch:
     inputs:
       isPreRelease:
@@ -11,10 +11,11 @@ on:
         required: true
         default: true 
         type: boolean
-
+          
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions: write-all
 
     steps:
       - uses: actions/checkout@v3
@@ -37,13 +38,25 @@ jobs:
         working-directory: ./Project/SchoolTimetable
         run: mvn --batch-mode --update-snapshots -e -X test
         
+      - name: Publish Test Report
+        # uses: mikepenz/action-junit-report@v3
+        # uses: scacap/action-surefire-report@v1
+        uses: EnricoMi/publish-unit-test-result-action@v2
+        if: always() # always run even if the previous step fails
+        with:
+          # name: junit-test-results
+          github_token: "${{ secrets.GITHUB_TOKEN }}"
+          # path: '**/Project/SchoolTimetable/target/surefire-reports/TEST-*.xml'
+          # report_paths: '**/Project/SchoolTimetable/target/surefire-reports/TEST-*.xml'
+          files: '**/Project/SchoolTimetable/target/surefire-reports/TEST-*.xml'
+        
       - run: mkdir staging && cp ./Project/SchoolTimetable/target/*.jar staging
       - uses: actions/upload-artifact@v3
         with:
           name: Package
           path: staging
   
-  publish_job:
+  publish:
     name: "Publish to release"
     permissions: write-all
     runs-on: ubuntu-latest
