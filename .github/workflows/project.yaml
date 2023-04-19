@@ -16,12 +16,15 @@ jobs:
           distribution: 'corretto'
 
       - name: Build with Maven
-        run: mvn --batch-mode --update-snapshots package
+        working-directory: ./Project/SchoolTimetable
+        run: mvn --batch-mode --update-snapshots -e -X package
       
       - name: Run the Maven verify phase
-        run: mvn --batch-mode --update-snapshots verify
+        working-directory: ./Project/SchoolTimetable
+        run: mvn --batch-mode --update-snapshots -e -X verify
         
       - run: mkdir staging && cp target/*.jar staging
+        working-directory: ./Project/SchoolTimetable
       - uses: actions/upload-artifact@v3
         with:
           name: Package
