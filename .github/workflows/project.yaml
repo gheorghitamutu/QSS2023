@@ -23,8 +23,7 @@ jobs:
         working-directory: ./Project/SchoolTimetable
         run: mvn --batch-mode --update-snapshots -e -X verify
         
-      - run: mkdir staging && cp target/*.jar staging
-        working-directory: ./Project/SchoolTimetable
+      - run: mkdir staging && cp ./Project/SchoolTimetable/target/*.jar staging
       - uses: actions/upload-artifact@v3
         with:
           name: Package
