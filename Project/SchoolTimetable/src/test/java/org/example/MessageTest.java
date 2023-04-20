@@ -1,33 +1,24 @@
 package org.example;
 
+import org.application.DatabaseManager;
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import org.hibernate.boot.MetadataSources;
-import org.hibernate.boot.registry.StandardServiceRegistry;
-import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
-import org.hibernate.cfg.Configuration;
 import org.junit.jupiter.api.*;
+import org.application.Message;
 
 import java.util.List;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class MessageTest {
-    SessionFactory sessionFactory;
+    DatabaseManager dbManager;
 
     @BeforeAll
     public void setup() throws Exception {
-        // A SessionFactory is set up once for an application!
-        final StandardServiceRegistry registry = new StandardServiceRegistryBuilder()
-                .configure("hibernate.cfg.xml") // configures settings from hibernate.cfg.xml
-                .build();
         try {
-            sessionFactory = new MetadataSources( registry ).getMetadataBuilder().build().getSessionFactoryBuilder().build();
+            dbManager = new DatabaseManager();
         }
         catch (Exception e) {
-            // The registry would be destroyed by the SessionFactory, but we had trouble building the SessionFactory
-            // so destroy it manually.
-            StandardServiceRegistryBuilder.destroy( registry );
+            // TODO: ?
         }
     }
 
@@ -66,23 +57,15 @@ class MessageTest {
     @Test
     public void saveMessage() {
         Message message = new Message("Hello, world");
-        Session session = sessionFactory.openSession();
-        Transaction tx = session.beginTransaction();
-        session.persist(message);
-        tx.commit();
-        session.close();
+        Assertions.assertTrue(dbManager.saveMessage(message));
     }
 
     @Test()
     public void readMessage() {
-        Session session = sessionFactory.openSession();
-        @SuppressWarnings("unchecked")
-        List<Message> list = (List<Message>) session.createQuery("from Message").list();
-
-        Assertions.assertEquals(list.size(), 1);
-        for (Message m : list) {
+        List<Message> messages = dbManager.readMessages();
+        Assertions.assertEquals(messages.size(), 1);
+        for (Message m : messages) {
             System.out.println(m);
         }
-        session.close();
     }
 }

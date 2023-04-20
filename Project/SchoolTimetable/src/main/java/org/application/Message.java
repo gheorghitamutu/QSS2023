@@ -1,6 +1,10 @@
-package org.example;
+package org.application;
 
-import jakarta.persistence.*;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Column;
+import org.hibernate.annotations.Entity;
 
 @Entity
 public class Message {

@@ -1,4 +1,4 @@
-package org.example;
+package org.application;
 
 import java.util.stream.DoubleStream;
 
