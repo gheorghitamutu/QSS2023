@@ -29,5 +29,6 @@
         <property name="javax.persistence.schema-generation.database.action">drop-and-create</property>
 
         <mapping class="org.application.models.Room"/>
+        <mapping class="org.application.models.Student"/>
     </session-factory>
 </hibernate-configuration>

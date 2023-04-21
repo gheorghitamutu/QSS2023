@@ -1,6 +1,6 @@
-package org.application;
+package org.application.models;
 
-import org.application.models.Room;
+import org.application.DatabaseManager;
 import org.junit.jupiter.api.*;
 
 import java.util.Date;
@@ -8,17 +8,8 @@ import java.util.List;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class RoomTest {
-    DatabaseManager dbManager;
-
     @BeforeAll
     public void setup() throws Exception {
-        try {
-            dbManager = new DatabaseManager();
-        }
-        catch (Exception e) {
-            System.out.println(e.getMessage());
-            throw e;
-        }
     }
 
     @AfterAll
@@ -41,12 +32,12 @@ class RoomTest {
         room.setName("test");
         room.setType(1);
         room.setInsertTime(new Date());
-        Assertions.assertTrue(dbManager.saveRoom(room));
+        Assertions.assertTrue(DatabaseManager.save(room));
     }
 
     @Test()
     public void readRoom() {
-        List<Room> rooms = dbManager.readRooms();
+        List<Room> rooms = DatabaseManager.read(Room.class);
         Assertions.assertEquals(1, rooms.size());
         for (Room r : rooms) {
             System.out.println(r);

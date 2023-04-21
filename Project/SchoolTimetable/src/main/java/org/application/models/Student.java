@@ -6,26 +6,23 @@ import java.io.Serializable;
 import java.util.Date;
 
 @Entity
-@Table(name = "Room", uniqueConstraints = {@UniqueConstraint(columnNames = {"Id"})})
-public class Room implements Serializable {
+@Table(name = "Student", uniqueConstraints = {@UniqueConstraint(columnNames = {"Id"})})
+public class Student implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "Id", nullable = false, unique = true)
     private int id;
 
-    @Column(name = "Type", nullable = false)
-    private int type;
-
     @Column(name = "Name", nullable = false)
     private String name;
 
-    @Column(name = "Capacity", nullable = false)
-    private int capacity;
+    @Column(name = "\"Group\"", nullable = false)
+    private String group;
 
-    @Column(name = "Floor", nullable = false)
-    private int floor;
+    @Column(name = "\"Year\"", nullable = false)
+    private int year;
 
-    @Column(name="insert_time", nullable=false)
+    @Column(name = "insert_time", nullable = false)
     private Date insertTime;
 
     public int getId() {
@@ -36,14 +33,6 @@ public class Room implements Serializable {
         this.id = id;
     }
 
-    public int getType() {
-        return type;
-    }
-
-    public void setType(int type) {
-        this.type = type;
-    }
-
     public String getName() {
         return name;
     }
@@ -52,20 +41,20 @@ public class Room implements Serializable {
         this.name = name;
     }
 
-    public int getCapacity() {
-        return capacity;
+    public String getGroup() {
+        return group;
     }
 
-    public void setCapacity(int capacity) {
-        this.capacity = capacity;
+    public void setGroup(String group) {
+        this.group = group;
     }
 
-    public int getFloor() {
-        return floor;
+    public int getYear() {
+        return year;
     }
 
-    public void setFloor(int floor) {
-        this.floor = floor;
+    public void setYear(int year) {
+        this.year = year;
     }
 
     public Date getInsertTime() {

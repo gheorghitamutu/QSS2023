@@ -5,6 +5,7 @@ import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
 import org.application.models.Room;
+import org.application.models.Student;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -84,6 +85,7 @@ public class DatabaseManager {
             configuration.setProperties(props);
 
             configuration.addAnnotatedClass(Room.class);
+            configuration.addAnnotatedClass(Student.class);
 
             ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder().applySettings(configuration.getProperties()).build();
             System.out.println("Hibernate Java Config serviceRegistry created");
@@ -112,11 +114,11 @@ public class DatabaseManager {
         return sessionJavaConfigFactory;
     }
 
-    public boolean saveRoom(Room room) {
+    public static <T> boolean save(T object) {
         try {
             Session session = DatabaseManager.getSessionJavaConfigFactory().openSession();
             session.beginTransaction();
-            session.save(room);
+            session.save(object);
             session.getTransaction().commit();
             session.close();
         } catch (Exception e) {
@@ -126,16 +128,16 @@ public class DatabaseManager {
         return true;
     }
 
-    public List<Room> readRooms() {
+    public static <T> List<T> read(Class<T> tClass) {
         Session session = DatabaseManager.getSessionJavaConfigFactory().openSession();
 
         CriteriaBuilder cb = session.getCriteriaBuilder();
-        CriteriaQuery<Room> cq = cb.createQuery(Room.class);
-        Root<Room> rootEntry = cq.from(Room.class);
-        CriteriaQuery<Room> all = cq.select(rootEntry);
+        CriteriaQuery<T> cq = cb.createQuery(tClass);
+        Root<T> rootEntry = cq.from(tClass);
+        CriteriaQuery<T> all = cq.select(rootEntry);
 
-        TypedQuery<Room> allQuery = session.createQuery(all);
-        List<Room> list = allQuery.getResultList();
+        TypedQuery<T> allQuery = session.createQuery(all);
+        List<T> list = allQuery.getResultList();
 
         session.close();
 
