@@ -1,10 +1,6 @@
-package org.example;
+package org.application;
 
-import org.application.DatabaseManager;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
 import org.junit.jupiter.api.*;
-import org.application.Message;
 
 import java.util.List;
 
@@ -62,8 +58,11 @@ class MessageTest {
 
     @Test()
     public void readMessage() {
+        Message message = new Message("Hello, world");
+        Assertions.assertTrue(dbManager.saveMessage(message));
+
         List<Message> messages = dbManager.readMessages();
-        Assertions.assertEquals(messages.size(), 1);
+        Assertions.assertEquals(1, messages.size());
         for (Message m : messages) {
             System.out.println(m);
         }
