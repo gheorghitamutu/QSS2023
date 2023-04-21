@@ -4,6 +4,7 @@ import jakarta.persistence.TypedQuery;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
+import org.application.models.Discipline;
 import org.application.models.Room;
 import org.application.models.Student;
 import org.hibernate.Session;
@@ -86,6 +87,7 @@ public class DatabaseManager {
 
             configuration.addAnnotatedClass(Room.class);
             configuration.addAnnotatedClass(Student.class);
+            configuration.addAnnotatedClass(Discipline.class);
 
             ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder().applySettings(configuration.getProperties()).build();
             System.out.println("Hibernate Java Config serviceRegistry created");
@@ -119,6 +121,36 @@ public class DatabaseManager {
             Session session = DatabaseManager.getSessionJavaConfigFactory().openSession();
             session.beginTransaction();
             session.save(object);
+            session.getTransaction().commit();
+            session.close();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return false;
+        }
+        return true;
+    }
+
+    public static <T> boolean delete(T object) {
+        try {
+            Session session = DatabaseManager.getSessionJavaConfigFactory().openSession();
+            session.beginTransaction();
+            session.delete(object);
+            session.getTransaction().commit();
+            session.close();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return false;
+        }
+        return true;
+    }
+
+    public static <T> boolean deleteMany(List<T> objects) {
+        try {
+            Session session = DatabaseManager.getSessionJavaConfigFactory().openSession();
+            session.beginTransaction();
+            for (T object : objects) {
+                session.delete(object);
+            }
             session.getTransaction().commit();
             session.close();
         } catch (Exception e) {

@@ -24,6 +24,16 @@ class RoomTest {
     void tearDown() {
     }
 
+    @BeforeAll
+    void setUpAll() {
+    }
+
+    @AfterAll
+    void tearDownAll() {
+        List<Room> rooms = DatabaseManager.read(Room.class);
+        DatabaseManager.deleteMany(rooms);
+    }
+
     @Test
     public void saveRoom() {
         Room room = new Room();

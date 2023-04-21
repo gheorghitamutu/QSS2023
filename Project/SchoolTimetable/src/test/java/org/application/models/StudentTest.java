@@ -1,16 +1,12 @@
 package org.application.models;
 
 import org.application.DatabaseManager;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import java.util.Date;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
-
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class StudentTest {
 
     @BeforeEach
@@ -19,6 +15,16 @@ class StudentTest {
 
     @AfterEach
     void tearDown() {
+    }
+
+    @BeforeAll
+    void setUpAll() {
+    }
+
+    @AfterAll
+    void tearDownAll() {
+        List<Student> students = DatabaseManager.read(Student.class);
+        DatabaseManager.deleteMany(students);
     }
 
     @Test
