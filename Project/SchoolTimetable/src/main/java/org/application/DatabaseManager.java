@@ -1,71 +1,141 @@
 package org.application;
 
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
-import org.hibernate.boot.MetadataSources;
-import org.hibernate.boot.registry.StandardServiceRegistry;
-import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
-
 import jakarta.persistence.TypedQuery;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
+import org.application.models.Room;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
+import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
+import org.hibernate.cfg.Configuration;
+import org.hibernate.service.ServiceRegistry;
 
 import java.util.List;
+import java.util.Properties;
 
 public class DatabaseManager {
-    private SessionFactory sessionFactory;
+    //XML based configuration
+    private static SessionFactory sessionFactory;
 
-    public DatabaseManager() throws Exception {
-        // A SessionFactory is set up once for an application!
-        final StandardServiceRegistry registry = new StandardServiceRegistryBuilder()
-                .configure() // configures settings from hibernate.cfg.xml
-                .build();
+    //Annotation based configuration
+    private static SessionFactory sessionAnnotationFactory;
+
+    //Property based configuration
+    private static SessionFactory sessionJavaConfigFactory;
+
+    private static SessionFactory buildSessionFactory() {
         try {
-            sessionFactory = new MetadataSources( registry )
-                    .getMetadataBuilder()
-                    .build()
-                    .getSessionFactoryBuilder()
-                    .build();
-        }
-        catch (Exception e) {
-            // The registry would be destroyed by the SessionFactory, but we had trouble building the SessionFactory
-            // so destroy it manually.
-            StandardServiceRegistryBuilder.destroy( registry );
+            // Create the SessionFactory from hibernate.cfg.xml
+            Configuration configuration = new Configuration();
+            configuration.configure("hibernate.cfg.xml");
+            System.out.println("Hibernate Configuration loaded");
+
+            ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder().applySettings(configuration.getProperties()).build();
+            System.out.println("Hibernate serviceRegistry created");
+
+            sessionFactory = configuration.buildSessionFactory(serviceRegistry);
+
+            return sessionFactory;
+        } catch (Throwable ex) {
+            // Make sure you log the exception, as it might be swallowed
+            System.err.println("Initial SessionFactory creation failed." + ex);
+            throw new ExceptionInInitializerError(ex);
         }
     }
 
-    public SessionFactory getSessionFactory() {
+    private static SessionFactory buildSessionAnnotationFactory() {
+        try {
+            Configuration configuration = new Configuration();
+            configuration.configure("hibernate.cfg.xml");
+            System.out.println("Hibernate Annotation Configuration loaded");
+
+            ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder().applySettings(configuration.getProperties()).build();
+            System.out.println("Hibernate Annotation serviceRegistry created");
+
+            sessionAnnotationFactory = configuration.buildSessionFactory(serviceRegistry);
+
+            return sessionAnnotationFactory;
+        } catch (Throwable ex) {
+            // Make sure you log the exception, as it might be swallowed
+            System.err.println("Initial SessionFactory creation failed." + ex);
+            throw new ExceptionInInitializerError(ex);
+        }
+    }
+
+    private static SessionFactory buildSessionJavaConfigFactory() {
+        try {
+            Configuration configuration = new Configuration();
+
+            Properties props = new Properties();
+            props.put("hibernate.dialect", "org.hibernate.dialect.DerbyDialect");
+            props.put("hibernate.connection.driver_class", "org.apache.derby.jdbc.EmbeddedDriver");
+            props.put("hibernate.connection.url", "jdbc:derby:testdb;create=true");
+            props.put("hibernate.connection.username", "app");
+            props.put("hibernate.connection.password", "app");
+            props.put("hibernate.current_session_context_class", "thread");
+            props.put("connection.pool_size", 5);
+            props.put("hbm2ddl.auto", "create-drop");
+            props.put("hibernate.show_sql", true);
+            props.put("hibernate.format_sql", true);
+            props.put("javax.persistence.schema-generation.database.action", "drop-and-create");
+
+            configuration.setProperties(props);
+
+            configuration.addAnnotatedClass(Room.class);
+
+            ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder().applySettings(configuration.getProperties()).build();
+            System.out.println("Hibernate Java Config serviceRegistry created");
+
+            sessionJavaConfigFactory = configuration.buildSessionFactory(serviceRegistry);
+
+            return sessionJavaConfigFactory;
+        } catch (Throwable ex) {
+            System.err.println("Initial SessionFactory creation failed." + ex);
+            throw new ExceptionInInitializerError(ex);
+        }
+    }
+
+    public static SessionFactory getSessionFactory() {
+        if (sessionFactory == null) sessionFactory = buildSessionFactory();
         return sessionFactory;
     }
 
-    public boolean saveMessage(Message message)
-    {
+    public static SessionFactory getSessionAnnotationFactory() {
+        if (sessionAnnotationFactory == null) sessionAnnotationFactory = buildSessionAnnotationFactory();
+        return sessionAnnotationFactory;
+    }
+
+    public static SessionFactory getSessionJavaConfigFactory() {
+        if (sessionJavaConfigFactory == null) sessionJavaConfigFactory = buildSessionJavaConfigFactory();
+        return sessionJavaConfigFactory;
+    }
+
+    public boolean saveRoom(Room room) {
         try {
-            Session session = sessionFactory.openSession();
-            Transaction tx = session.beginTransaction();
-            session.saveOrUpdate(message);
-            tx.commit();
+            Session session = DatabaseManager.getSessionJavaConfigFactory().openSession();
+            session.beginTransaction();
+            session.save(room);
+            session.getTransaction().commit();
             session.close();
-        }
-        catch (Exception e) {
-            // TODO: ?
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
             return false;
         }
         return true;
     }
 
-    public List<Message> readMessages() {
-        Session session = sessionFactory.openSession();
+    public List<Room> readRooms() {
+        Session session = DatabaseManager.getSessionJavaConfigFactory().openSession();
 
         CriteriaBuilder cb = session.getCriteriaBuilder();
-        CriteriaQuery<Message> cq = cb.createQuery(Message.class);
-        Root<Message> rootEntry = cq.from(Message.class);
-        CriteriaQuery<Message> all = cq.select(rootEntry);
+        CriteriaQuery<Room> cq = cb.createQuery(Room.class);
+        Root<Room> rootEntry = cq.from(Room.class);
+        CriteriaQuery<Room> all = cq.select(rootEntry);
 
-        TypedQuery<Message> allQuery = session.createQuery(all);
-        List<Message> list = allQuery.getResultList();
+        TypedQuery<Room> allQuery = session.createQuery(all);
+        List<Room> list = allQuery.getResultList();
 
         session.close();
 

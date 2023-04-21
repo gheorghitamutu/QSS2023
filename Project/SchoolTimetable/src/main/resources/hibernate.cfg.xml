@@ -8,12 +8,13 @@
         <!-- database connection settings -->
         <property name="hibernate.dialect"> org.hibernate.dialect.DerbyDialect </property>
         <property name="hibernate.connection.driver_class"> org.apache.derby.jdbc.EmbeddedDriver </property>
-        <property name="hibernate.connection.url"> jdbc:derby:test;create=true </property>
-        <property name="hibernate.connection.username"></property>
-        <property name="hibernate.connection.password"></property>
+        <property name="hibernate.connection.url"> jdbc:derby:testdb;create=true </property>
+        <property name="hibernate.connection.username">app</property>
+        <property name="hibernate.connection.password">app</property>
 
         <!-- Enable Hibernate's automatic session context management -->
         <property name="current_session_context_class">thread</property>
+
         <!-- JDBC connection pool (use the built-in) -->
         <property name="connection.pool_size">5</property>
 
@@ -23,9 +24,10 @@
 
         <!-- helper debug settings -->
         <property name="hibernate.show_sql">true</property>
-        <property name="hibernate.format_sql">false</property>
+        <property name="hibernate.format_sql">true</property>
 
-        <mapping class="org.application.Message"/>
+        <property name="javax.persistence.schema-generation.database.action">drop-and-create</property>
 
+        <mapping class="org.application.models.Room"/>
     </session-factory>
 </hibernate-configuration>
