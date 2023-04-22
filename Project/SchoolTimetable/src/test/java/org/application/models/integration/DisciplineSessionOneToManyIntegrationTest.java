@@ -26,9 +26,6 @@ public class DisciplineSessionOneToManyIntegrationTest {
 
     @AfterAll
     void tearDownAll() {
-        List<Student> students = DatabaseManager.read(Student.class);
-        DatabaseManager.deleteMany(students);
-
         List<Discipline> disciplines = DatabaseManager.read(Discipline.class);
         DatabaseManager.deleteMany(disciplines);
 

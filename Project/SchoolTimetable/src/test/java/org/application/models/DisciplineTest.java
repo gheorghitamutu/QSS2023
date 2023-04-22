@@ -19,6 +19,8 @@ class DisciplineTest {
 
     @BeforeAll
     void setUpAll() {
+        List<Discipline> disciplines = DatabaseManager.read(Discipline.class);
+        DatabaseManager.deleteMany(disciplines);
     }
 
     @AfterAll
@@ -40,8 +42,8 @@ class DisciplineTest {
     public void readDiscipline() {
         List<Discipline> disciplines = DatabaseManager.read(Discipline.class);
         Assertions.assertEquals(1, disciplines.size());
-        for (Discipline r : disciplines) {
-            System.out.println(r);
+        for (Discipline d : disciplines) {
+            System.out.println(d);
         }
     }
 }
