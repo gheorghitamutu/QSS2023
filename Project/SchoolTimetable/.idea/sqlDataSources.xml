@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DdlMappings">
+    <mapping uuid="9e8d0b08-f9ec-47d2-bad3-7f8e77d87a46" name="hibernate.cfg.xml/Hibernate Mapping">
+      <data-sources db="0153b34f-4995-4a2e-a232-8557ee5eb127" ddl="259a9e29-2f4c-4dfc-a518-d00cbf033f6b" />
+    </mapping>
+  </component>
+</project>

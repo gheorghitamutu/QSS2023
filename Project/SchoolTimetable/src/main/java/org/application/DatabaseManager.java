@@ -87,6 +87,7 @@ public class DatabaseManager {
 
             configuration.addAnnotatedClass(Room.class);
             configuration.addAnnotatedClass(Student.class);
+            configuration.addAnnotatedClass(Session.class);
             configuration.addAnnotatedClass(Discipline.class);
 
             ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder().applySettings(configuration.getProperties()).build();

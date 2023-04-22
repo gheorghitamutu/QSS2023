@@ -5,8 +5,8 @@ import jakarta.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 
-@Entity
-@Table(name = "Room", uniqueConstraints = {@UniqueConstraint(columnNames = {"Id"})})
+@Entity(name = "Room")
+@Table(name = "room", uniqueConstraints = {@UniqueConstraint(columnNames = {"Id"})})
 public class Room implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

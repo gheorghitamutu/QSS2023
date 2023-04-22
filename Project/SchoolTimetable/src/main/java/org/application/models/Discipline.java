@@ -7,12 +7,15 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
-@Entity
-@Table(name = "Discipline", uniqueConstraints = {@UniqueConstraint(columnNames = {"Id"})})
+@Entity(name = "Discipline")
+@Table(name = "discipline", uniqueConstraints = {@UniqueConstraint(columnNames = {"Id"})})
 public class Discipline implements Serializable {
 
     @ManyToMany(mappedBy = "disciplines")
-    private Set<Student> employees = new HashSet<>();
+    private Set<Student> students = new HashSet<>();
+
+    // @OneToMany(mappedBy="discipline")
+    // private Set<Session> sessions;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,7 +28,7 @@ public class Discipline implements Serializable {
     @Column(name = "Credits", nullable = false)
     private int credits;
 
-    @Column(name="insert_time", nullable=false)
+    @Column(name = "insert_time", nullable = false)
     private Date insertTime;
 
     public int getId() {
@@ -59,4 +62,20 @@ public class Discipline implements Serializable {
     public void setInsertTime(Date insertTime) {
         this.insertTime = insertTime;
     }
+
+    public Set<Student> getStudents() {
+        return students;
+    }
+
+    public void setStudents(Set<Student> students) {
+        this.students = students;
+    }
+
+    // public Set<Session> getSessions() {
+    //     return sessions;
+    // }
+//
+    // public void setSessions(Set<Session> sessions) {
+    //     this.sessions = sessions;
+    // }
 }

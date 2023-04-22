@@ -7,8 +7,8 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
-@Entity
-@Table(name = "Student", uniqueConstraints = {@UniqueConstraint(columnNames = {"Id"})})
+@Entity(name = "Student")
+@Table(name = "student", uniqueConstraints = {@UniqueConstraint(columnNames = {"Id"})})
 public class Student implements Serializable {
 
     @ManyToMany(cascade = {CascadeType.ALL})
@@ -17,6 +17,13 @@ public class Student implements Serializable {
             joinColumns = {@JoinColumn(name = "student_id")},
             inverseJoinColumns = {@JoinColumn(name = "discipline_id")})
     Set<Discipline> disciplines = new HashSet<>();
+
+    // @ManyToMany(cascade = {CascadeType.ALL})
+    // @JoinTable(
+    //         name = "Student_Session",
+    //         joinColumns = {@JoinColumn(name = "student_id")},
+    //         inverseJoinColumns = {@JoinColumn(name = "session_id")})
+    // private Set<Session> sessions = new HashSet<>();
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -82,4 +89,12 @@ public class Student implements Serializable {
     public void setDisciplines(Set<Discipline> disciplines) {
         this.disciplines = disciplines;
     }
+
+    // public Set<Session> getSessions() {
+    //     return sessions;
+    // }
+//
+    // public void setSessions(Set<Session> sessions) {
+    //     this.sessions = sessions;
+    // }
 }

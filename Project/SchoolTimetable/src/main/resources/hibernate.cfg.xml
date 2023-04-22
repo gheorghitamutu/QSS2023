@@ -30,6 +30,8 @@
 
         <mapping class="org.application.models.Room"/>
         <mapping class="org.application.models.Student"/>
+        <mapping class="org.application.models.Session"/>
         <mapping class="org.application.models.Discipline"/>
+
     </session-factory>
 </hibernate-configuration>
