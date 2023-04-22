@@ -9,7 +9,7 @@ import org.junit.jupiter.api.*;
 import java.util.*;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class StudentSessionManyToManyIntegration {
+public class StudentSessionManyToManyIntegrationTest {
     @BeforeEach
     void setUp() {
     }
@@ -42,6 +42,7 @@ public class StudentSessionManyToManyIntegration {
         discipline.setInsertTime(new Date());
 
         Session session = new Session();
+        session.setInsertTime(new Date());
         session.setType(0);
 
         discipline.setSessions(Collections.singleton(session));
@@ -53,7 +54,7 @@ public class StudentSessionManyToManyIntegration {
         student.setName("test");
         student.setInsertTime(new Date());
         student.setDisciplines(Collections.singleton(discipline));
-        // student.setSessions(Collections.singleton(session));
+        student.setSessions(Collections.singleton(session));
 
         session.setStudents(Collections.singleton(student));
         session.setDiscipline(discipline);

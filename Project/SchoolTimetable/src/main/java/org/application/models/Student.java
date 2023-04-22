@@ -18,12 +18,12 @@ public class Student implements Serializable {
             inverseJoinColumns = {@JoinColumn(name = "discipline_id")})
     Set<Discipline> disciplines = new HashSet<>();
 
-    // @ManyToMany(cascade = {CascadeType.ALL})
-    // @JoinTable(
-    //         name = "Student_Session",
-    //         joinColumns = {@JoinColumn(name = "student_id")},
-    //         inverseJoinColumns = {@JoinColumn(name = "session_id")})
-    // private Set<Session> sessions = new HashSet<>();
+    @ManyToMany(cascade = {CascadeType.ALL})
+    @JoinTable(
+            name = "Student_Session",
+            joinColumns = {@JoinColumn(name = "student_id")},
+            inverseJoinColumns = {@JoinColumn(name = "session_id")})
+    private Set<Session> sessions = new HashSet<>();
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -90,11 +90,11 @@ public class Student implements Serializable {
         this.disciplines = disciplines;
     }
 
-    // public Set<Session> getSessions() {
-    //     return sessions;
-    // }
-//
-    // public void setSessions(Set<Session> sessions) {
-    //     this.sessions = sessions;
-    // }
+    public Set<Session> getSessions() {
+        return sessions;
+    }
+
+    public void setSessions(Set<Session> sessions) {
+        this.sessions = sessions;
+    }
 }

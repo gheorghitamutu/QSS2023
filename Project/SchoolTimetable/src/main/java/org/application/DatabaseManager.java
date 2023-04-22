@@ -7,6 +7,7 @@ import jakarta.persistence.criteria.Root;
 import org.application.models.Discipline;
 import org.application.models.Room;
 import org.application.models.Student;
+import org.application.models.Timeslot;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -85,10 +86,11 @@ public class DatabaseManager {
 
             configuration.setProperties(props);
 
-            configuration.addAnnotatedClass(Room.class);
-            configuration.addAnnotatedClass(Student.class);
-            configuration.addAnnotatedClass(Session.class);
-            configuration.addAnnotatedClass(Discipline.class);
+            configuration.addAnnotatedClass(org.application.models.Room.class);
+            configuration.addAnnotatedClass(org.application.models.Student.class);
+            configuration.addAnnotatedClass(org.application.models.Session.class);
+            configuration.addAnnotatedClass(org.application.models.Discipline.class);
+            configuration.addAnnotatedClass(org.application.models.Timeslot.class);
 
             ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder().applySettings(configuration.getProperties()).build();
             System.out.println("Hibernate Java Config serviceRegistry created");

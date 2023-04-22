@@ -13,11 +13,14 @@ import java.util.Set;
 public class Session implements Serializable {
 
     @ManyToOne
-    @JoinColumn(name = "discipline_id", referencedColumnName = "Id", insertable = false, updatable = false, nullable = false)
+    @JoinColumn(name = "discipline_id", referencedColumnName = "Id")
     private Discipline discipline;
 
     @ManyToMany(mappedBy = "sessions")
     private Set<Student> students;
+
+    @OneToMany(mappedBy = "session")
+    private Set<Timeslot> timeslots = new HashSet<>();
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -68,5 +71,13 @@ public class Session implements Serializable {
 
     public void setDiscipline(Discipline discipline) {
         this.discipline = discipline;
+    }
+
+    public Set<Timeslot> getTimeslots() {
+        return timeslots;
+    }
+
+    public void setTimeslots(Set<Timeslot> timeslots) {
+        this.timeslots = timeslots;
     }
 }

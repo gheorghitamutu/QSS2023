@@ -3,11 +3,18 @@ package org.application.models;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
+import java.sql.Time;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity(name = "Room")
 @Table(name = "room", uniqueConstraints = {@UniqueConstraint(columnNames = {"Id"})})
 public class Room implements Serializable {
+
+    @OneToMany(mappedBy = "room")
+    private Set<Timeslot> timeslots = new HashSet<>();
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "Id", nullable = false, unique = true)
@@ -74,5 +81,13 @@ public class Room implements Serializable {
 
     public void setInsertTime(Date insertTime) {
         this.insertTime = insertTime;
+    }
+
+    public Set<Timeslot> getTimeslots() {
+        return timeslots;
+    }
+
+    public void setTimeslots(Set<Timeslot> timeslots) {
+        this.timeslots = timeslots;
     }
 }

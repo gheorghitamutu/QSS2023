@@ -14,8 +14,8 @@ public class Discipline implements Serializable {
     @ManyToMany(mappedBy = "disciplines")
     private Set<Student> students = new HashSet<>();
 
-    // @OneToMany(mappedBy="discipline")
-    // private Set<Session> sessions;
+    @OneToMany(mappedBy = "discipline")
+    private Set<Session> sessions;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -71,11 +71,11 @@ public class Discipline implements Serializable {
         this.students = students;
     }
 
-    // public Set<Session> getSessions() {
-    //     return sessions;
-    // }
-//
-    // public void setSessions(Set<Session> sessions) {
-    //     this.sessions = sessions;
-    // }
+    public Set<Session> getSessions() {
+        return sessions;
+    }
+
+    public void setSessions(Set<Session> sessions) {
+        this.sessions = sessions;
+    }
 }
