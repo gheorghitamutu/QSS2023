@@ -22,6 +22,9 @@ public class Session implements Serializable {
     @OneToMany(mappedBy = "session")
     private Set<Timeslot> timeslots = new HashSet<>();
 
+    @ManyToMany(mappedBy = "sessions")
+    private Set<Teacher> teachers;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "Id", nullable = false, unique = true)
@@ -79,5 +82,13 @@ public class Session implements Serializable {
 
     public void setTimeslots(Set<Timeslot> timeslots) {
         this.timeslots = timeslots;
+    }
+
+    public Set<Teacher> getTeachers() {
+        return teachers;
+    }
+
+    public void setTeachers(Set<Teacher> teachers) {
+        this.teachers = teachers;
     }
 }

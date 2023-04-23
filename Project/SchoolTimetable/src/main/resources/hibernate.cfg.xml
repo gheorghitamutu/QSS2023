@@ -33,6 +33,7 @@
         <mapping class="org.application.models.Session"/>
         <mapping class="org.application.models.Discipline"/>
         <mapping class="org.application.models.Timeslot"/>
+        <mapping class="org.application.models.Teacher"/>
 
     </session-factory>
 </hibernate-configuration>
