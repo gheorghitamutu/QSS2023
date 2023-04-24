@@ -11,11 +11,11 @@ import java.util.Set;
 @Table(name = "discipline", uniqueConstraints = {@UniqueConstraint(columnNames = {"Id"})})
 public class Discipline implements Serializable {
 
-    @ManyToMany(mappedBy = "disciplines")
+    @ManyToMany(mappedBy = "disciplines", cascade = CascadeType.ALL)
     private Set<Student> students = new HashSet<>();
 
-    @OneToMany(mappedBy = "discipline")
-    private Set<Session> sessions;
+    @OneToMany(mappedBy = "discipline", cascade = CascadeType.ALL)
+    private Set<Session> sessions = new HashSet<>();
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

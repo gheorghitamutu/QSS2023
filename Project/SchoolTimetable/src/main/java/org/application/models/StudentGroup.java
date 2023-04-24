@@ -1,21 +1,25 @@
 package org.application.models;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
 
 import java.io.Serializable;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
-@Entity(name = "Group")
-@Table(name = "group", uniqueConstraints = {@UniqueConstraint(columnNames = {"Id"})})
-public class Group implements Serializable {
+@Entity(name = "StudentGroup")
+@Table(name = "studentgroup", uniqueConstraints = {@UniqueConstraint(columnNames = {"Id"})})
+public class StudentGroup implements Serializable {
 
     @OneToMany(cascade = CascadeType.ALL)
     private Set<Student> students = new HashSet<>();
 
-    @ManyToMany(mappedBy = "groups")
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "StudentGroup_Session",
+            joinColumns = { @JoinColumn(name = "studentgroup_id", referencedColumnName = "Id") },
+            inverseJoinColumns = { @JoinColumn(name = "session_id", referencedColumnName = "Id") }
+    )
     private Set<Session> sessions = new HashSet<>();
 
     @Id
@@ -59,5 +63,13 @@ public class Group implements Serializable {
 
     public void setSessions(Set<Session> sessions) {
         this.sessions = sessions;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }

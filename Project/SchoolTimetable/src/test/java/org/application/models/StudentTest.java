@@ -29,12 +29,12 @@ class StudentTest {
 
     @Test
     public void saveStudent() {
-        Group group = new Group();
-        group.setName("A1");
-        group.setInsertTime(new Date());
+        StudentGroup studentGroup = new StudentGroup();
+        studentGroup.setName("A1");
+        studentGroup.setInsertTime(new Date());
 
         Student student = new Student();
-        student.setGroup(group);
+        student.setGroup(studentGroup);
         student.setYear(1);
         student.setName("test");
         student.setInsertTime(new Date());

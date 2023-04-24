@@ -12,17 +12,17 @@ import java.util.Set;
 @Table(name = "session", uniqueConstraints = {@UniqueConstraint(columnNames = {"Id"})})
 public class Session implements Serializable {
 
-    @ManyToOne
+    @ManyToOne(cascade=CascadeType.ALL)
     @JoinColumn(name = "discipline_id", referencedColumnName = "Id")
     private Discipline discipline;
 
-    @ManyToMany(mappedBy = "sessions")
-    private Set<Group> groups = new HashSet<>();
+    @ManyToMany(mappedBy = "sessions", cascade=CascadeType.ALL)
+    private Set<StudentGroup> studentGroups = new HashSet<>();
 
-    @ManyToMany(mappedBy = "sessions")
+    @ManyToMany(mappedBy = "sessions", cascade=CascadeType.ALL)
     private Set<Teacher> teachers = new HashSet<>();
 
-    @OneToMany(mappedBy = "session")
+    @OneToMany(mappedBy = "session", cascade=CascadeType.ALL)
     private Set<Timeslot> timeslots = new HashSet<>();
 
     @Id
@@ -84,12 +84,12 @@ public class Session implements Serializable {
         this.teachers = teachers;
     }
 
-    public Set<Group> getGroups() {
-        return groups;
+    public Set<StudentGroup> getGroups() {
+        return studentGroups;
     }
 
-    public void setGroups(Set<Group> groups) {
-        this.groups = groups;
+    public void setGroups(Set<StudentGroup> studentGroups) {
+        this.studentGroups = studentGroups;
     }
 
     public enum Type {

@@ -19,8 +19,8 @@ public class Student implements Serializable {
     Set<Discipline> disciplines = new HashSet<>();
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "group_id", referencedColumnName = "Id")
-    private Group group;
+    @JoinColumn(name = "studentgroup_id", referencedColumnName = "Id")
+    private StudentGroup studentGroup;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -76,11 +76,11 @@ public class Student implements Serializable {
         this.disciplines = disciplines;
     }
 
-    public Group getGroup() {
-        return group;
+    public StudentGroup getGroup() {
+        return studentGroup;
     }
 
-    public void setGroup(Group group) {
-        this.group = group;
+    public void setGroup(StudentGroup studentGroup) {
+        this.studentGroup = studentGroup;
     }
 }

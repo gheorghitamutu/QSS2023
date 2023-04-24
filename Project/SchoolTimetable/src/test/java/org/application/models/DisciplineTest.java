@@ -20,8 +20,6 @@ class DisciplineTest {
 
     @BeforeAll
     void setUpAll() {
-        List<Discipline> disciplines = DatabaseManager.readAll(Discipline.class);
-        DatabaseManager.deleteMany(disciplines);
     }
 
     @AfterAll
@@ -45,15 +43,19 @@ class DisciplineTest {
 
         session.setDiscipline(discipline);
 
-        Group group = new Group();
-        group.setName("A1");
-        group.setInsertTime(new Date());
+        StudentGroup studentGroup = new StudentGroup();
+        studentGroup.setName("A1");
+        studentGroup.setInsertTime(new Date());
 
-        group.setSessions(Collections.singleton(session));
-        session.setGroups(Collections.singleton(group));
+        Student student = new Student();
+        student.setGroup(studentGroup);
+        student.setYear(1);
+        student.setName("test");
+        student.setInsertTime(new Date());
 
-        Assertions.assertTrue(DatabaseManager.save(session));
-        Assertions.assertTrue(DatabaseManager.save(group));
+        studentGroup.setSessions(Collections.singleton(session));
+        session.setGroups(Collections.singleton(studentGroup));
+
         Assertions.assertTrue(DatabaseManager.save(discipline));
     }
 

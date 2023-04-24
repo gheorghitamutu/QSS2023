@@ -8,6 +8,7 @@ import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
 import jakarta.validation.ValidatorFactory;
+import org.application.models.StudentGroup;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
@@ -81,7 +82,7 @@ public class DatabaseManager {
             props.put("hibernate.current_session_context_class", "thread");
             props.put("connection.pool_size", 5);
             props.put("hbm2ddl.auto", "create-drop");
-            props.put("hibernate.show_sql", true);
+            props.put("hibernate.show_sql", false);
             props.put("hibernate.format_sql", false);
             props.put("javax.persistence.schema-generation.database.action", "drop-and-create");
 
@@ -93,7 +94,7 @@ public class DatabaseManager {
             configuration.addAnnotatedClass(org.application.models.Discipline.class);
             configuration.addAnnotatedClass(org.application.models.Timeslot.class);
             configuration.addAnnotatedClass(org.application.models.Teacher.class);
-            configuration.addAnnotatedClass(org.application.models.Group.class);
+            configuration.addAnnotatedClass(StudentGroup.class);
 
             ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder().applySettings(configuration.getProperties()).build();
             System.out.println("Hibernate Java Config serviceRegistry created");
