@@ -23,7 +23,7 @@ class TeacherTest {
 
     @AfterAll
     void tearDownAll() {
-        List<Teacher> teachers = DatabaseManager.read(Teacher.class);
+        List<Teacher> teachers = DatabaseManager.readAll(Teacher.class);
         DatabaseManager.deleteMany(teachers);
     }
 
@@ -38,7 +38,7 @@ class TeacherTest {
 
     @Test()
     public void readTeacher() {
-        List<Teacher> teachers = DatabaseManager.read(Teacher.class);
+        List<Teacher> teachers = DatabaseManager.readAll(Teacher.class);
         Assertions.assertEquals(1, teachers.size());
         for (Teacher t : teachers) {
             System.out.println(t);

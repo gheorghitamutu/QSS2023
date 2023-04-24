@@ -30,7 +30,7 @@ class RoomTest {
 
     @AfterAll
     void tearDownAll() {
-        List<Room> rooms = DatabaseManager.read(Room.class);
+        List<Room> rooms = DatabaseManager.readAll(Room.class);
         DatabaseManager.deleteMany(rooms);
     }
 
@@ -47,7 +47,7 @@ class RoomTest {
 
     @Test()
     public void readRoom() {
-        List<Room> rooms = DatabaseManager.read(Room.class);
+        List<Room> rooms = DatabaseManager.readAll(Room.class);
         Assertions.assertEquals(1, rooms.size());
         for (Room r : rooms) {
             System.out.println(r);

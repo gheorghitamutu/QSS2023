@@ -180,7 +180,7 @@ public class DatabaseManager {
         return true;
     }
 
-    public static <T> List<T> read(Class<T> tClass) {
+    public static <T> List<T> readAll(Class<T> tClass) {
         Session session = DatabaseManager.getSessionJavaConfigFactory().openSession();
 
         CriteriaBuilder cb = session.getCriteriaBuilder();

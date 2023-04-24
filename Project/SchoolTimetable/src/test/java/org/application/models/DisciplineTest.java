@@ -19,13 +19,13 @@ class DisciplineTest {
 
     @BeforeAll
     void setUpAll() {
-        List<Discipline> disciplines = DatabaseManager.read(Discipline.class);
+        List<Discipline> disciplines = DatabaseManager.readAll(Discipline.class);
         DatabaseManager.deleteMany(disciplines);
     }
 
     @AfterAll
     void tearDownAll() {
-        List<Discipline> disciplines = DatabaseManager.read(Discipline.class);
+        List<Discipline> disciplines = DatabaseManager.readAll(Discipline.class);
         DatabaseManager.deleteMany(disciplines);
     }
 
@@ -40,7 +40,7 @@ class DisciplineTest {
 
     @Test()
     public void readDiscipline() {
-        List<Discipline> disciplines = DatabaseManager.read(Discipline.class);
+        List<Discipline> disciplines = DatabaseManager.readAll(Discipline.class);
         Assertions.assertEquals(1, disciplines.size());
         for (Discipline d : disciplines) {
             System.out.println(d);

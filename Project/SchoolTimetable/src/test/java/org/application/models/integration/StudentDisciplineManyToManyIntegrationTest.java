@@ -27,10 +27,10 @@ public class StudentDisciplineManyToManyIntegrationTest {
 
     @AfterAll
     void tearDownAll() {
-        List<Student> students = DatabaseManager.read(Student.class);
+        List<Student> students = DatabaseManager.readAll(Student.class);
         DatabaseManager.deleteMany(students);
 
-        List<Discipline> disciplines = DatabaseManager.read(Discipline.class);
+        List<Discipline> disciplines = DatabaseManager.readAll(Discipline.class);
         DatabaseManager.deleteMany(disciplines);
     }
 

@@ -6,8 +6,6 @@ import org.junit.jupiter.api.*;
 import java.util.Date;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class SessionTest {
     @BeforeAll
@@ -32,7 +30,10 @@ class SessionTest {
 
     @AfterAll
     void tearDownAll() {
-        List<Session> sessions = DatabaseManager.read(Session.class);
+        List<Discipline> disciplines = DatabaseManager.readAll(Discipline.class);
+        DatabaseManager.deleteMany(disciplines);
+
+        List<Session> sessions = DatabaseManager.readAll(Session.class);
         DatabaseManager.deleteMany(sessions);
     }
 
@@ -53,7 +54,7 @@ class SessionTest {
 
     @Test()
     public void readSession() {
-        List<Session> sessions = DatabaseManager.read(Session.class);
+        List<Session> sessions = DatabaseManager.readAll(Session.class);
         Assertions.assertEquals(1, sessions.size());
         for (Session r : sessions) {
             System.out.println(r);

@@ -24,13 +24,13 @@ public class StudentSessionManyToManyIntegrationTest {
 
     @AfterAll
     void tearDownAll() {
-        List<Student> students = DatabaseManager.read(Student.class);
+        List<Student> students = DatabaseManager.readAll(Student.class);
         DatabaseManager.deleteMany(students);
 
-        List<Discipline> disciplines = DatabaseManager.read(Discipline.class);
+        List<Discipline> disciplines = DatabaseManager.readAll(Discipline.class);
         DatabaseManager.deleteMany(disciplines);
 
-        List<Session> sessions = DatabaseManager.read(Session.class);
+        List<Session> sessions = DatabaseManager.readAll(Session.class);
         DatabaseManager.deleteMany(sessions);
     }
 

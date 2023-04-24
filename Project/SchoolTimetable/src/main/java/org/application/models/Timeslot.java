@@ -1,21 +1,23 @@
 package org.application.models;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Future;
-import jakarta.validation.constraints.FutureOrPresent;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.NotNull;
+import org.application.models.validators.timeslot.ValidTimeslot;
+import org.hibernate.validator.constraints.time.DurationMax;
 
 import java.io.Serializable;
+import java.time.Duration;
 import java.util.Date;
 
+@ValidTimeslot
 @Entity(name = "Timeslot")
 @Table(name = "timeslot", uniqueConstraints = {@UniqueConstraint(columnNames = {"Id"})})
 public class Timeslot implements Serializable {
-
+    @NotNull
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "session_id", referencedColumnName = "Id")
     private Session session;
+    @NotNull
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "room_id", referencedColumnName = "Id")
     private Room room;
@@ -30,14 +32,13 @@ public class Timeslot implements Serializable {
     @Enumerated(EnumType.STRING)
     @Column(name = "Weekday", nullable = false)
     private Day weekday;
-    @Positive(message = "[ERROR] Value should be positive.")
-    @Min(value = 30, message = "[ERROR] You can reserve a minimum of 30 minutes.")
+    @DurationMax(minutes = 30, message = "[ERROR] You can reserve a minimum of 30 minutes.")
+    @DurationMax(minutes = 240, message = "[ERROR] You can reserve a maximum of 240 minutes.")
     @Column(name = "Timespan", nullable = false)
-    private int timespan;
+    private java.time.Duration timespan;
     @Enumerated(EnumType.STRING)
     @Column(name = "Periodicity", nullable = false)
     private Periodicity periodicity;
-    // @FutureOrPresent(message = "[ERROR] Invalid date: it should be provided as future or present date.")
     @Column(name = "insert_time", nullable = false)
     private Date insertTime;
 
@@ -97,11 +98,11 @@ public class Timeslot implements Serializable {
         this.session = session;
     }
 
-    public int getTimespan() {
+    public Duration getTimespan() {
         return timespan;
     }
 
-    public void setTimespan(int timespan) {
+    public void setTimespan(Duration timespan) {
         this.timespan = timespan;
     }
 

@@ -3,7 +3,6 @@ package org.application.models.integration;
 import org.application.DatabaseManager;
 import org.application.models.Discipline;
 import org.application.models.Session;
-import org.application.models.Student;
 import org.junit.jupiter.api.*;
 
 import java.util.Collections;
@@ -26,10 +25,10 @@ public class DisciplineSessionOneToManyIntegrationTest {
 
     @AfterAll
     void tearDownAll() {
-        List<Discipline> disciplines = DatabaseManager.read(Discipline.class);
+        List<Discipline> disciplines = DatabaseManager.readAll(Discipline.class);
         DatabaseManager.deleteMany(disciplines);
 
-        List<Session> sessions = DatabaseManager.read(Session.class);
+        List<Session> sessions = DatabaseManager.readAll(Session.class);
         DatabaseManager.deleteMany(sessions);
     }
 
