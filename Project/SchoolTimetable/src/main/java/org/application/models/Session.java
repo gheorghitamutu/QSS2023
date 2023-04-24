@@ -17,13 +17,13 @@ public class Session implements Serializable {
     private Discipline discipline;
 
     @ManyToMany(mappedBy = "sessions")
-    private Set<Student> students;
+    private Set<Group> groups = new HashSet<>();
+
+    @ManyToMany(mappedBy = "sessions")
+    private Set<Teacher> teachers = new HashSet<>();
 
     @OneToMany(mappedBy = "session")
     private Set<Timeslot> timeslots = new HashSet<>();
-
-    @ManyToMany(mappedBy = "sessions")
-    private Set<Teacher> teachers;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -60,14 +60,6 @@ public class Session implements Serializable {
         this.insertTime = insertTime;
     }
 
-    public Set<Student> getStudents() {
-        return students;
-    }
-
-    public void setStudents(Set<Student> students) {
-        this.students = students;
-    }
-
     public Discipline getDiscipline() {
         return discipline;
     }
@@ -90,6 +82,14 @@ public class Session implements Serializable {
 
     public void setTeachers(Set<Teacher> teachers) {
         this.teachers = teachers;
+    }
+
+    public Set<Group> getGroups() {
+        return groups;
+    }
+
+    public void setGroups(Set<Group> groups) {
+        this.groups = groups;
     }
 
     public enum Type {

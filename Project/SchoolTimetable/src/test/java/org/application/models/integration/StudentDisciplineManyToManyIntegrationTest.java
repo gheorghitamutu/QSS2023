@@ -2,6 +2,7 @@ package org.application.models.integration;
 
 import org.application.DatabaseManager;
 import org.application.models.Discipline;
+import org.application.models.Group;
 import org.application.models.Student;
 import org.junit.jupiter.api.*;
 
@@ -42,8 +43,12 @@ public class StudentDisciplineManyToManyIntegrationTest {
         discipline.setInsertTime(new Date());
         Assertions.assertTrue(DatabaseManager.save(discipline));
 
+        Group group = new Group();
+        group.setName("A1");
+        group.setInsertTime(new Date());
+
         Student student = new Student();
-        student.setGroup("A");
+        student.setGroup(group);
         student.setYear(1);
         student.setName("test");
         student.setInsertTime(new Date());

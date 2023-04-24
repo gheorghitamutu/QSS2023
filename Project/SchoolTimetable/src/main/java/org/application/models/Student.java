@@ -18,12 +18,9 @@ public class Student implements Serializable {
             inverseJoinColumns = {@JoinColumn(name = "discipline_id")})
     Set<Discipline> disciplines = new HashSet<>();
 
-    @ManyToMany(cascade = {CascadeType.ALL})
-    @JoinTable(
-            name = "Student_Session",
-            joinColumns = {@JoinColumn(name = "student_id")},
-            inverseJoinColumns = {@JoinColumn(name = "session_id")})
-    private Set<Session> sessions = new HashSet<>();
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "group_id", referencedColumnName = "Id")
+    private Group group;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,9 +29,6 @@ public class Student implements Serializable {
 
     @Column(name = "Name", nullable = false)
     private String name;
-
-    @Column(name = "\"Group\"", nullable = false)
-    private String group;
 
     @Column(name = "\"Year\"", nullable = false)
     private int year;
@@ -56,14 +50,6 @@ public class Student implements Serializable {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getGroup() {
-        return group;
-    }
-
-    public void setGroup(String group) {
-        this.group = group;
     }
 
     public int getYear() {
@@ -90,11 +76,11 @@ public class Student implements Serializable {
         this.disciplines = disciplines;
     }
 
-    public Set<Session> getSessions() {
-        return sessions;
+    public Group getGroup() {
+        return group;
     }
 
-    public void setSessions(Set<Session> sessions) {
-        this.sessions = sessions;
+    public void setGroup(Group group) {
+        this.group = group;
     }
 }

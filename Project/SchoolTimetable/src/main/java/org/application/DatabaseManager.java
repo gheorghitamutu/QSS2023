@@ -93,6 +93,7 @@ public class DatabaseManager {
             configuration.addAnnotatedClass(org.application.models.Discipline.class);
             configuration.addAnnotatedClass(org.application.models.Timeslot.class);
             configuration.addAnnotatedClass(org.application.models.Teacher.class);
+            configuration.addAnnotatedClass(org.application.models.Group.class);
 
             ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder().applySettings(configuration.getProperties()).build();
             System.out.println("Hibernate Java Config serviceRegistry created");
