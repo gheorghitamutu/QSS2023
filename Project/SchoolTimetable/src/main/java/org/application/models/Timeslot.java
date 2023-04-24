@@ -28,6 +28,9 @@ public class Timeslot implements Serializable {
     @Column(name = "DayOfWeek", nullable = false)
     private String dayOfWeek;
 
+    @Column(name = "Timespan", nullable = false)
+    private int timespan;
+
     @Column(name = "Periodicity", nullable = false)
     private String periodicity;
 
@@ -88,5 +91,13 @@ public class Timeslot implements Serializable {
 
     public void setSession(Session session) {
         this.session = session;
+    }
+
+    public int getTimespan() {
+        return timespan;
+    }
+
+    public void setTimespan(int timespan) {
+        this.timespan = timespan;
     }
 }

@@ -3,7 +3,6 @@ package org.application.models;
 import org.application.DatabaseManager;
 import org.junit.jupiter.api.*;
 
-import java.sql.Time;
 import java.util.Date;
 import java.util.List;
 
@@ -40,6 +39,7 @@ class TimeslotTest {
         Timeslot timeslot = new Timeslot();
         timeslot.setPeriodicity("weekly");
         timeslot.setDayOfWeek("M");
+        timeslot.setTimespan(30);
         timeslot.setTime(15);
         timeslot.setInsertTime(new Date());
         Assertions.assertTrue(DatabaseManager.save(timeslot));
