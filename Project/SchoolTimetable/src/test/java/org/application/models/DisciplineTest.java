@@ -3,6 +3,7 @@ package org.application.models;
 import org.application.DatabaseManager;
 import org.junit.jupiter.api.*;
 
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -19,8 +20,6 @@ class DisciplineTest {
 
     @BeforeAll
     void setUpAll() {
-        List<Discipline> disciplines = DatabaseManager.readAll(Discipline.class);
-        DatabaseManager.deleteMany(disciplines);
     }
 
     @AfterAll
@@ -31,10 +30,32 @@ class DisciplineTest {
 
     @Test
     public void saveDiscipline() {
+
+        Session session = new Session();
+        session.setType(Session.Type.COURSE);
+        session.setInsertTime(new Date());
+
         Discipline discipline = new Discipline();
         discipline.setCredits(6);
         discipline.setName("test");
+        discipline.setSessions(Collections.singleton(session));
         discipline.setInsertTime(new Date());
+
+        session.setDiscipline(discipline);
+
+        StudentGroup studentGroup = new StudentGroup();
+        studentGroup.setName("A1");
+        studentGroup.setInsertTime(new Date());
+
+        Student student = new Student();
+        student.setGroup(studentGroup);
+        student.setYear(1);
+        student.setName("test");
+        student.setInsertTime(new Date());
+
+        studentGroup.setSessions(Collections.singleton(session));
+        session.setGroups(Collections.singleton(studentGroup));
+
         Assertions.assertTrue(DatabaseManager.save(discipline));
     }
 

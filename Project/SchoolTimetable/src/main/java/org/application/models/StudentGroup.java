@@ -7,14 +7,19 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
-@Entity(name = "Discipline")
-@Table(name = "discipline", uniqueConstraints = {@UniqueConstraint(columnNames = {"Id"})})
-public class Discipline implements Serializable {
+@Entity(name = "StudentGroup")
+@Table(name = "studentgroup", uniqueConstraints = {@UniqueConstraint(columnNames = {"Id"})})
+public class StudentGroup implements Serializable {
 
-    @ManyToMany(mappedBy = "disciplines", cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL)
     private Set<Student> students = new HashSet<>();
 
-    @OneToMany(mappedBy = "discipline", cascade = CascadeType.ALL)
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "StudentGroup_Session",
+            joinColumns = { @JoinColumn(name = "studentgroup_id", referencedColumnName = "Id") },
+            inverseJoinColumns = { @JoinColumn(name = "session_id", referencedColumnName = "Id") }
+    )
     private Set<Session> sessions = new HashSet<>();
 
     @Id
@@ -25,18 +30,15 @@ public class Discipline implements Serializable {
     @Column(name = "Name", nullable = false)
     private String name;
 
-    @Column(name = "Credits", nullable = false)
-    private int credits;
-
     @Column(name = "insert_time", nullable = false)
     private Date insertTime;
 
-    public int getId() {
-        return id;
+    public Set<Student> getStudents() {
+        return students;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setStudents(Set<Student> students) {
+        this.students = students;
     }
 
     public String getName() {
@@ -47,14 +49,6 @@ public class Discipline implements Serializable {
         this.name = name;
     }
 
-    public int getCredits() {
-        return credits;
-    }
-
-    public void setCredits(int credits) {
-        this.credits = credits;
-    }
-
     public Date getInsertTime() {
         return insertTime;
     }
@@ -63,19 +57,19 @@ public class Discipline implements Serializable {
         this.insertTime = insertTime;
     }
 
-    public Set<Student> getStudents() {
-        return students;
-    }
-
-    public void setStudents(Set<Student> students) {
-        this.students = students;
-    }
-
     public Set<Session> getSessions() {
         return sessions;
     }
 
     public void setSessions(Set<Session> sessions) {
         this.sessions = sessions;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }

@@ -12,18 +12,18 @@ import java.util.Set;
 @Table(name = "session", uniqueConstraints = {@UniqueConstraint(columnNames = {"Id"})})
 public class Session implements Serializable {
 
-    @ManyToOne
+    @ManyToOne(cascade=CascadeType.ALL)
     @JoinColumn(name = "discipline_id", referencedColumnName = "Id")
     private Discipline discipline;
 
-    @ManyToMany(mappedBy = "sessions")
-    private Set<Student> students;
+    @ManyToMany(mappedBy = "sessions", cascade=CascadeType.ALL)
+    private Set<StudentGroup> studentGroups = new HashSet<>();
 
-    @OneToMany(mappedBy = "session")
+    @ManyToMany(mappedBy = "sessions", cascade=CascadeType.ALL)
+    private Set<Teacher> teachers = new HashSet<>();
+
+    @OneToMany(mappedBy = "session", cascade=CascadeType.ALL)
     private Set<Timeslot> timeslots = new HashSet<>();
-
-    @ManyToMany(mappedBy = "sessions")
-    private Set<Teacher> teachers;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -60,14 +60,6 @@ public class Session implements Serializable {
         this.insertTime = insertTime;
     }
 
-    public Set<Student> getStudents() {
-        return students;
-    }
-
-    public void setStudents(Set<Student> students) {
-        this.students = students;
-    }
-
     public Discipline getDiscipline() {
         return discipline;
     }
@@ -90,6 +82,14 @@ public class Session implements Serializable {
 
     public void setTeachers(Set<Teacher> teachers) {
         this.teachers = teachers;
+    }
+
+    public Set<StudentGroup> getGroups() {
+        return studentGroups;
+    }
+
+    public void setGroups(Set<StudentGroup> studentGroups) {
+        this.studentGroups = studentGroups;
     }
 
     public enum Type {
