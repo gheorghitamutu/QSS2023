@@ -3,6 +3,7 @@ package org.application.models;
 import org.application.DatabaseManager;
 import org.junit.jupiter.api.*;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -37,10 +38,15 @@ class TimeslotTest {
     @Test
     public void saveTimeslot() {
         Timeslot timeslot = new Timeslot();
-        timeslot.setPeriodicity("weekly");
+        timeslot.setPeriodicity(Timeslot.Periodicity.WEEKLY);
         timeslot.setDayOfWeek("M");
         timeslot.setTimespan(30);
-        timeslot.setTime(15);
+        try {
+            timeslot.setTime(new SimpleDateFormat("HH:mm:ss").parse("15:30:14"));
+        }
+        catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
         timeslot.setInsertTime(new Date());
         Assertions.assertTrue(DatabaseManager.save(timeslot));
     }

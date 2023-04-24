@@ -9,6 +9,10 @@ import java.util.Date;
 @Table(name = "timeslot", uniqueConstraints = {@UniqueConstraint(columnNames = {"Id"})})
 public class Timeslot implements Serializable {
 
+    public enum Periodicity {
+        WEEKLY, BIWEEKLY, MONTHLY
+    }
+
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "session_id", referencedColumnName = "Id")
     private Session session;
@@ -22,8 +26,10 @@ public class Timeslot implements Serializable {
     @Column(name = "Id", nullable = false, unique = true)
     private int id;
 
+    @Basic
+    @Temporal(TemporalType.TIME)
     @Column(name = "Time", nullable = false)
-    private int time;
+    private Date time;
 
     @Column(name = "DayOfWeek", nullable = false)
     private String dayOfWeek;
@@ -31,8 +37,9 @@ public class Timeslot implements Serializable {
     @Column(name = "Timespan", nullable = false)
     private int timespan;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "Periodicity", nullable = false)
-    private String periodicity;
+    private Periodicity periodicity;
 
     @Column(name="insert_time", nullable=false)
     private Date insertTime;
@@ -53,11 +60,11 @@ public class Timeslot implements Serializable {
         this.id = id;
     }
 
-    public int getTime() {
+    public Date getTime() {
         return time;
     }
 
-    public void setTime(int time) {
+    public void setTime(Date time) {
         this.time = time;
     }
 
@@ -69,11 +76,11 @@ public class Timeslot implements Serializable {
         this.dayOfWeek = dayOfWeek;
     }
 
-    public String getPeriodicity() {
+    public Periodicity getPeriodicity() {
         return periodicity;
     }
 
-    public void setPeriodicity(String periodicity) {
+    public void setPeriodicity(Periodicity periodicity) {
         this.periodicity = periodicity;
     }
 
