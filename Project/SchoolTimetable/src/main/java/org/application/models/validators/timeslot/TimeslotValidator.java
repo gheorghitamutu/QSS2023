@@ -45,6 +45,12 @@ public class TimeslotValidator implements ConstraintValidator<ValidTimeslot, Tim
             return false;
         }
 
+        Timeslot.Day day = value.getWeekday();
+        if (day == Timeslot.Day.SATURDAY || day == Timeslot.Day.SUNDAY)
+        {
+            return false;
+        }
+
         Room room = value.getRoom();
         if (room == null) {
             return false;
