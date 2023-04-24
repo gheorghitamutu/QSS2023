@@ -43,7 +43,7 @@ public class StudentSessionManyToManyIntegrationTest {
 
         Session session = new Session();
         session.setInsertTime(new Date());
-        session.setType(0);
+        session.setType(Session.Type.SEMINARY);
 
         discipline.setSessions(Collections.singleton(session));
         Assertions.assertTrue(DatabaseManager.save(discipline));

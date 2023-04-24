@@ -40,7 +40,7 @@ class RoomTest {
         room.setCapacity(30);
         room.setFloor(1);
         room.setName("test");
-        room.setType(1);
+        room.setType(Room.Type.COURSE);
         room.setInsertTime(new Date());
         Assertions.assertTrue(DatabaseManager.save(room));
     }

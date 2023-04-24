@@ -52,7 +52,7 @@ class TimeslotTest {
         room.setCapacity(30);
         room.setFloor(1);
         room.setName("test");
-        room.setType(1);
+        room.setType(Room.Type.COURSE);
         room.setInsertTime(new Date());
 
         Timeslot timeslot = new Timeslot();
@@ -74,7 +74,7 @@ class TimeslotTest {
         Assertions.assertTrue(DatabaseManager.save(discipline));
 
         Session session = new Session();
-        session.setType(0);
+        session.setType(Session.Type.COURSE);
         session.setInsertTime(new Date());
         session.setDiscipline(discipline);
         Assertions.assertTrue(DatabaseManager.save(session));

@@ -30,9 +30,9 @@ public class Session implements Serializable {
     @Column(name = "Id", nullable = false, unique = true)
     private int id;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "Type", nullable = false)
-    private int type;
-
+    private Type type;
     @Column(name = "insert_time", nullable = false)
     private Date insertTime;
 
@@ -44,11 +44,11 @@ public class Session implements Serializable {
         this.id = id;
     }
 
-    public int getType() {
+    public Type getType() {
         return type;
     }
 
-    public void setType(int type) {
+    public void setType(Type type) {
         this.type = type;
     }
 
@@ -90,5 +90,9 @@ public class Session implements Serializable {
 
     public void setTeachers(Set<Teacher> teachers) {
         this.teachers = teachers;
+    }
+
+    public enum Type {
+        COURSE, LABORATORY, SEMINARY
     }
 }

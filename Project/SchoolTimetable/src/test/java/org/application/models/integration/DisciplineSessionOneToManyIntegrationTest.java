@@ -41,7 +41,7 @@ public class DisciplineSessionOneToManyIntegrationTest {
 
         Session session = new Session();
         session.setInsertTime(new Date());
-        session.setType(0);
+        session.setType(Session.Type.COURSE);
         session.setDiscipline(discipline);
 
         discipline.setSessions(Collections.singleton(session));

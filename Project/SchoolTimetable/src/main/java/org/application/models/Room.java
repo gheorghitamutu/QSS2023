@@ -3,7 +3,6 @@ package org.application.models;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
-import java.sql.Time;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -20,8 +19,9 @@ public class Room implements Serializable {
     @Column(name = "Id", nullable = false, unique = true)
     private int id;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "Type", nullable = false)
-    private int type;
+    private Type type;
 
     @Column(name = "Name", nullable = false)
     private String name;
@@ -32,7 +32,7 @@ public class Room implements Serializable {
     @Column(name = "Floor", nullable = false)
     private int floor;
 
-    @Column(name="insert_time", nullable=false)
+    @Column(name = "insert_time", nullable = false)
     private Date insertTime;
 
     public int getId() {
@@ -43,11 +43,11 @@ public class Room implements Serializable {
         this.id = id;
     }
 
-    public int getType() {
+    public Type getType() {
         return type;
     }
 
-    public void setType(int type) {
+    public void setType(Type type) {
         this.type = type;
     }
 
@@ -89,5 +89,9 @@ public class Room implements Serializable {
 
     public void setTimeslots(Set<Timeslot> timeslots) {
         this.timeslots = timeslots;
+    }
+
+    public enum Type {
+        COURSE, LABORATORY
     }
 }

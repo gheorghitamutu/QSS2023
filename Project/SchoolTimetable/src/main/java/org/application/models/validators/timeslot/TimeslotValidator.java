@@ -3,6 +3,7 @@ package org.application.models.validators.timeslot;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import org.application.models.Room;
+import org.application.models.Session;
 import org.application.models.Timeslot;
 
 import java.text.SimpleDateFormat;
@@ -56,6 +57,10 @@ public class TimeslotValidator implements ConstraintValidator<ValidTimeslot, Tim
             return false;
         }
 
+        Session session = value.getSession();
+        if (session.getType() == Session.Type.COURSE && room.getType() != Room.Type.COURSE) {
+            return false;
+        }
 
         Set<Timeslot> timeslots = room.getTimeslots();
         for (Timeslot timeslot : timeslots) {

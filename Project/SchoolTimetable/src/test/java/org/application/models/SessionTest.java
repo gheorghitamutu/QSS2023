@@ -46,7 +46,7 @@ class SessionTest {
         Assertions.assertTrue(DatabaseManager.save(discipline));
 
         Session session = new Session();
-        session.setType(0);
+        session.setType(Session.Type.COURSE);
         session.setInsertTime(new Date());
         session.setDiscipline(discipline);
         Assertions.assertTrue(DatabaseManager.save(session));
