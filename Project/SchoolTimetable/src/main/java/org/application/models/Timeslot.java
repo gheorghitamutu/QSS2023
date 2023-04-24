@@ -1,6 +1,7 @@
 package org.application.models;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -9,39 +10,30 @@ import java.util.Date;
 @Table(name = "timeslot", uniqueConstraints = {@UniqueConstraint(columnNames = {"Id"})})
 public class Timeslot implements Serializable {
 
-    public enum Periodicity {
-        WEEKLY, BIWEEKLY, MONTHLY
-    }
-
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "session_id", referencedColumnName = "Id")
     private Session session;
-
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "room_id", referencedColumnName = "Id")
     private Room room;
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "Id", nullable = false, unique = true)
     private int id;
-
     @Basic
     @Temporal(TemporalType.TIME)
     @Column(name = "Time", nullable = false)
     private Date time;
-
-    @Column(name = "DayOfWeek", nullable = false)
-    private String dayOfWeek;
-
+    @Enumerated(EnumType.STRING)
+    @Column(name = "Weekday", nullable = false)
+    private Day weekday;
+    @Min(30)
     @Column(name = "Timespan", nullable = false)
     private int timespan;
-
     @Enumerated(EnumType.STRING)
     @Column(name = "Periodicity", nullable = false)
     private Periodicity periodicity;
-
-    @Column(name="insert_time", nullable=false)
+    @Column(name = "insert_time", nullable = false)
     private Date insertTime;
 
     public Room getRoom() {
@@ -68,12 +60,12 @@ public class Timeslot implements Serializable {
         this.time = time;
     }
 
-    public String getDayOfWeek() {
-        return dayOfWeek;
+    public Day getWeekday() {
+        return weekday;
     }
 
-    public void setDayOfWeek(String dayOfWeek) {
-        this.dayOfWeek = dayOfWeek;
+    public void setWeekday(Day weekday) {
+        this.weekday = weekday;
     }
 
     public Periodicity getPeriodicity() {
@@ -106,5 +98,13 @@ public class Timeslot implements Serializable {
 
     public void setTimespan(int timespan) {
         this.timespan = timespan;
+    }
+
+    public enum Periodicity {
+        WEEKLY, BIWEEKLY, MONTHLY
+    }
+
+    public enum Day {
+        MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, SUNDAY
     }
 }

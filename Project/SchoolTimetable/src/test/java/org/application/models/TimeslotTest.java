@@ -39,12 +39,11 @@ class TimeslotTest {
     public void saveTimeslot() {
         Timeslot timeslot = new Timeslot();
         timeslot.setPeriodicity(Timeslot.Periodicity.WEEKLY);
-        timeslot.setDayOfWeek("M");
+        timeslot.setWeekday(Timeslot.Day.MONDAY);
         timeslot.setTimespan(30);
         try {
             timeslot.setTime(new SimpleDateFormat("HH:mm:ss").parse("15:30:14"));
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             System.out.println(e.getMessage());
         }
         timeslot.setInsertTime(new Date());
