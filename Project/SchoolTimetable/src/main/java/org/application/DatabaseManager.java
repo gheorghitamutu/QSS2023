@@ -4,19 +4,20 @@ import jakarta.persistence.TypedQuery;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
-import org.application.models.Discipline;
-import org.application.models.Room;
-import org.application.models.Student;
-import org.application.models.Timeslot;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.Validation;
+import jakarta.validation.Validator;
+import jakarta.validation.ValidatorFactory;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.service.ServiceRegistry;
+import org.hibernate.validator.messageinterpolation.ParameterMessageInterpolator;
 
 import java.util.List;
 import java.util.Properties;
+import java.util.Set;
 
 public class DatabaseManager {
     //XML based configuration
@@ -81,7 +82,7 @@ public class DatabaseManager {
             props.put("connection.pool_size", 5);
             props.put("hbm2ddl.auto", "create-drop");
             props.put("hibernate.show_sql", true);
-            props.put("hibernate.format_sql", true);
+            props.put("hibernate.format_sql", false);
             props.put("javax.persistence.schema-generation.database.action", "drop-and-create");
 
             configuration.setProperties(props);
@@ -121,6 +122,21 @@ public class DatabaseManager {
     }
 
     public static <T> boolean save(T object) {
+        ValidatorFactory validatorFactory = Validation.byDefaultProvider()
+                .configure()
+                .messageInterpolator(new ParameterMessageInterpolator())
+                .buildValidatorFactory();
+        Validator validator = validatorFactory.usingContext()
+                .messageInterpolator(new ParameterMessageInterpolator())
+                .getValidator();
+        Set<ConstraintViolation<T>> constraintViolationsInvalidObject = validator.validate(object);
+        for (ConstraintViolation<T> constraintViolation : constraintViolationsInvalidObject) {
+            System.out.println(constraintViolation.getMessage());
+        }
+        if (constraintViolationsInvalidObject.size() > 0) {
+            return false;
+        }
+
         try {
             Session session = DatabaseManager.getSessionJavaConfigFactory().openSession();
             session.beginTransaction();

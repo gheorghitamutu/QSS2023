@@ -24,7 +24,7 @@
 
         <!-- helper debug settings -->
         <property name="hibernate.show_sql">true</property>
-        <property name="hibernate.format_sql">true</property>
+        <property name="hibernate.format_sql">false</property>
 
         <property name="javax.persistence.schema-generation.database.action">drop-and-create</property>
 

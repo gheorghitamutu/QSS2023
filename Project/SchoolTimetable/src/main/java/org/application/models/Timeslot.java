@@ -1,7 +1,10 @@
 package org.application.models;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Future;
+import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.Positive;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -27,12 +30,14 @@ public class Timeslot implements Serializable {
     @Enumerated(EnumType.STRING)
     @Column(name = "Weekday", nullable = false)
     private Day weekday;
-    @Min(30)
+    @Positive(message = "[ERROR] Value should be positive.")
+    @Min(value = 30, message = "[ERROR] You can reserve a minimum of 30 minutes.")
     @Column(name = "Timespan", nullable = false)
     private int timespan;
     @Enumerated(EnumType.STRING)
     @Column(name = "Periodicity", nullable = false)
     private Periodicity periodicity;
+    // @FutureOrPresent(message = "[ERROR] Invalid date: it should be provided as future or present date.")
     @Column(name = "insert_time", nullable = false)
     private Date insertTime;
 
