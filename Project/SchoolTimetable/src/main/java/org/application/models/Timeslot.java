@@ -3,6 +3,7 @@ package org.application.models;
 import jakarta.persistence.*;
 
 import jakarta.validation.Valid;
+
 import jakarta.validation.constraints.NotNull;
 import org.application.models.validators.timeslot.ValidTimeslot;
 import org.hibernate.validator.constraints.time.DurationMax;

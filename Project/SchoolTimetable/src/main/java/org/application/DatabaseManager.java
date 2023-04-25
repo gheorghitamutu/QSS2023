@@ -159,6 +159,7 @@ public class DatabaseManager {
         if (validator == null) {
             return false;
         }
+
         Set<ConstraintViolation<T>> constraintViolationsInvalidObject = validator.validate(object);
         for (ConstraintViolation<T> constraintViolation : constraintViolationsInvalidObject) {
             System.out.println(constraintViolation.getMessage());
