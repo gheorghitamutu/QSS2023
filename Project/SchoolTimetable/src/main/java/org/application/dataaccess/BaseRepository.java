@@ -26,20 +26,25 @@ public class BaseRepository<T> implements IRepository<T> {
         this.hibernateProvider = hibernateProvider;
     }
 
-    public boolean save(T object) {
-        ValidatorFactory validatorFactory = Validation.byDefaultProvider()
-                .configure()
-                .messageInterpolator(new ParameterMessageInterpolator())
-                .buildValidatorFactory();
+    private boolean constraintValidation(T object) {
+        Validator validator;
+        try (ValidatorFactory validatorFactory = Validation.byDefaultProvider().configure().messageInterpolator(new ParameterMessageInterpolator()).buildValidatorFactory()) {
+            validator = validatorFactory.usingContext().messageInterpolator(new ParameterMessageInterpolator()).getValidator();
+        }
+        if (validator == null) {
+            return false;
+        }
 
-        Validator validator = validatorFactory.usingContext()
-                .messageInterpolator(new ParameterMessageInterpolator())
-                .getValidator();
         Set<ConstraintViolation<T>> constraintViolationsInvalidObject = validator.validate(object);
         for (ConstraintViolation<T> constraintViolation : constraintViolationsInvalidObject) {
             System.out.println(constraintViolation.getMessage());
         }
-        if (constraintViolationsInvalidObject.size() > 0) {
+
+        return constraintViolationsInvalidObject.size() == 0;
+    }
+
+    public boolean save(T object) {
+        if (!constraintValidation(object)) {
             return false;
         }
 
