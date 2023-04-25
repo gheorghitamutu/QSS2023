@@ -1,6 +1,7 @@
 package org.application.models;
 
 import jakarta.persistence.*;
+import jakarta.validation.Valid;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -87,7 +88,7 @@ public class Room implements Serializable {
         return timeslots;
     }
 
-    public void setTimeslots(Set<Timeslot> timeslots) {
+    public void setTimeslots(Set<@Valid Timeslot> timeslots) {
         this.timeslots = timeslots;
     }
 

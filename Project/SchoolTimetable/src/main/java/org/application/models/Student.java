@@ -1,21 +1,21 @@
 package org.application.models;
 
 import jakarta.persistence.*;
+import jakarta.validation.Valid;
+import org.application.models.validators.student.ValidStudent;
 
 import java.io.Serializable;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+@ValidStudent
 @Entity(name = "Student")
 @Table(name = "student", uniqueConstraints = {@UniqueConstraint(columnNames = {"Id"})})
 public class Student implements Serializable {
 
     @ManyToMany(cascade = {CascadeType.ALL})
-    @JoinTable(
-            name = "Student_Discipline",
-            joinColumns = {@JoinColumn(name = "student_id")},
-            inverseJoinColumns = {@JoinColumn(name = "discipline_id")})
+    @JoinTable(name = "Student_Discipline", joinColumns = {@JoinColumn(name = "student_id")}, inverseJoinColumns = {@JoinColumn(name = "discipline_id")})
     Set<Discipline> disciplines = new HashSet<>();
 
     @ManyToOne(cascade = CascadeType.ALL)
@@ -72,7 +72,7 @@ public class Student implements Serializable {
         return disciplines;
     }
 
-    public void setDisciplines(Set<Discipline> disciplines) {
+    public void setDisciplines(Set<@Valid Discipline> disciplines) {
         this.disciplines = disciplines;
     }
 
@@ -80,7 +80,7 @@ public class Student implements Serializable {
         return studentGroup;
     }
 
-    public void setGroup(StudentGroup studentGroup) {
+    public void setGroup(@Valid StudentGroup studentGroup) {
         this.studentGroup = studentGroup;
     }
 }

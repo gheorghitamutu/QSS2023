@@ -2,6 +2,7 @@ package org.application.models;
 
 
 import jakarta.persistence.*;
+import jakarta.validation.Valid;
 import org.application.models.validators.teacher.ValidTeacher;
 
 import java.io.Serializable;
@@ -62,7 +63,7 @@ public class Teacher implements Serializable {
         return sessions;
     }
 
-    public void setSessions(Set<Session> sessions) {
+    public void setSessions(Set<@Valid Session> sessions) {
         this.sessions = sessions;
     }
 

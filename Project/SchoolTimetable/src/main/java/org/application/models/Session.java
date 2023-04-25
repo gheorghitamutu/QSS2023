@@ -2,6 +2,7 @@ package org.application.models;
 
 
 import jakarta.persistence.*;
+import jakarta.validation.Valid;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -72,7 +73,7 @@ public class Session implements Serializable {
         return timeslots;
     }
 
-    public void setTimeslots(Set<Timeslot> timeslots) {
+    public void setTimeslots(Set<@Valid Timeslot> timeslots) {
         this.timeslots = timeslots;
     }
 
@@ -80,7 +81,7 @@ public class Session implements Serializable {
         return teachers;
     }
 
-    public void setTeachers(Set<Teacher> teachers) {
+    public void setTeachers(Set<@Valid Teacher> teachers) {
         this.teachers = teachers;
     }
 
@@ -88,7 +89,7 @@ public class Session implements Serializable {
         return studentGroups;
     }
 
-    public void setGroups(Set<StudentGroup> studentGroups) {
+    public void setGroups(Set<@Valid StudentGroup> studentGroups) {
         this.studentGroups = studentGroups;
     }
 

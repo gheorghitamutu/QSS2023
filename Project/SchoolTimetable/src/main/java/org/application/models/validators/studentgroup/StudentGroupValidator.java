@@ -1,7 +1,8 @@
-package org.application.models.validators.StudentGroup;
+package org.application.models.validators.studentgroup;
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
+import org.application.DatabaseManager;
 import org.application.models.Session;
 import org.application.models.StudentGroup;
 import org.application.models.Timeslot;
@@ -22,6 +23,12 @@ public class StudentGroupValidator implements ConstraintValidator<ValidStudentGr
     public boolean isValid(StudentGroup value, ConstraintValidatorContext context) {
 
         Set<Session> sessions = value.getSessions();
+        for (Session session : sessions) {
+            if (!DatabaseManager.constraintValidation(session)) {
+                return false;
+            }
+        }
+
         Set<Timeslot> timeslots = new HashSet<>();
         for (Session session : sessions) {
             timeslots.addAll(session.getTimeslots());

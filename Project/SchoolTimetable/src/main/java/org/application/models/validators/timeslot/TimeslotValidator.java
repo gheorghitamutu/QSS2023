@@ -2,6 +2,7 @@ package org.application.models.validators.timeslot;
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
+import org.application.DatabaseManager;
 import org.application.models.Room;
 import org.application.models.Session;
 import org.application.models.Timeslot;
@@ -20,6 +21,23 @@ public class TimeslotValidator implements ConstraintValidator<ValidTimeslot, Tim
 
     @Override
     public boolean isValid(Timeslot value, ConstraintValidatorContext context) {
+
+        Room room = value.getRoom();
+        if (room == null) {
+            return false;
+        }
+        if (!DatabaseManager.constraintValidation(room)) {
+            return false;
+        }
+
+        Session session = value.getSession();
+        if (session.getType() == Session.Type.COURSE && room.getType() != Room.Type.COURSE) {
+            return false;
+        }
+        if (!DatabaseManager.constraintValidation(session)) {
+            return false;
+        }
+
         if (value.getTimespan().isZero()) {
             return false;
         }
@@ -48,16 +66,6 @@ public class TimeslotValidator implements ConstraintValidator<ValidTimeslot, Tim
 
         Timeslot.Day day = value.getWeekday();
         if (day == Timeslot.Day.SATURDAY || day == Timeslot.Day.SUNDAY) {
-            return false;
-        }
-
-        Room room = value.getRoom();
-        if (room == null) {
-            return false;
-        }
-
-        Session session = value.getSession();
-        if (session.getType() == Session.Type.COURSE && room.getType() != Room.Type.COURSE) {
             return false;
         }
 

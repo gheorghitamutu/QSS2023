@@ -123,19 +123,24 @@ public class DatabaseManager {
         return sessionJavaConfigFactory;
     }
 
-    public static <T> boolean save(T object) {
-        ValidatorFactory validatorFactory = Validation.byDefaultProvider()
-                .configure()
-                .messageInterpolator(new ParameterMessageInterpolator())
-                .buildValidatorFactory();
-        Validator validator = validatorFactory.usingContext()
-                .messageInterpolator(new ParameterMessageInterpolator())
-                .getValidator();
+    public static <T> boolean constraintValidation(T object) {
+        Validator validator;
+        try (ValidatorFactory validatorFactory = Validation.byDefaultProvider().configure().messageInterpolator(new ParameterMessageInterpolator()).buildValidatorFactory()) {
+            validator = validatorFactory.usingContext().messageInterpolator(new ParameterMessageInterpolator()).getValidator();
+        }
+        if (validator == null) {
+            return false;
+        }
         Set<ConstraintViolation<T>> constraintViolationsInvalidObject = validator.validate(object);
         for (ConstraintViolation<T> constraintViolation : constraintViolationsInvalidObject) {
             System.out.println(constraintViolation.getMessage());
         }
-        if (constraintViolationsInvalidObject.size() > 0) {
+
+        return constraintViolationsInvalidObject.size() == 0;
+    }
+
+    public static <T> boolean save(T object) {
+        if (!constraintValidation(object)) {
             return false;
         }
 

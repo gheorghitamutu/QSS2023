@@ -1,8 +1,9 @@
 package org.application.models;
 
 import jakarta.persistence.*;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Pattern;
-import org.application.models.validators.StudentGroup.ValidStudentGroup;
+import org.application.models.validators.studentgroup.ValidStudentGroup;
 import org.hibernate.validator.constraints.Length;
 
 import java.io.Serializable;
@@ -39,7 +40,7 @@ public class StudentGroup implements Serializable {
         return students;
     }
 
-    public void setStudents(Set<Student> students) {
+    public void setStudents(Set<@Valid Student> students) {
         this.students = students;
     }
 
@@ -63,7 +64,7 @@ public class StudentGroup implements Serializable {
         return sessions;
     }
 
-    public void setSessions(Set<Session> sessions) {
+    public void setSessions(Set<@Valid Session> sessions) {
         this.sessions = sessions;
     }
 

@@ -2,6 +2,7 @@ package org.application.models.validators.teacher;
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
+import org.application.DatabaseManager;
 import org.application.models.Session;
 import org.application.models.Teacher;
 import org.application.models.Timeslot;
@@ -21,8 +22,14 @@ public class TeacherValidator implements ConstraintValidator<ValidTeacher, Teach
     @Override
     public boolean isValid(Teacher value, ConstraintValidatorContext context) {
 
-        Teacher.Type teacherType = value.getType();
         Set<Session> sessions = value.getSessions();
+        for (Session session : sessions) {
+            if (!DatabaseManager.constraintValidation(session)) {
+                return false;
+            }
+        }
+
+        Teacher.Type teacherType = value.getType();
         for (Session session : sessions) {
             if (session.getType() == Session.Type.COURSE && teacherType != Teacher.Type.TEACHER) {
                 return false;

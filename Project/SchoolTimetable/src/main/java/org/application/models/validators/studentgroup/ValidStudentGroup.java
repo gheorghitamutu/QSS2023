@@ -1,4 +1,4 @@
-package org.application.models.validators.StudentGroup;
+package org.application.models.validators.studentgroup;
 
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
