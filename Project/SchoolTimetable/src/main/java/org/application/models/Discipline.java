@@ -1,5 +1,7 @@
 package org.application.models;
 
+
+
 import jakarta.persistence.*;
 
 import java.io.Serializable;

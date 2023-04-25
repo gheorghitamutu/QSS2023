@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+
 @Entity(name = "Student")
 @Table(name = "student", uniqueConstraints = {@UniqueConstraint(columnNames = {"Id"})})
 public class Student implements Serializable {
