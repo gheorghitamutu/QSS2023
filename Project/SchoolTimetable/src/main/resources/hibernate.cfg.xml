@@ -3,6 +3,8 @@
         "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
 
 <hibernate-configuration>
+
+
     <session-factory>
 
         <!-- database connection settings -->
@@ -19,14 +21,14 @@
         <property name="connection.pool_size">5</property>
 
         <!-- Drop and re-create the database schema on startup -->
-        <property name="hbm2ddl.auto">create-drop</property>
+        <property name="hbm2ddl.auto">update</property>
         <!-- <property name="hbm2ddl.auto">update</property> -->
 
         <!-- helper debug settings -->
         <property name="hibernate.show_sql">true</property>
         <property name="hibernate.format_sql">false</property>
 
-        <property name="javax.persistence.schema-generation.database.action">drop-and-create</property>
+        <property name="jakarta.persistence.schema-generation.database.action">drop-and-create</property>
 
         <mapping class="org.application.models.Room"/>
         <mapping class="org.application.models.Student"/>
