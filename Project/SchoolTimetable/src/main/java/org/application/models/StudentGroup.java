@@ -1,12 +1,16 @@
 package org.application.models;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Pattern;
+import org.application.models.validators.StudentGroup.ValidStudentGroup;
+import org.hibernate.validator.constraints.Length;
 
 import java.io.Serializable;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+@ValidStudentGroup
 @Entity(name = "StudentGroup")
 @Table(name = "studentgroup", uniqueConstraints = {@UniqueConstraint(columnNames = {"Id"})})
 public class StudentGroup implements Serializable {
@@ -15,11 +19,7 @@ public class StudentGroup implements Serializable {
     private Set<Student> students = new HashSet<>();
 
     @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(
-            name = "StudentGroup_Session",
-            joinColumns = { @JoinColumn(name = "studentgroup_id", referencedColumnName = "Id") },
-            inverseJoinColumns = { @JoinColumn(name = "session_id", referencedColumnName = "Id") }
-    )
+    @JoinTable(name = "StudentGroup_Session", joinColumns = {@JoinColumn(name = "studentgroup_id", referencedColumnName = "Id")}, inverseJoinColumns = {@JoinColumn(name = "session_id", referencedColumnName = "Id")})
     private Set<Session> sessions = new HashSet<>();
 
     @Id
@@ -27,6 +27,8 @@ public class StudentGroup implements Serializable {
     @Column(name = "Id", nullable = false, unique = true)
     private int id;
 
+    @Length(min = 2, max = 2)
+    @Pattern(regexp = "[A-Z]{1}[0-9]{1}")
     @Column(name = "Name", nullable = false)
     private String name;
 

@@ -47,8 +47,7 @@ public class TimeslotValidator implements ConstraintValidator<ValidTimeslot, Tim
         }
 
         Timeslot.Day day = value.getWeekday();
-        if (day == Timeslot.Day.SATURDAY || day == Timeslot.Day.SUNDAY)
-        {
+        if (day == Timeslot.Day.SATURDAY || day == Timeslot.Day.SUNDAY) {
             return false;
         }
 
@@ -64,8 +63,7 @@ public class TimeslotValidator implements ConstraintValidator<ValidTimeslot, Tim
 
         Set<Timeslot> timeslots = room.getTimeslots();
         for (Timeslot timeslot : timeslots) {
-            if (value == timeslot) // don't check against current timeslot
-            {
+            if (value == timeslot) { // don't check against current timeslot
                 continue;
             }
 

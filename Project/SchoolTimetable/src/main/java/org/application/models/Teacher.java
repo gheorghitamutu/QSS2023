@@ -2,21 +2,20 @@ package org.application.models;
 
 
 import jakarta.persistence.*;
+import org.application.models.validators.teacher.ValidTeacher;
 
 import java.io.Serializable;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+@ValidTeacher
 @Entity(name = "Teacher")
 @Table(name = "teacher", uniqueConstraints = {@UniqueConstraint(columnNames = {"Id"})})
 public class Teacher implements Serializable {
 
     @ManyToMany(cascade = {CascadeType.ALL})
-    @JoinTable(
-            name = "Teacher_Session",
-            joinColumns = {@JoinColumn(name = "teacher_id")},
-            inverseJoinColumns = {@JoinColumn(name = "session_id")})
+    @JoinTable(name = "Teacher_Session", joinColumns = {@JoinColumn(name = "teacher_id")}, inverseJoinColumns = {@JoinColumn(name = "session_id")})
     private Set<Session> sessions = new HashSet<>();
 
     @Id
@@ -27,8 +26,9 @@ public class Teacher implements Serializable {
     @Column(name = "Name", nullable = false)
     private String name;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "Type", nullable = false)
-    private String type;
+    private Type type;
 
     @Column(name = "insert_time", nullable = false)
     private Date insertTime;
@@ -66,11 +66,15 @@ public class Teacher implements Serializable {
         this.sessions = sessions;
     }
 
-    public String getType() {
+    public Type getType() {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(Type type) {
         this.type = type;
+    }
+
+    public enum Type {
+        TEACHER, COLLABORATOR
     }
 }

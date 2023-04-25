@@ -30,7 +30,7 @@ class TeacherTest {
     @Test
     public void saveTeacher() {
         Teacher teacher = new Teacher();
-        teacher.setType("Colab");
+        teacher.setType(Teacher.Type.COLLABORATOR);
         teacher.setName("test");
         teacher.setInsertTime(new Date());
         Assertions.assertTrue(DatabaseManager.save(teacher));
