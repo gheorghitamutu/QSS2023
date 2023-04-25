@@ -29,7 +29,7 @@ class StudentsRepositoryTests {
 
     @AfterAll
     void tearDownAll() {
-        List<Student> students = studentsRepository.readAll(Student.class);
+        List<Student> students = studentsRepository.readAll();
         studentsRepository.deleteMany(students);
     }
 
@@ -49,7 +49,7 @@ class StudentsRepositoryTests {
 
     @Test()
     public void readStudent() {
-        List<Student> students = studentsRepository.readAll(Student.class);
+        List<Student> students = studentsRepository.readAll();
         Assertions.assertEquals(1, students.size());
         for (Student r : students) {
             System.out.println(r);

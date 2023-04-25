@@ -1,4 +1,6 @@
 package org.application.dataaccess;
 
-public interface IStudentsRepository {
+import org.application.models.Student;
+
+public interface IStudentsRepository extends IRepository<Student> {
 }

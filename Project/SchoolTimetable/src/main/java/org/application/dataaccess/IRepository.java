@@ -9,6 +9,6 @@ public interface IRepository<T> {
 
     public boolean deleteMany(List<T> objects);
 
-    public List<T> readAll(Class<T> tClass);
+    public List<T> readAll();
 }
 

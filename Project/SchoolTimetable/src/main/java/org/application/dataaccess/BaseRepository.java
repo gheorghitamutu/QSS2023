@@ -12,16 +12,31 @@ import org.hibernate.validator.messageinterpolation.ParameterMessageInterpolator
 
 import jakarta.persistence.*;
 
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Set;
 
 public class BaseRepository<T> implements IRepository<T> {
 
-
+    protected Class<T> tClass;
     private final IHibernateProvider hibernateProvider;
 
-    protected BaseRepository(IHibernateProvider hibernateProvider)
-    {
+
+    protected BaseRepository(IHibernateProvider hibernateProvider) {
+
+        try
+        {
+            Type mySuperclass = getClass().getGenericSuperclass();
+            Type tType = ((ParameterizedType)mySuperclass).getActualTypeArguments()[0];
+            String className = tType.toString().split(" ")[1];
+            tClass = (Class<T>) Class.forName(className);
+        }
+        catch (Exception ex)
+        {
+            System.out.println("Class not found!");
+        }
+
 
         this.hibernateProvider = hibernateProvider;
     }
@@ -101,8 +116,9 @@ public class BaseRepository<T> implements IRepository<T> {
         return true;
     }
 
-    public List<T> readAll(Class<T> tClass) {
+    public List<T> readAll() {
         var session = this.hibernateProvider.getEntityManager();
+
 
         CriteriaBuilder cb = session.getCriteriaBuilder();
         CriteriaQuery<T> cq = cb.createQuery(tClass);
