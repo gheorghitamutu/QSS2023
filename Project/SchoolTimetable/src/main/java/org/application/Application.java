@@ -22,29 +22,36 @@ public class Application {
     public void run() {
         var students = this.studentsRepository.readAll();
 
-        if (students.size() <= 5)
+        if (students.size() <= 15)
         {
-            var newStudent = new Student();
-
             StudentGroup studentGroup = new StudentGroup();
-            studentGroup.setName("A1");
+
+
+            // check group validator
+//            studentGroup.setName("A1");
+            studentGroup.setName("1A1sadas");
+
             studentGroup.setInsertTime(new Date());
 
-            Student student = new Student();
-            student.setGroup(studentGroup);
-            student.setYear(1);
-            student.setName("test" + UUID.randomUUID());
-            student.setInsertTime(new Date());
+            Student newStudent = new Student();
+            newStudent.setGroup(studentGroup);
+            newStudent.setYear(1);
+            newStudent.setName("test" + UUID.randomUUID());
+            newStudent.setInsertTime(new Date());
 
-            this.studentsRepository.save(student);
+            var succeded = this.studentsRepository.save(newStudent);
+
+            if (!succeded)
+            {
+                System.out.println("Couldn't insert student.");
+            }
 
             students = this.studentsRepository.readAll();
         }
 
         System.out.println("************************************** STUDENTS LIST *************************");
 
-        for (var student :
-                students) {
+        for (var student : students) {
             System.out.println(student.getName());
         }
 
