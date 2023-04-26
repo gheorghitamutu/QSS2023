@@ -1,10 +1,6 @@
-package org.application;
+package org.application.dataaccess;
 
 
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.Persistence;
-import jakarta.persistence.TypedQuery;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
@@ -14,23 +10,38 @@ import jakarta.validation.Validator;
 import jakarta.validation.ValidatorFactory;
 import org.hibernate.validator.messageinterpolation.ParameterMessageInterpolator;
 
+import jakarta.persistence.*;
+
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Set;
 
-public class DatabaseManager {
-    public static EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("persistence-unit-test");
-    public static EntityManager entityManager = entityManagerFactory.createEntityManager();
+public class BaseRepository<T> implements IRepository<T> {
 
-    public static EntityManager getEntityManager() {
+    protected Class<T> tClass;
+    private final IHibernateProvider hibernateProvider;
 
-        if (entityManager == null || !entityManager.isOpen()) {
-            entityManager = entityManagerFactory.createEntityManager();
+
+    protected BaseRepository(IHibernateProvider hibernateProvider) {
+
+        try
+        {
+            Type mySuperclass = getClass().getGenericSuperclass();
+            Type tType = ((ParameterizedType)mySuperclass).getActualTypeArguments()[0];
+            String className = tType.toString().split(" ")[1];
+            tClass = (Class<T>) Class.forName(className);
+        }
+        catch (Exception ex)
+        {
+            System.out.println("Class not found!");
         }
 
-        return entityManager;
+
+        this.hibernateProvider = hibernateProvider;
     }
 
-    public static <T> boolean constraintValidation(T object) {
+    private boolean constraintValidation(T object) {
         Validator validator;
         try (ValidatorFactory validatorFactory = Validation.byDefaultProvider().configure().messageInterpolator(new ParameterMessageInterpolator()).buildValidatorFactory()) {
             validator = validatorFactory.usingContext().messageInterpolator(new ParameterMessageInterpolator()).getValidator();
@@ -47,13 +58,13 @@ public class DatabaseManager {
         return constraintViolationsInvalidObject.size() == 0;
     }
 
-    public static <T> boolean save(T object) {
+    public boolean save(T object) {
         if (!constraintValidation(object)) {
             return false;
         }
 
         try {
-            var session = getEntityManager();
+            var session = this.hibernateProvider.getEntityManager();
 
             if (!session.getTransaction().isActive())
             {
@@ -69,9 +80,9 @@ public class DatabaseManager {
         return true;
     }
 
-    public static <T> boolean delete(T object) {
+    public boolean delete(T object) {
         try {
-            var session = getEntityManager();
+            var session = this.hibernateProvider.getEntityManager();
 
             if (!session.getTransaction().isActive())
             {
@@ -86,9 +97,9 @@ public class DatabaseManager {
         return true;
     }
 
-    public static <T> boolean deleteMany(List<T> objects) {
+    public boolean deleteMany(List<T> objects) {
         try {
-            var session = getEntityManager();
+            var session = this.hibernateProvider.getEntityManager();
 
             if (!session.getTransaction().isActive())
             {
@@ -105,8 +116,9 @@ public class DatabaseManager {
         return true;
     }
 
-    public static <T> List<T> readAll(Class<T> tClass) {
-        var session = getEntityManager();
+    public List<T> readAll() {
+        var session = this.hibernateProvider.getEntityManager();
+
 
         CriteriaBuilder cb = session.getCriteriaBuilder();
         CriteriaQuery<T> cq = cb.createQuery(tClass);
