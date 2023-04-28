@@ -10,5 +10,7 @@ public interface IRepository<T> {
     boolean deleteMany(List<T> objects);
 
     List<T> readAll();
+
+    boolean validate(T object);
 }
 

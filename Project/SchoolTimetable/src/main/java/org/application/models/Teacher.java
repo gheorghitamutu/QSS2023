@@ -1,13 +1,8 @@
 package org.application.models;
 
-
 import jakarta.persistence.*;
 import jakarta.validation.Valid;
 import org.application.models.validators.teacher.ValidTeacher;
-
-
-
-
 
 import java.io.Serializable;
 import java.util.Date;

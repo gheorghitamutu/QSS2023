@@ -2,7 +2,10 @@ package org.application.models.validators.teacher;
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
-import org.application.DatabaseManager;
+import org.application.dataaccess.database.IHibernateProvider;
+import org.application.dataaccess.database.MainDatabaseHibernateProvider;
+import org.application.dataaccess.database.TestsDatabaseHibernateProvider;
+import org.application.dataaccess.session.SessionRepository;
 import org.application.models.Session;
 import org.application.models.Teacher;
 import org.application.models.Timeslot;
@@ -15,8 +18,12 @@ import java.util.Set;
 
 public class TeacherValidator implements ConstraintValidator<ValidTeacher, Teacher> {
 
+    SessionRepository sessionRepository;
+
     @Override
     public void initialize(ValidTeacher constraintAnnotation) {
+        IHibernateProvider provider = new MainDatabaseHibernateProvider();
+        sessionRepository = new SessionRepository(provider);
     }
 
     @Override
@@ -24,7 +31,7 @@ public class TeacherValidator implements ConstraintValidator<ValidTeacher, Teach
 
         Set<Session> sessions = value.getSessions();
         for (Session session : sessions) {
-            if (!DatabaseManager.constraintValidation(session)) {
+            if (!sessionRepository.validate(session)) {
                 return false;
             }
         }

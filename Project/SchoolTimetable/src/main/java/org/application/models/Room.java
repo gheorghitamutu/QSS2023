@@ -3,8 +3,6 @@ package org.application.models;
 import jakarta.persistence.*;
 import jakarta.validation.Valid;
 
-
-
 import java.io.Serializable;
 import java.util.Date;
 import java.util.HashSet;

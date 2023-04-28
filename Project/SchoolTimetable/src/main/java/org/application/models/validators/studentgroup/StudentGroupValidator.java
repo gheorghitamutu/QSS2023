@@ -2,7 +2,10 @@ package org.application.models.validators.studentgroup;
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
-import org.application.DatabaseManager;
+import org.application.dataaccess.database.IHibernateProvider;
+import org.application.dataaccess.database.MainDatabaseHibernateProvider;
+import org.application.dataaccess.database.TestsDatabaseHibernateProvider;
+import org.application.dataaccess.session.SessionRepository;
 import org.application.models.Session;
 import org.application.models.StudentGroup;
 import org.application.models.Timeslot;
@@ -15,8 +18,12 @@ import java.util.Set;
 
 public class StudentGroupValidator implements ConstraintValidator<ValidStudentGroup, StudentGroup> {
 
+    SessionRepository sessionRepository;
+
     @Override
     public void initialize(ValidStudentGroup constraintAnnotation) {
+        IHibernateProvider provider = new MainDatabaseHibernateProvider();
+        sessionRepository = new SessionRepository(provider);
     }
 
     @Override
@@ -24,7 +31,7 @@ public class StudentGroupValidator implements ConstraintValidator<ValidStudentGr
 
         Set<Session> sessions = value.getSessions();
         for (Session session : sessions) {
-            if (!DatabaseManager.constraintValidation(session)) {
+            if (!sessionRepository.validate(session)) {
                 return false;
             }
         }

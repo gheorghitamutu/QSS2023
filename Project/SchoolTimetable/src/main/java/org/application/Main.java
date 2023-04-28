@@ -4,9 +4,9 @@ package org.application;
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Provides;
-import org.application.dataaccess.hibernate.IHibernateProvider;
+import org.application.dataaccess.database.IHibernateProvider;
 import org.application.dataaccess.student.IStudentRepository;
-import org.application.dataaccess.hibernate.MainDatabaseHibernateProvider;
+import org.application.dataaccess.database.MainDatabaseHibernateProvider;
 import org.application.dataaccess.student.StudentRepository;
 
 public class Main {

@@ -1,13 +1,19 @@
-package org.application.models;
+package org.application.dataaccess;
 
-import org.application.DatabaseManager;
+import org.application.dataaccess.database.IHibernateProvider;
+import org.application.dataaccess.database.TestsDatabaseHibernateProvider;
+import org.application.dataaccess.room.RoomRepository;
+import org.application.models.Room;
 import org.junit.jupiter.api.*;
 
 import java.util.Date;
 import java.util.List;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class RoomTest {
+class RoomRepositoryTest {
+
+    private RoomRepository roomRepository;
+
     @BeforeAll
     public void setup() throws Exception {
     }
@@ -26,12 +32,15 @@ class RoomTest {
 
     @BeforeAll
     void setUpAll() {
+        IHibernateProvider provider = new TestsDatabaseHibernateProvider();
+        roomRepository = new RoomRepository(provider);
     }
+
 
     @AfterAll
     void tearDownAll() {
-        List<Room> rooms = DatabaseManager.readAll(Room.class);
-        DatabaseManager.deleteMany(rooms);
+        List<Room> rooms = roomRepository.readAll();
+        roomRepository.deleteMany(rooms);
     }
 
     @Test
@@ -42,12 +51,12 @@ class RoomTest {
         room.setName("test");
         room.setType(Room.Type.COURSE);
         room.setInsertTime(new Date());
-        Assertions.assertTrue(DatabaseManager.save(room));
+        Assertions.assertTrue(roomRepository.save(room));
     }
 
     @Test()
     public void readRoom() {
-        List<Room> rooms = DatabaseManager.readAll(Room.class);
+        List<Room> rooms = roomRepository.readAll();
         Assertions.assertEquals(1, rooms.size());
         for (Room r : rooms) {
             System.out.println(r);

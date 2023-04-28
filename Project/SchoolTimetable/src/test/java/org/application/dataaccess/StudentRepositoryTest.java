@@ -1,7 +1,9 @@
 package org.application.dataaccess;
 
-import org.application.dataaccess.hibernate.TestsDatabaseHibernateProvider;
+import org.application.dataaccess.database.IHibernateProvider;
+import org.application.dataaccess.database.TestsDatabaseHibernateProvider;
 import org.application.dataaccess.student.StudentRepository;
+import org.application.dataaccess.studentgroup.StudentGroupRepository;
 import org.application.models.Student;
 import org.application.models.StudentGroup;
 import org.junit.jupiter.api.*;
@@ -13,6 +15,7 @@ import java.util.List;
 class StudentRepositoryTest {
 
     private StudentRepository studentRepository;
+    private StudentGroupRepository studentGroupRepository;
 
     @BeforeEach
     void setUp() {
@@ -24,11 +27,16 @@ class StudentRepositoryTest {
 
     @BeforeAll
     void setUpAll() {
-        this.studentRepository = new StudentRepository(new TestsDatabaseHibernateProvider());
+        IHibernateProvider provider = new TestsDatabaseHibernateProvider();
+        studentRepository = new StudentRepository(provider);
+        studentGroupRepository = new StudentGroupRepository(provider);
     }
 
     @AfterAll
     void tearDownAll() {
+        List<StudentGroup> studentsGroups = studentGroupRepository.readAll();
+        studentGroupRepository.deleteMany(studentsGroups);
+
         List<Student> students = studentRepository.readAll();
         studentRepository.deleteMany(students);
     }

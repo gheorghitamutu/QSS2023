@@ -1,6 +1,13 @@
-package org.application.models;
+package org.application.dataaccess;
 
-import org.application.DatabaseManager;
+import org.application.dataaccess.database.IHibernateProvider;
+import org.application.dataaccess.discipline.DisciplineRepository;
+import org.application.dataaccess.database.TestsDatabaseHibernateProvider;
+import org.application.dataaccess.session.SessionRepository;
+import org.application.models.Discipline;
+import org.application.models.Session;
+import org.application.models.Student;
+import org.application.models.StudentGroup;
 import org.junit.jupiter.api.*;
 
 import java.util.Collections;
@@ -8,7 +15,10 @@ import java.util.Date;
 import java.util.List;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class DisciplineTest {
+class DisciplineRepositoryTest {
+
+    private DisciplineRepository disciplineRepository;
+    private SessionRepository sessionRepository;
 
     @BeforeEach
     void setUp() {
@@ -20,12 +30,19 @@ class DisciplineTest {
 
     @BeforeAll
     void setUpAll() {
+        IHibernateProvider provider = new TestsDatabaseHibernateProvider();
+        disciplineRepository = new DisciplineRepository(provider);
+        sessionRepository = new SessionRepository(provider);
     }
+
 
     @AfterAll
     void tearDownAll() {
-        List<Discipline> disciplines = DatabaseManager.readAll(Discipline.class);
-        DatabaseManager.deleteMany(disciplines);
+        List<Discipline> disciplines = disciplineRepository.readAll();
+        disciplineRepository.deleteMany(disciplines);
+
+        List<Session> sessions = sessionRepository.readAll();
+        sessionRepository.deleteMany(sessions);
     }
 
     @Test
@@ -56,12 +73,12 @@ class DisciplineTest {
         studentGroup.setSessions(Collections.singleton(session));
         session.setGroups(Collections.singleton(studentGroup));
 
-        Assertions.assertTrue(DatabaseManager.save(discipline));
+        Assertions.assertTrue(disciplineRepository.save(discipline));
     }
 
     @Test()
     public void readDiscipline() {
-        List<Discipline> disciplines = DatabaseManager.readAll(Discipline.class);
+        List<Discipline> disciplines = disciplineRepository.readAll();
         Assertions.assertEquals(1, disciplines.size());
         for (Discipline d : disciplines) {
             System.out.println(d);

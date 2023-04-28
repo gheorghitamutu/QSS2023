@@ -2,7 +2,11 @@ package org.application.models.validators.timeslot;
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
-import org.application.DatabaseManager;
+import org.application.dataaccess.database.IHibernateProvider;
+import org.application.dataaccess.database.MainDatabaseHibernateProvider;
+import org.application.dataaccess.database.TestsDatabaseHibernateProvider;
+import org.application.dataaccess.room.RoomRepository;
+import org.application.dataaccess.session.SessionRepository;
 import org.application.models.Room;
 import org.application.models.Session;
 import org.application.models.Timeslot;
@@ -15,8 +19,14 @@ import java.util.Set;
 
 public class TimeslotValidator implements ConstraintValidator<ValidTimeslot, Timeslot> {
 
+    RoomRepository roomRepository;
+    SessionRepository sessionRepository;
+
     @Override
     public void initialize(ValidTimeslot constraintAnnotation) {
+        IHibernateProvider provider = new MainDatabaseHibernateProvider();
+        roomRepository = new RoomRepository(provider);
+        sessionRepository = new SessionRepository(provider);
     }
 
     @Override
@@ -26,7 +36,7 @@ public class TimeslotValidator implements ConstraintValidator<ValidTimeslot, Tim
         if (room == null) {
             return false;
         }
-        if (!DatabaseManager.constraintValidation(room)) {
+        if (!roomRepository.validate(room)) {
             return false;
         }
 
@@ -34,7 +44,7 @@ public class TimeslotValidator implements ConstraintValidator<ValidTimeslot, Tim
         if (session.getType() == Session.Type.COURSE && room.getType() != Room.Type.COURSE) {
             return false;
         }
-        if (!DatabaseManager.constraintValidation(session)) {
+        if (!sessionRepository.validate(session)) {
             return false;
         }
 

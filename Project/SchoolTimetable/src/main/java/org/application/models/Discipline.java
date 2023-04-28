@@ -1,7 +1,5 @@
 package org.application.models;
 
-
-
 import jakarta.persistence.*;
 import jakarta.validation.Valid;
 

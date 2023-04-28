@@ -1,6 +1,5 @@
 package org.application.dataaccess.repository;
 
-
 import jakarta.persistence.TypedQuery;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
@@ -9,7 +8,7 @@ import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
 import jakarta.validation.ValidatorFactory;
-import org.application.dataaccess.hibernate.IHibernateProvider;
+import org.application.dataaccess.database.IHibernateProvider;
 import org.hibernate.validator.messageinterpolation.ParameterMessageInterpolator;
 
 import java.lang.reflect.ParameterizedType;
@@ -37,7 +36,7 @@ public class BaseRepository<T> implements IRepository<T> {
         this.hibernateProvider = hibernateProvider;
     }
 
-    private boolean constraintValidation(T object) {
+    public boolean validate(T object) {
         Validator validator;
         try (ValidatorFactory validatorFactory = Validation.byDefaultProvider().configure().messageInterpolator(new ParameterMessageInterpolator()).buildValidatorFactory()) {
             validator = validatorFactory.usingContext().messageInterpolator(new ParameterMessageInterpolator()).getValidator();
@@ -55,7 +54,7 @@ public class BaseRepository<T> implements IRepository<T> {
     }
 
     public boolean save(T object) {
-        if (!constraintValidation(object)) {
+        if (!validate(object)) {
             return false;
         }
 

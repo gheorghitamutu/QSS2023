@@ -1,12 +1,12 @@
-package org.application.dataaccess.hibernate;
+package org.application.dataaccess.database;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 
-public class TestsDatabaseHibernateProvider implements IHibernateProvider {
+public class MainDatabaseHibernateProvider implements IHibernateProvider {
 
-    public static EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("persistence-unit-test");
+    public static EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("persistence-unit");
     public EntityManager entityManager = entityManagerFactory.createEntityManager();
 
     @Override
