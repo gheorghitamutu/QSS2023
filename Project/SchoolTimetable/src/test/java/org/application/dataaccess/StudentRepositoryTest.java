@@ -1,6 +1,5 @@
 package org.application.dataaccess;
 
-import org.application.DatabaseManager;
 import org.application.models.Student;
 import org.application.models.StudentGroup;
 import org.junit.jupiter.api.*;
@@ -9,10 +8,10 @@ import java.util.Date;
 import java.util.List;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class StudentsRepositoryTests {
+class StudentRepositoryTest {
 
 
-    private StudentsRepository studentsRepository;
+    private StudentRepository studentRepository;
 
     @BeforeEach
     void setUp() {
@@ -24,13 +23,13 @@ class StudentsRepositoryTests {
 
     @BeforeAll
     void setUpAll() {
-        this.studentsRepository = new StudentsRepository(new TestsDatabaseHibernateProvider());
+        this.studentRepository = new StudentRepository(new TestsDatabaseHibernateProvider());
     }
 
     @AfterAll
     void tearDownAll() {
-        List<Student> students = studentsRepository.readAll();
-        studentsRepository.deleteMany(students);
+        List<Student> students = studentRepository.readAll();
+        studentRepository.deleteMany(students);
     }
 
     @Test
@@ -44,12 +43,12 @@ class StudentsRepositoryTests {
         student.setYear(1);
         student.setName("test");
         student.setInsertTime(new Date());
-        Assertions.assertTrue(studentsRepository.save(student));
+        Assertions.assertTrue(studentRepository.save(student));
     }
 
     @Test()
     public void readStudent() {
-        List<Student> students = studentsRepository.readAll();
+        List<Student> students = studentRepository.readAll();
         Assertions.assertEquals(1, students.size());
         for (Student r : students) {
             System.out.println(r);

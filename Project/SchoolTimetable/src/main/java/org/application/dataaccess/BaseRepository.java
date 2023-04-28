@@ -1,6 +1,7 @@
 package org.application.dataaccess;
 
 
+import jakarta.persistence.TypedQuery;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
@@ -10,8 +11,6 @@ import jakarta.validation.Validator;
 import jakarta.validation.ValidatorFactory;
 import org.hibernate.validator.messageinterpolation.ParameterMessageInterpolator;
 
-import jakarta.persistence.*;
-
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.List;
@@ -19,21 +18,17 @@ import java.util.Set;
 
 public class BaseRepository<T> implements IRepository<T> {
 
-    protected Class<T> tClass;
     private final IHibernateProvider hibernateProvider;
-
+    protected Class<T> tClass;
 
     protected BaseRepository(IHibernateProvider hibernateProvider) {
 
-        try
-        {
+        try {
             Type mySuperclass = getClass().getGenericSuperclass();
-            Type tType = ((ParameterizedType)mySuperclass).getActualTypeArguments()[0];
-            String className = tType.toString().split(" ")[1];
+            Type tType = ((ParameterizedType) mySuperclass).getActualTypeArguments()[0];
+            String className = tType.getTypeName();
             tClass = (Class<T>) Class.forName(className);
-        }
-        catch (Exception ex)
-        {
+        } catch (Exception ex) {
             System.out.println("Class not found!");
         }
 
@@ -66,8 +61,7 @@ public class BaseRepository<T> implements IRepository<T> {
         try {
             var session = this.hibernateProvider.getEntityManager();
 
-            if (!session.getTransaction().isActive())
-            {
+            if (!session.getTransaction().isActive()) {
                 session.getTransaction().begin();
             }
 
@@ -84,8 +78,7 @@ public class BaseRepository<T> implements IRepository<T> {
         try {
             var session = this.hibernateProvider.getEntityManager();
 
-            if (!session.getTransaction().isActive())
-            {
+            if (!session.getTransaction().isActive()) {
                 session.getTransaction().begin();
             }
             session.remove(object);
@@ -101,8 +94,7 @@ public class BaseRepository<T> implements IRepository<T> {
         try {
             var session = this.hibernateProvider.getEntityManager();
 
-            if (!session.getTransaction().isActive())
-            {
+            if (!session.getTransaction().isActive()) {
                 session.getTransaction().begin();
             }
             for (T object : objects) {
@@ -119,15 +111,13 @@ public class BaseRepository<T> implements IRepository<T> {
     public List<T> readAll() {
         var session = this.hibernateProvider.getEntityManager();
 
-
         CriteriaBuilder cb = session.getCriteriaBuilder();
         CriteriaQuery<T> cq = cb.createQuery(tClass);
         Root<T> rootEntry = cq.from(tClass);
         CriteriaQuery<T> all = cq.select(rootEntry);
 
         TypedQuery<T> allQuery = session.createQuery(all);
-        List<T> list = allQuery.getResultList();
 
-        return list;
+        return allQuery.getResultList();
     }
 }

@@ -1,7 +1,7 @@
 package org.application;
 
 import com.google.inject.Inject;
-import org.application.dataaccess.IStudentsRepository;
+import org.application.dataaccess.IStudentRepository;
 import org.application.models.Student;
 import org.application.models.StudentGroup;
 
@@ -11,10 +11,10 @@ import java.util.UUID;
 public class Application {
 
 
-    private final IStudentsRepository studentsRepository;
+    private final IStudentRepository studentsRepository;
 
     @Inject
-    public Application(IStudentsRepository studentsRepository) {
+    public Application(IStudentRepository studentsRepository) {
 
         this.studentsRepository = studentsRepository;
     }

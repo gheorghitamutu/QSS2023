@@ -4,5 +4,5 @@ import jakarta.persistence.EntityManager;
 
 public interface IHibernateProvider {
 
-    public EntityManager getEntityManager();
+    EntityManager getEntityManager();
 }
