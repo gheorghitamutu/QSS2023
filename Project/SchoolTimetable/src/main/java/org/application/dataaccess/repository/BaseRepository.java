@@ -1,4 +1,4 @@
-package org.application.dataaccess;
+package org.application.dataaccess.repository;
 
 
 import jakarta.persistence.TypedQuery;
@@ -9,6 +9,7 @@ import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
 import jakarta.validation.ValidatorFactory;
+import org.application.dataaccess.hibernate.IHibernateProvider;
 import org.hibernate.validator.messageinterpolation.ParameterMessageInterpolator;
 
 import java.lang.reflect.ParameterizedType;

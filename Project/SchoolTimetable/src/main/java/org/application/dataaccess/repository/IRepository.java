@@ -1,4 +1,4 @@
-package org.application.dataaccess;
+package org.application.dataaccess.repository;
 
 import java.util.List;
 

@@ -4,10 +4,10 @@ package org.application;
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Provides;
-import org.application.dataaccess.IHibernateProvider;
-import org.application.dataaccess.IStudentRepository;
-import org.application.dataaccess.MainDatabaseHibernateProvider;
-import org.application.dataaccess.StudentRepository;
+import org.application.dataaccess.hibernate.IHibernateProvider;
+import org.application.dataaccess.student.IStudentRepository;
+import org.application.dataaccess.hibernate.MainDatabaseHibernateProvider;
+import org.application.dataaccess.student.StudentRepository;
 
 public class Main {
     public static void main(String[] args) {

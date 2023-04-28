@@ -1,4 +1,4 @@
-package org.application.dataaccess;
+package org.application.dataaccess.hibernate;
 
 import jakarta.persistence.EntityManager;
 

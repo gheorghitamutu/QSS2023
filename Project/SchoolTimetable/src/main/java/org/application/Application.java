@@ -1,7 +1,7 @@
 package org.application;
 
 import com.google.inject.Inject;
-import org.application.dataaccess.IStudentRepository;
+import org.application.dataaccess.student.IStudentRepository;
 import org.application.models.Student;
 import org.application.models.StudentGroup;
 

@@ -1,5 +1,7 @@
 package org.application.dataaccess;
 
+import org.application.dataaccess.hibernate.TestsDatabaseHibernateProvider;
+import org.application.dataaccess.student.StudentRepository;
 import org.application.models.Student;
 import org.application.models.StudentGroup;
 import org.junit.jupiter.api.*;
@@ -9,7 +11,6 @@ import java.util.List;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class StudentRepositoryTest {
-
 
     private StudentRepository studentRepository;
 
