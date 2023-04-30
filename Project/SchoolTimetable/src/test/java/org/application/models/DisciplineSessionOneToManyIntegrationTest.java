@@ -4,6 +4,8 @@ import org.application.dataaccess.database.IHibernateProvider;
 import org.application.dataaccess.database.TestsDatabaseHibernateProvider;
 import org.application.dataaccess.discipline.DisciplineRepository;
 import org.application.dataaccess.session.SessionRepository;
+import org.application.di.TestsDI;
+import org.application.domain.exceptions.RepositoryOperationException;
 import org.application.domain.models.Discipline;
 import org.application.domain.models.Session;
 import org.junit.jupiter.api.*;
@@ -20,6 +22,8 @@ public class DisciplineSessionOneToManyIntegrationTest {
 
     @BeforeEach
     void setUp() {
+        TestsDI.initializeDi();
+
     }
 
     @AfterEach
@@ -34,7 +38,7 @@ public class DisciplineSessionOneToManyIntegrationTest {
     }
 
     @AfterAll
-    void tearDownAll() {
+    void tearDownAll() throws RepositoryOperationException {
         List<Discipline> disciplines = disciplineRepository.readAll();
         disciplineRepository.deleteMany(disciplines);
 
@@ -43,7 +47,7 @@ public class DisciplineSessionOneToManyIntegrationTest {
     }
 
     @Test
-    public void saveDisciplineSession() {
+    public void saveDisciplineSession() throws RepositoryOperationException {
         Discipline discipline = new Discipline();
         discipline.setCredits(6);
         discipline.setName("test");
@@ -56,7 +60,7 @@ public class DisciplineSessionOneToManyIntegrationTest {
 
         discipline.setSessions(Collections.singleton(session));
 
-        Assertions.assertTrue(disciplineRepository.save(discipline));
-        Assertions.assertTrue(sessionRepository.save(session));
+        disciplineRepository.save(discipline);
+        sessionRepository.save(session);
     }
 }

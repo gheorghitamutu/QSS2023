@@ -8,6 +8,7 @@ import com.google.inject.Provides;
 import org.application.application.students.IStudentsService;
 import org.application.application.students.StudentsService;
 import org.application.dataaccess.database.IHibernateProvider;
+import org.application.dataaccess.database.TestsDatabaseHibernateProvider;
 import org.application.dataaccess.discipline.DisciplineRepository;
 import org.application.dataaccess.discipline.IDisciplineRepository;
 import org.application.dataaccess.room.IRoomRepository;
@@ -22,10 +23,29 @@ import org.application.dataaccess.studentgroup.StudentGroupRepository;
 
 public class Main {
     public static void main(String[] args) {
+
+        var appInjector = setupDependenciesInjector(false);
+
+        var app = appInjector.getInstance(Application.class);
+
+        GuiceInjectorSingleton.INSTANCE.setInjector(appInjector);
+
+        app.run();
+    }
+
+    public static Injector setupDependenciesInjector(boolean testMode) {
         Injector appInjector = Guice.createInjector(new MessageModule(), new AbstractModule() {
             @Override
             protected void configure() {
-                bind(IHibernateProvider.class).toInstance(new MainDatabaseHibernateProvider());
+
+                if (testMode)
+                {
+                    bind(IHibernateProvider.class).toInstance(new TestsDatabaseHibernateProvider());
+                }
+                else
+                {
+                    bind(IHibernateProvider.class).toInstance(new MainDatabaseHibernateProvider());
+                }
 
                 bind(IStudentRepository.class).to(StudentRepository.class);
                 bind(IStudentGroupRepository.class).to(StudentGroupRepository.class);
@@ -39,14 +59,10 @@ public class Main {
             }
         });
 
-        var app = appInjector.getInstance(Application.class);
-
-        GuiceInjectorSingleton.INSTANCE.setInjector(appInjector);
-
-        app.run();
+        return appInjector;
     }
 
-    static class MessageModule extends AbstractModule {
+    public static class MessageModule extends AbstractModule {
         @Provides
         String provideMessage() {
             return "Hello, Guice!";

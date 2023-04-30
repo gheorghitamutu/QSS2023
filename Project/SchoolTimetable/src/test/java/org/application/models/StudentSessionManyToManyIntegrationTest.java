@@ -5,6 +5,8 @@ import org.application.dataaccess.database.TestsDatabaseHibernateProvider;
 import org.application.dataaccess.discipline.DisciplineRepository;
 import org.application.dataaccess.session.SessionRepository;
 import org.application.dataaccess.student.StudentRepository;
+import org.application.di.TestsDI;
+import org.application.domain.exceptions.RepositoryOperationException;
 import org.application.domain.models.Discipline;
 import org.application.domain.models.Session;
 import org.application.domain.models.Student;
@@ -24,6 +26,8 @@ public class StudentSessionManyToManyIntegrationTest {
 
     @BeforeEach
     void setUp() {
+        TestsDI.initializeDi();
+
     }
 
     @AfterEach
@@ -39,7 +43,7 @@ public class StudentSessionManyToManyIntegrationTest {
     }
 
     @AfterAll
-    void tearDownAll() {
+    void tearDownAll() throws RepositoryOperationException {
         List<Student> students = studentRepository.readAll();
         studentRepository.deleteMany(students);
 
@@ -51,7 +55,7 @@ public class StudentSessionManyToManyIntegrationTest {
     }
 
     @Test
-    public void saveStudentDiscipline() {
+    public void saveStudentDiscipline() throws RepositoryOperationException {
         Discipline discipline = new Discipline();
         discipline.setCredits(6);
         discipline.setName("test");
@@ -62,7 +66,7 @@ public class StudentSessionManyToManyIntegrationTest {
         session.setType(Session.Type.SEMINARY);
 
         discipline.setSessions(Collections.singleton(session));
-        Assertions.assertTrue(disciplineRepository.save(discipline));
+        disciplineRepository.save(discipline);
 
         StudentGroup studentGroup = new StudentGroup();
         studentGroup.setName("A1");
@@ -76,8 +80,8 @@ public class StudentSessionManyToManyIntegrationTest {
         student.setDisciplines(Collections.singleton(discipline));
 
         session.setDiscipline(discipline);
-        Assertions.assertTrue(sessionRepository.save(session));
+        sessionRepository.save(session);
 
-        Assertions.assertTrue(studentRepository.save(student));
+        studentRepository.save(student);
     }
 }

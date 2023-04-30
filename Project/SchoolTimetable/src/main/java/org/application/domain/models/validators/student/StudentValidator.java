@@ -22,6 +22,7 @@ public class StudentValidator implements ConstraintValidator<ValidStudent, Stude
     @Override
     public void initialize(ValidStudent constraintAnnotation) {
         Injector injector = GuiceInjectorSingleton.INSTANCE.getInjector();
+
         if(null != injector) {
             disciplineRepository = injector.getInstance(IDisciplineRepository.class);
             studentGroupRepository = injector.getInstance(IStudentGroupRepository.class);

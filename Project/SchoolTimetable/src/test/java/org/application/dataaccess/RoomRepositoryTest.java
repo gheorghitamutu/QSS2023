@@ -3,6 +3,8 @@ package org.application.dataaccess;
 import org.application.dataaccess.database.IHibernateProvider;
 import org.application.dataaccess.database.TestsDatabaseHibernateProvider;
 import org.application.dataaccess.room.RoomRepository;
+import org.application.di.TestsDI;
+import org.application.domain.exceptions.RepositoryOperationException;
 import org.application.domain.models.Room;
 import org.junit.jupiter.api.*;
 
@@ -16,6 +18,8 @@ class RoomRepositoryTest {
 
     @BeforeAll
     public void setup() throws Exception {
+        TestsDI.initializeDi();
+
     }
 
     @AfterAll
@@ -38,20 +42,21 @@ class RoomRepositoryTest {
 
 
     @AfterAll
-    void tearDownAll() {
+    void tearDownAll() throws RepositoryOperationException {
         List<Room> rooms = roomRepository.readAll();
         roomRepository.deleteMany(rooms);
     }
 
     @Test
-    public void saveRoom() {
+    public void saveRoom() throws RepositoryOperationException {
         Room room = new Room();
         room.setCapacity(30);
         room.setFloor(1);
         room.setName("test");
         room.setType(Room.Type.COURSE);
         room.setInsertTime(new Date());
-        Assertions.assertTrue(roomRepository.save(room));
+
+        roomRepository.save(room);
     }
 
     @Test()
