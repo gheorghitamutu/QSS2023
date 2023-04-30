@@ -43,6 +43,8 @@ public class Application {
 
         StudentGroup studentGroup = new StudentGroup();
         studentGroup.setName("A6");
+        studentGroup.setYear(1);
+        studentGroup.setType(StudentGroup.Type.BACHELOR);
         studentGroup.setInsertTime(new Date());
         Student newStudent = new Student();
 
@@ -136,6 +138,8 @@ public class Application {
             // check group validator
             // studentGroup.setName("1A1");
             studentGroup.setName("A1");
+            studentGroup.setYear(1);
+            studentGroup.setType(StudentGroup.Type.BACHELOR);
 
             studentGroup.setInsertTime(new Date());
 

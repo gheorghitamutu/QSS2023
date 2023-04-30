@@ -22,7 +22,6 @@ class StudentRepositoryTest {
     @BeforeEach
     void setUp() {
         TestsDI.initializeDi();
-
     }
 
     @AfterEach
@@ -49,6 +48,8 @@ class StudentRepositoryTest {
     public void saveStudent() throws RepositoryOperationException {
         StudentGroup studentGroup = new StudentGroup();
         studentGroup.setName("A1");
+        studentGroup.setYear(1);
+        studentGroup.setType(StudentGroup.Type.BACHELOR);
         studentGroup.setInsertTime(new Date());
 
         Student student = new Student();

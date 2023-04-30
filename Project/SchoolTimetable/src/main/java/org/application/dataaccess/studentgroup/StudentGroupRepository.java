@@ -40,6 +40,8 @@ public class StudentGroupRepository extends BaseRepository<StudentGroup> impleme
         StudentGroup studentGroup = new StudentGroup();
 
         studentGroup.setName(groupName);
+        studentGroup.setYear(1);
+        studentGroup.setType(StudentGroup.Type.BACHELOR);
         studentGroup.setInsertTime(new Date());
 
         try {

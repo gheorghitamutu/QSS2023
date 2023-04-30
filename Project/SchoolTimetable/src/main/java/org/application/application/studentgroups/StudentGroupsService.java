@@ -29,11 +29,13 @@ public class StudentGroupsService implements IStudentGroupsService {
     }
 
     @Override
-    public StudentGroup addStudentGroup(String name) throws StudentGroupAdditionException {
+    public StudentGroup addStudentGroup(String name, int year, StudentGroup.Type type) throws StudentGroupAdditionException {
         StudentGroup group = studentGroupRepository.getByGroupName(name);
         if (group == null) {
             group = new StudentGroup();
             group.setName(name);
+            group.setYear(1);
+            group.setType(StudentGroup.Type.BACHELOR);
             group.setInsertTime(new Date());
 
             try {
@@ -56,13 +58,13 @@ public class StudentGroupsService implements IStudentGroupsService {
     public boolean deleteStudentGroup(int studentGroupId) throws StudentGroupNotFoundException, StudentGroupDeletionFailed {
         var group = studentGroupRepository.getById(studentGroupId);
         if (group == null) {
-            throw new StudentGroupNotFoundException(MessageFormat.format("[Student Groups Service DELETE student group] Student Group with id {0} not found.", studentGroupId));
+            throw new StudentGroupNotFoundException(MessageFormat.format("[StudentGroupsService] Student Group with id {0} not found.", studentGroupId));
         }
 
         try {
             studentGroupRepository.delete(group);
         } catch (Exception e) {
-            throw new StudentGroupDeletionFailed(" [Student Groups Service] Couldn't delete student group.", e);
+            throw new StudentGroupDeletionFailed(" [StudentGroupsService] Couldn't delete student group.", e);
         }
 
         return true;
@@ -72,7 +74,7 @@ public class StudentGroupsService implements IStudentGroupsService {
     public StudentGroup getStudentGroupById(int studentGroupId) throws StudentGroupNotFoundException {
         var group = studentGroupRepository.getById(studentGroupId);
         if (group == null) {
-            throw new StudentGroupNotFoundException(MessageFormat.format("[Student Groups Service] Student Group with id {0} not found.", studentGroupId));
+            throw new StudentGroupNotFoundException(MessageFormat.format("[StudentGroupsService] Student Group with id {0} not found.", studentGroupId));
         }
         return group;
     }
@@ -84,8 +86,11 @@ public class StudentGroupsService implements IStudentGroupsService {
 
     @Override
     public List<StudentGroup> getStudentGroupsByYear(int year) {
-        var students = studentGroupRepository.readAll();
-        // TODO: filter by year
-        return students;
+        return studentGroupRepository.readAll().stream().filter(group -> group.getYear() == year).toList();
+    }
+
+    @Override
+    public List<StudentGroup> getStudentGroupsByType(StudentGroup.Type type) {
+        return studentGroupRepository.readAll().stream().filter(group -> group.getType() == type).toList();
     }
 }

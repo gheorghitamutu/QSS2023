@@ -2,6 +2,8 @@ package org.application.domain.models;
 
 import jakarta.persistence.*;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Pattern;
 import org.application.domain.models.validators.studentgroup.ValidStudentGroup;
 import org.hibernate.validator.constraints.Length;
@@ -33,6 +35,15 @@ public class StudentGroup implements Serializable {
     @Pattern(regexp = "[A-Z]{1}[0-9]{1}")
     @Column(name = "Name", nullable = false)
     private String name;
+
+    @Min(1)
+    @Max(3)
+    @Column(name = "Year", nullable = false)
+    private int year;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "Type", nullable = false)
+    private StudentGroup.Type type;
 
     @Column(name = "insert_time", nullable = false)
     private Date insertTime;
@@ -75,5 +86,25 @@ public class StudentGroup implements Serializable {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public int getYear() {
+        return year;
+    }
+
+    public void setYear(int year) {
+        this.year = year;
+    }
+
+    public Type getType() {
+        return type;
+    }
+
+    public void setType(Type type) {
+        this.type = type;
+    }
+
+    public enum Type {
+        BACHELOR, MASTER
     }
 }
