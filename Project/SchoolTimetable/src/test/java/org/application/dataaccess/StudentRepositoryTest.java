@@ -4,8 +4,8 @@ import org.application.dataaccess.database.IHibernateProvider;
 import org.application.dataaccess.database.TestsDatabaseHibernateProvider;
 import org.application.dataaccess.student.StudentRepository;
 import org.application.dataaccess.studentgroup.StudentGroupRepository;
-import org.application.models.Student;
-import org.application.models.StudentGroup;
+import org.application.domain.models.Student;
+import org.application.domain.models.StudentGroup;
 import org.junit.jupiter.api.*;
 
 import java.util.Date;

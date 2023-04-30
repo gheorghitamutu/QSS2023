@@ -1,11 +1,11 @@
-package org.application.models;
+package org.application.domain.models;
 
 import jakarta.persistence.*;
 
 import jakarta.validation.Valid;
 
 import jakarta.validation.constraints.NotNull;
-import org.application.models.validators.timeslot.ValidTimeslot;
+import org.application.domain.models.validators.timeslot.ValidTimeslot;
 import org.hibernate.validator.constraints.time.DurationMax;
 
 import java.io.Serializable;

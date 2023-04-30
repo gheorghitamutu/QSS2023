@@ -3,7 +3,7 @@ package org.application.dataaccess;
 import org.application.dataaccess.database.IHibernateProvider;
 import org.application.dataaccess.database.TestsDatabaseHibernateProvider;
 import org.application.dataaccess.teacher.TeacherRepository;
-import org.application.models.Teacher;
+import org.application.domain.models.Teacher;
 import org.junit.jupiter.api.*;
 
 import java.util.Date;

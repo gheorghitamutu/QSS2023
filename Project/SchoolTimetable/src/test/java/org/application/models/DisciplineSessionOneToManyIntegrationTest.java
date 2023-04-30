@@ -4,6 +4,8 @@ import org.application.dataaccess.database.IHibernateProvider;
 import org.application.dataaccess.database.TestsDatabaseHibernateProvider;
 import org.application.dataaccess.discipline.DisciplineRepository;
 import org.application.dataaccess.session.SessionRepository;
+import org.application.domain.models.Discipline;
+import org.application.domain.models.Session;
 import org.junit.jupiter.api.*;
 
 import java.util.Collections;

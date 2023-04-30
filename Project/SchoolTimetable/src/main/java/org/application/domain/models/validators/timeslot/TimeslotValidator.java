@@ -1,15 +1,19 @@
-package org.application.models.validators.timeslot;
+package org.application.domain.models.validators.timeslot;
 
+import com.google.inject.Inject;
+import com.google.inject.Injector;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
+import org.application.GuiceInjectorSingleton;
 import org.application.dataaccess.database.IHibernateProvider;
 import org.application.dataaccess.database.MainDatabaseHibernateProvider;
-import org.application.dataaccess.database.TestsDatabaseHibernateProvider;
+import org.application.dataaccess.room.IRoomRepository;
 import org.application.dataaccess.room.RoomRepository;
+import org.application.dataaccess.session.ISessionRepository;
 import org.application.dataaccess.session.SessionRepository;
-import org.application.models.Room;
-import org.application.models.Session;
-import org.application.models.Timeslot;
+import org.application.domain.models.Room;
+import org.application.domain.models.Session;
+import org.application.domain.models.Timeslot;
 
 import java.text.SimpleDateFormat;
 import java.time.Duration;
@@ -19,14 +23,18 @@ import java.util.Set;
 
 public class TimeslotValidator implements ConstraintValidator<ValidTimeslot, Timeslot> {
 
-    RoomRepository roomRepository;
-    SessionRepository sessionRepository;
+
+    private IRoomRepository roomRepository;
+    private ISessionRepository sessionRepository;
 
     @Override
     public void initialize(ValidTimeslot constraintAnnotation) {
-        IHibernateProvider provider = new MainDatabaseHibernateProvider();
-        roomRepository = new RoomRepository(provider);
-        sessionRepository = new SessionRepository(provider);
+
+        Injector injector = GuiceInjectorSingleton.INSTANCE.getInjector();
+        if(null != injector) {
+            roomRepository = injector.getInstance(IRoomRepository.class);
+            sessionRepository = injector.getInstance(ISessionRepository.class);
+        }
     }
 
     @Override

@@ -1,9 +1,9 @@
-package org.application.models;
+package org.application.domain.models;
 
 import jakarta.persistence.*;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Pattern;
-import org.application.models.validators.studentgroup.ValidStudentGroup;
+import org.application.domain.models.validators.studentgroup.ValidStudentGroup;
 import org.hibernate.validator.constraints.Length;
 
 import java.io.Serializable;
@@ -14,6 +14,7 @@ import java.util.Set;
 @ValidStudentGroup
 @Entity(name = "StudentGroup")
 @Table(name = "studentgroup", uniqueConstraints = {@UniqueConstraint(columnNames = {"Id"})})
+@NamedQuery(name = "StudentGroup.getByGroupName", query = "SELECT sg FROM StudentGroup sg WHERE sg.name = :name")
 public class StudentGroup implements Serializable {
 
     @OneToMany(cascade = CascadeType.ALL)
@@ -66,6 +67,14 @@ public class StudentGroup implements Serializable {
 
     public void setSessions(Set<@Valid Session> sessions) {
         this.sessions = sessions;
+    }
+
+    public String getGroupName() {
+        return name;
+    }
+
+    public void setGroupName(String name) {
+        this.name = name;
     }
 
     public int getId() {

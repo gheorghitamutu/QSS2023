@@ -6,10 +6,10 @@ import org.application.dataaccess.discipline.DisciplineRepository;
 import org.application.dataaccess.room.RoomRepository;
 import org.application.dataaccess.session.SessionRepository;
 import org.application.dataaccess.timeslot.TimeslotRepository;
-import org.application.models.Discipline;
-import org.application.models.Room;
-import org.application.models.Session;
-import org.application.models.Timeslot;
+import org.application.domain.models.Discipline;
+import org.application.domain.models.Room;
+import org.application.domain.models.Session;
+import org.application.domain.models.Timeslot;
 import org.junit.jupiter.api.*;
 
 import java.text.SimpleDateFormat;

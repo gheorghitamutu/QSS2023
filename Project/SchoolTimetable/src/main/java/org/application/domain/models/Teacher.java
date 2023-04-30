@@ -1,21 +1,21 @@
-package org.application.models;
+package org.application.domain.models;
 
 import jakarta.persistence.*;
 import jakarta.validation.Valid;
+import org.application.domain.models.validators.teacher.ValidTeacher;
 
 import java.io.Serializable;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
-@Entity(name = "Discipline")
-@Table(name = "discipline", uniqueConstraints = {@UniqueConstraint(columnNames = {"Id"})})
-public class Discipline implements Serializable {
+@ValidTeacher
+@Entity(name = "Teacher")
+@Table(name = "teacher", uniqueConstraints = {@UniqueConstraint(columnNames = {"Id"})})
+public class Teacher implements Serializable {
 
-    @ManyToMany(mappedBy = "disciplines", cascade = CascadeType.ALL)
-    private Set<Student> students = new HashSet<>();
-
-    @OneToMany(mappedBy = "discipline", cascade = CascadeType.ALL)
+    @ManyToMany(cascade = {CascadeType.ALL})
+    @JoinTable(name = "Teacher_Session", joinColumns = {@JoinColumn(name = "teacher_id")}, inverseJoinColumns = {@JoinColumn(name = "session_id")})
     private Set<Session> sessions = new HashSet<>();
 
     @Id
@@ -26,8 +26,9 @@ public class Discipline implements Serializable {
     @Column(name = "Name", nullable = false)
     private String name;
 
-    @Column(name = "Credits", nullable = false)
-    private int credits;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "Type", nullable = false)
+    private Type type;
 
     @Column(name = "insert_time", nullable = false)
     private Date insertTime;
@@ -48,13 +49,6 @@ public class Discipline implements Serializable {
         this.name = name;
     }
 
-    public int getCredits() {
-        return credits;
-    }
-
-    public void setCredits(int credits) {
-        this.credits = credits;
-    }
 
     public Date getInsertTime() {
         return insertTime;
@@ -64,19 +58,23 @@ public class Discipline implements Serializable {
         this.insertTime = insertTime;
     }
 
-    public Set<Student> getStudents() {
-        return students;
-    }
-
-    public void setStudents(Set<@Valid Student> students) {
-        this.students = students;
-    }
-
     public Set<Session> getSessions() {
         return sessions;
     }
 
     public void setSessions(Set<@Valid Session> sessions) {
         this.sessions = sessions;
+    }
+
+    public Type getType() {
+        return type;
+    }
+
+    public void setType(Type type) {
+        this.type = type;
+    }
+
+    public enum Type {
+        TEACHER, COLLABORATOR
     }
 }

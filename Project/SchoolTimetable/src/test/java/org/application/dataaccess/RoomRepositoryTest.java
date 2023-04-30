@@ -3,7 +3,7 @@ package org.application.dataaccess;
 import org.application.dataaccess.database.IHibernateProvider;
 import org.application.dataaccess.database.TestsDatabaseHibernateProvider;
 import org.application.dataaccess.room.RoomRepository;
-import org.application.models.Room;
+import org.application.domain.models.Room;
 import org.junit.jupiter.api.*;
 
 import java.util.Date;

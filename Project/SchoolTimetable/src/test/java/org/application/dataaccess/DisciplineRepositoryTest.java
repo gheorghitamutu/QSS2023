@@ -4,10 +4,10 @@ import org.application.dataaccess.database.IHibernateProvider;
 import org.application.dataaccess.discipline.DisciplineRepository;
 import org.application.dataaccess.database.TestsDatabaseHibernateProvider;
 import org.application.dataaccess.session.SessionRepository;
-import org.application.models.Discipline;
-import org.application.models.Session;
-import org.application.models.Student;
-import org.application.models.StudentGroup;
+import org.application.domain.models.Discipline;
+import org.application.domain.models.Session;
+import org.application.domain.models.Student;
+import org.application.domain.models.StudentGroup;
 import org.junit.jupiter.api.*;
 
 import java.util.Collections;

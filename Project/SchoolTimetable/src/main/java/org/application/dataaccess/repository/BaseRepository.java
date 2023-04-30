@@ -4,11 +4,9 @@ import jakarta.persistence.TypedQuery;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
-import jakarta.validation.ConstraintViolation;
-import jakarta.validation.Validation;
-import jakarta.validation.Validator;
-import jakarta.validation.ValidatorFactory;
+import jakarta.validation.*;
 import org.application.dataaccess.database.IHibernateProvider;
+import org.application.domain.exceptions.RepositoryOperationException;
 import org.hibernate.validator.messageinterpolation.ParameterMessageInterpolator;
 
 import java.lang.reflect.ParameterizedType;
@@ -18,7 +16,7 @@ import java.util.Set;
 
 public class BaseRepository<T> implements IRepository<T> {
 
-    private final IHibernateProvider hibernateProvider;
+    protected final IHibernateProvider hibernateProvider;
     protected Class<T> tClass;
 
     protected BaseRepository(IHibernateProvider hibernateProvider) {
@@ -34,6 +32,11 @@ public class BaseRepository<T> implements IRepository<T> {
 
 
         this.hibernateProvider = hibernateProvider;
+    }
+
+    public T getById(int id) {
+        var session = this.hibernateProvider.getEntityManager();
+        return session.find(tClass, id);
     }
 
     public boolean validate(T object) {
@@ -53,9 +56,9 @@ public class BaseRepository<T> implements IRepository<T> {
         return constraintViolationsInvalidObject.size() == 0;
     }
 
-    public boolean save(T object) {
+    public void save(T object) throws RepositoryOperationException {
         if (!validate(object)) {
-            return false;
+            throw new RepositoryOperationException("Validation fails for object");
         }
 
         try {
@@ -66,15 +69,16 @@ public class BaseRepository<T> implements IRepository<T> {
             }
 
             session.persist(object);
+
             session.getTransaction().commit();
         } catch (Exception e) {
             System.out.println(e.getMessage());
-            return false;
+
+            throw new RepositoryOperationException("Save failed, check inner exception", e);
         }
-        return true;
     }
 
-    public boolean delete(T object) {
+    public void delete(T object) throws RepositoryOperationException {
         try {
             var session = this.hibernateProvider.getEntityManager();
 
@@ -85,12 +89,12 @@ public class BaseRepository<T> implements IRepository<T> {
             session.getTransaction().commit();
         } catch (Exception e) {
             System.out.println(e.getMessage());
-            return false;
+
+            throw new RepositoryOperationException("Delete failed, check inner exception", e);
         }
-        return true;
     }
 
-    public boolean deleteMany(List<T> objects) {
+    public void deleteMany(List<T> objects) throws RepositoryOperationException {
         try {
             var session = this.hibernateProvider.getEntityManager();
 
@@ -103,9 +107,9 @@ public class BaseRepository<T> implements IRepository<T> {
             session.getTransaction().commit();
         } catch (Exception e) {
             System.out.println(e.getMessage());
-            return false;
+
+            throw new RepositoryOperationException("Delete many failed, check inner exception", e);
         }
-        return true;
     }
 
     public List<T> readAll() {
