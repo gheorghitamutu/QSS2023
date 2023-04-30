@@ -1,7 +1,6 @@
 package org.application.application.studentgroups;
 
 import org.application.domain.exceptions.*;
-import org.application.domain.models.Student;
 import org.application.domain.models.StudentGroup;
 
 import java.util.List;

@@ -57,7 +57,7 @@ public class StudentGroupsService implements IStudentGroupsService {
         try {
             studentGroupRepository.delete(group);
         } catch (Exception e) {
-            throw new StudentGroupDeletionFailed(" [StudentGroupsService] Couldn't delete student group.", e);
+            throw new StudentGroupDeletionFailed(" [StudentGroupsService] Failed to delete student group.", e);
         }
 
         return true;
