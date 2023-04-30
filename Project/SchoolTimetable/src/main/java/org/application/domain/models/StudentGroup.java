@@ -38,7 +38,7 @@ public class StudentGroup implements Serializable {
 
     @Min(1)
     @Max(3)
-    @Column(name = "Year", nullable = false)
+    @Column(name = "\"Year\"", nullable = false)
     private int year;
 
     @Enumerated(EnumType.STRING)

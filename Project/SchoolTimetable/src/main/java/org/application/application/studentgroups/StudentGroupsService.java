@@ -1,8 +1,6 @@
 package org.application.application.studentgroups;
 
 import com.google.inject.Inject;
-import org.application.dataaccess.session.ISessionRepository;
-import org.application.dataaccess.student.IStudentRepository;
 import org.application.dataaccess.studentgroup.IStudentGroupRepository;
 import org.application.domain.exceptions.RepositoryOperationException;
 import org.application.domain.exceptions.StudentGroupAdditionException;
@@ -17,15 +15,10 @@ import java.util.List;
 public class StudentGroupsService implements IStudentGroupsService {
 
     private final IStudentGroupRepository studentGroupRepository;
-    private final IStudentRepository studentRepository;
-    private final ISessionRepository sessionRepository;
 
     @Inject
-
-    public StudentGroupsService(IStudentGroupRepository studentGroupRepository, IStudentRepository studentRepository, ISessionRepository sessionRepository) {
+    public StudentGroupsService(IStudentGroupRepository studentGroupRepository) {
         this.studentGroupRepository = studentGroupRepository;
-        this.studentRepository = studentRepository;
-        this.sessionRepository = sessionRepository;
     }
 
     @Override

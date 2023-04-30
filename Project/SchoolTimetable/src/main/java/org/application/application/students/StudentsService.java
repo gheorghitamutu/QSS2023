@@ -8,7 +8,9 @@ import org.application.domain.models.Student;
 import org.application.domain.models.StudentGroup;
 
 import java.text.MessageFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 
 public class StudentsService implements IStudentsService {
@@ -116,5 +118,16 @@ public class StudentsService implements IStudentsService {
     @Override
     public List<Student> getStudents() {
         return studentRepository.readAll();
+    }
+
+    @Override
+    public List<Student> getStudentsByGroupNameAndYear(String groupName, int year) {
+        var groups = studentGroupRepository.readAll().stream().filter(group -> group.getName().equals(groupName) && group.getYear() == year).toList();
+        List<Student> students = new ArrayList<>();
+        for (var group : groups) {
+            students.addAll(group.getStudents());
+        }
+
+        return students;
     }
 }
