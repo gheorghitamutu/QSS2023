@@ -69,14 +69,6 @@ public class StudentGroup implements Serializable {
         this.sessions = sessions;
     }
 
-    public String getGroupName() {
-        return name;
-    }
-
-    public void setGroupName(String name) {
-        this.name = name;
-    }
-
     public int getId() {
         return id;
     }

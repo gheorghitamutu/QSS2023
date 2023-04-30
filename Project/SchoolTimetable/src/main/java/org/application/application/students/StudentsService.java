@@ -7,6 +7,7 @@ import org.application.domain.exceptions.*;
 import org.application.domain.models.Student;
 import org.application.domain.models.StudentGroup;
 
+import java.text.MessageFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -17,9 +18,7 @@ public class StudentsService implements IStudentsService {
 
     @Inject
 
-    public StudentsService(IStudentRepository studentRepository,
-                           IStudentGroupRepository studentGroupRepository) {
-
+    public StudentsService(IStudentRepository studentRepository, IStudentGroupRepository studentGroupRepository) {
         this.studentRepository = studentRepository;
         this.studentGroupRepository = studentGroupRepository;
     }
@@ -32,31 +31,29 @@ public class StudentsService implements IStudentsService {
         student.setYear(year);
         student.setInsertTime(new Date());
 
-
-        StudentGroup newStudentGroup = studentGroupRepository.getByGroupName(groupName);
-
-        if (newStudentGroup == null)
-        {
+        var group = studentGroupRepository.getByGroupName(groupName);
+        if (group == null) {
             try {
-                System.out.println("[Students Service]  Creating new group with name" + groupName + ".");
+                System.out.println(MessageFormat.format("[Students Service] Creating new group with name {0}.", groupName));
 
-                newStudentGroup = studentGroupRepository.createNewGroup(groupName);
+                group = studentGroupRepository.createNewGroup(groupName);
 
-                System.out.println("[Students Service]  Created new group with name" + groupName + ".");
+                System.out.println(MessageFormat.format("[Students Service] Created new group with name {0}.", groupName));
 
             } catch (RepositoryOperationException e) {
-                System.out.println("[Students Service]  Couldn't create new group.");
+                System.out.println("[Students Service] Couldn't create new group.");
                 throw new RuntimeException(e);
             }
         }
-        student.setGroup(newStudentGroup);
+        student.setGroup(group);
 
         try {
             studentRepository.save(student);
-            return student;
         } catch (Exception e) {
-            throw new StudentAdditionException("[Students Service]  Couldn't add student.",e);
+            throw new StudentAdditionException("[Students Service] Couldn't add student.", e);
         }
+
+        return student;
     }
 
     @Override
@@ -71,7 +68,7 @@ public class StudentsService implements IStudentsService {
             return student;
         } catch (Exception e) {
 
-            throw new StudentUpdateException("[Students Service] Couldn't update student.",e);
+            throw new StudentUpdateException("[Students Service] Couldn't update student.", e);
         }
     }
 
@@ -79,23 +76,17 @@ public class StudentsService implements IStudentsService {
     public Student reassignStudent(int studentId, String newGroupName) throws StudentGroupReassignException {
         var student = studentRepository.getById(studentId);
 
-        StudentGroup newStudentGroup = studentGroupRepository.getByGroupName(newGroupName);
+        StudentGroup group = studentGroupRepository.getByGroupName(newGroupName);
 
-        if (newStudentGroup == null)
-        {
-            StudentGroup studentGroup = null;
+        if (group == null) {
             try {
-                studentGroup = studentGroupRepository.createNewGroup(newGroupName);
+                group = studentGroupRepository.createNewGroup(newGroupName);
             } catch (RepositoryOperationException e) {
-                throw new StudentGroupReassignException("[Students Service] Couldn't reassign student to group " + newStudentGroup + ".", e);
+                throw new StudentGroupReassignException(MessageFormat.format("[Students Service] Couldn't reassign student to group {0}.", newGroupName), e);
             }
-
-            student.setGroup(studentGroup);
-
-            return student;
         }
 
-        student.setGroup(newStudentGroup);
+        student.setGroup(group);
 
         return student;
     }
@@ -109,19 +100,17 @@ public class StudentsService implements IStudentsService {
     public boolean deleteStudent(int studentId) throws StudentNotFoundException, StudentDeletionFailed {
         var student = studentRepository.getById(studentId);
 
-        if (student == null)
-        {
-            throw new StudentNotFoundException("[Students Service DELETE student] Student with id " + studentId + " not found.");
+        if (student == null) {
+            throw new StudentNotFoundException(MessageFormat.format("[Students Service DELETE student] Student with id {0} not found.", studentId));
         }
 
         try {
             studentRepository.deleteStudent(student);
-
-            return true;
         } catch (Exception e) {
-
             throw new StudentDeletionFailed(" [Students Service] Couldn't delete student.", e);
         }
+
+        return true;
     }
 
     @Override

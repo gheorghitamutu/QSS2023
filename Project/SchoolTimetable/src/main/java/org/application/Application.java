@@ -12,7 +12,6 @@ import java.util.UUID;
 
 public class Application {
 
-
     private final IStudentRepository studentsRepository;
     private final IStudentsService studentsService;
 
@@ -24,7 +23,6 @@ public class Application {
     }
 
     public void run() {
-
 
         showcaseStudentsService();
 
@@ -42,7 +40,6 @@ public class Application {
 
         int newStudentId = 0;
         Student specificStudent = null;
-
 
         StudentGroup studentGroup = new StudentGroup();
         studentGroup.setName("A6");
@@ -136,9 +133,8 @@ public class Application {
         if (students.size() <= 45) {
             StudentGroup studentGroup = new StudentGroup();
 
-
             // check group validator
-//            studentGroup.setName("1A1");
+            // studentGroup.setName("1A1");
             studentGroup.setName("A1");
 
             studentGroup.setInsertTime(new Date());
@@ -148,7 +144,6 @@ public class Application {
             newStudent.setYear(1);
             newStudent.setName("test" + UUID.randomUUID());
             newStudent.setInsertTime(new Date());
-
 
             try {
                 this.studentsRepository.save(newStudent);
@@ -167,6 +162,5 @@ public class Application {
         }
 
         System.out.println("************************************** END STUDENTS LIST *************************");
-
     }
 }

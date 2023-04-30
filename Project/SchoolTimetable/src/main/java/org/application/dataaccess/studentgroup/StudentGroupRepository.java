@@ -39,7 +39,7 @@ public class StudentGroupRepository extends BaseRepository<StudentGroup> impleme
 
         StudentGroup studentGroup = new StudentGroup();
 
-        studentGroup.setGroupName(groupName);
+        studentGroup.setName(groupName);
         studentGroup.setInsertTime(new Date());
 
         try {
