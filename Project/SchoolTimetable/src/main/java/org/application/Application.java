@@ -67,7 +67,13 @@ public class Application {
             throw new RuntimeException(e);
         }
 
-        specificStudent = studentsService.getStudentById(newStudentId);
+        try {
+            specificStudent = studentsService.getStudentById(newStudentId);
+        } catch (StudentNotFoundException e) {
+            System.out.println("Student with id " + newStudentId + " couldn't be created.");
+
+            throw new RuntimeException(e);
+        }
 
         System.out.println("Student with id " + newStudentId + " is in group " + specificStudent.getGroup().getName());
         System.out.println("Student with id " + newStudentId + " is in year " + specificStudent.getYear());
@@ -85,7 +91,13 @@ public class Application {
             throw new RuntimeException(e);
         }
 
-        specificStudent = studentsService.getStudentById(newStudentId);
+        try {
+            specificStudent = studentsService.getStudentById(newStudentId);
+        } catch (StudentNotFoundException e) {
+            System.out.println("Student with id " + newStudentId + " couldn't be created.");
+
+            throw new RuntimeException(e);
+        }
 
         System.out.println("Student with id " + newStudentId + " is in group " + specificStudent.getGroup().getName());
         System.out.println("Student with id " + newStudentId + " is in year " + specificStudent.getYear());
@@ -101,7 +113,13 @@ public class Application {
             throw new RuntimeException(e);
         }
 
-        specificStudent = studentsService.getStudentById(newStudentId);
+        try {
+            specificStudent = studentsService.getStudentById(newStudentId);
+        } catch (StudentNotFoundException e) {
+            System.out.println("Student with id " + newStudentId + " couldn't be created.");
+
+            throw new RuntimeException(e);
+        }
 
         System.out.println("Student with id " + newStudentId + " is in group " + specificStudent.getGroup().getName());
         System.out.println("Student with id " + newStudentId + " is in year " + specificStudent.getYear());
@@ -120,7 +138,13 @@ public class Application {
             throw new RuntimeException(e);
         }
 
-        specificStudent = studentsService.getStudentById(newStudentId);
+        try {
+            specificStudent = studentsService.getStudentById(newStudentId);
+        } catch (StudentNotFoundException e) {
+            System.out.println("Student with id " + newStudentId + " couldn't be created.");
+
+            throw new RuntimeException(e);
+        }
 
         if (specificStudent == null) {
             System.out.println("Student with id " + newStudentId + " doesn't exist.");

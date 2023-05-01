@@ -12,7 +12,6 @@ public class TestsDI {
         if (!DiInitialized) {
 
             Injector appInjector = Main.setupDependenciesInjector(true);
-
             GuiceInjectorSingleton.INSTANCE.setInjector(appInjector);
 
             DiInitialized = true;

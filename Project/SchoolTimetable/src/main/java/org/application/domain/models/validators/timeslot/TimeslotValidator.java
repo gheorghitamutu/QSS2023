@@ -31,7 +31,7 @@ public class TimeslotValidator implements ConstraintValidator<ValidTimeslot, Tim
     public void initialize(ValidTimeslot constraintAnnotation) {
 
         Injector injector = GuiceInjectorSingleton.INSTANCE.getInjector();
-        if(null != injector) {
+        if (injector != null) {
             roomRepository = injector.getInstance(IRoomRepository.class);
             sessionRepository = injector.getInstance(ISessionRepository.class);
         }

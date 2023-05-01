@@ -6,6 +6,7 @@ import org.application.dataaccess.discipline.DisciplineRepository;
 import org.application.dataaccess.room.RoomRepository;
 import org.application.dataaccess.session.SessionRepository;
 import org.application.dataaccess.timeslot.TimeslotRepository;
+import org.application.di.TestsDI;
 import org.application.domain.exceptions.RepositoryOperationException;
 import org.application.domain.models.Discipline;
 import org.application.domain.models.Room;
@@ -42,6 +43,7 @@ class TimeslotRepositoryTest {
 
     @BeforeEach
     void setUp() {
+        TestsDI.initializeDi();
     }
 
     @AfterEach
