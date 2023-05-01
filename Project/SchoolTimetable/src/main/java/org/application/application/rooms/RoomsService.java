@@ -49,13 +49,13 @@ public class RoomsService implements IRoomsService {
 
     @Override
     public boolean deleteRoom(int roomId) throws RoomNotFoundException, RoomDeletionFailed {
-        var discipline = roomRepository.getById(roomId);
-        if (discipline == null) {
-            throw new RoomNotFoundException(MessageFormat.format("[RoomService] Discipline with id {0} not found.", roomId));
+        var room = roomRepository.getById(roomId);
+        if (room == null) {
+            throw new RoomNotFoundException(MessageFormat.format("[RoomService] Room with id {0} not found.", roomId));
         }
 
         try {
-            roomRepository.delete(discipline);
+            roomRepository.delete(room);
         } catch (Exception e) {
             throw new RoomDeletionFailed(" [RoomService] Failed to delete room.", e);
         }
@@ -65,11 +65,11 @@ public class RoomsService implements IRoomsService {
 
     @Override
     public Room getRoomById(int roomId) throws RoomNotFoundException {
-        var discipline = roomRepository.getById(roomId);
-        if (discipline == null) {
+        var room = roomRepository.getById(roomId);
+        if (room == null) {
             throw new RoomNotFoundException(MessageFormat.format("[RoomService] Room with id {0} not found.", roomId));
         }
-        return discipline;
+        return room;
     }
 
     @Override
