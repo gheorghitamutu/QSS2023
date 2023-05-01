@@ -1,4 +1,4 @@
-package org.application.domain.exceptions;
+package org.application.domain.exceptions.discipline;
 
 public class DisciplineNotFoundException extends Exception{
     public DisciplineNotFoundException(String message) {

@@ -1,4 +1,4 @@
-package org.application.domain.exceptions;
+package org.application.domain.exceptions.discipline;
 
 public class DisciplineDeletionFailed extends Exception{
     public DisciplineDeletionFailed(String message) {

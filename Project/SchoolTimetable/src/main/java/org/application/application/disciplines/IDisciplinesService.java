@@ -1,8 +1,9 @@
 package org.application.application.disciplines;
 
-import org.application.domain.exceptions.*;
+import org.application.domain.exceptions.discipline.DisciplineAdditionException;
+import org.application.domain.exceptions.discipline.DisciplineDeletionFailed;
+import org.application.domain.exceptions.discipline.DisciplineNotFoundException;
 import org.application.domain.models.Discipline;
-import org.application.domain.models.StudentGroup;
 
 import java.util.List;
 

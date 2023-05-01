@@ -41,7 +41,7 @@ public class DisciplineRepository extends BaseRepository<Discipline> implements 
             save(discipline);
         } catch (Exception e) {
             e.printStackTrace();
-            throw new RepositoryOperationException("[Student Group Repository] Couldn't create new group.", e);
+            throw new RepositoryOperationException("[DisciplineRepository] Couldn't create new discipline.", e);
         }
 
         return discipline;

@@ -2,9 +2,9 @@ package org.application.application.disciplines;
 
 import com.google.inject.Inject;
 import org.application.dataaccess.discipline.IDisciplineRepository;
-import org.application.domain.exceptions.DisciplineAdditionException;
-import org.application.domain.exceptions.DisciplineDeletionFailed;
-import org.application.domain.exceptions.DisciplineNotFoundException;
+import org.application.domain.exceptions.discipline.DisciplineAdditionException;
+import org.application.domain.exceptions.discipline.DisciplineDeletionFailed;
+import org.application.domain.exceptions.discipline.DisciplineNotFoundException;
 import org.application.domain.exceptions.RepositoryOperationException;
 import org.application.domain.models.Discipline;
 

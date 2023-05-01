@@ -51,7 +51,6 @@ public class Main {
                 bind(IRoomRepository.class).to(RoomRepository.class);
 
                 bind(IStudentsService.class).to(StudentsService.class);
-
             }
         });
     }
