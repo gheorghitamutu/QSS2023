@@ -18,20 +18,22 @@ public class GUI extends JFrame implements ActionListener {
     public GUI() {
         super("Timetable Generator");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(1000, 800);
+        setSize(800, 600);
 
         // Create main panel
-        mainPanel = new JPanel(new BorderLayout());
+        mainPanel = new JPanel(new GridLayout(1, 2));
+        mainPanel = createMain(mainPanel);
         add(mainPanel, BorderLayout.CENTER);
 
-        // Create navigation panel
+
+        // Create category buttons for the navigation
+        String[] categories = {"Home","Students", "Teachers", "Disciplines", "Rooms", "Timeslots", "Generate TimeTable"};
         navPanel = new JPanel();
-        navPanel.setLayout(new BoxLayout(navPanel, BoxLayout.PAGE_AXIS));
+        // Create navigation panel
+        navPanel.setLayout(new GridLayout(categories.length + 1, 1));
         navPanel.setBackground(bgColor1);
         add(navPanel, BorderLayout.WEST);
 
-        // Create category buttons for the navigation
-        String[] categories = {"Students", "Teachers", "Disciplines", "Rooms", "Timeslots", "Generate TimeTable"};
         categoryButtons = new JButton[categories.length];
         for (int i = 0; i < categories.length; i++) {
             categoryButtons[i] = new JButton(categories[i]);
@@ -52,7 +54,6 @@ public class GUI extends JFrame implements ActionListener {
                 }
             });
             navPanel.add(categoryButtons[i]);
-            navPanel.add(Box.createRigidArea(new Dimension(0, 10)));
         }
 
         // Create exit button
@@ -72,42 +73,49 @@ public class GUI extends JFrame implements ActionListener {
         navPanel.add(exitButton);
 
         // Set main panel visible
+        setResizable(false);
         setVisible(true);
     }
 
-    public void actionPerformed(ActionEvent e) {
-        // Open new frame
-//        JFrame newFrame = new JFrame("New Frame");
-//        newFrame.setSize(500, 400);
-//        newFrame.setLocationRelativeTo(null);
-//        newFrame.setVisible(true);
-        // Get the source of the event
+    public JPanel createMain(JPanel main){
+        // Remove previous components from right panel and add result label
+        main.removeAll();
+        setSize(800, 600);
+        main.setBackground(new Color(0x252F23));
+        ImageIcon image = new ImageIcon("D:\\Desktop\\MASTER\\Semestru2\\CSS\\QSS2023\\Project\\SchoolTimetable\\src\\main\\java\\org\\application\\presentation\\icons\\logo.png");
+        Image rescaledImage = image.getImage().getScaledInstance(450,450, Image.SCALE_DEFAULT);
+        ImageIcon finalImage = new ImageIcon(rescaledImage);
+        JLabel imageLabel = new JLabel(finalImage);
+        imageLabel.setBounds(30,20,350,350);
+        main.add(imageLabel, BorderLayout.CENTER);
+        return main;
+    }
 
+    public void actionPerformed(ActionEvent e) {
         JButton source = (JButton) e.getSource();
-        JLabel resultLabel = new JLabel();
+
         if(source.getText().equals("Students")){
             StudentSettings studentSettings = new StudentSettings();
-            studentSettings.createJPanel(mainPanel, source.getText());
+            mainPanel = studentSettings.createJPanel(mainPanel, source.getText());
+            pack();
+        } else  if (source.getText().equals("Home")){
+            mainPanel = createMain(mainPanel);
         } else if (source.getText().equals("Teachers")){
             TeacherSettings teacherSettings = new TeacherSettings();
-            teacherSettings.createJPanel(mainPanel, source.getText());
+            mainPanel = teacherSettings.createJPanel(mainPanel, source.getText());
         }else if(source.getText().equals("Disciplines")){
             DisciplineSettings disciplineSettings = new DisciplineSettings();
-            disciplineSettings.createJPanel(mainPanel, source.getText());
+            mainPanel =disciplineSettings.createJPanel(mainPanel, source.getText());
         }else if(source.getText().equals("Rooms")){
             RoomSettings roomSettings = new RoomSettings();
-            roomSettings.createJPanel(mainPanel, source.getText());
+            mainPanel = roomSettings.createJPanel(mainPanel, source.getText());
         }else if(source.getText().equals("Timeslots")) {
             TimeslotSettings timeslotSettings = new TimeslotSettings();
-            timeslotSettings.createJPanel(mainPanel, source.getText());
+            mainPanel =timeslotSettings.createJPanel(mainPanel, source.getText());
         }else if(source.getText().equals("Generate Timetable")){
              //TODO TimeTable Generator Btn link here
         }
 
-
-        // Remove previous components from right panel and add result label
-        //mainPanel.removeAll();
-        //mainPanel.add(resultLabel);
 
         // Refresh right panel
         mainPanel.revalidate();

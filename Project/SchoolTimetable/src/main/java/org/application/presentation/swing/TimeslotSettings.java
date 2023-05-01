@@ -18,4 +18,14 @@ public class TimeslotSettings implements BaseSettings {
 
         return main;
     }
+
+    @Override
+    public JPanel createLeftJPanel() {
+        return null;
+    }
+
+    @Override
+    public JPanel createRightJPanel() {
+        return null;
+    }
 }
