@@ -1,4 +1,4 @@
-package org.application.models.validators.teacher;
+package org.application.domain.models.validators.teacher;
 
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;

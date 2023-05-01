@@ -6,10 +6,11 @@ import org.application.dataaccess.discipline.DisciplineRepository;
 import org.application.dataaccess.room.RoomRepository;
 import org.application.dataaccess.session.SessionRepository;
 import org.application.dataaccess.timeslot.TimeslotRepository;
-import org.application.models.Discipline;
-import org.application.models.Room;
-import org.application.models.Session;
-import org.application.models.Timeslot;
+import org.application.domain.exceptions.RepositoryOperationException;
+import org.application.domain.models.Discipline;
+import org.application.domain.models.Room;
+import org.application.domain.models.Session;
+import org.application.domain.models.Timeslot;
 import org.junit.jupiter.api.*;
 
 import java.text.SimpleDateFormat;
@@ -52,7 +53,7 @@ class TimeslotRepositoryTest {
     }
 
     @AfterAll
-    void tearDownAll() {
+    void tearDownAll() throws RepositoryOperationException {
         List<Discipline> disciplines = disciplineRepository.readAll();
         disciplineRepository.deleteMany(disciplines);
 
@@ -67,7 +68,7 @@ class TimeslotRepositoryTest {
     }
 
     @Test
-    public void saveTimeslot() {
+    public void saveTimeslot() throws RepositoryOperationException {
         Room room = new Room();
         room.setCapacity(30);
         room.setFloor(1);
@@ -91,18 +92,22 @@ class TimeslotRepositoryTest {
         discipline.setCredits(6);
         discipline.setName("test");
         discipline.setInsertTime(new Date());
-        Assertions.assertTrue(disciplineRepository.save(discipline));
+
+        disciplineRepository.save(discipline);
 
         Session session = new Session();
         session.setType(Session.Type.COURSE);
         session.setInsertTime(new Date());
         session.setDiscipline(discipline);
-        Assertions.assertTrue(sessionRepository.save(session));
+
+        sessionRepository.save(session);
+
         timeslot.setSession(session);
 
         room.setTimeslots(Collections.singleton(timeslot));
-        Assertions.assertTrue(roomRepository.save(room));
-        Assertions.assertTrue(timeslotRepository.save(timeslot));
+
+        roomRepository.save(room);
+        timeslotRepository.save(timeslot);
     }
 
     @Test()

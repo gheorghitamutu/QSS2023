@@ -1,8 +1,7 @@
-package org.application.models.validators.timeslot;
+package org.application.domain.models.validators.timeslot;
 
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
-import org.application.models.validators.timeslot.TimeslotValidator;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;

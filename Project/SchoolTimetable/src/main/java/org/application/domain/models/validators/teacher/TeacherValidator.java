@@ -1,14 +1,17 @@
-package org.application.models.validators.studentgroup;
+package org.application.domain.models.validators.teacher;
 
+import com.google.inject.Inject;
+import com.google.inject.Injector;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
+import org.application.GuiceInjectorSingleton;
 import org.application.dataaccess.database.IHibernateProvider;
 import org.application.dataaccess.database.MainDatabaseHibernateProvider;
-import org.application.dataaccess.database.TestsDatabaseHibernateProvider;
+import org.application.dataaccess.session.ISessionRepository;
 import org.application.dataaccess.session.SessionRepository;
-import org.application.models.Session;
-import org.application.models.StudentGroup;
-import org.application.models.Timeslot;
+import org.application.domain.models.Session;
+import org.application.domain.models.Timeslot;
+import org.application.domain.models.Teacher;
 
 import java.time.Duration;
 import java.util.Calendar;
@@ -16,22 +19,32 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
-public class StudentGroupValidator implements ConstraintValidator<ValidStudentGroup, StudentGroup> {
+public class TeacherValidator implements ConstraintValidator<ValidTeacher, Teacher> {
 
-    SessionRepository sessionRepository;
+    ISessionRepository sessionRepository;
 
     @Override
-    public void initialize(ValidStudentGroup constraintAnnotation) {
-        IHibernateProvider provider = new MainDatabaseHibernateProvider();
-        sessionRepository = new SessionRepository(provider);
+    public void initialize(ValidTeacher constraintAnnotation) {
+
+        Injector injector = GuiceInjectorSingleton.INSTANCE.getInjector();
+        if(null != injector) {
+            sessionRepository = injector.getInstance(ISessionRepository.class);
+        }
     }
 
     @Override
-    public boolean isValid(StudentGroup value, ConstraintValidatorContext context) {
+    public boolean isValid(Teacher value, ConstraintValidatorContext context) {
 
         Set<Session> sessions = value.getSessions();
         for (Session session : sessions) {
             if (!sessionRepository.validate(session)) {
+                return false;
+            }
+        }
+
+        Teacher.Type teacherType = value.getType();
+        for (Session session : sessions) {
+            if (session.getType() == Session.Type.COURSE && teacherType != Teacher.Type.TEACHER) {
                 return false;
             }
         }

@@ -3,7 +3,9 @@ package org.application.dataaccess;
 import org.application.dataaccess.database.IHibernateProvider;
 import org.application.dataaccess.database.TestsDatabaseHibernateProvider;
 import org.application.dataaccess.studentgroup.StudentGroupRepository;
-import org.application.models.StudentGroup;
+import org.application.di.TestsDI;
+import org.application.domain.exceptions.RepositoryOperationException;
+import org.application.domain.models.StudentGroup;
 import org.junit.jupiter.api.*;
 
 import java.util.Date;
@@ -15,6 +17,8 @@ class StudentGroupRepositoryTest {
 
     @BeforeAll
     public void setup() throws Exception {
+        TestsDI.initializeDi();
+
     }
 
     @AfterAll
@@ -26,8 +30,9 @@ class StudentGroupRepositoryTest {
     }
 
     @AfterEach
-    void tearDown() {
+    void tearDown() throws RepositoryOperationException {
         List<StudentGroup> groups = studentGroupRepository.readAll();
+
         studentGroupRepository.deleteMany(groups);
     }
 
@@ -42,15 +47,18 @@ class StudentGroupRepositoryTest {
     }
 
     @Test
-    public void saveGroup() {
+    public void saveGroup() throws RepositoryOperationException {
         StudentGroup group = new StudentGroup();
         group.setName("A1");
+        group.setYear(1);
+        group.setType(StudentGroup.Type.BACHELOR);
         group.setInsertTime(new Date());
-        Assertions.assertTrue(studentGroupRepository.save(group));
+
+        studentGroupRepository.save(group);
     }
 
     @Test()
-    public void readGroup() {
+    public void readGroup() throws RepositoryOperationException {
         saveGroup();
 
         List<StudentGroup> groups = studentGroupRepository.readAll();

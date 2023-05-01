@@ -3,7 +3,9 @@ package org.application.dataaccess;
 import org.application.dataaccess.database.IHibernateProvider;
 import org.application.dataaccess.database.TestsDatabaseHibernateProvider;
 import org.application.dataaccess.teacher.TeacherRepository;
-import org.application.models.Teacher;
+import org.application.di.TestsDI;
+import org.application.domain.exceptions.RepositoryOperationException;
+import org.application.domain.models.Teacher;
 import org.junit.jupiter.api.*;
 
 import java.util.Date;
@@ -15,6 +17,7 @@ class TeacherRepositoryTest {
 
     @BeforeEach
     void setUp() {
+        TestsDI.initializeDi();
     }
 
     @AfterEach
@@ -28,18 +31,19 @@ class TeacherRepositoryTest {
     }
 
     @AfterAll
-    void tearDownAll() {
+    void tearDownAll() throws RepositoryOperationException {
         List<Teacher> teachers = teacherRepository.readAll();
         teacherRepository.deleteMany(teachers);
     }
 
     @Test
-    public void saveTeacher() {
+    public void saveTeacher() throws RepositoryOperationException {
         Teacher teacher = new Teacher();
         teacher.setType(Teacher.Type.COLLABORATOR);
         teacher.setName("test");
         teacher.setInsertTime(new Date());
-        Assertions.assertTrue(teacherRepository.save(teacher));
+
+        teacherRepository.save(teacher);
     }
 
     @Test()

@@ -4,8 +4,10 @@ import org.application.dataaccess.database.IHibernateProvider;
 import org.application.dataaccess.database.TestsDatabaseHibernateProvider;
 import org.application.dataaccess.student.StudentRepository;
 import org.application.dataaccess.studentgroup.StudentGroupRepository;
-import org.application.models.Student;
-import org.application.models.StudentGroup;
+import org.application.di.TestsDI;
+import org.application.domain.exceptions.RepositoryOperationException;
+import org.application.domain.models.Student;
+import org.application.domain.models.StudentGroup;
 import org.junit.jupiter.api.*;
 
 import java.util.Date;
@@ -19,6 +21,7 @@ class StudentRepositoryTest {
 
     @BeforeEach
     void setUp() {
+        TestsDI.initializeDi();
     }
 
     @AfterEach
@@ -33,7 +36,7 @@ class StudentRepositoryTest {
     }
 
     @AfterAll
-    void tearDownAll() {
+    void tearDownAll() throws RepositoryOperationException {
         List<StudentGroup> studentsGroups = studentGroupRepository.readAll();
         studentGroupRepository.deleteMany(studentsGroups);
 
@@ -42,9 +45,11 @@ class StudentRepositoryTest {
     }
 
     @Test
-    public void saveStudent() {
+    public void saveStudent() throws RepositoryOperationException {
         StudentGroup studentGroup = new StudentGroup();
         studentGroup.setName("A1");
+        studentGroup.setYear(1);
+        studentGroup.setType(StudentGroup.Type.BACHELOR);
         studentGroup.setInsertTime(new Date());
 
         Student student = new Student();
@@ -52,7 +57,9 @@ class StudentRepositoryTest {
         student.setYear(1);
         student.setName("test");
         student.setInsertTime(new Date());
-        Assertions.assertTrue(studentRepository.save(student));
+
+        //ASSERT (sa nu fie exceptie by default)
+        studentRepository.save(student);
     }
 
     @Test()

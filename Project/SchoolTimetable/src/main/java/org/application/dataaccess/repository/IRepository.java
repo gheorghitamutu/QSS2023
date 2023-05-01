@@ -1,13 +1,18 @@
 package org.application.dataaccess.repository;
 
+import org.application.domain.exceptions.RepositoryOperationException;
+
 import java.util.List;
 
 public interface IRepository<T> {
-    boolean save(T object);
 
-    boolean delete(T object);
+    public T getById(int id);
 
-    boolean deleteMany(List<T> objects);
+    void save(T object) throws RepositoryOperationException;
+
+    void delete(T object) throws RepositoryOperationException;
+
+    void deleteMany(List<T> objects) throws RepositoryOperationException;
 
     List<T> readAll();
 

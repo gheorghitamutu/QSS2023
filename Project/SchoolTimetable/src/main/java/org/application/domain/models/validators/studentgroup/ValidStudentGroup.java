@@ -1,4 +1,4 @@
-package org.application.models.validators.student;
+package org.application.domain.models.validators.studentgroup;
 
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
@@ -10,12 +10,12 @@ import java.lang.annotation.Target;
 import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
-@Constraint(validatedBy = {StudentValidator.class})
+@Constraint(validatedBy = {StudentGroupValidator.class})
 @Documented
 @Target(TYPE)
 @Retention(RUNTIME)
-public @interface ValidStudent {
-    String message() default "This student does not meet our requirements!";
+public @interface ValidStudentGroup {
+    String message() default "This student group does not meet our requirements!";
 
     Class<?>[] groups() default {};
 

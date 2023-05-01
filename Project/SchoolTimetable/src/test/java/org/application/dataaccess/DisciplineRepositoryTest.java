@@ -4,10 +4,12 @@ import org.application.dataaccess.database.IHibernateProvider;
 import org.application.dataaccess.discipline.DisciplineRepository;
 import org.application.dataaccess.database.TestsDatabaseHibernateProvider;
 import org.application.dataaccess.session.SessionRepository;
-import org.application.models.Discipline;
-import org.application.models.Session;
-import org.application.models.Student;
-import org.application.models.StudentGroup;
+import org.application.di.TestsDI;
+import org.application.domain.exceptions.RepositoryOperationException;
+import org.application.domain.models.Discipline;
+import org.application.domain.models.Session;
+import org.application.domain.models.Student;
+import org.application.domain.models.StudentGroup;
 import org.junit.jupiter.api.*;
 
 import java.util.Collections;
@@ -30,14 +32,15 @@ class DisciplineRepositoryTest {
 
     @BeforeAll
     void setUpAll() {
-        IHibernateProvider provider = new TestsDatabaseHibernateProvider();
-        disciplineRepository = new DisciplineRepository(provider);
-        sessionRepository = new SessionRepository(provider);
+        TestsDI.initializeDi();
+
+        sessionRepository = new SessionRepository(new TestsDatabaseHibernateProvider());
+        disciplineRepository = new DisciplineRepository(new TestsDatabaseHibernateProvider());
     }
 
 
     @AfterAll
-    void tearDownAll() {
+    void tearDownAll() throws RepositoryOperationException {
         List<Discipline> disciplines = disciplineRepository.readAll();
         disciplineRepository.deleteMany(disciplines);
 
@@ -46,7 +49,7 @@ class DisciplineRepositoryTest {
     }
 
     @Test
-    public void saveDiscipline() {
+    public void saveDiscipline() throws RepositoryOperationException {
 
         Session session = new Session();
         session.setType(Session.Type.COURSE);
@@ -62,6 +65,8 @@ class DisciplineRepositoryTest {
 
         StudentGroup studentGroup = new StudentGroup();
         studentGroup.setName("A1");
+        studentGroup.setYear(1);
+        studentGroup.setType(StudentGroup.Type.BACHELOR);
         studentGroup.setInsertTime(new Date());
 
         Student student = new Student();
@@ -73,7 +78,7 @@ class DisciplineRepositoryTest {
         studentGroup.setSessions(Collections.singleton(session));
         session.setGroups(Collections.singleton(studentGroup));
 
-        Assertions.assertTrue(disciplineRepository.save(discipline));
+        disciplineRepository.save(discipline);
     }
 
     @Test()

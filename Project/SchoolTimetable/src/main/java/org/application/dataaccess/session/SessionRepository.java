@@ -3,7 +3,7 @@ package org.application.dataaccess.session;
 import com.google.inject.Inject;
 import org.application.dataaccess.database.IHibernateProvider;
 import org.application.dataaccess.repository.BaseRepository;
-import org.application.models.Session;
+import org.application.domain.models.Session;
 
 public class SessionRepository extends BaseRepository<Session> implements ISessionRepository {
 
