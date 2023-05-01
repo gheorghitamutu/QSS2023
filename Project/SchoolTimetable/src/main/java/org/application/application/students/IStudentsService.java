@@ -18,4 +18,6 @@ public interface IStudentsService {
     public Student getStudentById(int studentId);
 
     public List<Student> getStudents();
+
+    public List<Student> getStudentsByGroupNameAndYear(String groupName, int year);
 }

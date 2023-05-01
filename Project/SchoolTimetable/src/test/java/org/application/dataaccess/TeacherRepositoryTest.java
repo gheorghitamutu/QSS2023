@@ -18,7 +18,6 @@ class TeacherRepositoryTest {
     @BeforeEach
     void setUp() {
         TestsDI.initializeDi();
-
     }
 
     @AfterEach
@@ -34,7 +33,6 @@ class TeacherRepositoryTest {
     @AfterAll
     void tearDownAll() throws RepositoryOperationException {
         List<Teacher> teachers = teacherRepository.readAll();
-
         teacherRepository.deleteMany(teachers);
     }
 

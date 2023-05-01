@@ -50,6 +50,8 @@ class StudentGroupRepositoryTest {
     public void saveGroup() throws RepositoryOperationException {
         StudentGroup group = new StudentGroup();
         group.setName("A1");
+        group.setYear(1);
+        group.setType(StudentGroup.Type.BACHELOR);
         group.setInsertTime(new Date());
 
         studentGroupRepository.save(group);

@@ -58,6 +58,8 @@ public class StudentDisciplineManyToManyIntegrationTest {
 
         StudentGroup studentGroup = new StudentGroup();
         studentGroup.setName("A1");
+        studentGroup.setYear(1);
+        studentGroup.setType(StudentGroup.Type.BACHELOR);
         studentGroup.setInsertTime(new Date());
 
         Student student = new Student();

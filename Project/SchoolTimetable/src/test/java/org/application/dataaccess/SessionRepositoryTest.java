@@ -22,7 +22,6 @@ class SessionRepositoryTest {
     @BeforeAll
     public void setup() throws Exception {
         TestsDI.initializeDi();
-
     }
 
     @AfterAll
