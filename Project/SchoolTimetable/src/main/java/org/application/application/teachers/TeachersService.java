@@ -41,7 +41,7 @@ public class TeachersService implements ITeachersService {
         try {
             teacherRepository.save(teacher);
         } catch (Exception e) {
-            throw new TeacherAdditionException("[TeacherService] Failed adding room!", e);
+            throw new TeacherAdditionException("[TeacherService] Failed adding teacher!", e);
         }
 
         return teacher;
