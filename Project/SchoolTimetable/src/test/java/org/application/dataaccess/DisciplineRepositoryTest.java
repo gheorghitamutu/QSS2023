@@ -73,6 +73,7 @@ class DisciplineRepositoryTest {
         student.setGroup(studentGroup);
         student.setYear(1);
         student.setName("test");
+        student.setRegistrationNumber("310910204006SM000000");
         student.setInsertTime(new Date());
 
         studentGroup.setSessions(Collections.singleton(session));

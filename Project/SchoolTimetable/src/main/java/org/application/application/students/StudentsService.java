@@ -94,8 +94,21 @@ public class StudentsService implements IStudentsService {
     }
 
     @Override
-    public Student getStudentById(int studentId) {
+    public Student getStudentById(int studentId) throws StudentNotFoundException {
+        var student = studentRepository.getById(studentId);
+        if (student == null) {
+            throw new StudentNotFoundException(MessageFormat.format("[Students Service DELETE student] Student with id {0} not found.", studentId));
+        }
+
         return studentRepository.getById(studentId);
+    }
+
+    public Student getStudentByRegistrationNumber(String registrationNumber) throws StudentNotFoundException {
+        var students = studentRepository.readAll().stream().filter(s -> s.getRegistrationNumber().equals(registrationNumber)).toList();
+        if (students.size() != 1) {
+            throw new StudentNotFoundException(MessageFormat.format("[Students Service DELETE student] Student with id {0} not found.", registrationNumber));
+        }
+        return students.get(0);
     }
 
     @Override
@@ -106,6 +119,23 @@ public class StudentsService implements IStudentsService {
             throw new StudentNotFoundException(MessageFormat.format("[Students Service DELETE student] Student with id {0} not found.", studentId));
         }
 
+        try {
+            studentRepository.deleteStudent(student);
+        } catch (Exception e) {
+            throw new StudentDeletionFailed(" [Students Service] Couldn't delete student.", e);
+        }
+
+        return true;
+    }
+
+    @Override
+    public boolean deleteStudent(String registrationNumber) throws StudentNotFoundException, StudentDeletionFailed {
+        var students = studentRepository.readAll().stream().filter(s -> s.getRegistrationNumber().equals(registrationNumber)).toList();
+        if (students.size() != 1) {
+            throw new StudentNotFoundException(MessageFormat.format("[Students Service DELETE student] Student with id {0} not found.", registrationNumber));
+        }
+
+        var student = students.get(0);
         try {
             studentRepository.deleteStudent(student);
         } catch (Exception e) {

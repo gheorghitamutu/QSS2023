@@ -23,7 +23,6 @@ public class DisciplineSessionOneToManyIntegrationTest {
     @BeforeEach
     void setUp() {
         TestsDI.initializeDi();
-
     }
 
     @AfterEach

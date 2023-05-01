@@ -13,9 +13,13 @@ public interface IStudentsService {
 
     public boolean deleteStudent(int studentId) throws StudentNotFoundException, StudentDeletionFailed;
 
+    public boolean deleteStudent(String registrationNumber) throws StudentNotFoundException, StudentDeletionFailed;
+
     public Student reassignStudent(int studentId, String newGroupName) throws StudentGroupReassignException;
 
-    public Student getStudentById(int studentId);
+    public Student getStudentById(int studentId) throws StudentNotFoundException;
+
+    public Student getStudentByRegistrationNumber(String registrationNumber) throws StudentNotFoundException;
 
     public List<Student> getStudents();
 
