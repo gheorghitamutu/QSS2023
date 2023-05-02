@@ -6,6 +6,8 @@ import org.application.domain.exceptions.Timeslot.TimeslotNotFoundException;
 import org.application.domain.exceptions.teacher.TeacherAdditionException;
 import org.application.domain.exceptions.teacher.TeacherDeletionFailed;
 import org.application.domain.exceptions.teacher.TeacherNotFoundException;
+import org.application.domain.models.Room;
+import org.application.domain.models.Session;
 import org.application.domain.models.Teacher;
 import org.application.domain.models.Timeslot;
 
@@ -15,7 +17,7 @@ import java.util.List;
 
 public interface ITimeslotsService {
 
-    public Timeslot addTimeslot(Date date, Duration duration, Timeslot.Day day, Timeslot.Periodicity periodicity) throws TimeslotAdditionException;
+    public Timeslot addTimeslot(Date startDate, Date endDate, Date time, Duration duration, Timeslot.Day day, Timeslot.Periodicity periodicity, Room room, Session session) throws TimeslotAdditionException;
 
     public boolean deleteTimeslot(int timeslotId) throws TimeslotNotFoundException, TimeslotDeletionFailed;
 

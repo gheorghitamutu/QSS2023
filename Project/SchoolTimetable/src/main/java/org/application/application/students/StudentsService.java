@@ -30,11 +30,12 @@ public class StudentsService implements IStudentsService {
     }
 
     @Override
-    public Student addStudent(String name, int year, String groupName) throws StudentAdditionException {
+    public Student addStudent(String name, String registrationNumber, int year, String groupName) throws StudentAdditionException {
         var student = new Student();
 
         student.setName(name);
         student.setYear(year);
+        student.setRegistrationNumber(registrationNumber);
         student.setInsertTime(new Date());
 
         var group = studentGroupRepository.getByGroupName(groupName);

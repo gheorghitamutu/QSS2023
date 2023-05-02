@@ -11,7 +11,7 @@ import java.util.List;
 
 public interface IStudentsService {
 
-    public Student addStudent(String name, int year, String groupName) throws StudentAdditionException;
+    public Student addStudent(String name, String registrationNumber, int year, String groupName) throws StudentAdditionException;
 
     public Student updateStudent(int studentId, String name, int year) throws StudentUpdateException;
 

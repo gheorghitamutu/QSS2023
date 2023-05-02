@@ -70,7 +70,7 @@ class TimeslotRepositoryTest {
     }
 
     @Test
-    public void saveTimeslot() throws RepositoryOperationException {
+    public void saveTimeslot() throws RepositoryOperationException, java.text.ParseException {
         Room room = new Room();
         room.setCapacity(30);
         room.setFloor(1);
@@ -82,11 +82,9 @@ class TimeslotRepositoryTest {
         timeslot.setPeriodicity(Timeslot.Periodicity.WEEKLY);
         timeslot.setWeekday(Timeslot.Day.MONDAY);
         timeslot.setTimespan(Duration.ofMinutes(30));
-        try {
-            timeslot.setTime(new SimpleDateFormat("HH:mm:ss").parse("15:30:14"));
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
+        timeslot.setStartDate(new SimpleDateFormat("dd-MM-yyyy").parse("01-01-2023"));
+        timeslot.setEndDate(new SimpleDateFormat("dd-MM-yyyy").parse("01-07-2023"));
+        timeslot.setTime(new SimpleDateFormat("HH:mm:ss").parse("15:30:14"));
         timeslot.setInsertTime(new Date());
         timeslot.setRoom(room);
 
