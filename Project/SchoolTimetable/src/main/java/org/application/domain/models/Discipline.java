@@ -10,6 +10,7 @@ import java.util.Set;
 
 @Entity(name = "Discipline")
 @Table(name = "discipline", uniqueConstraints = {@UniqueConstraint(columnNames = {"Id"})})
+@NamedQuery(name = "Discipline.getByName", query = "SELECT d FROM Discipline d WHERE d.name = :name")
 public class Discipline implements Serializable {
 
     @ManyToMany(mappedBy = "disciplines", cascade = CascadeType.ALL)

@@ -12,6 +12,7 @@ import java.util.Set;
 @ValidTeacher
 @Entity(name = "Teacher")
 @Table(name = "teacher", uniqueConstraints = {@UniqueConstraint(columnNames = {"Id"})})
+@NamedQuery(name = "Teacher.getByName", query = "SELECT t FROM Teacher t WHERE t.name = :name")
 public class Teacher implements Serializable {
 
     @ManyToMany(cascade = {CascadeType.ALL})

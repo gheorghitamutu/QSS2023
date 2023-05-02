@@ -1,4 +1,4 @@
-package org.application.domain.exceptions;
+package org.application.domain.exceptions.student;
 
 public class StudentUpdateException extends Exception{
     public StudentUpdateException(String message) {

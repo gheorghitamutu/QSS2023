@@ -1,6 +1,8 @@
 package org.application.application.studentgroups;
 
-import org.application.domain.exceptions.*;
+import org.application.domain.exceptions.studentgroup.StudentGroupAdditionException;
+import org.application.domain.exceptions.studentgroup.StudentGroupDeletionFailed;
+import org.application.domain.exceptions.studentgroup.StudentGroupNotFoundException;
 import org.application.domain.models.StudentGroup;
 
 import java.util.List;

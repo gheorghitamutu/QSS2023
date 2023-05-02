@@ -1,6 +1,10 @@
 package org.application.application.students;
 
-import org.application.domain.exceptions.*;
+import org.application.domain.exceptions.student.StudentAdditionException;
+import org.application.domain.exceptions.student.StudentDeletionFailed;
+import org.application.domain.exceptions.student.StudentNotFoundException;
+import org.application.domain.exceptions.student.StudentUpdateException;
+import org.application.domain.exceptions.studentgroup.StudentGroupReassignException;
 import org.application.domain.models.Student;
 
 import java.util.List;

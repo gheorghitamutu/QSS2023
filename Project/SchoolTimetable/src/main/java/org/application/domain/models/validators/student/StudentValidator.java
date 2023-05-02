@@ -7,6 +7,7 @@ import jakarta.validation.ConstraintValidatorContext;
 import org.application.GuiceInjectorSingleton;
 import org.application.dataaccess.discipline.IDisciplineRepository;
 import org.application.dataaccess.studentgroup.IStudentGroupRepository;
+import org.application.domain.models.Session;
 import org.application.domain.models.Student;
 import org.application.domain.models.StudentGroup;
 import org.application.domain.models.Discipline;
@@ -40,7 +41,6 @@ public class StudentValidator implements ConstraintValidator<ValidStudent, Stude
         }
 
         StudentGroup studentGroup = value.getGroup();
-
         return studentGroupRepository.validate(studentGroup);
     }
 }

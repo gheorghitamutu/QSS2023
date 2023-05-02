@@ -4,13 +4,17 @@ import com.google.inject.Inject;
 import org.application.dataaccess.student.IStudentRepository;
 import org.application.dataaccess.studentgroup.IStudentGroupRepository;
 import org.application.domain.exceptions.*;
+import org.application.domain.exceptions.student.StudentAdditionException;
+import org.application.domain.exceptions.student.StudentDeletionFailed;
+import org.application.domain.exceptions.student.StudentNotFoundException;
+import org.application.domain.exceptions.student.StudentUpdateException;
+import org.application.domain.exceptions.studentgroup.StudentGroupReassignException;
 import org.application.domain.models.Student;
 import org.application.domain.models.StudentGroup;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
 
 public class StudentsService implements IStudentsService {

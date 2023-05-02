@@ -3,9 +3,9 @@ package org.application.application.studentgroups;
 import com.google.inject.Inject;
 import org.application.dataaccess.studentgroup.IStudentGroupRepository;
 import org.application.domain.exceptions.RepositoryOperationException;
-import org.application.domain.exceptions.StudentGroupAdditionException;
-import org.application.domain.exceptions.StudentGroupDeletionFailed;
-import org.application.domain.exceptions.StudentGroupNotFoundException;
+import org.application.domain.exceptions.studentgroup.StudentGroupAdditionException;
+import org.application.domain.exceptions.studentgroup.StudentGroupDeletionFailed;
+import org.application.domain.exceptions.studentgroup.StudentGroupNotFoundException;
 import org.application.domain.models.StudentGroup;
 
 import java.text.MessageFormat;

@@ -37,7 +37,7 @@ public class Student implements Serializable {
 
     @Length(min = 20, max = 20)
     @Pattern(regexp = "[0-9]{12}[A-Z]{2}[0-9]{6}")
-    @Column(name = "RegistrationNumber", nullable = false)
+    @Column(name = "Registration_Number", nullable = false)
     private String registrationNumber;
 
     @Column(name = "insert_time", nullable = false)

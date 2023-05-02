@@ -10,6 +10,7 @@ import java.util.Set;
 
 @Entity(name = "Room")
 @Table(name = "room", uniqueConstraints = {@UniqueConstraint(columnNames = {"Id"})})
+@NamedQuery(name = "Room.getByName", query = "SELECT r FROM Room r WHERE r.name = :name")
 public class Room implements Serializable {
 
     @OneToMany(mappedBy = "room")

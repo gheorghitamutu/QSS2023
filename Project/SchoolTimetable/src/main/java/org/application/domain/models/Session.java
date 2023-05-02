@@ -2,6 +2,8 @@ package org.application.domain.models;
 
 import jakarta.persistence.*;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Pattern;
+import org.hibernate.validator.constraints.Length;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -33,6 +35,12 @@ public class Session implements Serializable {
     @Enumerated(EnumType.STRING)
     @Column(name = "Type", nullable = false)
     private Type type;
+
+    @Length(min = 1, max = 1)
+    @Pattern(regexp = "[A-Z]{1}")
+    @Column(name = "HalfYear")
+    private String halfYear;
+
     @Column(name = "insert_time", nullable = false)
     private Date insertTime;
 
@@ -90,6 +98,14 @@ public class Session implements Serializable {
 
     public void setGroups(Set<@Valid StudentGroup> studentGroups) {
         this.studentGroups = studentGroups;
+    }
+
+    public String getHalfYear() {
+        return halfYear;
+    }
+
+    public void setHalfYear(String halfYear) {
+        this.halfYear = halfYear;
     }
 
     public enum Type {
