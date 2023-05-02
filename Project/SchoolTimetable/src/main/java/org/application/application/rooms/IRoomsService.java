@@ -13,6 +13,8 @@ public interface IRoomsService {
 
     public boolean deleteRoom(int roomId) throws RoomNotFoundException, RoomDeletionFailed;
 
+    public boolean deleteAll() throws RoomDeletionFailed;
+
     public Room getRoomById(int roomId) throws RoomNotFoundException;
 
     public List<Room> getRooms();

@@ -55,6 +55,16 @@ public class SessionsService implements ISessionsService {
         return true;
     }
 
+    public boolean deleteAll() throws SessionDeletionFailed {
+        try {
+            sessionRepository.deleteMany(sessionRepository.readAll());
+        } catch (Exception e) {
+            throw new SessionDeletionFailed(" [SessionService] Failed to delete sessions.", e);
+        }
+
+        return true;
+    }
+
     @Override
     public Session getSessionById(int sessionId) throws SessionNotFoundException {
         var session = sessionRepository.getById(sessionId);

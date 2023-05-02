@@ -14,6 +14,8 @@ public interface ITeachersService {
 
     public boolean deleteTeacher(int teacherId) throws TeacherNotFoundException, TeacherDeletionFailed;
 
+    public boolean deleteAll() throws TeacherDeletionFailed;
+
     public Teacher getTeacherById(int teacherId) throws TeacherNotFoundException;
 
     public List<Teacher> getTeachers();

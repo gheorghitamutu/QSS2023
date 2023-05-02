@@ -61,6 +61,17 @@ public class TimeslotsService implements ITimeslotsService {
     }
 
     @Override
+    public boolean deleteAll() throws TimeslotDeletionFailed {
+        try {
+            timeslotRepository.deleteMany(timeslotRepository.readAll());
+        } catch (Exception e) {
+            throw new TimeslotDeletionFailed(" [TimeslotService] Failed to delete timeslots.", e);
+        }
+
+        return true;
+    }
+
+    @Override
     public Timeslot getTimeslotById(int timeslotId) throws TimeslotNotFoundException {
         var timeslot = timeslotRepository.getById(timeslotId);
         if (timeslot == null) {

@@ -21,6 +21,8 @@ public interface ITimeslotsService {
 
     public boolean deleteTimeslot(int timeslotId) throws TimeslotNotFoundException, TimeslotDeletionFailed;
 
+    public boolean deleteAll() throws TimeslotDeletionFailed;
+
     public Timeslot getTimeslotById(int timeslotId) throws TimeslotNotFoundException;
 
     public List<Timeslot> getTimeslots();

@@ -64,6 +64,17 @@ public class RoomsService implements IRoomsService {
     }
 
     @Override
+    public boolean deleteAll() throws RoomDeletionFailed {
+        try {
+            roomRepository.deleteMany(roomRepository.readAll());
+        } catch (Exception e) {
+            throw new RoomDeletionFailed(" [RoomService] Failed to delete rooms.", e);
+        }
+
+        return true;
+    }
+
+    @Override
     public Room getRoomById(int roomId) throws RoomNotFoundException {
         var room = roomRepository.getById(roomId);
         if (room == null) {
