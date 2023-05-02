@@ -54,12 +54,13 @@ public class Application {
 
         newStudent.setGroup(studentGroup);
         newStudent.setYear(1);
+        newStudent.setRegistrationNumber("310910204006SM000000");
         newStudent.setName("test" + UUID.randomUUID());
 
         System.out.println("Creating Student...");
 
         try {
-            newStudent = studentsService.addStudent(newStudent.getName(), newStudent.getYear(), newStudent.getGroup().getName());
+            newStudent = studentsService.addStudent(newStudent.getName(), newStudent.getRegistrationNumber(), newStudent.getYear(), newStudent.getGroup().getName());
 
             newStudentId = newStudent.getId();
 

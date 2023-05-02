@@ -2,6 +2,8 @@ package org.application.dataaccess.timeslot;
 
 import org.application.dataaccess.repository.IRepository;
 import org.application.domain.exceptions.RepositoryOperationException;
+import org.application.domain.models.Room;
+import org.application.domain.models.Session;
 import org.application.domain.models.Teacher;
 import org.application.domain.models.Timeslot;
 
@@ -10,5 +12,5 @@ import java.util.Date;
 
 public interface ITimeslotRepository extends IRepository<Timeslot> {
 
-    public Timeslot createNewTimeslot(Date date, Duration duration, Timeslot.Day day, Timeslot.Periodicity periodicity) throws RepositoryOperationException;
+    public Timeslot createNewTimeslot(Date startDate, Date endDate, Date time, Duration duration, Timeslot.Day day, Timeslot.Periodicity periodicity, Room room, Session session) throws RepositoryOperationException;
 }

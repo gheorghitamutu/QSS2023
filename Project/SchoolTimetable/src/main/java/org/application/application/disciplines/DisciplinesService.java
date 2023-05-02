@@ -64,6 +64,17 @@ public class DisciplinesService implements IDisciplinesService {
     }
 
     @Override
+    public boolean deleteAll() throws DisciplineDeletionFailed {
+        try {
+            disciplineRepository.deleteMany(disciplineRepository.readAll());
+        } catch (Exception e) {
+            throw new DisciplineDeletionFailed(" [DisciplineService] Failed to delete disciplines.", e);
+        }
+
+        return true;
+    }
+
+    @Override
     public Discipline getDisciplineById(int disciplineId) throws DisciplineNotFoundException {
         var discipline = disciplineRepository.getById(disciplineId);
         if (discipline == null) {

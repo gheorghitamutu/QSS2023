@@ -11,11 +11,13 @@ import java.util.List;
 
 public interface IStudentsService {
 
-    public Student addStudent(String name, int year, String groupName) throws StudentAdditionException;
+    public Student addStudent(String name, String registrationNumber, int year, String groupName) throws StudentAdditionException;
 
     public Student updateStudent(int studentId, String name, int year) throws StudentUpdateException;
 
     public boolean deleteStudent(int studentId) throws StudentNotFoundException, StudentDeletionFailed;
+
+    public boolean deleteAll() throws StudentDeletionFailed;
 
     public boolean deleteStudent(String registrationNumber) throws StudentNotFoundException, StudentDeletionFailed;
 

@@ -30,24 +30,25 @@ public class StudentsService implements IStudentsService {
     }
 
     @Override
-    public Student addStudent(String name, int year, String groupName) throws StudentAdditionException {
+    public Student addStudent(String name, String registrationNumber, int year, String groupName) throws StudentAdditionException {
         var student = new Student();
 
         student.setName(name);
         student.setYear(year);
+        student.setRegistrationNumber(registrationNumber);
         student.setInsertTime(new Date());
 
         var group = studentGroupRepository.getByGroupName(groupName);
         if (group == null) {
             try {
-                System.out.println(MessageFormat.format("[Students Service] Creating new group with name {0}.", groupName));
+                System.out.println(MessageFormat.format("[StudentsService] Creating new group with name {0}.", groupName));
 
                 group = studentGroupRepository.createNewGroup(groupName);
 
-                System.out.println(MessageFormat.format("[Students Service] Created new group with name {0}.", groupName));
+                System.out.println(MessageFormat.format("[StudentsService] Created new group with name {0}.", groupName));
 
             } catch (RepositoryOperationException e) {
-                System.out.println("[Students Service] Couldn't create new group.");
+                System.out.println("[StudentsService] Couldn't create new group.");
                 throw new RuntimeException(e);
             }
         }
@@ -56,7 +57,7 @@ public class StudentsService implements IStudentsService {
         try {
             studentRepository.save(student);
         } catch (Exception e) {
-            throw new StudentAdditionException("[Students Service] Couldn't add student.", e);
+            throw new StudentAdditionException("[StudentsService] Couldn't add student.", e);
         }
 
         return student;
@@ -65,17 +66,16 @@ public class StudentsService implements IStudentsService {
     @Override
     public Student updateStudent(int studentId, String name, int year) throws StudentUpdateException {
         var student = studentRepository.getById(studentId);
-
         student.setName(name);
         student.setYear(year);
 
         try {
             studentRepository.updateStudent(student);
-            return student;
         } catch (Exception e) {
-
-            throw new StudentUpdateException("[Students Service] Couldn't update student.", e);
+            throw new StudentUpdateException("[StudentsService] Couldn't update student.", e);
         }
+
+        return student;
     }
 
     @Override
@@ -88,7 +88,7 @@ public class StudentsService implements IStudentsService {
             try {
                 group = studentGroupRepository.createNewGroup(newGroupName);
             } catch (RepositoryOperationException e) {
-                throw new StudentGroupReassignException(MessageFormat.format("[Students Service] Couldn't reassign student to group {0}.", newGroupName), e);
+                throw new StudentGroupReassignException(MessageFormat.format("[StudentsService] Couldn't reassign student to group {0}.", newGroupName), e);
             }
         }
 
@@ -101,7 +101,7 @@ public class StudentsService implements IStudentsService {
     public Student getStudentById(int studentId) throws StudentNotFoundException {
         var student = studentRepository.getById(studentId);
         if (student == null) {
-            throw new StudentNotFoundException(MessageFormat.format("[Students Service DELETE student] Student with id {0} not found.", studentId));
+            throw new StudentNotFoundException(MessageFormat.format("[StudentsService DELETE student] Student with id {0} not found.", studentId));
         }
 
         return studentRepository.getById(studentId);
@@ -110,7 +110,7 @@ public class StudentsService implements IStudentsService {
     public Student getStudentByRegistrationNumber(String registrationNumber) throws StudentNotFoundException {
         var students = studentRepository.readAll().stream().filter(s -> s.getRegistrationNumber().equals(registrationNumber)).toList();
         if (students.size() != 1) {
-            throw new StudentNotFoundException(MessageFormat.format("[Students Service DELETE student] Student with id {0} not found.", registrationNumber));
+            throw new StudentNotFoundException(MessageFormat.format("[StudentsService DELETE student] Student with id {0} not found.", registrationNumber));
         }
         return students.get(0);
     }
@@ -120,13 +120,24 @@ public class StudentsService implements IStudentsService {
         var student = studentRepository.getById(studentId);
 
         if (student == null) {
-            throw new StudentNotFoundException(MessageFormat.format("[Students Service DELETE student] Student with id {0} not found.", studentId));
+            throw new StudentNotFoundException(MessageFormat.format("[StudentsService DELETE student] Student with id {0} not found.", studentId));
         }
 
         try {
             studentRepository.deleteStudent(student);
         } catch (Exception e) {
-            throw new StudentDeletionFailed(" [Students Service] Couldn't delete student.", e);
+            throw new StudentDeletionFailed(" [StudentsService] Couldn't delete student.", e);
+        }
+
+        return true;
+    }
+
+    @Override
+    public boolean deleteAll() throws StudentDeletionFailed {
+        try {
+            studentRepository.deleteMany(studentRepository.readAll());
+        } catch (Exception e) {
+            throw new StudentDeletionFailed(" [StudentsService] Couldn't delete students.", e);
         }
 
         return true;
@@ -136,14 +147,14 @@ public class StudentsService implements IStudentsService {
     public boolean deleteStudent(String registrationNumber) throws StudentNotFoundException, StudentDeletionFailed {
         var students = studentRepository.readAll().stream().filter(s -> s.getRegistrationNumber().equals(registrationNumber)).toList();
         if (students.size() != 1) {
-            throw new StudentNotFoundException(MessageFormat.format("[Students Service DELETE student] Student with id {0} not found.", registrationNumber));
+            throw new StudentNotFoundException(MessageFormat.format("[StudentsService DELETE student] Student with id {0} not found.", registrationNumber));
         }
 
         var student = students.get(0);
         try {
             studentRepository.deleteStudent(student);
         } catch (Exception e) {
-            throw new StudentDeletionFailed(" [Students Service] Couldn't delete student.", e);
+            throw new StudentDeletionFailed(" [StudentsService] Couldn't delete student.", e);
         }
 
         return true;

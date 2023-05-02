@@ -6,6 +6,8 @@ import org.application.domain.exceptions.RepositoryOperationException;
 import org.application.domain.exceptions.Timeslot.TimeslotAdditionException;
 import org.application.domain.exceptions.Timeslot.TimeslotDeletionFailed;
 import org.application.domain.exceptions.Timeslot.TimeslotNotFoundException;
+import org.application.domain.models.Room;
+import org.application.domain.models.Session;
 import org.application.domain.models.Timeslot;
 
 import java.text.MessageFormat;
@@ -23,11 +25,11 @@ public class TimeslotsService implements ITimeslotsService {
     }
 
     @Override
-    public Timeslot addTimeslot(Date date, Duration duration, Timeslot.Day day, Timeslot.Periodicity periodicity) throws TimeslotAdditionException {
+    public Timeslot addTimeslot(Date startDate, Date endDate, Date time, Duration duration, Timeslot.Day day, Timeslot.Periodicity periodicity, Room room, Session session) throws TimeslotAdditionException {
         Timeslot timeslot;
 
         try {
-            timeslot = timeslotRepository.createNewTimeslot(date, duration, day, periodicity);
+            timeslot = timeslotRepository.createNewTimeslot(startDate, endDate, time, duration, day, periodicity, room, session);
         } catch (RepositoryOperationException e) {
             throw new RuntimeException(e);
         }
@@ -53,6 +55,17 @@ public class TimeslotsService implements ITimeslotsService {
             timeslotRepository.delete(timeslot);
         } catch (Exception e) {
             throw new TimeslotDeletionFailed(" [TimeslotService] Failed to delete timeslot.", e);
+        }
+
+        return true;
+    }
+
+    @Override
+    public boolean deleteAll() throws TimeslotDeletionFailed {
+        try {
+            timeslotRepository.deleteMany(timeslotRepository.readAll());
+        } catch (Exception e) {
+            throw new TimeslotDeletionFailed(" [TimeslotService] Failed to delete timeslots.", e);
         }
 
         return true;

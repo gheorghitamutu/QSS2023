@@ -64,6 +64,17 @@ public class TeachersService implements ITeachersService {
     }
 
     @Override
+    public boolean deleteAll() throws TeacherDeletionFailed {
+        try {
+            teacherRepository.deleteMany(teacherRepository.readAll());
+        } catch (Exception e) {
+            throw new TeacherDeletionFailed(" [TeacherService] Failed to delete teachers.", e);
+        }
+
+        return true;
+    }
+
+    @Override
     public Teacher getTeacherById(int teacherId) throws TeacherNotFoundException {
         var teacher = teacherRepository.getById(teacherId);
         if (teacher == null) {

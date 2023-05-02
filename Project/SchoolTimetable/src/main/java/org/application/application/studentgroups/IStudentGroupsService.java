@@ -13,6 +13,8 @@ public interface IStudentGroupsService {
 
     public boolean deleteStudentGroup(int studentGroupId) throws StudentGroupNotFoundException, StudentGroupDeletionFailed;
 
+    public boolean deleteAll() throws StudentGroupDeletionFailed;
+
     public StudentGroup getStudentGroupById(int studentGroupId) throws StudentGroupNotFoundException;
 
     public List<StudentGroup> getStudentGroups();
