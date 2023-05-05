@@ -1,5 +1,17 @@
 package org.application.presentation;
 
+import com.google.inject.Inject;
+import com.google.inject.Injector;
+import org.application.GuiceInjectorSingleton;
+import org.application.Main;
+import org.application.application.disciplines.IDisciplinesService;
+import org.application.application.rooms.IRoomsService;
+import org.application.application.sessions.ISessionsService;
+import org.application.application.studentgroups.IStudentGroupsService;
+import org.application.application.students.IStudentsService;
+import org.application.application.teachers.ITeachersService;
+import org.application.application.timeslots.ITimeslotsService;
+import org.application.dataaccess.student.IStudentRepository;
 import org.application.presentation.swing.*;
 
 import javax.swing.*;
@@ -8,6 +20,7 @@ import java.awt.event.*;
 
 public class GUI extends JFrame implements ActionListener {
     // Define variables
+    public static Application app;
     private JPanel mainPanel, navPanel;
     private JButton exitButton;
     private JButton[] categoryButtons;
@@ -15,6 +28,11 @@ public class GUI extends JFrame implements ActionListener {
     private Color bgColor2 = Color.decode("#F6FFDE");
     private Color bgColor3 = Color.decode("#C9DBB2");
 
+    static void setUpAll(){
+        var appInjector = Main.setupDependenciesInjector(false);
+        app = appInjector.getInstance(Application.class);
+        GuiceInjectorSingleton.INSTANCE.setInjector(appInjector);
+    }
     public GUI() {
         super("Timetable Generator");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -103,7 +121,10 @@ public class GUI extends JFrame implements ActionListener {
         } else if (source.getText().equals("Teachers")){
             TeacherSettings teacherSettings = new TeacherSettings();
             mainPanel = teacherSettings.createJPanel(mainPanel, source.getText());
-        }else if(source.getText().equals("Disciplines")){
+        } else if (source.getText().equals("Sessions")){
+            SessionSettings sessionSettings = new SessionSettings();
+            mainPanel = sessionSettings.createJPanel(mainPanel, source.getText());
+        } else if(source.getText().equals("Disciplines")){
             DisciplineSettings disciplineSettings = new DisciplineSettings();
             mainPanel =disciplineSettings.createJPanel(mainPanel, source.getText());
         }else if(source.getText().equals("Rooms")){
@@ -124,6 +145,30 @@ public class GUI extends JFrame implements ActionListener {
     }
 
     public static void main(String[] args) {
+        setUpAll();
         GUI gui = new GUI();
+
+
+    }
+
+    public static class Application {
+        public final IDisciplinesService disciplinesService;
+        public final IRoomsService roomsService;
+        public final ISessionsService sessionsService;
+        public final IStudentGroupsService studentGroupsService;
+        public final IStudentsService studentsService;
+        public final ITeachersService teachersService;
+        public final ITimeslotsService timeslotsService;
+
+        @Inject
+        public Application(IDisciplinesService disciplinesService, IRoomsService roomsService, ISessionsService sessionsService, IStudentGroupsService studentGroupsService, IStudentsService studentsService, ITeachersService teachersService, ITimeslotsService timeslotsService) {
+            this.disciplinesService = disciplinesService;
+            this.roomsService = roomsService;
+            this.sessionsService = sessionsService;
+            this.studentGroupsService = studentGroupsService;
+            this.studentsService = studentsService;
+            this.teachersService = teachersService;
+            this.timeslotsService = timeslotsService;
+        }
     }
 }
