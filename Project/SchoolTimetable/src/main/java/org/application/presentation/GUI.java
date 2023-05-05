@@ -27,7 +27,7 @@ public class GUI extends JFrame implements ActionListener {
 
 
         // Create category buttons for the navigation
-        String[] categories = {"Home","Students", "Teachers", "Disciplines", "Rooms", "Timeslots", "Generate TimeTable"};
+        String[] categories = {"Home","Students", "Teachers", "Disciplines", "Sessions", "Rooms", "Timeslots"};
         navPanel = new JPanel();
         // Create navigation panel
         navPanel.setLayout(new GridLayout(categories.length + 1, 1));
@@ -40,7 +40,7 @@ public class GUI extends JFrame implements ActionListener {
             categoryButtons[i].setBorderPainted(false);
             categoryButtons[i].setFocusPainted(false);
             categoryButtons[i].setBackground(bgColor1);
-            categoryButtons[i].setForeground(bgColor3);
+            categoryButtons[i].setForeground(Color.decode("#617A55"));
             categoryButtons[i].setFont(new Font("Arial", Font.BOLD, 19));
             categoryButtons[i].setPreferredSize(new Dimension(250, 50));
             categoryButtons[i].setAlignmentX(Component.LEFT_ALIGNMENT);
@@ -97,7 +97,7 @@ public class GUI extends JFrame implements ActionListener {
         if(source.getText().equals("Students")){
             StudentSettings studentSettings = new StudentSettings();
             mainPanel = studentSettings.createJPanel(mainPanel, source.getText());
-            pack();
+
         } else  if (source.getText().equals("Home")){
             mainPanel = createMain(mainPanel);
         } else if (source.getText().equals("Teachers")){
@@ -116,7 +116,7 @@ public class GUI extends JFrame implements ActionListener {
              //TODO TimeTable Generator Btn link here
         }
 
-
+        pack();
         // Refresh right panel
         mainPanel.revalidate();
         mainPanel.repaint();
