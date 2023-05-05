@@ -33,6 +33,7 @@ import org.junit.jupiter.api.*;
 import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.util.Collections;
+import java.util.HashSet;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class MinimalAllServicesTest {
@@ -73,6 +74,13 @@ public class MinimalAllServicesTest {
         var collaborator = app.teachersService.addTeacher("Teacher 02", Teacher.Type.COLLABORATOR);
 
         var discipline = app.disciplinesService.addDiscipline("Discipline 01", 6);
+        discipline.setTeachers(new HashSet<>() {{
+            add(teacher);
+            add(collaborator);
+        }});
+
+        teacher.setDisciplines(Collections.singleton(discipline));
+        collaborator.setDisciplines(Collections.singleton(discipline));
 
         var student = app.studentsService.addStudent("Student 01", "310910204006SM000000", 1, "A1");
 

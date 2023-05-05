@@ -18,6 +18,9 @@ public class Teacher implements Serializable {
     @ManyToMany(cascade = {CascadeType.ALL})
     @JoinTable(name = "Teacher_Session", joinColumns = {@JoinColumn(name = "teacher_id")}, inverseJoinColumns = {@JoinColumn(name = "session_id")})
     private Set<Session> sessions = new HashSet<>();
+    @ManyToMany(cascade = {CascadeType.ALL})
+    @JoinTable(name = "Teacher_Discipline", joinColumns = {@JoinColumn(name = "teacher_id")}, inverseJoinColumns = {@JoinColumn(name = "discipline_id")})
+    private Set<Discipline> disciplines = new HashSet<>();
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -73,6 +76,14 @@ public class Teacher implements Serializable {
 
     public void setType(Type type) {
         this.type = type;
+    }
+
+    public Set<Discipline> getDisciplines() {
+        return disciplines;
+    }
+
+    public void setDisciplines(Set<@Valid Discipline> disciplines) {
+        this.disciplines = disciplines;
     }
 
     public enum Type {
