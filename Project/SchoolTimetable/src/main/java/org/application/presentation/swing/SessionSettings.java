@@ -5,8 +5,8 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class RoomSettings implements BaseSettings {
-    public RoomSettings(){
+public class SessionSettings implements BaseSettings{
+    public SessionSettings(){
 
     }
     private JPanel createFieldPanel(JLabel label, JComponent component) {
@@ -27,7 +27,7 @@ public class RoomSettings implements BaseSettings {
         currentPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
         currentPanel.add(Box.createRigidArea(new Dimension(0, 30)));
 
-        JLabel titleLabel = new JLabel("DELETE ROOM");
+        JLabel titleLabel = new JLabel("DELETE SESSION");
         titleLabel.setFont(new Font("serif", Font.BOLD, 25));
         titleLabel.setForeground(Color.decode("#617A55"));
         //titleLabel.setBounds(0,30,300,25);
@@ -50,7 +50,7 @@ public class RoomSettings implements BaseSettings {
         submitButtonDelete.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 // TODO
-                System.out.println("Delete room btn clicked");
+                System.out.println("Delete session btn clicked");
             }
         });
 
@@ -61,57 +61,37 @@ public class RoomSettings implements BaseSettings {
         return currentPanel;
     }
 
-    public JPanel addRoomForm(JPanel currentPanel){
+    public JPanel addSessionForm(JPanel currentPanel){
         currentPanel.setBackground(Color.decode("#F6FFDE"));
 
         currentPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
         currentPanel.add(Box.createRigidArea(new Dimension(0, 10)));
 
-        JLabel titleLabel = new JLabel("ADD ROOM");
+        JLabel titleLabel = new JLabel("ADD SESSION");
         titleLabel.setFont(new Font("serif", Font.BOLD, 25));
         titleLabel.setForeground(Color.decode("#617A55"));
         titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         // titleLabel.setBounds(50,30,300,25);
         currentPanel.add(titleLabel);
-        // Add the name field
-        JLabel nameLabel = new JLabel("Name:");
-        nameLabel.setFont(new Font("Arial", Font.PLAIN, 14));
-        nameLabel.setBackground(Color.decode("#617A55"));
-        JTextField nameField = new JTextField(20);
-        JPanel namePanel = createFieldPanel(nameLabel, nameField);
-        currentPanel.add(namePanel);
 
-        // Add the type
-        currentPanel.add(Box.createRigidArea(new Dimension(0, 10)));
         JLabel typeLabel = new JLabel("Type:");
         typeLabel.setFont(new Font("Arial", Font.PLAIN, 14));
         typeLabel.setBackground(Color.decode("#617A55"));
-        String[] yearValues = {"COURSE", "LABORATORY"};
+        String[] yearValues = {"COURSE", "LABORATORY", "SEMINARY"};
         JComboBox<String> typeComboBox = new JComboBox<>(yearValues);
         JPanel typePanel = createFieldPanel(typeLabel, typeComboBox);
         currentPanel.add(typePanel);
 
 
-        //Add floor number
+        //Add half year values
         currentPanel.add(Box.createRigidArea(new Dimension(0, 10)));
-        JLabel floorLabel = new JLabel("Floor no:");
-        floorLabel.setFont(new Font("Arial", Font.PLAIN, 14));
-        floorLabel.setBackground(Color.decode("#617A55"));
-        String[] floorValues = {"1", "2", "3", "4"};
-        JComboBox<String> floorComboBox = new JComboBox<>(floorValues);
-        JPanel floorPanel = createFieldPanel(floorLabel, floorComboBox);
-        currentPanel.add(floorPanel);
-
-        // Add the type
-        currentPanel.add(Box.createRigidArea(new Dimension(0, 10)));
-        JLabel capacityLabel = new JLabel("Capacity:");
-        capacityLabel.setFont(new Font("Arial", Font.PLAIN, 14));
-        capacityLabel.setBackground(Color.decode("#617A55"));
-        String[] capacityValues = {"30", "50", "100", "200"};
-        JComboBox<String> capacityComboBox = new JComboBox<>(capacityValues);
-        JPanel capacityPanel = createFieldPanel(capacityLabel, capacityComboBox);
-        currentPanel.add(capacityPanel);
-
+        JLabel halfyearLabel = new JLabel("Half Year:");
+        halfyearLabel.setFont(new Font("Arial", Font.PLAIN, 14));
+        halfyearLabel.setBackground(Color.decode("#617A55"));
+        String[] halfyearValues = {"A", "B"};
+        JComboBox<String> halfyearComboBox = new JComboBox<>(halfyearValues);
+        JPanel halfyearPanel = createFieldPanel(halfyearLabel, halfyearComboBox);
+        currentPanel.add(halfyearPanel);
 
         // Add the submit button
         currentPanel.add(Box.createRigidArea(new Dimension(0, 10)));
@@ -121,7 +101,7 @@ public class RoomSettings implements BaseSettings {
         submitButtonAdd.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 // TODO
-                System.out.println("Add room btn clicked");
+                System.out.println("Add session btn clicked");
             }
         });
         buttonPanel.add(submitButtonAdd);
@@ -150,7 +130,7 @@ public class RoomSettings implements BaseSettings {
         JPanel currentPanel = new JPanel();
         currentPanel.setLayout(new BoxLayout(currentPanel, BoxLayout.Y_AXIS));
 
-        currentPanel = addRoomForm(currentPanel);
+        currentPanel = addSessionForm(currentPanel);
         currentPanel = deleteRoomForm(currentPanel);
         // Set the frame size and center it on the screen
         return currentPanel;
@@ -162,7 +142,7 @@ public class RoomSettings implements BaseSettings {
         currentPanel.setLayout(null);
         currentPanel.setBackground(Color.decode("#F6FFDE"));
 
-        ImageIcon image = new ImageIcon("D:\\Desktop\\MASTER\\Semestru2\\CSS\\QSS2023\\Project\\SchoolTimetable\\src\\main\\java\\org\\application\\presentation\\icons\\room.png");
+        ImageIcon image = new ImageIcon("D:\\Desktop\\MASTER\\Semestru2\\CSS\\QSS2023\\Project\\SchoolTimetable\\src\\main\\java\\org\\application\\presentation\\icons\\generator.png");
         Image rescaledImage = image.getImage().getScaledInstance(300,300, Image.SCALE_DEFAULT);
         ImageIcon finalImage = new ImageIcon(rescaledImage);
         JLabel imageLabel = new JLabel(finalImage);

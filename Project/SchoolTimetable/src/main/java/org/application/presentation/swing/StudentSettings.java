@@ -1,9 +1,15 @@
 package org.application.presentation.swing;
 
+import org.application.domain.exceptions.student.StudentAdditionException;
+import org.application.domain.exceptions.student.StudentDeletionFailed;
+import org.application.domain.exceptions.student.StudentNotFoundException;
+import org.application.presentation.GUI;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
 
 
 public class StudentSettings extends JFrame implements BaseSettings {
@@ -43,7 +49,7 @@ public class StudentSettings extends JFrame implements BaseSettings {
         JLabel yearLabel = new JLabel("Year of Study:");
         yearLabel.setFont(new Font("Arial", Font.PLAIN, 14));
         yearLabel.setBackground(Color.decode("#617A55"));
-        String[] yearValues = {"Year 1", "Year 2", "Year 3"};
+        String[] yearValues = {"1", "2", "3"};
         JComboBox<String> yearComboBox = new JComboBox<>(yearValues);
         JPanel yearPanel = createFieldPanel(yearLabel, yearComboBox);
         currentPanel.add(yearPanel);
@@ -67,7 +73,22 @@ public class StudentSettings extends JFrame implements BaseSettings {
         submitButtonAdd.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 // TODO
-                System.out.println("Add btn clicked");
+                System.out.println("Insert student button  clicked");
+                String yearComboValue = (String) yearComboBox.getSelectedItem();
+                String groupComboValue = (String) groupComboBox.getSelectedItem();
+                try {
+                    assert yearComboValue != null;
+                     GUI.app.studentsService.addStudent(nameField.getText(), regField.getText(), Integer.parseInt(yearComboValue), groupComboValue);
+
+                } catch (StudentAdditionException ex) {
+                    JOptionPane.showMessageDialog(
+                            null,
+                            "An exception occurred: " + ex.getMessage(),
+                            "Error",
+                            JOptionPane.ERROR_MESSAGE
+                    );
+                    throw new RuntimeException(ex);
+                }
             }
         });
         buttonPanel.add(submitButtonAdd);
@@ -107,6 +128,25 @@ public class StudentSettings extends JFrame implements BaseSettings {
             public void actionPerformed(ActionEvent e) {
                 // TODO
                 System.out.println("Delete btn clicked");
+                try {
+                    GUI.app.studentsService.deleteStudent(regField.getText());
+                } catch (StudentNotFoundException ex) {
+                    JOptionPane.showMessageDialog(
+                            null,
+                            "An exception occurred: " + ex.getMessage(),
+                            "Error",
+                            JOptionPane.ERROR_MESSAGE
+                    );
+                    throw new RuntimeException(ex);
+                } catch (StudentDeletionFailed ex) {
+                    JOptionPane.showMessageDialog(
+                            null,
+                            "An exception occurred: " + ex.getMessage(),
+                            "Error",
+                            JOptionPane.ERROR_MESSAGE
+                    );
+                    throw new RuntimeException(ex);
+                }
             }
         });
 

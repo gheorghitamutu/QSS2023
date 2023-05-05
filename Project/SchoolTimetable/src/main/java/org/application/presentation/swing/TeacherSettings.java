@@ -1,5 +1,9 @@
 package org.application.presentation.swing;
 
+import org.application.domain.exceptions.teacher.TeacherAdditionException;
+import org.application.domain.models.Teacher;
+import org.application.presentation.GUI;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -34,12 +38,18 @@ public class TeacherSettings implements BaseSettings {
         currentPanel.add(titleLabel);
 
         currentPanel.add(Box.createRigidArea(new Dimension(0, 10)));
-        JLabel regLabel = new JLabel("Name:");
+        JLabel regLabel = new JLabel("Data:");
         regLabel.setFont(new Font("Arial", Font.PLAIN, 14));
         regLabel.setBackground(Color.decode("#617A55"));
-        JTextField regField = new JTextField(20);
-        JPanel regPanel = createFieldPanel(regLabel, regField);
-        currentPanel.add(regPanel);
+        JComboBox<String> model = new JComboBox<>();
+
+        // get all the teachers from db
+        var allTeachers = GUI.app.teachersService.getTeachers();
+        for (var teacher : allTeachers) {
+           model.addItem(teacher.getName());
+        }
+        JPanel typePanel = createFieldPanel(regLabel, model);
+        currentPanel.add(typePanel);
 
         // Add the submit button
         currentPanel.add(Box.createRigidArea(new Dimension(0, 10)));
@@ -98,8 +108,20 @@ public class TeacherSettings implements BaseSettings {
         buttonPanel.setBackground(Color.decode("#F6FFDE"));
         submitButtonAdd.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                // TODO
-                System.out.println("Add btn clicked");
+                System.out.println("Insert - teacher - btn - clicked");
+                Teacher.Type type = Teacher.Type.valueOf((String) typeComboBox.getSelectedItem());
+
+                try {
+                    GUI.app.teachersService.addTeacher(nameField.getText(), type);
+                } catch (TeacherAdditionException ex) {
+                    JOptionPane.showMessageDialog(
+                            null,
+                            "An exception occurred: " + ex.getMessage(),
+                            "Error",
+                            JOptionPane.ERROR_MESSAGE
+                    );
+                    throw new RuntimeException(ex);
+                }
             }
         });
         buttonPanel.add(submitButtonAdd);
