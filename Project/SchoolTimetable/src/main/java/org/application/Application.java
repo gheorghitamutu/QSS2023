@@ -3,7 +3,11 @@ package org.application;
 import com.google.inject.Inject;
 import org.application.application.students.IStudentsService;
 import org.application.dataaccess.student.IStudentRepository;
-import org.application.domain.exceptions.*;
+import org.application.domain.exceptions.student.StudentAdditionException;
+import org.application.domain.exceptions.student.StudentDeletionFailed;
+import org.application.domain.exceptions.student.StudentNotFoundException;
+import org.application.domain.exceptions.student.StudentUpdateException;
+import org.application.domain.exceptions.studentgroup.StudentGroupReassignException;
 import org.application.domain.models.Student;
 import org.application.domain.models.StudentGroup;
 
@@ -50,12 +54,13 @@ public class Application {
 
         newStudent.setGroup(studentGroup);
         newStudent.setYear(1);
+        newStudent.setRegistrationNumber("310910204006SM000000");
         newStudent.setName("test" + UUID.randomUUID());
 
         System.out.println("Creating Student...");
 
         try {
-            newStudent = studentsService.addStudent(newStudent.getName(), newStudent.getYear(), newStudent.getGroup().getName());
+            newStudent = studentsService.addStudent(newStudent.getName(), newStudent.getRegistrationNumber(), newStudent.getYear(), newStudent.getGroup().getName());
 
             newStudentId = newStudent.getId();
 
@@ -67,7 +72,13 @@ public class Application {
             throw new RuntimeException(e);
         }
 
-        specificStudent = studentsService.getStudentById(newStudentId);
+        try {
+            specificStudent = studentsService.getStudentById(newStudentId);
+        } catch (StudentNotFoundException e) {
+            System.out.println("Student with id " + newStudentId + " couldn't be created.");
+
+            throw new RuntimeException(e);
+        }
 
         System.out.println("Student with id " + newStudentId + " is in group " + specificStudent.getGroup().getName());
         System.out.println("Student with id " + newStudentId + " is in year " + specificStudent.getYear());
@@ -85,7 +96,13 @@ public class Application {
             throw new RuntimeException(e);
         }
 
-        specificStudent = studentsService.getStudentById(newStudentId);
+        try {
+            specificStudent = studentsService.getStudentById(newStudentId);
+        } catch (StudentNotFoundException e) {
+            System.out.println("Student with id " + newStudentId + " couldn't be created.");
+
+            throw new RuntimeException(e);
+        }
 
         System.out.println("Student with id " + newStudentId + " is in group " + specificStudent.getGroup().getName());
         System.out.println("Student with id " + newStudentId + " is in year " + specificStudent.getYear());
@@ -101,7 +118,13 @@ public class Application {
             throw new RuntimeException(e);
         }
 
-        specificStudent = studentsService.getStudentById(newStudentId);
+        try {
+            specificStudent = studentsService.getStudentById(newStudentId);
+        } catch (StudentNotFoundException e) {
+            System.out.println("Student with id " + newStudentId + " couldn't be created.");
+
+            throw new RuntimeException(e);
+        }
 
         System.out.println("Student with id " + newStudentId + " is in group " + specificStudent.getGroup().getName());
         System.out.println("Student with id " + newStudentId + " is in year " + specificStudent.getYear());
@@ -120,7 +143,13 @@ public class Application {
             throw new RuntimeException(e);
         }
 
-        specificStudent = studentsService.getStudentById(newStudentId);
+        try {
+            specificStudent = studentsService.getStudentById(newStudentId);
+        } catch (StudentNotFoundException e) {
+            System.out.println("Student with id " + newStudentId + " couldn't be created.");
+
+            throw new RuntimeException(e);
+        }
 
         if (specificStudent == null) {
             System.out.println("Student with id " + newStudentId + " doesn't exist.");

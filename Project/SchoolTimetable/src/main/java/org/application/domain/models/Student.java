@@ -2,7 +2,9 @@ package org.application.domain.models;
 
 import jakarta.persistence.*;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Pattern;
 import org.application.domain.models.validators.student.ValidStudent;
+import org.hibernate.validator.constraints.Length;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -32,6 +34,11 @@ public class Student implements Serializable {
 
     @Column(name = "\"Year\"", nullable = false)
     private int year;
+
+    @Length(min = 20, max = 20)
+    @Pattern(regexp = "[0-9]{12}[A-Z]{2}[0-9]{6}")
+    @Column(name = "Registration_Number", nullable = false)
+    private String registrationNumber;
 
     @Column(name = "insert_time", nullable = false)
     private Date insertTime;
@@ -82,5 +89,13 @@ public class Student implements Serializable {
 
     public void setGroup(@Valid StudentGroup studentGroup) {
         this.studentGroup = studentGroup;
+    }
+
+    public String getRegistrationNumber() {
+        return registrationNumber;
+    }
+
+    public void setRegistrationNumber(String registrationNumber) {
+        this.registrationNumber = registrationNumber;
     }
 }

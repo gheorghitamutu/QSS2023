@@ -6,6 +6,7 @@ import org.application.dataaccess.discipline.DisciplineRepository;
 import org.application.dataaccess.room.RoomRepository;
 import org.application.dataaccess.session.SessionRepository;
 import org.application.dataaccess.timeslot.TimeslotRepository;
+import org.application.di.TestsDI;
 import org.application.domain.exceptions.RepositoryOperationException;
 import org.application.domain.models.Discipline;
 import org.application.domain.models.Room;
@@ -42,6 +43,7 @@ class TimeslotRepositoryTest {
 
     @BeforeEach
     void setUp() {
+        TestsDI.initializeDi();
     }
 
     @AfterEach
@@ -68,7 +70,7 @@ class TimeslotRepositoryTest {
     }
 
     @Test
-    public void saveTimeslot() throws RepositoryOperationException {
+    public void saveTimeslot() throws RepositoryOperationException, java.text.ParseException {
         Room room = new Room();
         room.setCapacity(30);
         room.setFloor(1);
@@ -80,11 +82,9 @@ class TimeslotRepositoryTest {
         timeslot.setPeriodicity(Timeslot.Periodicity.WEEKLY);
         timeslot.setWeekday(Timeslot.Day.MONDAY);
         timeslot.setTimespan(Duration.ofMinutes(30));
-        try {
-            timeslot.setTime(new SimpleDateFormat("HH:mm:ss").parse("15:30:14"));
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
+        timeslot.setStartDate(new SimpleDateFormat("dd-MM-yyyy").parse("01-01-2023"));
+        timeslot.setEndDate(new SimpleDateFormat("dd-MM-yyyy").parse("01-07-2023"));
+        timeslot.setTime(new SimpleDateFormat("HH:mm:ss").parse("15:30:14"));
         timeslot.setInsertTime(new Date());
         timeslot.setRoom(room);
 

@@ -10,6 +10,7 @@ import java.util.Set;
 
 @Entity(name = "Discipline")
 @Table(name = "discipline", uniqueConstraints = {@UniqueConstraint(columnNames = {"Id"})})
+@NamedQuery(name = "Discipline.getByName", query = "SELECT d FROM Discipline d WHERE d.name = :name")
 public class Discipline implements Serializable {
 
     @ManyToMany(mappedBy = "disciplines", cascade = CascadeType.ALL)
@@ -17,6 +18,9 @@ public class Discipline implements Serializable {
 
     @OneToMany(mappedBy = "discipline", cascade = CascadeType.ALL)
     private Set<Session> sessions = new HashSet<>();
+
+    @ManyToMany(mappedBy = "disciplines", cascade=CascadeType.ALL)
+    private Set<Teacher> teachers = new HashSet<>();
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -78,5 +82,13 @@ public class Discipline implements Serializable {
 
     public void setSessions(Set<@Valid Session> sessions) {
         this.sessions = sessions;
+    }
+
+    public Set<Teacher> getTeachers() {
+        return teachers;
+    }
+
+    public void setTeachers(Set<Teacher> teachers) {
+        this.teachers = teachers;
     }
 }

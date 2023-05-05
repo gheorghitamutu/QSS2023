@@ -56,6 +56,7 @@ class StudentRepositoryTest {
         student.setGroup(studentGroup);
         student.setYear(1);
         student.setName("test");
+        student.setRegistrationNumber("310910204006SM000000");
         student.setInsertTime(new Date());
 
         //ASSERT (sa nu fie exceptie by default)

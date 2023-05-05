@@ -1,4 +1,4 @@
-package org.application.domain.exceptions;
+package org.application.domain.exceptions.studentgroup;
 
 public class StudentGroupDeletionFailed extends Exception{
     public StudentGroupDeletionFailed(String message) {

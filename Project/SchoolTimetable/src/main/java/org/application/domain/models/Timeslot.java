@@ -7,6 +7,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import org.application.domain.models.validators.timeslot.ValidTimeslot;
 import org.hibernate.validator.constraints.time.DurationMax;
+import org.hibernate.validator.constraints.time.DurationMin;
 
 import java.io.Serializable;
 import java.time.Duration;
@@ -35,13 +36,17 @@ public class Timeslot implements Serializable {
     @Enumerated(EnumType.STRING)
     @Column(name = "Weekday", nullable = false)
     private Day weekday;
-    @DurationMax(minutes = 30, message = "[ERROR] You can reserve a minimum of 30 minutes.")
+    @DurationMin(minutes = 30, message = "[ERROR] You can reserve a minimum of 30 minutes.")
     @DurationMax(minutes = 240, message = "[ERROR] You can reserve a maximum of 240 minutes.")
     @Column(name = "Timespan", nullable = false)
     private java.time.Duration timespan;
     @Enumerated(EnumType.STRING)
     @Column(name = "Periodicity", nullable = false)
     private Periodicity periodicity;
+    @Column(name = "StartDate", nullable = false)
+    private Date startDate;
+    @Column(name = "EndDate", nullable = false)
+    private Date endDate;
     @Column(name = "insert_time", nullable = false)
     private Date insertTime;
 
@@ -107,6 +112,22 @@ public class Timeslot implements Serializable {
 
     public void setTimespan(Duration timespan) {
         this.timespan = timespan;
+    }
+
+    public Date getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
+    }
+
+    public Date getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(Date endDate) {
+        this.endDate = endDate;
     }
 
     public enum Periodicity {

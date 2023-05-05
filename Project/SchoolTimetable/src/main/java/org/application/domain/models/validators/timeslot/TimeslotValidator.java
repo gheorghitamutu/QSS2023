@@ -31,7 +31,7 @@ public class TimeslotValidator implements ConstraintValidator<ValidTimeslot, Tim
     public void initialize(ValidTimeslot constraintAnnotation) {
 
         Injector injector = GuiceInjectorSingleton.INSTANCE.getInjector();
-        if(null != injector) {
+        if (injector != null) {
             roomRepository = injector.getInstance(IRoomRepository.class);
             sessionRepository = injector.getInstance(ISessionRepository.class);
         }
@@ -60,21 +60,25 @@ public class TimeslotValidator implements ConstraintValidator<ValidTimeslot, Tim
             return false;
         }
 
-        Date startDate = value.getTime();
+        if (value.getStartDate().after(value.getEndDate())) {
+            return false;
+        }
+
+        Date startTime = value.getTime();
         Duration timespan = value.getTimespan();
 
         Calendar calendar = Calendar.getInstance();
-        calendar.setTime(startDate);
+        calendar.setTime(startTime);
         calendar.add(Calendar.MINUTE, (int) timespan.toMinutes());
 
-        Date endDate = calendar.getTime();
+        Date endTime = calendar.getTime();
 
         try {
-            if (startDate.before(new SimpleDateFormat("HH:mm:ss").parse("08:00:00"))) {
+            if (startTime.before(new SimpleDateFormat("HH:mm:ss").parse("08:00:00"))) {
                 return false;
             }
 
-            if (endDate.after(new SimpleDateFormat("HH:mm:ss").parse("20:00:00"))) {
+            if (endTime.after(new SimpleDateFormat("HH:mm:ss").parse("20:00:00"))) {
                 return false;
             }
         } catch (Exception e) {
@@ -101,11 +105,11 @@ public class TimeslotValidator implements ConstraintValidator<ValidTimeslot, Tim
 
             Date ed = calendar.getTime();
 
-            if (startDate.after(d) && startDate.before(ed)) {
+            if (startTime.after(d) && startTime.before(ed)) {
                 return false;
             }
 
-            if (endDate.after(d) && endDate.before(ed)) {
+            if (endTime.after(d) && endTime.before(ed)) {
                 return false;
             }
         }

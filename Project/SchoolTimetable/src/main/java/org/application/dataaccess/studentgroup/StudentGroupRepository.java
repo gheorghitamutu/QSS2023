@@ -20,13 +20,10 @@ public class StudentGroupRepository extends BaseRepository<StudentGroup> impleme
     public StudentGroup getByGroupName(String groupName) {
 
         var session = hibernateProvider.getEntityManager();
-
         var query = session.createNamedQuery("StudentGroup.getByGroupName", StudentGroup.class);
-
         query.setParameter("name", groupName);
 
         var result = query.getResultList();
-
         if (result.size() == 0) {
             return null;
         }

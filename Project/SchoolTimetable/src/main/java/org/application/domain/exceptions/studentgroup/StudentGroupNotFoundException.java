@@ -1,4 +1,4 @@
-package org.application.domain.exceptions;
+package org.application.domain.exceptions.studentgroup;
 
 public class StudentGroupNotFoundException extends Exception{
     public StudentGroupNotFoundException(String message) {
