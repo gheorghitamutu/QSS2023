@@ -66,6 +66,27 @@ public class SessionsService implements ISessionsService {
         return true;
     }
 
+    @Override
+    public boolean deleteSession(String disciplineName) throws DisciplineNotFoundException, SessionNotFoundException, SessionDeletionFailed {
+        var disciplines = disciplineRepository.readAll().stream().filter(d -> d.getName().equals(disciplineName)).toList();
+        if (disciplines.isEmpty()) {
+            throw new DisciplineNotFoundException("[SessionService] Discipline not found!");
+        }
+        var discipline = disciplines.get(0);
+        var sessions = discipline.getSessions();
+        if (sessions.isEmpty()) {
+            throw new SessionNotFoundException("[SessionService] Session not found!");
+        }
+        var session = sessions.stream().toList().get(0);
+        try {
+            sessionRepository.delete(session);
+        } catch (Exception e) {
+            throw new SessionDeletionFailed(" [SessionService] Failed to delete session.", e);
+        }
+
+        return true;
+    }
+
     public boolean deleteAll() throws SessionDeletionFailed {
         try {
             sessionRepository.deleteMany(sessionRepository.readAll());

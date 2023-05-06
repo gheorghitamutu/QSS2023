@@ -18,6 +18,8 @@ public interface ISessionsService {
 
     public boolean deleteSession(int sessionId) throws SessionNotFoundException, SessionDeletionFailed;
 
+    public boolean deleteSession(String disciplineName) throws DisciplineNotFoundException, SessionNotFoundException, SessionDeletionFailed;
+
     public boolean deleteAll() throws SessionDeletionFailed;
 
     public Session getSessionById(int SessionId) throws SessionNotFoundException;
