@@ -64,6 +64,19 @@ public class TeachersService implements ITeachersService {
     }
 
     @Override
+    public boolean deleteTeachers(String name) throws TeacherDeletionFailed {
+        var teachers = teacherRepository.readAll().stream().filter(t -> t.getName().equals(name)).toList();
+
+        try {
+            teacherRepository.deleteMany(teachers);
+        } catch (Exception e) {
+            throw new TeacherDeletionFailed(" [TeacherService] Failed to delete teachers.", e);
+        }
+
+        return true;
+    }
+
+    @Override
     public boolean deleteAll() throws TeacherDeletionFailed {
         try {
             teacherRepository.deleteMany(teacherRepository.readAll());

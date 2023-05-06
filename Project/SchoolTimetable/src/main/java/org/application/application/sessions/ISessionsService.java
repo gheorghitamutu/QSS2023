@@ -1,5 +1,6 @@
 package org.application.application.sessions;
 
+import org.application.domain.exceptions.discipline.DisciplineNotFoundException;
 import org.application.domain.exceptions.room.RoomAdditionException;
 import org.application.domain.exceptions.room.RoomDeletionFailed;
 import org.application.domain.exceptions.room.RoomNotFoundException;
@@ -13,7 +14,7 @@ import java.util.List;
 
 public interface ISessionsService {
 
-    public Session addSession(Session.Type type, String halfYear) throws SessionAdditionException;
+    public Session addSession(Session.Type type, String halfYear, String disciplineName) throws SessionAdditionException, DisciplineNotFoundException;
 
     public boolean deleteSession(int sessionId) throws SessionNotFoundException, SessionDeletionFailed;
 

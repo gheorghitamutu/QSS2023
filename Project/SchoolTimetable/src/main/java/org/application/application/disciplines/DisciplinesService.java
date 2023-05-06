@@ -64,6 +64,19 @@ public class DisciplinesService implements IDisciplinesService {
     }
 
     @Override
+    public boolean deleteDisciplines(String name) throws DisciplineDeletionFailed {
+        var disciplines = disciplineRepository.readAll().stream().filter(d -> d.getName().equals(name)).toList();
+
+        try {
+            disciplineRepository.deleteMany(disciplines);
+        } catch (Exception e) {
+            throw new DisciplineDeletionFailed(" [DisciplineService] Failed to delete disciplines.", e);
+        }
+
+        return true;
+    }
+
+    @Override
     public boolean deleteAll() throws DisciplineDeletionFailed {
         try {
             disciplineRepository.deleteMany(disciplineRepository.readAll());

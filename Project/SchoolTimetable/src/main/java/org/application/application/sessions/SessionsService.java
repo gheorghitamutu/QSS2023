@@ -1,11 +1,14 @@
 package org.application.application.sessions;
 
 import com.google.inject.Inject;
+import org.application.dataaccess.discipline.IDisciplineRepository;
 import org.application.dataaccess.session.ISessionRepository;
 import org.application.domain.exceptions.RepositoryOperationException;
+import org.application.domain.exceptions.discipline.DisciplineNotFoundException;
 import org.application.domain.exceptions.session.SessionAdditionException;
 import org.application.domain.exceptions.session.SessionDeletionFailed;
 import org.application.domain.exceptions.session.SessionNotFoundException;
+import org.application.domain.models.Discipline;
 import org.application.domain.models.Session;
 
 import java.text.MessageFormat;
@@ -14,21 +17,29 @@ import java.util.List;
 public class SessionsService implements ISessionsService {
 
     private final ISessionRepository sessionRepository;
+    private final IDisciplineRepository disciplineRepository;
 
     @Inject
-    public SessionsService(ISessionRepository sessionRepository) {
+    public SessionsService(ISessionRepository sessionRepository, IDisciplineRepository disciplineRepository) {
         this.sessionRepository = sessionRepository;
+        this.disciplineRepository = disciplineRepository;
     }
 
     @Override
-    public Session addSession(Session.Type type, String halfYear) throws SessionAdditionException {
+    public Session addSession(Session.Type type, String halfYear, String disciplineName) throws SessionAdditionException, DisciplineNotFoundException {
+        var disciplines = disciplineRepository.readAll().stream().filter(d -> d.getName().equals(disciplineName)).toList();
+        if (disciplines.isEmpty()) {
+            throw new DisciplineNotFoundException("[SessionService] Discipline not found!");
+        }
+        var discipline = disciplines.get(0);
+
         Session session;
         try {
             session = sessionRepository.createNewSession(type, halfYear);
+            session.setDiscipline(discipline);
         } catch (RepositoryOperationException e) {
             throw new RuntimeException(e);
         }
-
 
         try {
             sessionRepository.save(session);

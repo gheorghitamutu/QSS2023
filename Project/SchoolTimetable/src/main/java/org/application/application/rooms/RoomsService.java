@@ -64,6 +64,19 @@ public class RoomsService implements IRoomsService {
     }
 
     @Override
+    public boolean deleteRooms(String name) throws RoomDeletionFailed {
+        var rooms = roomRepository.readAll().stream().filter(r -> r.getName().equals(name)).toList();
+
+        try {
+            roomRepository.deleteMany(rooms);
+        } catch (Exception e) {
+            throw new RoomDeletionFailed(" [RoomService] Failed to delete rooms.", e);
+        }
+
+        return true;
+    }
+
+    @Override
     public boolean deleteAll() throws RoomDeletionFailed {
         try {
             roomRepository.deleteMany(roomRepository.readAll());
