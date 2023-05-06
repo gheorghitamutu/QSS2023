@@ -1,5 +1,11 @@
 package org.application.presentation.swing;
 
+import org.application.domain.exceptions.Timeslot.TimeslotAdditionException;
+import org.application.domain.exceptions.room.RoomAdditionException;
+import org.application.domain.models.Room;
+import org.application.domain.models.Timeslot;
+import org.application.presentation.GUI;
+
 import javax.swing.*;
 import javax.swing.text.MaskFormatter;
 import java.awt.*;
@@ -7,8 +13,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.Duration;
+import java.util.Objects;
 
 public class TimeslotSettings implements BaseSettings {
+    private final SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+
+    private final SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
     public TimeslotSettings(){
 
     }
@@ -21,6 +32,23 @@ public class TimeslotSettings implements BaseSettings {
         panel.add(component);
         panel.setMaximumSize(new Dimension(Short.MAX_VALUE, component.getPreferredSize().height));
         return panel;
+    }
+    private List createOptionListForDeleteOperation(){
+        List optionList = new List();
+        List roomsName = new List();
+        List startDate = new List();
+        List timespan = new List();
+        // take all rooms
+        var allTimeslot = GUI.app.timeslotsService.getTimeslots();
+
+        for (var timeslot : allTimeslot){
+            optionList.add(timeslot.getSession().getDiscipline().getName()  + ", " +
+                           timeslot.getStartDate().toString() + ", " +
+                           timeslot.getTimespan().toString() + ", " +
+                           timeslot.getRoom().getName());
+        }
+
+        return optionList;
     }
 
     public JPanel deleteRoomForm(JPanel currentPanel){
@@ -80,6 +108,7 @@ public class TimeslotSettings implements BaseSettings {
         JLabel startDateLabel = new JLabel("Start Date:");
         startDateLabel.setFont(new Font("Arial", Font.PLAIN, 14));
         startDateLabel.setBackground(Color.decode("#617A55"));
+
         MaskFormatter formatter = null;
         try {
             formatter = new MaskFormatter("##/##/####");
@@ -142,7 +171,7 @@ public class TimeslotSettings implements BaseSettings {
 
         //Add day field
         currentPanel.add(Box.createRigidArea(new Dimension(0, 10)));
-        JLabel dayLabel = new JLabel("Group:");
+        JLabel dayLabel = new JLabel("Day:");
         dayLabel.setFont(new Font("Arial", Font.PLAIN, 14));
         dayLabel.setBackground(Color.decode("#617A55"));
         String[] dayValues = { "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY", "SUNDAY"};
@@ -151,6 +180,44 @@ public class TimeslotSettings implements BaseSettings {
         JPanel dayPanel = createFieldPanel(dayLabel, dayComboBox);
         currentPanel.add(dayPanel);
 
+        //Add periodicity field
+        currentPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+        JLabel periodicityLabel = new JLabel("Periodicity:");
+        periodicityLabel.setFont(new Font("Arial", Font.PLAIN, 14));
+        periodicityLabel.setBackground(Color.decode("#617A55"));
+        String[] periodicityValues = { "WEEKLY", "BIWEEKLY", "MONTHLY"};
+
+        JComboBox<String> periodicityComboBox = new JComboBox<>(periodicityValues);
+        JPanel periodicityPanel = createFieldPanel(periodicityLabel, periodicityComboBox);
+        currentPanel.add(periodicityPanel);
+
+         //Add room field
+        currentPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+        JComboBox<String> model = new JComboBox<>();
+        JLabel roomLabel = new JLabel("Room:");
+        roomLabel.setFont(new Font("Arial", Font.PLAIN, 14));
+        roomLabel.setBackground(Color.decode("#617A55"));
+        // get all the disciplines from db
+        var allRooms = GUI.app.roomsService.getRooms();
+        for (var room : allRooms) {
+            model.addItem(room.getName());
+        }
+        JPanel roomPanel = createFieldPanel(roomLabel, model);
+        currentPanel.add(roomPanel);
+
+        //Add session field
+        currentPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+        JComboBox<String> sessionModel = new JComboBox<>();
+        JLabel sessionLabel = new JLabel("Session:");
+        sessionLabel.setFont(new Font("Arial", Font.PLAIN, 14));
+        sessionLabel.setBackground(Color.decode("#617A55"));
+        // get all the disciplines from db
+        var allSession = GUI.app.sessionsService.getSessions();
+        for (var session : allSession) {
+            sessionModel.addItem(session.getDiscipline().getName());
+        }
+        JPanel sessionPanel = createFieldPanel(sessionLabel, sessionModel);
+        currentPanel.add(sessionPanel);
 
         // Add the submit button
         currentPanel.add(Box.createRigidArea(new Dimension(0, 10)));
@@ -160,7 +227,8 @@ public class TimeslotSettings implements BaseSettings {
         submitButtonAdd.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 // TODO
-                System.out.println("Add room btn clicked");
+                System.out.println("Insert timeslot btn clicked");
+
             }
         });
         buttonPanel.add(submitButtonAdd);
