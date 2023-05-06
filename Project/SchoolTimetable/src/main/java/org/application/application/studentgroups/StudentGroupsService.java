@@ -64,6 +64,19 @@ public class StudentGroupsService implements IStudentGroupsService {
     }
 
     @Override
+    public boolean deleteStudentGroup(String name) throws StudentGroupDeletionFailed {
+        var groups = studentGroupRepository.readAll().stream().filter(sg -> sg.getName().equals(name)).toList();
+
+        try {
+            studentGroupRepository.deleteMany(groups);
+        } catch (Exception e) {
+            throw new StudentGroupDeletionFailed(" [StudentGroupsService] Failed to delete student groups.", e);
+        }
+
+        return true;
+    }
+
+    @Override
     public boolean deleteAll() throws StudentGroupDeletionFailed {
 
         try {

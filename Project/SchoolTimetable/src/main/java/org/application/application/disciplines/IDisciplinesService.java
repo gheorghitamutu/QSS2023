@@ -13,6 +13,8 @@ public interface IDisciplinesService {
 
     public boolean deleteDiscipline(int disciplineId) throws DisciplineNotFoundException, DisciplineDeletionFailed;
 
+    public boolean deleteDisciplines(String name) throws DisciplineDeletionFailed;
+
     public boolean deleteAll() throws DisciplineDeletionFailed;
 
     public Discipline getDisciplineById(int disciplineId) throws DisciplineNotFoundException;

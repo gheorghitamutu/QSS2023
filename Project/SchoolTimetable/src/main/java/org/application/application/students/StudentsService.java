@@ -133,6 +133,19 @@ public class StudentsService implements IStudentsService {
     }
 
     @Override
+    public boolean deleteStudents(String registrationNumber) throws StudentNotFoundException, StudentDeletionFailed {
+        var students = studentRepository.readAll().stream().filter(s -> s.getRegistrationNumber().equals(registrationNumber)).toList();
+
+        try {
+            studentRepository.deleteMany(students);
+        } catch (Exception e) {
+            throw new StudentDeletionFailed(" [StudentsService] Couldn't delete students.", e);
+        }
+
+        return true;
+    }
+
+    @Override
     public boolean deleteAll() throws StudentDeletionFailed {
         try {
             studentRepository.deleteMany(studentRepository.readAll());

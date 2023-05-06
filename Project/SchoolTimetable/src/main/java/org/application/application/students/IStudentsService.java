@@ -17,6 +17,8 @@ public interface IStudentsService {
 
     public boolean deleteStudent(int studentId) throws StudentNotFoundException, StudentDeletionFailed;
 
+    public boolean deleteStudents(String registrationNumber) throws StudentNotFoundException, StudentDeletionFailed;
+
     public boolean deleteAll() throws StudentDeletionFailed;
 
     public boolean deleteStudent(String registrationNumber) throws StudentNotFoundException, StudentDeletionFailed;
