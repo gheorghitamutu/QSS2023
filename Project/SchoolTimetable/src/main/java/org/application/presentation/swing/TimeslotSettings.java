@@ -134,6 +134,13 @@ public class TimeslotSettings implements BaseSettings {
 
         JPanel generatorPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         generatorPanel.setBackground(Color.decode("#F6FFDE"));
+
+        generateTimetableButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e){
+                System.out.println("Generate Timetable btm clicked");
+                //TODO link HTML Timetable Generator
+            }
+        });
         generatorPanel.add(generateTimetableButton);
         currentPanel.add(generatorPanel);
         return currentPanel;
@@ -275,7 +282,6 @@ public class TimeslotSettings implements BaseSettings {
         submitButtonAdd.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 System.out.println("Insert timeslot btn clicked");
-                System.out.println("Aici" +  startDateField.getText() + "aici" + timespanField.getText());
                 try {
                     assert startDateField != null;
                     GUI.app.timeslotsService.addTimeslot(dateFormat.parse(startDateField.getText()),

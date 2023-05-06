@@ -2,6 +2,8 @@ package org.application.presentation.swing;
 
 import org.application.domain.exceptions.discipline.DisciplineNotFoundException;
 import org.application.domain.exceptions.session.SessionAdditionException;
+import org.application.domain.exceptions.session.SessionDeletionFailed;
+import org.application.domain.exceptions.session.SessionNotFoundException;
 import org.application.domain.models.Session;
 import org.application.presentation.GUI;
 
@@ -62,6 +64,16 @@ public class SessionSettings implements BaseSettings{
         submitButtonDelete.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 System.out.println("Delete session btn clicked");
+                try {
+                    GUI.app.sessionsService.deleteSession((String) model.getSelectedItem());
+                } catch (DisciplineNotFoundException | SessionDeletionFailed | SessionNotFoundException ex) {
+                    JOptionPane.showMessageDialog(
+                            null,
+                            "An exception occurred: " + ex.getMessage(),
+                            "Error",
+                            JOptionPane.ERROR_MESSAGE);
+                    throw new RuntimeException(ex);
+                }
             }
         });
 
