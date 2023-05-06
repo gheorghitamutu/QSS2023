@@ -79,7 +79,7 @@ public class TimeslotSettings implements BaseSettings {
         currentPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
         currentPanel.add(Box.createRigidArea(new Dimension(0, 30)));
 
-        JLabel titleLabel = new JLabel("DELETE ROOM");
+        JLabel titleLabel = new JLabel("DELETE TIMESLOT");
         titleLabel.setFont(new Font("serif", Font.BOLD, 25));
         titleLabel.setForeground(Color.decode("#617A55"));
         //titleLabel.setBounds(0,30,300,25);
