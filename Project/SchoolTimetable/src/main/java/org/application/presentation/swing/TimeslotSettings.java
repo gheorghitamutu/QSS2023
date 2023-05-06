@@ -112,7 +112,7 @@ public class TimeslotSettings implements BaseSettings {
                 String[] options =((String) model.getSelectedItem()).split(",");
                 try {
                     GUI.app.timeslotsService.deleteTimeslot(dateFormat.parse(options[1]),
-                            timeFormat.parse(options[3]),durationConvertor(options[3]),options[4]);
+                            timeFormat.parse(options[2]),durationConvertor(options[3]),options[4]);
                 } catch (ParseException | TimeslotDeletionFailed | RoomNotFoundException | TimeslotNotFoundException ex) {
                     JOptionPane.showMessageDialog(
                             null,
