@@ -16,6 +16,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class TimeslotSettings implements BaseSettings {
     private final SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
@@ -41,9 +42,14 @@ public class TimeslotSettings implements BaseSettings {
         var allTimeslot = GUI.app.timeslotsService.getTimeslots();
 
         for (var timeslot : allTimeslot){
+            Date startDate = timeslot.getStartDate();
+            long totalMinutes = timeslot.getTimespan().toMinutes();
+            long hours = totalMinutes / 60;
+            long min = totalMinutes % 60;
+
             optionList.add(timeslot.getSession().getDiscipline().getName()  + ", " +
-                           timeslot.getStartDate().toString() + ", " +
-                           timeslot.getTimespan().toString() + ", " +
+                           dateFormat.format(startDate)+ ", " +
+                           String.format("%02d:%02d", hours, min) + ", " +
                            timeslot.getRoom().getName());
         }
 
@@ -232,12 +238,13 @@ public class TimeslotSettings implements BaseSettings {
         submitButtonAdd.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 System.out.println("Insert timeslot btn clicked");
+                System.out.println("Aici" +  startDateField.getText() + "aici" + timespanField.getText());
                 try {
                     assert startDateField != null;
                     GUI.app.timeslotsService.addTimeslot(dateFormat.parse(startDateField.getText()),
                             dateFormat.parse(endDateField.getText()),
                             timeFormat.parse(timeField.getText()),
-                            Duration.parse(timespanField.getText()),
+                            Duration.ofMinutes(Integer.parseInt(timespanField.getText())),
                             Timeslot.Day.valueOf((String) dayComboBox.getSelectedItem()),
                             Timeslot.Periodicity.valueOf((String) periodicityComboBox.getSelectedItem()),
                             (String) model.getSelectedItem(),
