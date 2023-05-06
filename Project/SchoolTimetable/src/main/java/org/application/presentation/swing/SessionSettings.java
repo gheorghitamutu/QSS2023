@@ -9,6 +9,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Objects;
 
 public class SessionSettings implements BaseSettings{
     public SessionSettings(){
@@ -180,11 +181,11 @@ public class SessionSettings implements BaseSettings{
         currentPanel.setLayout(null);
         currentPanel.setBackground(Color.decode("#F6FFDE"));
 
-        ImageIcon image = new ImageIcon("D:\\Desktop\\MASTER\\Semestru2\\CSS\\QSS2023\\Project\\SchoolTimetable\\src\\main\\java\\org\\application\\presentation\\icons\\generator.png");
-        Image rescaledImage = image.getImage().getScaledInstance(300,300, Image.SCALE_DEFAULT);
+        ImageIcon image = new ImageIcon(Objects.requireNonNull(SessionSettings.class.getResource("/icons/generator.png")));
+        Image rescaledImage = image.getImage().getScaledInstance(250,250, Image.SCALE_DEFAULT);
         ImageIcon finalImage = new ImageIcon(rescaledImage);
         JLabel imageLabel = new JLabel(finalImage);
-        imageLabel.setBounds(0,30,300,300);
+        imageLabel.setBounds(0,60,250,250);
         currentPanel.add(imageLabel, BorderLayout.CENTER);
         return currentPanel;
     }

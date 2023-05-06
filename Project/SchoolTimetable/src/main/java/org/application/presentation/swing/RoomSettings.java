@@ -199,7 +199,7 @@ public class RoomSettings implements BaseSettings {
         currentPanel.setLayout(null);
         currentPanel.setBackground(Color.decode("#F6FFDE"));
 
-        ImageIcon image = new ImageIcon("D:\\Desktop\\MASTER\\Semestru2\\CSS\\QSS2023\\Project\\SchoolTimetable\\src\\main\\java\\org\\application\\presentation\\icons\\room.png");
+        ImageIcon image = new ImageIcon(Objects.requireNonNull(RoomSettings.class.getResource("/icons/room.png")));
         Image rescaledImage = image.getImage().getScaledInstance(300,300, Image.SCALE_DEFAULT);
         ImageIcon finalImage = new ImageIcon(rescaledImage);
         JLabel imageLabel = new JLabel(finalImage);

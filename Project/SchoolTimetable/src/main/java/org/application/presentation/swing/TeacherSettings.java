@@ -9,6 +9,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Objects;
 
 public class TeacherSettings implements BaseSettings {
     public TeacherSettings(){
@@ -174,7 +175,7 @@ public class TeacherSettings implements BaseSettings {
         currentPanel.setLayout(null);
         currentPanel.setBackground(Color.decode("#F6FFDE"));
 
-        ImageIcon image = new ImageIcon("D:\\Desktop\\MASTER\\Semestru2\\CSS\\QSS2023\\Project\\SchoolTimetable\\src\\main\\java\\org\\application\\presentation\\icons\\teacher.png");
+        ImageIcon image = new ImageIcon(Objects.requireNonNull(TeacherSettings.class.getResource("/icons/teacher.png")));
         Image rescaledImage = image.getImage().getScaledInstance(350,350, Image.SCALE_DEFAULT);
         ImageIcon finalImage = new ImageIcon(rescaledImage);
         JLabel imageLabel = new JLabel(finalImage);

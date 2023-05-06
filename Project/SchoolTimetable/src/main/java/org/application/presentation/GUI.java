@@ -17,6 +17,7 @@ import org.application.presentation.swing.*;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.Objects;
 
 public class GUI extends JFrame implements ActionListener {
     // Define variables
@@ -100,7 +101,7 @@ public class GUI extends JFrame implements ActionListener {
         main.removeAll();
         setSize(800, 600);
         main.setBackground(new Color(0x252F23));
-        ImageIcon image = new ImageIcon("D:\\Desktop\\MASTER\\Semestru2\\CSS\\QSS2023\\Project\\SchoolTimetable\\src\\main\\java\\org\\application\\presentation\\icons\\logo.png");
+        ImageIcon image = new ImageIcon(Objects.requireNonNull(GUI.class.getResource("/icons/logo.png")));
         Image rescaledImage = image.getImage().getScaledInstance(450,450, Image.SCALE_DEFAULT);
         ImageIcon finalImage = new ImageIcon(rescaledImage);
         JLabel imageLabel = new JLabel(finalImage);
@@ -133,12 +134,10 @@ public class GUI extends JFrame implements ActionListener {
         }else if(source.getText().equals("Timeslots")) {
             TimeslotSettings timeslotSettings = new TimeslotSettings();
             mainPanel =timeslotSettings.createJPanel(mainPanel, source.getText());
-        }else if(source.getText().equals("Generate Timetable")){
-             //TODO TimeTable Generator Btn link here
         }
 
         pack();
-        // Refresh right panel
+        // Refresh panel
         mainPanel.revalidate();
         mainPanel.repaint();
 

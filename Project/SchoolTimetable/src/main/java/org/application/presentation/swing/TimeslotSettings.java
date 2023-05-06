@@ -1,6 +1,8 @@
 package org.application.presentation.swing;
 
 import org.application.domain.exceptions.Timeslot.TimeslotAdditionException;
+import org.application.domain.exceptions.Timeslot.TimeslotDeletionFailed;
+import org.application.domain.exceptions.Timeslot.TimeslotNotFoundException;
 import org.application.domain.exceptions.discipline.DisciplineNotFoundException;
 import org.application.domain.exceptions.room.RoomNotFoundException;
 import org.application.domain.exceptions.session.SessionNotFoundException;
@@ -17,6 +19,7 @@ import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Objects;
 
 public class TimeslotSettings implements BaseSettings {
     private final SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
@@ -47,13 +50,26 @@ public class TimeslotSettings implements BaseSettings {
             long hours = totalMinutes / 60;
             long min = totalMinutes % 60;
 
-            optionList.add(timeslot.getSession().getDiscipline().getName()  + ", " +
-                           dateFormat.format(startDate)+ ", " +
-                           String.format("%02d:%02d", hours, min) + ", " +
+            Date timeDate = timeslot.getTime();
+
+            optionList.add(timeslot.getSession().getDiscipline().getName()  + "," +
+                           dateFormat.format(startDate)+ "," +
+                           timeFormat.format(timeDate) + "," +
+                           String.format("%02d:%02d", hours, min) + "," +
                            timeslot.getRoom().getName());
         }
 
         return optionList;
+    }
+
+    private Duration durationConvertor(String s){
+
+        String[] parts = s.split(":");
+        long hours = Long.parseLong(parts[0].trim());
+        long minutes = Long.parseLong(parts[1]);
+        long totalMinutes = hours * 60 + minutes;
+
+        return Duration.ofMinutes(totalMinutes);
     }
 
     public JPanel deleteRoomForm(JPanel currentPanel){
@@ -91,14 +107,35 @@ public class TimeslotSettings implements BaseSettings {
         submitButtonDelete.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 // TODO
-                System.out.println("Delete room btn clicked");
+                System.out.println("Delete timeslot btn clicked");
+
+                String[] options =((String) model.getSelectedItem()).split(",");
+                try {
+                    GUI.app.timeslotsService.deleteTimeslot(dateFormat.parse(options[1]),
+                            timeFormat.parse(options[3]),durationConvertor(options[3]),options[4]);
+                } catch (ParseException | TimeslotDeletionFailed | RoomNotFoundException | TimeslotNotFoundException ex) {
+                    JOptionPane.showMessageDialog(
+                            null,
+                            "An exception occurred: " + ex.getMessage(),
+                            "Error",
+                            JOptionPane.ERROR_MESSAGE
+                    );
+                    throw new RuntimeException(ex);
+                }
+
+
             }
         });
-
-
         buttonPanel.add(submitButtonDelete);
         currentPanel.add(buttonPanel);
 
+        currentPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+        JButton generateTimetableButton = new JButton("Generate Timetable");
+
+        JPanel generatorPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        generatorPanel.setBackground(Color.decode("#F6FFDE"));
+        generatorPanel.add(generateTimetableButton);
+        currentPanel.add(generatorPanel);
         return currentPanel;
     }
 
@@ -300,12 +337,13 @@ public class TimeslotSettings implements BaseSettings {
         currentPanel.setLayout(null);
         currentPanel.setBackground(Color.decode("#F6FFDE"));
 
-        ImageIcon image = new ImageIcon("D:\\Desktop\\MASTER\\Semestru2\\CSS\\QSS2023\\Project\\SchoolTimetable\\src\\main\\java\\org\\application\\presentation\\icons\\room.png");
+        ImageIcon image = new ImageIcon(Objects.requireNonNull(TimeslotSettings.class.getResource("/icons/timeslot.png")));
         Image rescaledImage = image.getImage().getScaledInstance(300,300, Image.SCALE_DEFAULT);
         ImageIcon finalImage = new ImageIcon(rescaledImage);
         JLabel imageLabel = new JLabel(finalImage);
-        imageLabel.setBounds(0,30,300,300);
+        imageLabel.setBounds(30,130,300,300);
         currentPanel.add(imageLabel, BorderLayout.CENTER);
+
         return currentPanel;
     }
 }
