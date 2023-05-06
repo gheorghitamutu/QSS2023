@@ -29,7 +29,7 @@ public class SessionsService implements ISessionsService {
     public Session addSession(Session.Type type, String halfYear, String disciplineName) throws SessionAdditionException, DisciplineNotFoundException {
         var disciplines = disciplineRepository.readAll().stream().filter(d -> d.getName().equals(disciplineName)).toList();
         if (disciplines.isEmpty()) {
-            throw new DisciplineNotFoundException("[SessionRepository] Discipline not found!");
+            throw new DisciplineNotFoundException("[SessionService] Discipline not found!");
         }
         var discipline = disciplines.get(0);
 
