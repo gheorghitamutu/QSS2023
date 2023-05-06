@@ -1,5 +1,10 @@
 package org.application.presentation.swing;
 
+import org.application.domain.exceptions.Timeslot.TimeslotAdditionException;
+import org.application.domain.exceptions.discipline.DisciplineNotFoundException;
+import org.application.domain.exceptions.room.RoomNotFoundException;
+import org.application.domain.exceptions.session.SessionNotFoundException;
+import org.application.domain.models.Timeslot;
 import org.application.presentation.GUI;
 
 import javax.swing.*;
@@ -9,6 +14,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.Duration;
 import java.util.ArrayList;
 
 public class TimeslotSettings implements BaseSettings {
@@ -70,6 +76,7 @@ public class TimeslotSettings implements BaseSettings {
         }
         JPanel dataPanel = createFieldPanel(dataLabel, model);
         currentPanel.add(dataPanel);
+
         // Add the submit button
         currentPanel.add(Box.createRigidArea(new Dimension(0, 10)));
         JButton submitButtonDelete = new JButton("Submit");
@@ -119,6 +126,7 @@ public class TimeslotSettings implements BaseSettings {
 
         JPanel namePanel = createFieldPanel(startDateLabel, startDateField);
         currentPanel.add(namePanel);
+
         currentPanel.add(Box.createRigidArea(new Dimension(0, 10)));
 
         // Add the end date field
@@ -223,8 +231,27 @@ public class TimeslotSettings implements BaseSettings {
         buttonPanel.setBackground(Color.decode("#F6FFDE"));
         submitButtonAdd.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                // TODO
                 System.out.println("Insert timeslot btn clicked");
+                try {
+                    assert startDateField != null;
+                    GUI.app.timeslotsService.addTimeslot(dateFormat.parse(startDateField.getText()),
+                            dateFormat.parse(endDateField.getText()),
+                            timeFormat.parse(timeField.getText()),
+                            Duration.parse(timespanField.getText()),
+                            Timeslot.Day.valueOf((String) dayComboBox.getSelectedItem()),
+                            Timeslot.Periodicity.valueOf((String) periodicityComboBox.getSelectedItem()),
+                            (String) model.getSelectedItem(),
+                            (String) sessionModel.getSelectedItem());
+                } catch (ParseException | RoomNotFoundException | DisciplineNotFoundException |
+                         TimeslotAdditionException | SessionNotFoundException ex) {
+                    JOptionPane.showMessageDialog(
+                            null,
+                            "An exception occurred: " + ex.getMessage(),
+                            "Error",
+                            JOptionPane.ERROR_MESSAGE
+                    );
+                    throw new RuntimeException(ex);
+                }
 
             }
         });
