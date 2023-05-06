@@ -13,11 +13,13 @@ import org.application.application.timeslots.ITimeslotsService;
 import org.application.di.TestsDI;
 import org.application.domain.exceptions.Timeslot.TimeslotAdditionException;
 import org.application.domain.exceptions.Timeslot.TimeslotDeletionFailed;
+import org.application.domain.exceptions.Timeslot.TimeslotNotFoundException;
 import org.application.domain.exceptions.discipline.DisciplineAdditionException;
 import org.application.domain.exceptions.discipline.DisciplineDeletionFailed;
 import org.application.domain.exceptions.discipline.DisciplineNotFoundException;
 import org.application.domain.exceptions.room.RoomAdditionException;
 import org.application.domain.exceptions.room.RoomDeletionFailed;
+import org.application.domain.exceptions.room.RoomNotFoundException;
 import org.application.domain.exceptions.session.SessionAdditionException;
 import org.application.domain.exceptions.session.SessionDeletionFailed;
 import org.application.domain.exceptions.student.StudentAdditionException;
@@ -70,7 +72,7 @@ public class MinimalAllServicesTest {
     }
 
     @Test
-    public void TestSimpleUseCase() throws TeacherAdditionException, DisciplineAdditionException, StudentAdditionException, StudentGroupAdditionException, SessionAdditionException, java.text.ParseException, TimeslotAdditionException, RoomAdditionException, StudentUpdateException, StudentNotFoundException, DisciplineNotFoundException {
+    public void TestSimpleUseCase() throws TeacherAdditionException, DisciplineAdditionException, StudentAdditionException, StudentGroupAdditionException, SessionAdditionException, java.text.ParseException, TimeslotAdditionException, RoomAdditionException, StudentUpdateException, StudentNotFoundException, DisciplineNotFoundException, TimeslotDeletionFailed, RoomNotFoundException, TimeslotNotFoundException {
         var teacher = app.teachersService.addTeacher("Teacher 01", Teacher.Type.TEACHER);
         var collaborator = app.teachersService.addTeacher("Teacher 02", Teacher.Type.COLLABORATOR);
 
@@ -108,6 +110,8 @@ public class MinimalAllServicesTest {
 
         var timeslotLaboratory = app.timeslotsService.addTimeslot(new SimpleDateFormat("dd-MM-yyyy").parse("01-01-2023"), new SimpleDateFormat("dd-MM-yyyy").parse("01-07-2023"), new SimpleDateFormat("HH:mm:ss").parse("15:30:00"), Duration.ofMinutes(120), Timeslot.Day.TUESDAY, Timeslot.Periodicity.WEEKLY, room, laboratory);
         Assertions.assertNotNull(timeslotLaboratory);
+
+        app.timeslotsService.deleteTimeslot(new SimpleDateFormat("dd-MM-yyyy").parse("01-01-2023"), new SimpleDateFormat("HH:mm:ss").parse("15:30:00"), Duration.ofMinutes(120), "C100");
     }
 
     public static class Application {
