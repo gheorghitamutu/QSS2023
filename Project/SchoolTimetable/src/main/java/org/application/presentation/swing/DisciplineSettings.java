@@ -1,7 +1,9 @@
 package org.application.presentation.swing;
 
 import org.application.domain.exceptions.discipline.DisciplineAdditionException;
+import org.application.domain.exceptions.discipline.DisciplineDeletionFailed;
 import org.application.domain.exceptions.teacher.TeacherAdditionException;
+import org.application.domain.exceptions.teacher.TeacherDeletionFailed;
 import org.application.presentation.GUI;
 
 import javax.swing.*;
@@ -58,8 +60,18 @@ public class DisciplineSettings implements BaseSettings {
         buttonPanel.setBackground(Color.decode("#F6FFDE"));
         submitButtonDelete.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                // TODO
                 System.out.println("Delete room btn clicked");
+                try {
+                    GUI.app.disciplinesService.deleteDisciplines((String) model.getSelectedItem());
+                } catch ( DisciplineDeletionFailed ex) {
+                    JOptionPane.showMessageDialog(
+                            null,
+                            "An exception occurred: " + ex.getMessage(),
+                            "Error",
+                            JOptionPane.ERROR_MESSAGE
+                    );
+                    throw new RuntimeException(ex);
+                }
             }
         });
 

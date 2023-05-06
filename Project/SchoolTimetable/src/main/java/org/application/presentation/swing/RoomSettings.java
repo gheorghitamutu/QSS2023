@@ -1,6 +1,8 @@
 package org.application.presentation.swing;
 
 import org.application.domain.exceptions.room.RoomAdditionException;
+import org.application.domain.exceptions.room.RoomDeletionFailed;
+import org.application.domain.exceptions.teacher.TeacherDeletionFailed;
 import org.application.domain.models.Room;
 import org.application.presentation.GUI;
 
@@ -60,8 +62,18 @@ public class RoomSettings implements BaseSettings {
         buttonPanel.setBackground(Color.decode("#F6FFDE"));
         submitButtonDelete.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                // TODO
                 System.out.println("Delete room btn clicked");
+                try {
+                    GUI.app.roomsService.deleteRooms((String) model.getSelectedItem());
+                } catch (RoomDeletionFailed ex) {
+                    JOptionPane.showMessageDialog(
+                            null,
+                            "An exception occurred: " + ex.getMessage(),
+                            "Error",
+                            JOptionPane.ERROR_MESSAGE
+                    );
+                    throw new RuntimeException(ex);
+                }
             }
         });
 

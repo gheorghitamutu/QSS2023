@@ -1,9 +1,5 @@
 package org.application.presentation.swing;
 
-import org.application.domain.exceptions.Timeslot.TimeslotAdditionException;
-import org.application.domain.exceptions.room.RoomAdditionException;
-import org.application.domain.models.Room;
-import org.application.domain.models.Timeslot;
 import org.application.presentation.GUI;
 
 import javax.swing.*;
@@ -13,8 +9,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.Duration;
-import java.util.Objects;
+import java.util.ArrayList;
 
 public class TimeslotSettings implements BaseSettings {
     private final SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
@@ -33,12 +28,10 @@ public class TimeslotSettings implements BaseSettings {
         panel.setMaximumSize(new Dimension(Short.MAX_VALUE, component.getPreferredSize().height));
         return panel;
     }
-    private List createOptionListForDeleteOperation(){
-        List optionList = new List();
-        List roomsName = new List();
-        List startDate = new List();
-        List timespan = new List();
-        // take all rooms
+    private ArrayList<String> createOptionListForDeleteOperation(){
+        ArrayList<String> optionList = new ArrayList<>();
+
+        //take the timeslots
         var allTimeslot = GUI.app.timeslotsService.getTimeslots();
 
         for (var timeslot : allTimeslot){
@@ -66,13 +59,17 @@ public class TimeslotSettings implements BaseSettings {
         currentPanel.add(titleLabel);
 
         currentPanel.add(Box.createRigidArea(new Dimension(0, 10)));
-        JLabel regLabel = new JLabel("Name:");
-        regLabel.setFont(new Font("Arial", Font.PLAIN, 14));
-        regLabel.setBackground(Color.decode("#617A55"));
-        JTextField regField = new JTextField(20);
-        JPanel regPanel = createFieldPanel(regLabel, regField);
-        currentPanel.add(regPanel);
+        JLabel dataLabel = new JLabel("Data:");
+        dataLabel.setFont(new Font("Arial", Font.PLAIN, 14));
+        dataLabel.setBackground(Color.decode("#617A55"));
 
+        ArrayList<String>  optionsForDelete = createOptionListForDeleteOperation();
+        JComboBox<String> model = new JComboBox<>();
+        for (String opt : optionsForDelete){
+            model.addItem(opt);
+        }
+        JPanel dataPanel = createFieldPanel(dataLabel, model);
+        currentPanel.add(dataPanel);
         // Add the submit button
         currentPanel.add(Box.createRigidArea(new Dimension(0, 10)));
         JButton submitButtonDelete = new JButton("Submit");

@@ -1,6 +1,7 @@
 package org.application.presentation.swing;
 
 import org.application.domain.exceptions.teacher.TeacherAdditionException;
+import org.application.domain.exceptions.teacher.TeacherDeletionFailed;
 import org.application.domain.models.Teacher;
 import org.application.presentation.GUI;
 
@@ -58,9 +59,20 @@ public class TeacherSettings implements BaseSettings {
         buttonPanel.setBackground(Color.decode("#F6FFDE"));
         submitButtonDelete.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                // TODO
                 System.out.println("Delete teacher btn clicked");
+                try {
+                    GUI.app.teachersService.deleteTeachers((String) model.getSelectedItem());
+                } catch (TeacherDeletionFailed ex) {
+                    JOptionPane.showMessageDialog(
+                            null,
+                            "An exception occurred: " + ex.getMessage(),
+                            "Error",
+                            JOptionPane.ERROR_MESSAGE
+                    );
+                    throw new RuntimeException(ex);
+                }
             }
+
         });
 
 

@@ -1,5 +1,8 @@
 package org.application.presentation.swing;
 
+import org.application.domain.exceptions.discipline.DisciplineNotFoundException;
+import org.application.domain.exceptions.session.SessionAdditionException;
+import org.application.domain.models.Session;
 import org.application.presentation.GUI;
 
 import javax.swing.*;
@@ -43,9 +46,9 @@ public class SessionSettings implements BaseSettings{
         JComboBox<String> model = new JComboBox<>();
 
         // get all the disciplines from db
-        var allDisciplines = GUI.app.disciplinesService.getDisciplines();
-        for (var discipline : allDisciplines) {
-            model.addItem(discipline.getName());
+        var allSessions = GUI.app.sessionsService.getSessions();
+        for (var session : allSessions) {
+            model.addItem(session.getDiscipline().getName());
         }
         JPanel dataPanel = createFieldPanel(regLabel, model);
         currentPanel.add(dataPanel);
@@ -124,7 +127,19 @@ public class SessionSettings implements BaseSettings{
         submitButtonAdd.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 // TODO
-                System.out.println("Add session btn clicked");
+                System.out.println("Insert session btn clicked");
+                try {
+                    GUI.app.sessionsService.addSession(Session.Type.valueOf((String) typeComboBox.getSelectedItem()),
+                            (String) halfyearComboBox.getSelectedItem(),
+                            (String) model.getSelectedItem());
+                } catch (SessionAdditionException | DisciplineNotFoundException ex) {
+                    JOptionPane.showMessageDialog(
+                            null,
+                            "An exception occurred: " + ex.getMessage(),
+                            "Error",
+                            JOptionPane.ERROR_MESSAGE);
+                    throw new RuntimeException(ex);
+                }
             }
         });
         buttonPanel.add(submitButtonAdd);
