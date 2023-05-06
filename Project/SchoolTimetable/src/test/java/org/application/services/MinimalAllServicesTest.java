@@ -15,6 +15,7 @@ import org.application.domain.exceptions.Timeslot.TimeslotAdditionException;
 import org.application.domain.exceptions.Timeslot.TimeslotDeletionFailed;
 import org.application.domain.exceptions.discipline.DisciplineAdditionException;
 import org.application.domain.exceptions.discipline.DisciplineDeletionFailed;
+import org.application.domain.exceptions.discipline.DisciplineNotFoundException;
 import org.application.domain.exceptions.room.RoomAdditionException;
 import org.application.domain.exceptions.room.RoomDeletionFailed;
 import org.application.domain.exceptions.session.SessionAdditionException;
@@ -69,7 +70,7 @@ public class MinimalAllServicesTest {
     }
 
     @Test
-    public void TestSimpleUseCase() throws TeacherAdditionException, DisciplineAdditionException, StudentAdditionException, StudentGroupAdditionException, SessionAdditionException, java.text.ParseException, TimeslotAdditionException, RoomAdditionException, StudentUpdateException, StudentNotFoundException {
+    public void TestSimpleUseCase() throws TeacherAdditionException, DisciplineAdditionException, StudentAdditionException, StudentGroupAdditionException, SessionAdditionException, java.text.ParseException, TimeslotAdditionException, RoomAdditionException, StudentUpdateException, StudentNotFoundException, DisciplineNotFoundException {
         var teacher = app.teachersService.addTeacher("Teacher 01", Teacher.Type.TEACHER);
         var collaborator = app.teachersService.addTeacher("Teacher 02", Teacher.Type.COLLABORATOR);
 
@@ -89,8 +90,8 @@ public class MinimalAllServicesTest {
         student.setGroup(group);
         student.setDisciplines(Collections.singleton(discipline));
 
-        var course = app.sessionsService.addSession(Session.Type.COURSE, "A");
-        var laboratory = app.sessionsService.addSession(Session.Type.LABORATORY, null);
+        var course = app.sessionsService.addSession(Session.Type.COURSE, "A", "Discipline 01");
+        var laboratory = app.sessionsService.addSession(Session.Type.LABORATORY, null, "Discipline 01");
 
         course.setDiscipline(discipline);
         course.setGroups(Collections.singleton(group));
