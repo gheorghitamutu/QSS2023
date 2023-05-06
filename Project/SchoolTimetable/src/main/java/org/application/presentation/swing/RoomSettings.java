@@ -1,9 +1,14 @@
 package org.application.presentation.swing;
 
+import org.application.domain.exceptions.room.RoomAdditionException;
+import org.application.domain.models.Room;
+import org.application.presentation.GUI;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Objects;
 
 public class RoomSettings implements BaseSettings {
     public RoomSettings(){
@@ -38,9 +43,15 @@ public class RoomSettings implements BaseSettings {
         JLabel regLabel = new JLabel("Name:");
         regLabel.setFont(new Font("Arial", Font.PLAIN, 14));
         regLabel.setBackground(Color.decode("#617A55"));
-        JTextField regField = new JTextField(20);
-        JPanel regPanel = createFieldPanel(regLabel, regField);
-        currentPanel.add(regPanel);
+
+        JComboBox<String> model = new JComboBox<>();
+        // get all the disciplines from db
+        var allRooms = GUI.app.roomsService.getRooms();
+        for (var room : allRooms) {
+            model.addItem(room.getName());
+        }
+        JPanel dataPanel = createFieldPanel(regLabel, model);
+        currentPanel.add(dataPanel);
 
         // Add the submit button
         currentPanel.add(Box.createRigidArea(new Dimension(0, 10)));
@@ -120,8 +131,22 @@ public class RoomSettings implements BaseSettings {
         buttonPanel.setBackground(Color.decode("#F6FFDE"));
         submitButtonAdd.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                // TODO
-                System.out.println("Add room btn clicked");
+                System.out.println("Insert room btn clicked");
+                try {
+                    assert nameField.getText() != null;
+                    GUI.app.roomsService.addRoom(nameField.getText(),
+                                                Integer.parseInt((String) Objects.requireNonNull(capacityComboBox.getSelectedItem())),
+                                                Integer.parseInt((String) Objects.requireNonNull(floorComboBox.getSelectedItem())),
+                                                Room.Type.valueOf((String) typeComboBox.getSelectedItem()));
+                } catch (RoomAdditionException ex) {
+                    JOptionPane.showMessageDialog(
+                            null,
+                            "An exception occurred: " + ex.getMessage(),
+                            "Error",
+                            JOptionPane.ERROR_MESSAGE
+                    );
+                    throw new RuntimeException(ex);
+                }
             }
         });
         buttonPanel.add(submitButtonAdd);

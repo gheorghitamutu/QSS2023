@@ -1,5 +1,7 @@
 package org.application.presentation.swing;
 
+import org.application.presentation.GUI;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -35,12 +37,18 @@ public class SessionSettings implements BaseSettings{
         currentPanel.add(titleLabel);
 
         currentPanel.add(Box.createRigidArea(new Dimension(0, 10)));
-        JLabel regLabel = new JLabel("Name:");
+        JLabel regLabel = new JLabel("Data:");
         regLabel.setFont(new Font("Arial", Font.PLAIN, 14));
         regLabel.setBackground(Color.decode("#617A55"));
-        JTextField regField = new JTextField(20);
-        JPanel regPanel = createFieldPanel(regLabel, regField);
-        currentPanel.add(regPanel);
+        JComboBox<String> model = new JComboBox<>();
+
+        // get all the disciplines from db
+        var allDisciplines = GUI.app.disciplinesService.getDisciplines();
+        for (var discipline : allDisciplines) {
+            model.addItem(discipline.getName());
+        }
+        JPanel dataPanel = createFieldPanel(regLabel, model);
+        currentPanel.add(dataPanel);
 
         // Add the submit button
         currentPanel.add(Box.createRigidArea(new Dimension(0, 10)));
@@ -49,7 +57,6 @@ public class SessionSettings implements BaseSettings{
         buttonPanel.setBackground(Color.decode("#F6FFDE"));
         submitButtonDelete.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                // TODO
                 System.out.println("Delete session btn clicked");
             }
         });
@@ -74,6 +81,22 @@ public class SessionSettings implements BaseSettings{
         // titleLabel.setBounds(50,30,300,25);
         currentPanel.add(titleLabel);
 
+        //add discipline selector
+        currentPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+        JLabel disciplineLabel = new JLabel("Discipline:");
+        disciplineLabel.setFont(new Font("Arial", Font.PLAIN, 14));
+        disciplineLabel.setBackground(Color.decode("#617A55"));
+        JComboBox<String> model = new JComboBox<>();
+
+        // get all the disciplines from db
+        var allDisciplines = GUI.app.disciplinesService.getDisciplines();
+        for (var discipline : allDisciplines) {
+            model.addItem(discipline.getName());
+        }
+        JPanel dataPanel = createFieldPanel(disciplineLabel, model);
+        currentPanel.add(dataPanel);
+
+        currentPanel.add(Box.createRigidArea(new Dimension(0, 10)));
         JLabel typeLabel = new JLabel("Type:");
         typeLabel.setFont(new Font("Arial", Font.PLAIN, 14));
         typeLabel.setBackground(Color.decode("#617A55"));

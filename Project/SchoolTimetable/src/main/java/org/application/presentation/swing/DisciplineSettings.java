@@ -1,5 +1,9 @@
 package org.application.presentation.swing;
 
+import org.application.domain.exceptions.discipline.DisciplineAdditionException;
+import org.application.domain.exceptions.teacher.TeacherAdditionException;
+import org.application.presentation.GUI;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -38,10 +42,15 @@ public class DisciplineSettings implements BaseSettings {
         JLabel regLabel = new JLabel("Name:");
         regLabel.setFont(new Font("Arial", Font.PLAIN, 14));
         regLabel.setBackground(Color.decode("#617A55"));
-        JTextField regField = new JTextField(20);
-        JPanel regPanel = createFieldPanel(regLabel, regField);
-        currentPanel.add(regPanel);
+        JComboBox<String> model = new JComboBox<>();
 
+        // get all the disciplines from db
+        var allDisciplines = GUI.app.disciplinesService.getDisciplines();
+        for (var discipline : allDisciplines) {
+            model.addItem(discipline.getName());
+        }
+        JPanel typePanel = createFieldPanel(regLabel, model);
+        currentPanel.add(typePanel);
         // Add the submit button
         currentPanel.add(Box.createRigidArea(new Dimension(0, 10)));
         JButton submitButtonDelete = new JButton("Submit");
@@ -87,8 +96,8 @@ public class DisciplineSettings implements BaseSettings {
         creditsLabel.setFont(new Font("Arial", Font.PLAIN, 14));
         creditsLabel.setBackground(Color.decode("#617A55"));
         String[] creditsValues = {"3", "4", "5", "6"};
-        JComboBox<String> typeComboBox = new JComboBox<>(creditsValues);
-        JPanel creditsPanel = createFieldPanel(creditsLabel, typeComboBox);
+        JComboBox<String> creditComboBox = new JComboBox<>(creditsValues);
+        JPanel creditsPanel = createFieldPanel(creditsLabel, creditComboBox);
         currentPanel.add(creditsPanel);
 
         // Add the submit button
@@ -98,8 +107,22 @@ public class DisciplineSettings implements BaseSettings {
         buttonPanel.setBackground(Color.decode("#F6FFDE"));
         submitButtonAdd.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                // TODO
-                System.out.println("Add discipline btn clicked");
+                System.out.println("Insert discipline btn clicked");
+                String creditsComboValue = (String) creditComboBox.getSelectedItem();
+                try {
+                    assert creditsComboValue != null;
+                    assert nameField.getText() != null;
+                    GUI.app.disciplinesService.addDiscipline(nameField.getText(), Integer.parseInt(creditsComboValue));
+                } catch (DisciplineAdditionException ex) {
+                    JOptionPane.showMessageDialog(
+                            null,
+                            "An exception occurred: " + ex.getMessage(),
+                            "Error",
+                            JOptionPane.ERROR_MESSAGE
+                    );
+                    throw new RuntimeException(ex);
+                }
+
             }
         });
         buttonPanel.add(submitButtonAdd);
