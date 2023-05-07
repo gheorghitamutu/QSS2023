@@ -33,4 +33,6 @@ public interface ITimeslotsService {
     public Timeslot getTimeslotById(int timeslotId) throws TimeslotNotFoundException;
 
     public List<Timeslot> getTimeslots();
+
+    public List<Timeslot> getSortedTimeslotsByStartDateAndTime();
 }
