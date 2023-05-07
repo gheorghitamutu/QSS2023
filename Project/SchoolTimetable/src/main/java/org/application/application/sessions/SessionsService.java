@@ -131,7 +131,7 @@ public class SessionsService implements ISessionsService {
         }
         var discipline = disciplines.get(0);
 
-        var teachers = discipline.getTeachers().stream().filter(d -> d.getName().equals(teacherName)).toList();
+        var teachers = teacherRepository.readAll().stream().filter(d -> d.getName().equals(teacherName)).toList();
         if (teachers.isEmpty()) {
             throw new TeacherNotFoundException("[SessionService] Teacher not found!");
         }
