@@ -61,7 +61,7 @@ public class MainGenerator {
         BaseGenerator timetablesGenerator = new TimetablesGenerator(generationDateString, timetablesDays, timetablesNames, timetablesData, freeRooms);
         timetablesGenerator.generate();
 
-        BaseGenerator freeRoomsGenerator = new FreeRoomsGenerator(generationDateString, timetablesDays, freeRooms);
+        BaseGenerator freeRoomsGenerator = new FreeRoomsGenerator(generationDateString, timetablesDays, freeRooms, listsData);
         freeRoomsGenerator.generate();
 
         this.timetablesGenerated = true;
