@@ -8,16 +8,37 @@ import java.util.*;
 
 public class TimetablesGenerator extends BaseGenerator{
     private final List<Timeslot> timeslots;
+    private final List<Room> rooms;
     private final Map<String, String> timetablesNames;
     private final Map<String, String> timetablesData;
+    private final Map<Room, Map<Integer, Map<Timeslot.Day, Boolean>>> freeRooms;
 
-    public TimetablesGenerator(String generationDateString, Map<String, Map<Timeslot.Day, StringBuilder>> timetablesDays, Map<String, String> timetablesNames, Map<String, String> timetablesData){
+    public TimetablesGenerator(String generationDateString, Map<String, Map<Timeslot.Day, StringBuilder>> timetablesDays, Map<String, String> timetablesNames, Map<String, String> timetablesData, Map<Room, Map<Integer, Map<Timeslot.Day, Boolean>>> freeRooms){
         super(generationDateString, timetablesDays);
 
         this.timeslots = GUI.app.timeslotsService.getSortedTimeslotsByStartTime();
+        this.rooms = GUI.app.roomsService.getRooms();
         this.timetablesNames = timetablesNames;
         this.timetablesData = timetablesData;
+        this.freeRooms = freeRooms;
     }
+
+    private void initializeFreeRooms(){
+        Timeslot.Day[] daysArray = Timeslot.Day.class.getEnumConstants();
+
+        for (Room room : rooms){
+            Map<Integer, Map<Timeslot.Day, Boolean>> hoursMap = new HashMap<>();
+            for (int i = 8; i < 20; i++) {
+                Map<Timeslot.Day, Boolean> dayMap = new HashMap<>();
+                for (Timeslot.Day day : daysArray){
+                    dayMap.put(day, true);
+                }
+                hoursMap.put(i, dayMap);
+            }
+            freeRooms.put(room, hoursMap);
+        }
+    }
+
     private void createTimetableDataFromDays(){
         for (Map.Entry<String, Map<Timeslot.Day, StringBuilder>> mapEntry : this.timetablesDays.entrySet()){
             String tableName = mapEntry.getKey();
@@ -86,6 +107,12 @@ public class TimetablesGenerator extends BaseGenerator{
         }
     }
 
+    private void addToFreeRoomsTable(Timeslot.Day day, Room room, int startHour, int endHour){
+        for (int i = startHour; i < endHour; i++) {
+            freeRooms.get(room).get(startHour).replace(day, false);
+        }
+    }
+
     private void generateTimetablesFromTimeslots(){
         for (Timeslot timeslot : this.timeslots){
             Date startTime = timeslot.getTime();
@@ -98,6 +125,19 @@ public class TimetablesGenerator extends BaseGenerator{
             SimpleDateFormat formatter = new SimpleDateFormat("HH:mm");
             String startTimeString = formatter.format(startTime);
             String endTimeString = formatter.format(endTime);
+
+            int startHour = 0;
+            int endHour = 0;
+
+            try{
+                startHour = Integer.parseInt(startTimeString.substring(0, 2));
+                endHour = Integer.parseInt(endTimeString.substring(0, 2));
+            }
+            catch (NumberFormatException ex){
+                ex.printStackTrace();
+            }
+
+            this.addToFreeRoomsTable(timeslot.getWeekday(), room, startHour, endHour);
 
             SimpleDateFormat formatter2 = new SimpleDateFormat("dd.MM.yyyy");
             String startDateString = formatter2.format(timeslot.getStartDate());
@@ -138,6 +178,7 @@ public class TimetablesGenerator extends BaseGenerator{
         this.addToDaysMap("timetable");
         this.timetablesNames.put("timetable", "Complete Timetable");
 
+        this.initializeFreeRooms();
         this.generateTimetablesFromTimeslots();
         this.createTimetableDataFromDays();
     }

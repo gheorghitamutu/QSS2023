@@ -16,6 +16,7 @@ public class MainGenerator {
     private final Map<String, String> timetablesData;
     private final Map<String, Map<Timeslot.Day, StringBuilder>> timetablesDays;
     private final Map<String, String> timetablesNames;
+    private final Map<Room, Map<Integer, Map<Timeslot.Day, Boolean>>> freeRooms;
 
     private boolean listsGenerated;
     private boolean timetablesGenerated;
@@ -33,6 +34,7 @@ public class MainGenerator {
         this.timetablesData = new HashMap<>();
         this.timetablesDays = new HashMap<>();
         this.timetablesNames = new HashMap<>();
+        this.freeRooms = new HashMap<>();
 
         this.listsGenerated = false;
         this.timetablesGenerated = false;
@@ -56,8 +58,11 @@ public class MainGenerator {
     }
 
     public void generateTimetables(){
-        BaseGenerator generator = new TimetablesGenerator(generationDateString, timetablesDays, timetablesNames, timetablesData);
-        generator.generate();
+        BaseGenerator timetablesGenerator = new TimetablesGenerator(generationDateString, timetablesDays, timetablesNames, timetablesData, freeRooms);
+        timetablesGenerator.generate();
+
+        BaseGenerator freeRoomsGenerator = new FreeRoomsGenerator(generationDateString, timetablesDays, freeRooms);
+        freeRoomsGenerator.generate();
 
         this.timetablesGenerated = true;
     }
