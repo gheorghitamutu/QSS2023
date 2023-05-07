@@ -6,41 +6,37 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.List;
+import java.net.URISyntaxException;
+import java.util.Objects;
 
 public class TemplateUtils {
-    private String templatesPath;
-
     public TemplateUtils() {
-        createTemplatesPath();
     }
 
-    private void createTemplatesPath() {
-        StringBuilder basePath = new StringBuilder(System.getProperty("user.dir"));
-        String separator = System.getProperty("file.separator");
-
-        List<String> packages = List.of("src", "main", "java", "org", "application", "presentation", "templates");
-
-        for (String pack : packages){
-            basePath.append(separator).append(pack);
-        }
-
-        this.templatesPath = basePath.toString();
-    }
-
-    public String getBaseTemplateData(String templateName) {
-        String separator = System.getProperty("file.separator");
-        String currentPath = this.templatesPath + separator + templateName + ".html";
-        File htmlTemplateFile = new File(currentPath);
-        String htmlString;
+    private String getDataFromResources(String path) {
+        File dataFile;
+        String dataString;
 
         try {
-            htmlString = FileUtils.readFileToString(htmlTemplateFile, "UTF-8");
+            dataFile = new File(Objects.requireNonNull(TemplateUtils.class.getResource(path)).toURI());
+        } catch (URISyntaxException e) {
+            throw new RuntimeException(e);
+        }
+
+        try {
+            dataString = FileUtils.readFileToString(dataFile, "UTF-8");
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
 
-        return htmlString;
+        return dataString;
+    }
+
+    public String getBaseTemplateData(String templateName) {
+        String separator = "/";
+        String currentPath = separator + "templates" + separator + templateName + ".html";
+
+        return getDataFromResources(currentPath);
     }
 
     public void saveTemplateDataToFile(String templateData, String savePath) {
@@ -51,5 +47,12 @@ public class TemplateUtils {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public void copyStyle(String savePathBase) {
+        String path = "/templates/style.css";
+        String savePath = savePathBase + System.getProperty("file.separator") + "style.css";
+        String data = getDataFromResources(path);
+        saveTemplateDataToFile(data, savePath);
     }
 }
