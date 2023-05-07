@@ -38,4 +38,6 @@ public interface ITimeslotsService {
     public List<Timeslot> getTimeslots();
 
     public List<Timeslot> getSortedTimeslotsByStartDateAndTime();
+
+    public List<Timeslot> getSortedTimeslotsByStartTime();
 }

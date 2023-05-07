@@ -2,10 +2,12 @@ package org.application.application.disciplines;
 
 import com.google.inject.Inject;
 import org.application.dataaccess.discipline.IDisciplineRepository;
+import org.application.dataaccess.teacher.ITeacherRepository;
 import org.application.domain.exceptions.discipline.DisciplineAdditionException;
 import org.application.domain.exceptions.discipline.DisciplineDeletionFailed;
 import org.application.domain.exceptions.discipline.DisciplineNotFoundException;
 import org.application.domain.exceptions.RepositoryOperationException;
+import org.application.domain.exceptions.teacher.TeacherNotFoundException;
 import org.application.domain.models.Discipline;
 
 import java.text.MessageFormat;
@@ -14,10 +16,12 @@ import java.util.List;
 public class DisciplinesService implements IDisciplinesService {
 
     private final IDisciplineRepository disciplineRepository;
+    private final ITeacherRepository teacherRepository;
 
     @Inject
-    public DisciplinesService(IDisciplineRepository disciplineRepository) {
+    public DisciplinesService(IDisciplineRepository disciplineRepository, ITeacherRepository teacherRepository) {
         this.disciplineRepository = disciplineRepository;
+        this.teacherRepository = teacherRepository;
     }
 
     @Override
@@ -99,5 +103,26 @@ public class DisciplinesService implements IDisciplinesService {
     @Override
     public List<Discipline> getDisciplines() {
         return disciplineRepository.readAll();
+    }
+
+    @Override
+    public Discipline addTeacherToDiscipline(String teacherName, String disciplineName) throws TeacherNotFoundException, DisciplineNotFoundException {
+        var teachers = this.teacherRepository.readAll().stream().filter(t -> t.getName().equals(teacherName)).toList();
+        if (teachers.isEmpty()) {
+            throw new TeacherNotFoundException("[DisciplineService] Teacher not found!");
+        }
+        var teacher = teachers.get(0);
+
+        var disciplines = this.disciplineRepository.readAll().stream().filter(d -> d.getName().equals(disciplineName)).toList();
+        if (disciplines.isEmpty()) {
+            throw new DisciplineNotFoundException("[DisciplineService] Discipline not found!");
+        }
+        var discipline = disciplines.get(0);
+
+        var disciplineTeachers = discipline.getTeachers();
+        disciplineTeachers.add(teacher);
+        discipline.setTeachers(disciplineTeachers);
+
+        return discipline;
     }
 }

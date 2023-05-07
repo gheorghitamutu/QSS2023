@@ -7,6 +7,9 @@ import org.application.domain.exceptions.room.RoomNotFoundException;
 import org.application.domain.exceptions.session.SessionAdditionException;
 import org.application.domain.exceptions.session.SessionDeletionFailed;
 import org.application.domain.exceptions.session.SessionNotFoundException;
+import org.application.domain.exceptions.student.StudentNotFoundException;
+import org.application.domain.exceptions.studentgroup.StudentGroupNotFoundException;
+import org.application.domain.exceptions.teacher.TeacherNotFoundException;
 import org.application.domain.models.Room;
 import org.application.domain.models.Session;
 
@@ -27,4 +30,12 @@ public interface ISessionsService {
     public List<Session> getSessions();
 
     public List<Session> getSessionsByHalfYear(String hf);
+
+    public Session addTeacherToSession(String disciplineName, String teacherName) throws DisciplineNotFoundException, SessionNotFoundException, TeacherNotFoundException;
+
+    public Session addTeacherToSession(int sessionId, String teacherName) throws SessionNotFoundException, TeacherNotFoundException;
+
+    public Session addGroupToSession(String disciplineName, String groupName) throws StudentGroupNotFoundException, DisciplineNotFoundException, SessionNotFoundException;
+
+    public Session addGroupToSession(int sessionId, String groupName) throws SessionNotFoundException, StudentGroupNotFoundException;
 }
