@@ -1,0 +1,11 @@
+table {
+    border-spacing: 0px;
+    border-collapse:collapse;
+}
+
+hr {
+    page-break-after: always;
+}
+
+a:link    { text-decoration:none; }
+a:visited { text-decoration:none; }

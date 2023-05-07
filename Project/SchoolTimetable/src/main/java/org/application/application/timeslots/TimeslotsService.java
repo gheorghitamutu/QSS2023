@@ -157,4 +157,14 @@ public class TimeslotsService implements ITimeslotsService {
                                 .thenComparing(Timeslot::getTime))
                 .toList();
     }
+
+    @Override
+    public List<Timeslot> getSortedTimeslotsByStartTime() {
+        return getTimeslots()
+                .stream()
+                .sorted(
+                        Comparator
+                                .comparing(Timeslot::getTime))
+                .toList();
+    }
 }
