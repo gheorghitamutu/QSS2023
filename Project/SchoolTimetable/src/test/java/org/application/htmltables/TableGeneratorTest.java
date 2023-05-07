@@ -1,6 +1,7 @@
 package org.application.htmltables;
 
 import com.google.inject.Inject;
+import org.application.Application;
 import org.application.GuiceInjectorSingleton;
 import org.application.Main;
 import org.application.application.disciplines.IDisciplinesService;
@@ -95,13 +96,13 @@ public class TableGeneratorTest {
 
     @AfterAll
     void tearDownAll() throws DisciplineDeletionFailed, RoomDeletionFailed, SessionDeletionFailed, StudentGroupDeletionFailed, StudentDeletionFailed, TeacherDeletionFailed, TimeslotDeletionFailed {
-//        app.disciplinesService.deleteAll();
-//        app.roomsService.deleteAll();
-//        app.sessionsService.deleteAll();
-//        app.studentGroupsService.deleteAll();
-//        app.studentsService.deleteAll();
-//        app.teachersService.deleteAll();
-//        app.timeslotsService.deleteAll();
+        app.disciplinesService.deleteAll();
+        app.roomsService.deleteAll();
+        app.sessionsService.deleteAll();
+        app.studentGroupsService.deleteAll();
+        app.studentsService.deleteAll();
+        app.teachersService.deleteAll();
+        app.timeslotsService.deleteAll();
     }
 
     @Test
@@ -215,26 +216,5 @@ public class TableGeneratorTest {
         generator.generateTimetables();
 
         generator.saveAllData(".");
-    }
-
-    public static class Application {
-        private final IDisciplinesService disciplinesService;
-        private final IRoomsService roomsService;
-        private final ISessionsService sessionsService;
-        private final IStudentGroupsService studentGroupsService;
-        private final IStudentsService studentsService;
-        private final ITeachersService teachersService;
-        private final ITimeslotsService timeslotsService;
-
-        @Inject
-        public Application(IDisciplinesService disciplinesService, IRoomsService roomsService, ISessionsService sessionsService, IStudentGroupsService studentGroupsService, IStudentsService studentsService, ITeachersService teachersService, ITimeslotsService timeslotsService) {
-            this.disciplinesService = disciplinesService;
-            this.roomsService = roomsService;
-            this.sessionsService = sessionsService;
-            this.studentGroupsService = studentGroupsService;
-            this.studentsService = studentsService;
-            this.teachersService = teachersService;
-            this.timeslotsService = timeslotsService;
-        }
     }
 }
