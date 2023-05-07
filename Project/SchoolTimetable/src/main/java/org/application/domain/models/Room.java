@@ -25,10 +25,10 @@ public class Room implements Serializable {
     @Column(name = "Type", nullable = false)
     private Type type;
 
-    @Column(name = "Name", nullable = false)
+    @Column(name = "Name", nullable = false, unique=true)
     private String name;
 
-    @Column(name = "Capacity", nullable = false, unique=true)
+    @Column(name = "Capacity", nullable = false)
     private int capacity;
 
     @Column(name = "Floor", nullable = false)

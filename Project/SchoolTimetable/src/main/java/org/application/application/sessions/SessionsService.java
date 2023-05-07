@@ -174,7 +174,7 @@ public class SessionsService implements ISessionsService {
     }
 
     @Override
-    public Session addGroupToSession(String disciplineName, String groupName) throws StudentGroupNotFoundException, DisciplineNotFoundException {
+    public Session addGroupToSession(String disciplineName, String groupName) throws StudentGroupNotFoundException, DisciplineNotFoundException, SessionNotFoundException {
         var groups = studentGroupRepository.readAll().stream().filter(d -> d.getName().equals(groupName)).toList();
         if (groups.isEmpty()) {
             throw new StudentGroupNotFoundException("[SessionService] Student group not found!");
@@ -187,6 +187,9 @@ public class SessionsService implements ISessionsService {
         }
         var discipline = disciplines.get(0);
 
+        if (discipline.getSessions().isEmpty()) {
+            throw new DisciplineNotFoundException("[SessionService] Session not found!");
+        }
         var session = discipline.getSessions().stream().toList().get(0);
         var sessionGroups = session.getGroups();
         sessionGroups.add(group);
