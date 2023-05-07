@@ -219,7 +219,9 @@ public class TableGeneratorTest {
         var students = this.app.studentsService.getStudents();
         var timeslots = this.app.timeslotsService.getTimeslots();
 
-        GUI.setUpAll(true);
+//        GUI.setUpAll(true);
+
+        GUI.app = this.app;
 
         MainGenerator generator = new MainGenerator(42);
 
@@ -227,6 +229,6 @@ public class TableGeneratorTest {
 
         generator.generateTimetables();
 
-        generator.saveAllData(".");
+        generator.saveAllData("./outtimetable");
     }
 }
