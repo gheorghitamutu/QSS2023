@@ -16,6 +16,7 @@ import org.application.domain.models.Session;
 
 import java.text.MessageFormat;
 import java.util.List;
+import java.util.Objects;
 
 public class SessionsService implements ISessionsService {
 
@@ -44,13 +45,13 @@ public class SessionsService implements ISessionsService {
         try {
             session = sessionRepository.createNewSession(type, halfYear);
             session.setDiscipline(discipline);
-        } catch (RepositoryOperationException e) {
-            throw new RuntimeException(e);
-        }
-
-        try {
             sessionRepository.save(session);
-        } catch (Exception e) {
+
+            var disciplineSessions = discipline.getSessions();
+            disciplineSessions.add(session);
+            discipline.setSessions(disciplineSessions);
+            disciplineRepository.save(discipline);
+        } catch (RepositoryOperationException e) {
             throw new SessionAdditionException("[SessionService] Failed adding session!", e);
         }
 
@@ -137,11 +138,12 @@ public class SessionsService implements ISessionsService {
         }
         var teacher = teachers.get(0);
 
-        if (discipline.getSessions().isEmpty()) {
+        var sessions = discipline.getSessions();
+        if (sessions.isEmpty()) {
             throw new SessionNotFoundException("[SessionService] Session not found!");
         }
 
-        var session = discipline.getSessions().stream().toList().get(0);
+        var session = sessions.stream().toList().get(0);
         var sessionTeachers = session.getTeachers();
         sessionTeachers.add(teacher);
         session.setTeachers(sessionTeachers);
