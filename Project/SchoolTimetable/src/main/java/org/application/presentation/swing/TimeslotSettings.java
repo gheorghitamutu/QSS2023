@@ -8,6 +8,7 @@ import org.application.domain.exceptions.room.RoomNotFoundException;
 import org.application.domain.exceptions.session.SessionNotFoundException;
 import org.application.domain.models.Timeslot;
 import org.application.presentation.GUI;
+import org.application.presentation.MainGenerator;
 
 import javax.swing.*;
 import javax.swing.text.MaskFormatter;
@@ -22,6 +23,7 @@ import java.util.Date;
 import java.util.Objects;
 
 public class TimeslotSettings implements BaseSettings {
+    private int timeslotVersion = 0;
     private final SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
     private final SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
@@ -137,8 +139,18 @@ public class TimeslotSettings implements BaseSettings {
 
         generateTimetableButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e){
-                System.out.println("Generate Timetable btm clicked");
-                //TODO link HTML Timetable Generator
+                JFileChooser f = new JFileChooser();
+                f.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+                int result = f.showSaveDialog(null);
+
+                if (result == JFileChooser.APPROVE_OPTION) {
+                    System.out.println(f.getSelectedFile().getAbsolutePath());
+                    timeslotVersion = timeslotVersion + 1;
+                    MainGenerator mainGenerator = new MainGenerator(timeslotVersion);
+                    mainGenerator.generateLists();
+                    mainGenerator.generateTimetables();
+                    mainGenerator.saveAllData(f.getSelectedFile().getAbsolutePath());
+                }
             }
         });
         generatorPanel.add(generateTimetableButton);

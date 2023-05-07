@@ -1,6 +1,7 @@
 package org.application.presentation.generators;
 
 import org.application.domain.models.*;
+import org.application.presentation.GUI;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -10,10 +11,10 @@ public class TimetablesGenerator extends BaseGenerator{
     private final Map<String, String> timetablesNames;
     private final Map<String, String> timetablesData;
 
-    public TimetablesGenerator(String generationDateString, Map<String, Map<Timeslot.Day, StringBuilder>> timetablesDays, List<Timeslot> timeslots, Map<String, String> timetablesNames, Map<String, String> timetablesData){
+    public TimetablesGenerator(String generationDateString, Map<String, Map<Timeslot.Day, StringBuilder>> timetablesDays, Map<String, String> timetablesNames, Map<String, String> timetablesData){
         super(generationDateString, timetablesDays);
 
-        this.timeslots = timeslots;
+        this.timeslots = GUI.app.timeslotsService.getSortedTimeslotsByStartTime();
         this.timetablesNames = timetablesNames;
         this.timetablesData = timetablesData;
     }

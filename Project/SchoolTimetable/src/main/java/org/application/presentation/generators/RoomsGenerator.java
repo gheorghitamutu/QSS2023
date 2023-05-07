@@ -2,6 +2,7 @@ package org.application.presentation.generators;
 
 import org.application.domain.models.Room;
 import org.application.domain.models.Timeslot;
+import org.application.presentation.GUI;
 
 import java.util.List;
 import java.util.Map;
@@ -11,10 +12,10 @@ public class RoomsGenerator extends BaseGenerator{
     private final Map<String, String> timetablesNames;
     private final Map<String, String> listsData;
 
-    public RoomsGenerator(String generationDateString, Map<String, Map<Timeslot.Day, StringBuilder>> timetablesDays, List<Room> rooms, Map<String, String> timetablesNames, Map<String, String> listsData){
+    public RoomsGenerator(String generationDateString, Map<String, Map<Timeslot.Day, StringBuilder>> timetablesDays, Map<String, String> timetablesNames, Map<String, String> listsData){
         super(generationDateString, timetablesDays);
 
-        this.rooms = rooms;
+        this.rooms = GUI.app.roomsService.getRooms();
         this.timetablesNames = timetablesNames;
         this.listsData = listsData;
     }

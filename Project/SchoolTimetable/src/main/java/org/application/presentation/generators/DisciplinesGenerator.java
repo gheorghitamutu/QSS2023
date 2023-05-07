@@ -1,6 +1,7 @@
 package org.application.presentation.generators;
 
 import org.application.domain.models.*;
+import org.application.presentation.GUI;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,10 +12,10 @@ public class DisciplinesGenerator extends BaseGenerator{
     private final Map<String, String> timetablesNames;
     private final Map<String, String> listsData;
 
-    public DisciplinesGenerator(String generationDateString, Map<String, Map<Timeslot.Day, StringBuilder>> timetablesDays, List<Discipline> disciplines, Map<String, String> timetablesNames, Map<String, String> listsData){
+    public DisciplinesGenerator(String generationDateString, Map<String, Map<Timeslot.Day, StringBuilder>> timetablesDays, Map<String, String> timetablesNames, Map<String, String> listsData){
         super(generationDateString, timetablesDays);
 
-        this.disciplines = disciplines;
+        this.disciplines = GUI.app.disciplinesService.getDisciplines();
         this.timetablesNames = timetablesNames;
         this.listsData = listsData;
     }

@@ -7,11 +7,6 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class MainGenerator {
-    private final List<Discipline> disciplines;
-    private final List<Room> rooms;
-    private final List<StudentGroup> groups;
-    private final List<Teacher> teachers;
-    private final List<Timeslot> timeslots;
     private final int version;
     private final String generationDateString;
 
@@ -25,12 +20,7 @@ public class MainGenerator {
     private boolean listsGenerated;
     private boolean timetablesGenerated;
 
-    public MainGenerator(List<Discipline> disciplines, List<Room> rooms, List<StudentGroup> groups, List<Teacher> teachers, List<Timeslot> timeslots, int version) {
-        this.disciplines = disciplines;
-        this.rooms = rooms;
-        this.groups = groups;
-        this.teachers = teachers;
-        this.timeslots = timeslots;
+    public MainGenerator(int version) {
         this.version = version;
 
         Date generationDate = new Date();
@@ -53,10 +43,10 @@ public class MainGenerator {
         List<BaseGenerator> generators = new ArrayList<>();
 
         generators.add(new HomeGenerator(generationDateString, timetablesDays, version, listsData));
-        generators.add(new DisciplinesGenerator(generationDateString, timetablesDays, disciplines, timetablesNames, listsData));
-        generators.add(new RoomsGenerator(generationDateString, timetablesDays, rooms, timetablesNames, listsData));
-        generators.add(new StudentsGenerator(generationDateString, timetablesDays, groups, timetablesNames, listsData));
-        generators.add(new TeachersGenerator(generationDateString, timetablesDays, teachers, timetablesNames, listsData));
+        generators.add(new DisciplinesGenerator(generationDateString, timetablesDays, timetablesNames, listsData));
+        generators.add(new RoomsGenerator(generationDateString, timetablesDays, timetablesNames, listsData));
+        generators.add(new StudentsGenerator(generationDateString, timetablesDays, timetablesNames, listsData));
+        generators.add(new TeachersGenerator(generationDateString, timetablesDays, timetablesNames, listsData));
 
         for (BaseGenerator generator : generators){
             generator.generate();
@@ -66,7 +56,7 @@ public class MainGenerator {
     }
 
     public void generateTimetables(){
-        BaseGenerator generator = new TimetablesGenerator(generationDateString, timetablesDays, timeslots, timetablesNames, timetablesData);
+        BaseGenerator generator = new TimetablesGenerator(generationDateString, timetablesDays, timetablesNames, timetablesData);
         generator.generate();
 
         this.timetablesGenerated = true;

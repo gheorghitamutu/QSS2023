@@ -2,6 +2,7 @@ package org.application.presentation.generators;
 
 import org.application.domain.models.Teacher;
 import org.application.domain.models.Timeslot;
+import org.application.presentation.GUI;
 
 import java.util.List;
 import java.util.Map;
@@ -11,10 +12,10 @@ public class TeachersGenerator extends BaseGenerator{
     private final Map<String, String> timetablesNames;
     private final Map<String, String> listsData;
 
-    public TeachersGenerator(String generationDateString, Map<String, Map<Timeslot.Day, StringBuilder>> timetablesDays, List<Teacher> teachers, Map<String, String> timetablesNames, Map<String, String> listsData){
+    public TeachersGenerator(String generationDateString, Map<String, Map<Timeslot.Day, StringBuilder>> timetablesDays, Map<String, String> timetablesNames, Map<String, String> listsData){
         super(generationDateString, timetablesDays);
 
-        this.teachers = teachers;
+        this.teachers = GUI.app.teachersService.getTeachers();
         this.timetablesNames = timetablesNames;
         this.listsData = listsData;
     }
