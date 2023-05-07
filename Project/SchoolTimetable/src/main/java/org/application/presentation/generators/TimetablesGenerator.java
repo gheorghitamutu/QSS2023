@@ -110,7 +110,7 @@ public class TimetablesGenerator extends BaseGenerator{
 
     private void addToFreeRoomsTable(Timeslot.Day day, Room room, int startHour, int endHour){
         for (int i = startHour; i < endHour; i++) {
-            freeRooms.get(room).get(startHour).replace(day, false);
+            freeRooms.get(room).get(i).replace(day, false);
         }
     }
 
@@ -129,13 +129,19 @@ public class TimetablesGenerator extends BaseGenerator{
 
             int startHour = 0;
             int endHour = 0;
+            int endMinutes = 0;
 
             try{
                 startHour = Integer.parseInt(startTimeString.substring(0, 2));
                 endHour = Integer.parseInt(endTimeString.substring(0, 2));
+                endMinutes = Integer.parseInt(endTimeString.substring(3, 5));
             }
             catch (NumberFormatException ex){
                 ex.printStackTrace();
+            }
+
+            if (endMinutes > 0){
+                endHour += 1;
             }
 
             this.addToFreeRoomsTable(timeslot.getWeekday(), room, startHour, endHour);
