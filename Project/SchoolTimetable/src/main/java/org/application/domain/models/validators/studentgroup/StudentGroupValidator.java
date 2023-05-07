@@ -48,32 +48,25 @@ public class StudentGroupValidator implements ConstraintValidator<ValidStudentGr
         }
 
         for (Timeslot t1 : timeslots) {
-            Date d1 = t1.getTime();
-            Duration t11 = t1.getTimespan();
-
-            Calendar c1 = Calendar.getInstance();
-            c1.setTime(d1);
-            c1.add(Calendar.MINUTE, (int) t11.toMinutes());
-
-            Date ed1 = c1.getTime();
+            var vsd = t1.getStartDate();
+            var vt = t1.getTime();
 
             for (Timeslot t2 : timeslots) {
-
-                Date d2 = t2.getTime();
-                Duration t22 = t2.getTimespan();
-
-                Calendar c2 = Calendar.getInstance();
-                c2.setTime(d2);
-                c2.add(Calendar.MINUTE, (int) t22.toMinutes());
-
-                Date ed2 = c2.getTime();
-
-                if (d1.after(d2) && d1.before(ed1)) {
-                    return false;
+                if (t1.equals(t2)) {
+                    continue;
                 }
 
-                if (ed1.after(d1) && ed1.before(ed2)) {
-                    return false;
+                var tsd = t2.getStartDate();
+                var ted = t2.getEndDate();
+                var tt = t2.getTime();
+                var tet = Date.from(tt.toInstant().plus(t2.getTimespan()));
+
+                if (t1.getWeekday() == t2.getWeekday()) {
+                    if (vsd.after(tsd) && vsd.before(ted)) {
+                        if (vt.after(tt) && vt.before(tet)) {
+                            return false;
+                        }
+                    }
                 }
             }
         }

@@ -28,7 +28,7 @@ public class Room implements Serializable {
     @Column(name = "Name", nullable = false)
     private String name;
 
-    @Column(name = "Capacity", nullable = false)
+    @Column(name = "Capacity", nullable = false, unique=true)
     private int capacity;
 
     @Column(name = "Floor", nullable = false)

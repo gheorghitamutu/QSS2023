@@ -16,10 +16,14 @@ import org.application.domain.models.Room;
 import org.application.domain.models.Session;
 import org.application.domain.models.Timeslot;
 
+import java.sql.Time;
 import java.text.MessageFormat;
 import java.time.Duration;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Stream;
 
 public class TimeslotsService implements ITimeslotsService {
 
@@ -141,5 +145,16 @@ public class TimeslotsService implements ITimeslotsService {
     @Override
     public List<Timeslot> getTimeslots() {
         return timeslotRepository.readAll();
+    }
+
+    @Override
+    public List<Timeslot> getSortedTimeslotsByStartDateAndTime() {
+        return getTimeslots()
+                .stream()
+                .sorted(
+                        Comparator
+                                .comparing(Timeslot::getStartDate)
+                                .thenComparing(Timeslot::getTime))
+                .toList();
     }
 }

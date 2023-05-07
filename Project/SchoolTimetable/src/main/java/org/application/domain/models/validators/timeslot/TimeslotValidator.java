@@ -11,6 +11,7 @@ import org.application.dataaccess.room.IRoomRepository;
 import org.application.dataaccess.room.RoomRepository;
 import org.application.dataaccess.session.ISessionRepository;
 import org.application.dataaccess.session.SessionRepository;
+import org.application.dataaccess.timeslot.ITimeslotRepository;
 import org.application.domain.models.Room;
 import org.application.domain.models.Session;
 import org.application.domain.models.Timeslot;
@@ -20,12 +21,14 @@ import java.time.Duration;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class TimeslotValidator implements ConstraintValidator<ValidTimeslot, Timeslot> {
 
 
     private IRoomRepository roomRepository;
     private ISessionRepository sessionRepository;
+    private ITimeslotRepository timeslotRepository;
 
     @Override
     public void initialize(ValidTimeslot constraintAnnotation) {
@@ -34,6 +37,7 @@ public class TimeslotValidator implements ConstraintValidator<ValidTimeslot, Tim
         if (injector != null) {
             roomRepository = injector.getInstance(IRoomRepository.class);
             sessionRepository = injector.getInstance(ISessionRepository.class);
+            timeslotRepository = injector.getInstance(ITimeslotRepository.class);
         }
     }
 
@@ -66,12 +70,7 @@ public class TimeslotValidator implements ConstraintValidator<ValidTimeslot, Tim
 
         Date startTime = value.getTime();
         Duration timespan = value.getTimespan();
-
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(startTime);
-        calendar.add(Calendar.MINUTE, (int) timespan.toMinutes());
-
-        Date endTime = calendar.getTime();
+        Date endTime = Date.from(startTime.toInstant().plus(timespan));
 
         try {
             if (startTime.before(new SimpleDateFormat("HH:mm:ss").parse("08:00:00"))) {
@@ -91,26 +90,26 @@ public class TimeslotValidator implements ConstraintValidator<ValidTimeslot, Tim
             return false;
         }
 
-        Set<Timeslot> timeslots = room.getTimeslots();
+        Set<Timeslot> timeslots = timeslotRepository.readAll().stream().filter(t -> t.getRoom().equals(room)).collect(Collectors.toSet());
         for (Timeslot timeslot : timeslots) {
             if (value == timeslot) { // don't check against current timeslot
                 continue;
             }
 
-            Date d = timeslot.getTime();
-            Duration t = timeslot.getTimespan();
+            var vsd = value.getStartDate();
+            var tsd = timeslot.getStartDate();
+            var ted = timeslot.getEndDate();
 
-            calendar.setTime(d);
-            calendar.add(Calendar.MINUTE, (int) t.toMinutes());
+            var vt = value.getTime();
+            var tt = timeslot.getTime();
+            var tet = Date.from(tt.toInstant().plus(timeslot.getTimespan()));
 
-            Date ed = calendar.getTime();
-
-            if (startTime.after(d) && startTime.before(ed)) {
-                return false;
-            }
-
-            if (endTime.after(d) && endTime.before(ed)) {
-                return false;
+            if (value.getWeekday() == timeslot.getWeekday()) {
+                if (vsd.after(tsd) && vsd.before(ted)) {
+                    if (vt.after(tt) && vt.before(tet)) {
+                        return false;
+                    }
+                }
             }
         }
 
