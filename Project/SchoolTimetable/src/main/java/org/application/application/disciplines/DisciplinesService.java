@@ -123,6 +123,13 @@ public class DisciplinesService implements IDisciplinesService {
         disciplineTeachers.add(teacher);
         discipline.setTeachers(disciplineTeachers);
 
+        try {
+            disciplineRepository.save(discipline);
+        }
+        catch (RepositoryOperationException e) {
+            System.out.println(e.getMessage());
+        }
+
         return discipline;
     }
 }
