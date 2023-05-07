@@ -35,7 +35,9 @@ import org.junit.jupiter.api.*;
 
 import java.text.SimpleDateFormat;
 import java.time.Duration;
+import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashSet;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -81,20 +83,20 @@ public class TableGeneratorTest {
     void setUpAll() {
         TestsDI.initializeDi();
 
-        var appInjector = Main.setupDependenciesInjector(false);
+        var appInjector = Main.setupDependenciesInjector(true);
         app = appInjector.getInstance(Application.class);
         GuiceInjectorSingleton.INSTANCE.setInjector(appInjector);
     }
 
     @AfterAll
     void tearDownAll() throws DisciplineDeletionFailed, RoomDeletionFailed, SessionDeletionFailed, StudentGroupDeletionFailed, StudentDeletionFailed, TeacherDeletionFailed, TimeslotDeletionFailed {
-        app.disciplinesService.deleteAll();
-        app.roomsService.deleteAll();
-        app.sessionsService.deleteAll();
-        app.studentGroupsService.deleteAll();
-        app.studentsService.deleteAll();
-        app.teachersService.deleteAll();
-        app.timeslotsService.deleteAll();
+//        app.disciplinesService.deleteAll();
+//        app.roomsService.deleteAll();
+//        app.sessionsService.deleteAll();
+//        app.studentGroupsService.deleteAll();
+//        app.studentsService.deleteAll();
+//        app.teachersService.deleteAll();
+//        app.timeslotsService.deleteAll();
     }
 
     @Test
@@ -124,11 +126,49 @@ public class TableGeneratorTest {
             this.app.disciplinesService.addDiscipline(name, 6);
         }
 
+        var disciplines = this.app.disciplinesService.getDisciplines();
+        var rooms = this.app.roomsService.getRooms();
+
+        for (int sessionIndex = 0; sessionIndex < disciplines.size(); sessionIndex++)
+        {
+
+            var session = this.app.sessionsService.addSession(
+                    Session.Type.COURSE,
+                    "A",
+                    disciplines.get(sessionIndex).getName()
+            );
+
+            //TODO: add groups to this session
+
+            //TODO: add teachers to this session
+
+            var startDate = new Date();
+
+            // get date 6 months away from startdate
+            var endDate = new Date(startDate.getTime() + 6L * 30 * 24 * 60 * 60 * 1000);
+
+            var time = new Date(0, Calendar.MAY, 0, 8 + sessionIndex * 2 + 1 , 0, 0);
+            var duration = Duration.ofHours(2);
+            var day = Timeslot.Day.MONDAY;
+            var periodicity = Timeslot.Periodicity.WEEKLY;
+            var room = rooms.get(0);
+
+            this.app.timeslotsService.addTimeslot(
+                    startDate,
+                    endDate,
+                    time,
+                    duration,
+                    day,
+                    periodicity,
+                    room,
+                    session
+            );
+        }
+
         var teachers = this.app.teachersService.getTeachers();
         var groups = this.app.studentGroupsService.getStudentGroups();
         var students = this.app.studentsService.getStudents();
-        var rooms = this.app.roomsService.getRooms();
-        var disciplines = this.app.disciplinesService.getDisciplines();
+        var timeslots = this.app.timeslotsService.getTimeslots();
     }
 
     public static class Application {

@@ -73,11 +73,15 @@ public class TimeslotValidator implements ConstraintValidator<ValidTimeslot, Tim
         Date endTime = Date.from(startTime.toInstant().plus(timespan));
 
         try {
-            if (startTime.before(new SimpleDateFormat("HH:mm:ss").parse("08:00:00"))) {
+            var startTimeHours = startTime.getHours();
+
+            var endTimeHours = endTime.getHours();
+
+            if (startTimeHours < 8 || startTimeHours > 20) {
                 return false;
             }
 
-            if (endTime.after(new SimpleDateFormat("HH:mm:ss").parse("20:00:00"))) {
+            if (endTimeHours < 8 || endTimeHours > 20) {
                 return false;
             }
         } catch (Exception e) {

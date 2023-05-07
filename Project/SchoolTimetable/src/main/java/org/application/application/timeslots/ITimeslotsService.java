@@ -20,9 +20,12 @@ import java.util.List;
 
 public interface ITimeslotsService {
 
-    public Timeslot addTimeslot(Date startDate, Date endDate, Date time, Duration duration, Timeslot.Day day, Timeslot.Periodicity periodicity, Room room, Session session) throws TimeslotAdditionException;
+    public Timeslot addTimeslot(Date startDate, Date endDate, Date time,
+                                Duration duration, Timeslot.Day day, Timeslot.Periodicity periodicity,
+                                Room room, Session session) throws TimeslotAdditionException;
 
-    public Timeslot addTimeslot(Date startDate, Date endDate, Date time, Duration duration, Timeslot.Day day, Timeslot.Periodicity periodicity, String roomName, String disciplineName) throws TimeslotAdditionException, SessionNotFoundException, DisciplineNotFoundException, RoomNotFoundException;
+    public Timeslot addTimeslot(Date startDate, Date endDate, Date time, Duration duration, Timeslot.Day day,
+                                Timeslot.Periodicity periodicity, String roomName, String disciplineName) throws TimeslotAdditionException, SessionNotFoundException, DisciplineNotFoundException, RoomNotFoundException;
 
     public boolean deleteTimeslot(int timeslotId) throws TimeslotNotFoundException, TimeslotDeletionFailed;
 
