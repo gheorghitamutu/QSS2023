@@ -1,13 +1,20 @@
 package org.application.application.sessions;
 
 import com.google.inject.Inject;
+import org.application.application.studentgroups.IStudentGroupsService;
+import org.application.application.teachers.ITeachersService;
 import org.application.dataaccess.discipline.IDisciplineRepository;
 import org.application.dataaccess.session.ISessionRepository;
+import org.application.dataaccess.studentgroup.IStudentGroupRepository;
+import org.application.dataaccess.teacher.ITeacherRepository;
 import org.application.domain.exceptions.RepositoryOperationException;
 import org.application.domain.exceptions.discipline.DisciplineNotFoundException;
 import org.application.domain.exceptions.session.SessionAdditionException;
 import org.application.domain.exceptions.session.SessionDeletionFailed;
 import org.application.domain.exceptions.session.SessionNotFoundException;
+import org.application.domain.exceptions.student.StudentNotFoundException;
+import org.application.domain.exceptions.studentgroup.StudentGroupNotFoundException;
+import org.application.domain.exceptions.teacher.TeacherNotFoundException;
 import org.application.domain.models.Discipline;
 import org.application.domain.models.Session;
 
@@ -18,11 +25,15 @@ public class SessionsService implements ISessionsService {
 
     private final ISessionRepository sessionRepository;
     private final IDisciplineRepository disciplineRepository;
+    private final ITeacherRepository teacherRepository;
+    private final IStudentGroupRepository studentGroupRepository;
 
     @Inject
-    public SessionsService(ISessionRepository sessionRepository, IDisciplineRepository disciplineRepository) {
+    public SessionsService(ISessionRepository sessionRepository, IDisciplineRepository disciplineRepository, ITeacherRepository teacherRepository, IStudentGroupRepository studentGroupRepository) {
         this.sessionRepository = sessionRepository;
         this.disciplineRepository = disciplineRepository;
+        this.teacherRepository = teacherRepository;
+        this.studentGroupRepository = studentGroupRepository;
     }
 
     @Override
@@ -114,5 +125,93 @@ public class SessionsService implements ISessionsService {
     @Override
     public List<Session> getSessionsByHalfYear(String hf) {
         return sessionRepository.readAll().stream().filter(session -> session.getHalfYear().equals(hf)).toList();
+    }
+
+    @Override
+    public Session addTeacherToSession(String disciplineName, String teacherName) throws DisciplineNotFoundException, SessionNotFoundException, TeacherNotFoundException {
+        var disciplines = disciplineRepository.readAll().stream().filter(d -> d.getName().equals(disciplineName)).toList();
+        if (disciplines.isEmpty()) {
+            throw new DisciplineNotFoundException("[SessionService] Discipline not found!");
+        }
+        var discipline = disciplines.get(0);
+
+        var teachers = discipline.getTeachers().stream().filter(d -> d.getName().equals(teacherName)).toList();
+        if (teachers.isEmpty()) {
+            throw new TeacherNotFoundException("[SessionService] Teacher not found!");
+        }
+        var teacher = teachers.get(0);
+
+        if (discipline.getSessions().isEmpty()) {
+            throw new SessionNotFoundException("[SessionService] Session not found!");
+        }
+
+        var session = discipline.getSessions().stream().toList().get(0);
+        var sessionTeachers = session.getTeachers();
+        sessionTeachers.add(teacher);
+        session.setTeachers(sessionTeachers);
+
+        return session;
+    }
+
+    @Override
+    public Session addTeacherToSession(int sessionId, String teacherName) throws SessionNotFoundException, TeacherNotFoundException {
+        var session = this.sessionRepository.getById(sessionId);
+        if (session == null) {
+            throw new SessionNotFoundException("[SessionService] Session not found!");
+        }
+
+        var teachers = this.teacherRepository.readAll().stream().filter(d -> d.getName().equals(teacherName)).toList();
+        if (teachers.isEmpty()) {
+            throw new TeacherNotFoundException("[SessionService] Teacher not found!");
+        }
+
+        var teacher = teachers.get(0);
+        var sessionTeachers = session.getTeachers();
+        sessionTeachers.add(teacher);
+        session.setTeachers(sessionTeachers);
+
+        return session;
+    }
+
+    @Override
+    public Session addGroupToSession(String disciplineName, String groupName) throws StudentGroupNotFoundException, DisciplineNotFoundException {
+        var groups = studentGroupRepository.readAll().stream().filter(d -> d.getName().equals(groupName)).toList();
+        if (groups.isEmpty()) {
+            throw new StudentGroupNotFoundException("[SessionService] Student group not found!");
+        }
+        var group = groups.get(0);
+
+        var disciplines = disciplineRepository.readAll().stream().filter(d -> d.getName().equals(disciplineName)).toList();
+        if (disciplines.isEmpty()) {
+            throw new DisciplineNotFoundException("[SessionService] Discipline not found!");
+        }
+        var discipline = disciplines.get(0);
+
+        var session = discipline.getSessions().stream().toList().get(0);
+        var sessionGroups = session.getGroups();
+        sessionGroups.add(group);
+        session.setGroups(sessionGroups);
+
+        return session;
+    }
+
+    @Override
+    public Session addGroupToSession(int sessionId, String groupName) throws SessionNotFoundException, StudentGroupNotFoundException {
+        var session = this.sessionRepository.getById(sessionId);
+        if (session == null) {
+            throw new SessionNotFoundException("[SessionService] Session not found!");
+        }
+
+        var groups = this.studentGroupRepository.readAll().stream().filter(d -> d.getName().equals(groupName)).toList();
+        if (groups.isEmpty()) {
+            throw new StudentGroupNotFoundException("[SessionService] Student group not found!");
+        }
+
+        var group = groups.get(0);
+        var sessionGroups = session.getGroups();
+        sessionGroups.add(group);
+        session.setGroups(sessionGroups);
+
+        return session;
     }
 }
