@@ -4,6 +4,8 @@ import org.application.domain.exceptions.discipline.DisciplineNotFoundException;
 import org.application.domain.exceptions.session.SessionAdditionException;
 import org.application.domain.exceptions.session.SessionDeletionFailed;
 import org.application.domain.exceptions.session.SessionNotFoundException;
+import org.application.domain.exceptions.studentgroup.StudentGroupNotFoundException;
+import org.application.domain.exceptions.teacher.TeacherNotFoundException;
 import org.application.domain.models.Session;
 import org.application.presentation.GUI;
 
@@ -15,6 +17,72 @@ import java.util.Objects;
 
 public class SessionSettings implements BaseSettings{
     public SessionSettings(){
+
+    }
+
+    private void addGroupToSessionForm(JPanel currentPanel){
+
+        JLabel titleLabel1 = new JLabel("ADD GROUP TO SESSION");
+        titleLabel1.setFont(new Font("serif", Font.BOLD, 25));
+        titleLabel1.setForeground(Color.decode("#617A55"));
+        titleLabel1.setAlignmentX(Component.CENTER_ALIGNMENT);
+        // titleLabel.setBounds(50,30,300,25);
+        currentPanel.add(titleLabel1);
+
+        //add techer to session
+        currentPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+        JLabel sessionLabel = new JLabel("Discipline Session:");
+        sessionLabel.setFont(new Font("Arial", Font.PLAIN, 14));
+        sessionLabel.setBackground(Color.decode("#617A55"));
+        JComboBox<String> sessionSelector = new JComboBox<>();
+
+
+        var allSession = GUI.app.sessionsService.getSessions();
+        for (var s : allSession) {
+            sessionSelector.addItem(s.getDiscipline().getName());
+        }
+        JPanel sessionPanel = createFieldPanel(sessionLabel, sessionSelector);
+        currentPanel.add(sessionPanel);
+
+
+
+        currentPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+        JLabel groupLabel = new JLabel("Group:");
+        groupLabel.setFont(new Font("Arial", Font.PLAIN, 14));
+        groupLabel.setBackground(Color.decode("#617A55"));
+        JComboBox<String> groupSelector = new JComboBox<>();
+
+        // get all the disciplines from db
+        var allGroupsName = GUI.app.studentGroupsService.getStudentGroups();
+        for (var group : allGroupsName) {
+            groupSelector.addItem(group.getName());
+        }
+        JPanel teacherPanel = createFieldPanel(groupLabel, groupSelector);
+        currentPanel.add(teacherPanel);
+
+        // Add the submit button
+        currentPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+        JButton groupBtn = new JButton("Submit");
+        JPanel groupButtonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        groupButtonPanel.setBackground(Color.decode("#F6FFDE"));
+        groupBtn.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("ADD GROUP TO A SESSION CLICKED");
+                try {
+                    GUI.app.sessionsService.addGroupToSession((String) sessionSelector.getSelectedItem(), (String) groupSelector.getSelectedItem() );
+                } catch (DisciplineNotFoundException | StudentGroupNotFoundException ex) {
+                    JOptionPane.showMessageDialog(
+                            null,
+                            "An exception occurred: " + ex.getMessage(),
+                            "Error",
+                            JOptionPane.ERROR_MESSAGE);
+                    throw new RuntimeException(ex);
+                }
+
+            }
+        });
+        groupButtonPanel.add(groupBtn);
+        currentPanel.add(groupButtonPanel);
 
     }
     private JPanel createFieldPanel(JLabel label, JComponent component) {
@@ -90,7 +158,7 @@ public class SessionSettings implements BaseSettings{
         currentPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
         currentPanel.add(Box.createRigidArea(new Dimension(0, 10)));
 
-        JLabel titleLabel = new JLabel("ADD SESSION");
+        JLabel titleLabel = new JLabel("CREATE SESSION");
         titleLabel.setFont(new Font("serif", Font.BOLD, 25));
         titleLabel.setForeground(Color.decode("#617A55"));
         titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -158,6 +226,73 @@ public class SessionSettings implements BaseSettings{
         buttonPanel.add(submitButtonAdd);
         currentPanel.add(buttonPanel);
 
+        currentPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+        JLabel titleLabel1 = new JLabel("ADD TEACHER TO SESSION");
+        titleLabel1.setFont(new Font("serif", Font.BOLD, 25));
+        titleLabel1.setForeground(Color.decode("#617A55"));
+        titleLabel1.setAlignmentX(Component.CENTER_ALIGNMENT);
+        // titleLabel.setBounds(50,30,300,25);
+        currentPanel.add(titleLabel1);
+
+        //add techer to session
+        currentPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+        JLabel sessionLabel = new JLabel("Discipline Session:");
+        sessionLabel.setFont(new Font("Arial", Font.PLAIN, 14));
+        sessionLabel.setBackground(Color.decode("#617A55"));
+        JComboBox<String> sessionSelector = new JComboBox<>();
+
+
+        var allSession = GUI.app.sessionsService.getSessions();
+        for (var s : allSession) {
+            sessionSelector.addItem(s.getDiscipline().getName());
+        }
+        JPanel sessionPanel = createFieldPanel(sessionLabel, sessionSelector);
+        currentPanel.add(sessionPanel);
+
+
+
+        currentPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+        JLabel teacherLabel = new JLabel("Teacher:");
+        teacherLabel.setFont(new Font("Arial", Font.PLAIN, 14));
+        teacherLabel.setBackground(Color.decode("#617A55"));
+        JComboBox<String> teacherSelector = new JComboBox<>();
+
+
+        var allTeacher = GUI.app.teachersService.getTeachers();
+        for (var t : allTeacher) {
+            teacherSelector.addItem(t.getName());
+        }
+        JPanel teacherPanel = createFieldPanel(teacherLabel, teacherSelector);
+        currentPanel.add(teacherPanel);
+
+        // Add the submit button
+        currentPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+        JButton teacherBtn = new JButton("Submit");
+        JPanel teacherButtonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        teacherButtonPanel.setBackground(Color.decode("#F6FFDE"));
+        teacherBtn.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("ADD TEACHER TO A SESSION CLICKED");
+                try {
+                    GUI.app.sessionsService.addTeacherToSession((String) sessionSelector.getSelectedItem(), (String) teacherSelector.getSelectedItem());
+                } catch (DisciplineNotFoundException | SessionNotFoundException | TeacherNotFoundException ex) {
+                    JOptionPane.showMessageDialog(
+                            null,
+                            "An exception occurred: " + ex.getMessage(),
+                            "Error",
+                            JOptionPane.ERROR_MESSAGE);
+                    throw new RuntimeException(ex);
+                }
+
+            }
+        });
+        teacherButtonPanel.add(teacherBtn);
+        currentPanel.add(teacherButtonPanel);
+
+        // ADD GROUP TO SESSION
+        currentPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+        addGroupToSessionForm(currentPanel);
+
         return currentPanel;
     }
     @Override
@@ -197,7 +332,7 @@ public class SessionSettings implements BaseSettings{
         Image rescaledImage = image.getImage().getScaledInstance(250,250, Image.SCALE_DEFAULT);
         ImageIcon finalImage = new ImageIcon(rescaledImage);
         JLabel imageLabel = new JLabel(finalImage);
-        imageLabel.setBounds(0,60,250,250);
+        imageLabel.setBounds(20,200,300,300);
         currentPanel.add(imageLabel, BorderLayout.CENTER);
         return currentPanel;
     }
