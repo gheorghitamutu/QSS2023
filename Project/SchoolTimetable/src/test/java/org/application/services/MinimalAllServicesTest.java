@@ -1,6 +1,7 @@
 package org.application.services;
 
 import com.google.inject.Inject;
+import org.application.Application;
 import org.application.GuiceInjectorSingleton;
 import org.application.Main;
 import org.application.application.disciplines.IDisciplinesService;
@@ -55,7 +56,7 @@ public class MinimalAllServicesTest {
     void setUpAll() {
         TestsDI.initializeDi();
 
-        var appInjector = Main.setupDependenciesInjector(false);
+        var appInjector = Main.setupDependenciesInjector(true);
         app = appInjector.getInstance(Application.class);
         GuiceInjectorSingleton.INSTANCE.setInjector(appInjector);
     }
@@ -122,26 +123,5 @@ public class MinimalAllServicesTest {
         );
 
         app.timeslotsService.deleteTimeslot(new SimpleDateFormat("dd-MM-yyyy").parse("01-01-2023"), new SimpleDateFormat("HH:mm:ss").parse("15:30:00"), Duration.ofMinutes(120), "C100");
-    }
-
-    public static class Application {
-        private final IDisciplinesService disciplinesService;
-        private final IRoomsService roomsService;
-        private final ISessionsService sessionsService;
-        private final IStudentGroupsService studentGroupsService;
-        private final IStudentsService studentsService;
-        private final ITeachersService teachersService;
-        private final ITimeslotsService timeslotsService;
-
-        @Inject
-        public Application(IDisciplinesService disciplinesService, IRoomsService roomsService, ISessionsService sessionsService, IStudentGroupsService studentGroupsService, IStudentsService studentsService, ITeachersService teachersService, ITimeslotsService timeslotsService) {
-            this.disciplinesService = disciplinesService;
-            this.roomsService = roomsService;
-            this.sessionsService = sessionsService;
-            this.studentGroupsService = studentGroupsService;
-            this.studentsService = studentsService;
-            this.teachersService = teachersService;
-            this.timeslotsService = timeslotsService;
-        }
     }
 }

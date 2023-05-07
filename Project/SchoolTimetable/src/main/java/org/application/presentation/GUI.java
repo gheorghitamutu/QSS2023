@@ -2,6 +2,7 @@ package org.application.presentation;
 
 import com.google.inject.Inject;
 import com.google.inject.Injector;
+import org.application.Application;
 import org.application.GuiceInjectorSingleton;
 import org.application.Main;
 import org.application.application.disciplines.IDisciplinesService;
@@ -146,26 +147,5 @@ public class GUI extends JFrame implements ActionListener {
     public static void main(String[] args) {
         setUpAll(false);
         GUI gui = new GUI();
-    }
-
-    public static class Application {
-        public final IDisciplinesService disciplinesService;
-        public final IRoomsService roomsService;
-        public final ISessionsService sessionsService;
-        public final IStudentGroupsService studentGroupsService;
-        public final IStudentsService studentsService;
-        public final ITeachersService teachersService;
-        public final ITimeslotsService timeslotsService;
-
-        @Inject
-        public Application(IDisciplinesService disciplinesService, IRoomsService roomsService, ISessionsService sessionsService, IStudentGroupsService studentGroupsService, IStudentsService studentsService, ITeachersService teachersService, ITimeslotsService timeslotsService) {
-            this.disciplinesService = disciplinesService;
-            this.roomsService = roomsService;
-            this.sessionsService = sessionsService;
-            this.studentGroupsService = studentGroupsService;
-            this.studentsService = studentsService;
-            this.teachersService = teachersService;
-            this.timeslotsService = timeslotsService;
-        }
     }
 }
