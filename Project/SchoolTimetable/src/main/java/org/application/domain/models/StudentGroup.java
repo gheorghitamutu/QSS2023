@@ -15,7 +15,13 @@ import java.util.Set;
 
 @ValidStudentGroup
 @Entity(name = "StudentGroup")
-@Table(name = "studentgroup", uniqueConstraints = {@UniqueConstraint(columnNames = {"Id"})})
+@Table(
+        name = "studentgroup",
+        uniqueConstraints = {
+                @UniqueConstraint(columnNames = {"Id"}),
+                @UniqueConstraint(columnNames = {"Name", "\"Year\""}),
+        }
+)
 @NamedQuery(name = "StudentGroup.getByGroupName", query = "SELECT sg FROM StudentGroup sg WHERE sg.name = :name")
 public class StudentGroup implements Serializable {
 

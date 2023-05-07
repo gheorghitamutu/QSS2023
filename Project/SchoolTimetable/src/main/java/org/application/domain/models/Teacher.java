@@ -27,7 +27,7 @@ public class Teacher implements Serializable {
     @Column(name = "Id", nullable = false, unique = true)
     private int id;
 
-    @Column(name = "Name", nullable = false)
+    @Column(name = "Name", nullable = false, unique=true)
     private String name;
 
     @Enumerated(EnumType.STRING)
