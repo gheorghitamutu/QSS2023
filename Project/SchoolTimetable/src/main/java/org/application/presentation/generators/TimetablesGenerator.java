@@ -4,6 +4,7 @@ import org.application.domain.models.*;
 import org.application.presentation.GUI;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.*;
 
 public class TimetablesGenerator extends BaseGenerator{
@@ -114,8 +115,8 @@ public class TimetablesGenerator extends BaseGenerator{
     }
 
     private void generateTimetablesFromTimeslots(){
-        for (Timeslot timeslot : this.timeslots){
-            Date startTime = timeslot.getTime();
+        for (Timeslot timeslot : this.timeslots) {
+            Date startTime = new Date(timeslot.getTime().getTime());
             Date endTime = Date.from(startTime.toInstant().plus(timeslot.getTimespan()));
             Room room = timeslot.getRoom();
             Discipline discipline = timeslot.getSession().getDiscipline();
