@@ -125,6 +125,7 @@ public class DisciplinesService implements IDisciplinesService {
 
         try {
             disciplineRepository.save(discipline);
+            teacherRepository.save(teacher);
         }
         catch (RepositoryOperationException e) {
             System.out.println(e.getMessage());
