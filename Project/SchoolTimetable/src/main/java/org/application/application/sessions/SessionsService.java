@@ -1,8 +1,6 @@
 package org.application.application.sessions;
 
 import com.google.inject.Inject;
-import org.application.application.studentgroups.IStudentGroupsService;
-import org.application.application.teachers.ITeachersService;
 import org.application.dataaccess.discipline.IDisciplineRepository;
 import org.application.dataaccess.session.ISessionRepository;
 import org.application.dataaccess.studentgroup.IStudentGroupRepository;
@@ -12,10 +10,8 @@ import org.application.domain.exceptions.discipline.DisciplineNotFoundException;
 import org.application.domain.exceptions.session.SessionAdditionException;
 import org.application.domain.exceptions.session.SessionDeletionFailed;
 import org.application.domain.exceptions.session.SessionNotFoundException;
-import org.application.domain.exceptions.student.StudentNotFoundException;
 import org.application.domain.exceptions.studentgroup.StudentGroupNotFoundException;
 import org.application.domain.exceptions.teacher.TeacherNotFoundException;
-import org.application.domain.models.Discipline;
 import org.application.domain.models.Session;
 
 import java.text.MessageFormat;
@@ -150,6 +146,13 @@ public class SessionsService implements ISessionsService {
         sessionTeachers.add(teacher);
         session.setTeachers(sessionTeachers);
 
+        try {
+            sessionRepository.save(session);
+        }
+        catch (RepositoryOperationException e) {
+            System.out.println(e.getMessage());
+        }
+
         return session;
     }
 
@@ -169,6 +172,13 @@ public class SessionsService implements ISessionsService {
         var sessionTeachers = session.getTeachers();
         sessionTeachers.add(teacher);
         session.setTeachers(sessionTeachers);
+
+        try {
+            sessionRepository.save(session);
+        }
+        catch (RepositoryOperationException e) {
+            System.out.println(e.getMessage());
+        }
 
         return session;
     }
@@ -195,6 +205,13 @@ public class SessionsService implements ISessionsService {
         sessionGroups.add(group);
         session.setGroups(sessionGroups);
 
+        try {
+            sessionRepository.save(session);
+        }
+        catch (RepositoryOperationException e) {
+            System.out.println(e.getMessage());
+        }
+
         return session;
     }
 
@@ -214,6 +231,13 @@ public class SessionsService implements ISessionsService {
         var sessionGroups = session.getGroups();
         sessionGroups.add(group);
         session.setGroups(sessionGroups);
+
+        try {
+            sessionRepository.save(session);
+        }
+        catch (RepositoryOperationException e) {
+            System.out.println(e.getMessage());
+        }
 
         return session;
     }
