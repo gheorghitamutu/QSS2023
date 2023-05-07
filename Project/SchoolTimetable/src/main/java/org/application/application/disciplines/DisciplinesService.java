@@ -108,6 +108,7 @@ public class DisciplinesService implements IDisciplinesService {
     @Override
     public Discipline addTeacherToDiscipline(String teacherName, String disciplineName) throws TeacherNotFoundException, DisciplineNotFoundException {
         var teachers = this.teacherRepository.readAll().stream().filter(t -> t.getName().equals(teacherName)).toList();
+
         if (teachers.isEmpty()) {
             throw new TeacherNotFoundException("[DisciplineService] Teacher not found!");
         }

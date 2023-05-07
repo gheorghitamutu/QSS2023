@@ -128,10 +128,22 @@ public class TableGeneratorTest {
             this.app.roomsService.addRoom(name, 30, 1, Room.Type.COURSE);
         }
 
+        var teachers = this.app.teachersService.getTeachers();
+
         for (var name : this.disciplineNames) {
             this.app.disciplinesService.addDiscipline(name, 6);
 
             // TODO: add teachers to discipline
+
+            this.app.disciplinesService.addTeacherToDiscipline(
+                    teachers.get(0).getName(),
+                    name
+            );
+
+            this.app.disciplinesService.addTeacherToDiscipline(
+                    teachers.get(1).getName(),
+                    name
+            );
 
 
         }
@@ -149,8 +161,6 @@ public class TableGeneratorTest {
                     disciplines.get(sessionIndex).getName()
             );
 
-            //TODO: add groups to this session
-
             this.app.sessionsService.addGroupToSession(
                     session.getId(),
                     this.groupNames[0]
@@ -167,8 +177,6 @@ public class TableGeneratorTest {
             );
 
 
-            //TODO: add teachers to this session
-
             this.app.sessionsService.addTeacherToSession(
                     session.getId(),
                     this.teacherNames[0]
@@ -184,7 +192,9 @@ public class TableGeneratorTest {
             // get date 6 months away from startdate
             var endDate = new Date(startDate.getTime() + 6L * 30 * 24 * 60 * 60 * 1000);
 
-            var time = new Date(0, Calendar.MAY, 0, 8 + sessionIndex * 2 , 0, 0);
+            var time = new SimpleDateFormat("HH:mm")
+                    .parse(String.format("%02d:%02d", 8 + sessionIndex * 2, 0));
+
             var duration = Duration.ofHours(2);
             var day = Timeslot.Day.MONDAY;
             var periodicity = Timeslot.Periodicity.WEEKLY;
@@ -202,7 +212,9 @@ public class TableGeneratorTest {
             );
         }
 
-        var teachers = this.app.teachersService.getTeachers();
+        disciplines = this.app.disciplinesService.getDisciplines();
+        rooms = this.app.roomsService.getRooms();
+        teachers = this.app.teachersService.getTeachers();
         var groups = this.app.studentGroupsService.getStudentGroups();
         var students = this.app.studentsService.getStudents();
         var timeslots = this.app.timeslotsService.getTimeslots();
