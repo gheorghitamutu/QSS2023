@@ -24,7 +24,7 @@ public class Session implements Serializable {
     @ManyToMany(mappedBy = "sessions", cascade=CascadeType.ALL)
     private Set<Teacher> teachers = new HashSet<>();
 
-    @OneToMany(mappedBy = "session", cascade=CascadeType.ALL)
+    @OneToMany(mappedBy = "session", cascade=CascadeType.ALL, orphanRemoval = true)
     private Set<Timeslot> timeslots = new HashSet<>();
 
     @Id

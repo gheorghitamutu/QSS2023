@@ -25,7 +25,7 @@ import java.util.Set;
 @NamedQuery(name = "StudentGroup.getByGroupName", query = "SELECT sg FROM StudentGroup sg WHERE sg.name = :name")
 public class StudentGroup implements Serializable {
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Student> students = new HashSet<>();
 
     @ManyToMany(cascade = CascadeType.ALL)

@@ -13,7 +13,7 @@ import java.util.Set;
 @NamedQuery(name = "Room.getByName", query = "SELECT r FROM Room r WHERE r.name = :name")
 public class Room implements Serializable {
 
-    @OneToMany(mappedBy = "room")
+    @OneToMany(mappedBy = "room", orphanRemoval = true)
     private Set<Timeslot> timeslots = new HashSet<>();
 
     @Id

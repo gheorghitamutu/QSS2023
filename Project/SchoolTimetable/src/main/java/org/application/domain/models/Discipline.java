@@ -16,7 +16,7 @@ public class Discipline implements Serializable {
     @ManyToMany(mappedBy = "disciplines", cascade = CascadeType.ALL)
     private Set<Student> students = new HashSet<>();
 
-    @OneToMany(mappedBy = "discipline", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "discipline", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Session> sessions = new HashSet<>();
 
     @ManyToMany(mappedBy = "disciplines", cascade=CascadeType.ALL)
