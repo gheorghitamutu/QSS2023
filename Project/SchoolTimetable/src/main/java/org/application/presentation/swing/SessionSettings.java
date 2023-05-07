@@ -70,7 +70,7 @@ public class SessionSettings implements BaseSettings{
                 System.out.println("ADD GROUP TO A SESSION CLICKED");
                 try {
                     GUI.app.sessionsService.addGroupToSession((String) sessionSelector.getSelectedItem(), (String) groupSelector.getSelectedItem() );
-                } catch (DisciplineNotFoundException | StudentGroupNotFoundException ex) {
+                } catch (DisciplineNotFoundException | StudentGroupNotFoundException | SessionNotFoundException ex) {
                     JOptionPane.showMessageDialog(
                             null,
                             "An exception occurred: " + ex.getMessage(),
