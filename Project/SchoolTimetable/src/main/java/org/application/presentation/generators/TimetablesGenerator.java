@@ -98,6 +98,10 @@ public class TimetablesGenerator extends BaseGenerator{
             String startTimeString = formatter.format(startTime);
             String endTimeString = formatter.format(endTime);
 
+            SimpleDateFormat formatter2 = new SimpleDateFormat("dd.MM.yyyy");
+            String startDateString = formatter2.format(timeslot.getStartDate());
+            String endDateString = formatter2.format(timeslot.getEndDate());
+
             List<String> tableNames = new ArrayList<>();
             Map<String, String> groupsNamesTables = new HashMap<>();
             Map<String, String> teacherNamesTables = new HashMap<>();
@@ -120,6 +124,8 @@ public class TimetablesGenerator extends BaseGenerator{
             timetableEntry = timetableEntry.replace("$entry_type", timeslot.getSession().getType().toString());
             timetableEntry = timetableEntry.replace("$room_name", room.getName());
             timetableEntry = timetableEntry.replace("$room_ref", "./" + roomTable + ".html");
+            timetableEntry = timetableEntry.replace("$entry_frequency", timeslot.getPeriodicity().toString());
+            timetableEntry = timetableEntry.replace("$entry_period", startDateString + " - " + endDateString);
 
             timetableEntry = addElementsToTimetableEntry("students", timetableEntry, groupsNamesTables, ", ");
             timetableEntry = addElementsToTimetableEntry("teachers", timetableEntry, teacherNamesTables, "<br>");

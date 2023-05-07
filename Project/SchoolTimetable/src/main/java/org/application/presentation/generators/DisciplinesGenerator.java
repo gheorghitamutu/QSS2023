@@ -28,6 +28,7 @@ public class DisciplinesGenerator extends BaseGenerator{
             StringBuilder disciplineData = new StringBuilder();
             List<Teacher> teachers = new ArrayList<>();
             List<StudentGroup> studentGroups = new ArrayList<>();
+            int credits = discipline.getCredits();
 
             String disciplineEntry = utils.getBaseTemplateData("atomics" + this.separator + "disciplines_entry");
 
@@ -37,10 +38,11 @@ public class DisciplinesGenerator extends BaseGenerator{
             disciplineEntry = disciplineEntry.replace("$discipline_name", name);
             disciplineEntry = disciplineEntry.replace("$discipline_ref", "./" + timetableName + ".html");
 
+            for (Teacher teacher : discipline.getTeachers()){
+                if (teacher.getType() == Teacher.Type.TEACHER && !teachers.contains(teacher)) teachers.add(teacher);
+            }
+
             for (Session session : discipline.getSessions()){
-                for (Teacher teacher : session.getTeachers()){
-                    if (teacher.getType() == Teacher.Type.TEACHER && !teachers.contains(teacher)) teachers.add(teacher);
-                }
                 for (StudentGroup group : session.getGroups()){
                     if (!studentGroups.contains(group)) studentGroups.add(group);
                 }
@@ -54,7 +56,7 @@ public class DisciplinesGenerator extends BaseGenerator{
             elementsData.append(disciplineEntry);
 
             this.addToDaysMap(timetableName);
-            this.timetablesNames.put(timetableName, "Timetable of " + name);
+            this.timetablesNames.put(timetableName, "Timetable of " + name + ", " + credits + " credits discipline");
         }
 
         disciplinesData = disciplinesData.replace("$elements", elementsData.toString());

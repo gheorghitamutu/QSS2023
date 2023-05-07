@@ -29,6 +29,8 @@ public class RoomsGenerator extends BaseGenerator{
             String roomEntry = utils.getBaseTemplateData("atomics" + this.separator + "list_entry");
 
             String name = room.getName();
+            int floor = room.getFloor();
+            int capacity = room.getCapacity();
             String timetableName = "timetable_r_" + name.toLowerCase().replace(" ", "_");
 
             roomEntry = roomEntry.replace("$entry_name", name);
@@ -42,7 +44,7 @@ public class RoomsGenerator extends BaseGenerator{
             }
 
             this.addToDaysMap(timetableName);
-            this.timetablesNames.put(timetableName, "Timetable of Room " + name);
+            this.timetablesNames.put(timetableName, "Timetable of Room " + name + ", Floor " + floor + ", Capacity of " + capacity + " seats");
         }
 
         roomsData = roomsData.replace("$lab_elements", labElementsData.toString());
