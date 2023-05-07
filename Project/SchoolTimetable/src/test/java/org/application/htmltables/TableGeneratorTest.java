@@ -22,15 +22,20 @@ import org.application.domain.exceptions.room.RoomDeletionFailed;
 import org.application.domain.exceptions.room.RoomNotFoundException;
 import org.application.domain.exceptions.session.SessionAdditionException;
 import org.application.domain.exceptions.session.SessionDeletionFailed;
+import org.application.domain.exceptions.session.SessionNotFoundException;
 import org.application.domain.exceptions.student.StudentAdditionException;
 import org.application.domain.exceptions.student.StudentDeletionFailed;
 import org.application.domain.exceptions.student.StudentNotFoundException;
 import org.application.domain.exceptions.student.StudentUpdateException;
 import org.application.domain.exceptions.studentgroup.StudentGroupAdditionException;
 import org.application.domain.exceptions.studentgroup.StudentGroupDeletionFailed;
+import org.application.domain.exceptions.studentgroup.StudentGroupNotFoundException;
 import org.application.domain.exceptions.teacher.TeacherAdditionException;
 import org.application.domain.exceptions.teacher.TeacherDeletionFailed;
+import org.application.domain.exceptions.teacher.TeacherNotFoundException;
 import org.application.domain.models.*;
+import org.application.presentation.GUI;
+import org.application.presentation.MainGenerator;
 import org.junit.jupiter.api.*;
 
 import java.text.SimpleDateFormat;
@@ -100,7 +105,7 @@ public class TableGeneratorTest {
     }
 
     @Test
-    public void TestSimpleUseCase() throws TeacherAdditionException, DisciplineAdditionException, StudentAdditionException, StudentGroupAdditionException, SessionAdditionException, java.text.ParseException, TimeslotAdditionException, RoomAdditionException, StudentUpdateException, StudentNotFoundException, DisciplineNotFoundException, TimeslotDeletionFailed, RoomNotFoundException, TimeslotNotFoundException {
+    public void TestSimpleUseCase() throws TeacherAdditionException, DisciplineAdditionException, StudentAdditionException, StudentGroupAdditionException, SessionAdditionException, java.text.ParseException, TimeslotAdditionException, RoomAdditionException, StudentUpdateException, StudentNotFoundException, DisciplineNotFoundException, TimeslotDeletionFailed, RoomNotFoundException, TimeslotNotFoundException, StudentGroupNotFoundException, SessionNotFoundException, TeacherNotFoundException {
         for (var name : this.teacherNames) {
             this.app.teachersService.addTeacher(name, Teacher.Type.TEACHER);
         }
@@ -124,12 +129,17 @@ public class TableGeneratorTest {
 
         for (var name : this.disciplineNames) {
             this.app.disciplinesService.addDiscipline(name, 6);
+
+            // TODO: add teachers to discipline
+
+
         }
+
 
         var disciplines = this.app.disciplinesService.getDisciplines();
         var rooms = this.app.roomsService.getRooms();
 
-        for (int sessionIndex = 0; sessionIndex < disciplines.size(); sessionIndex++)
+        for (int sessionIndex = 0; sessionIndex < Math.min(disciplines.size(), 4); sessionIndex++)
         {
 
             var session = this.app.sessionsService.addSession(
@@ -140,14 +150,40 @@ public class TableGeneratorTest {
 
             //TODO: add groups to this session
 
+            this.app.sessionsService.addGroupToSession(
+                    session.getId(),
+                    this.groupNames[0]
+            );
+
+            this.app.sessionsService.addGroupToSession(
+                    session.getId(),
+                    this.groupNames[1]
+            );
+
+            this.app.sessionsService.addGroupToSession(
+                    session.getId(),
+                    this.groupNames[2]
+            );
+
+
             //TODO: add teachers to this session
+
+            this.app.sessionsService.addTeacherToSession(
+                    session.getId(),
+                    this.teacherNames[0]
+            );
+
+            this.app.sessionsService.addTeacherToSession(
+                    session.getId(),
+                    this.teacherNames[1]
+            );
 
             var startDate = new Date();
 
             // get date 6 months away from startdate
             var endDate = new Date(startDate.getTime() + 6L * 30 * 24 * 60 * 60 * 1000);
 
-            var time = new Date(0, Calendar.MAY, 0, 8 + sessionIndex * 2 + 1 , 0, 0);
+            var time = new Date(0, Calendar.MAY, 0, 8 + sessionIndex * 2 , 0, 0);
             var duration = Duration.ofHours(2);
             var day = Timeslot.Day.MONDAY;
             var periodicity = Timeslot.Periodicity.WEEKLY;
@@ -169,6 +205,16 @@ public class TableGeneratorTest {
         var groups = this.app.studentGroupsService.getStudentGroups();
         var students = this.app.studentsService.getStudents();
         var timeslots = this.app.timeslotsService.getTimeslots();
+
+        GUI.setUpAll(true);
+
+        MainGenerator generator = new MainGenerator(42);
+
+        generator.generateLists();
+
+        generator.generateTimetables();
+
+        generator.saveAllData(".");
     }
 
     public static class Application {

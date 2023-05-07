@@ -29,8 +29,8 @@ public class GUI extends JFrame implements ActionListener {
     private Color bgColor2 = Color.decode("#F6FFDE");
     private Color bgColor3 = Color.decode("#C9DBB2");
 
-    static void setUpAll(){
-        var appInjector = Main.setupDependenciesInjector(false);
+    public static void setUpAll(boolean isTest){
+        var appInjector = Main.setupDependenciesInjector(isTest);
         app = appInjector.getInstance(Application.class);
         GuiceInjectorSingleton.INSTANCE.setInjector(appInjector);
     }
@@ -144,10 +144,8 @@ public class GUI extends JFrame implements ActionListener {
     }
 
     public static void main(String[] args) {
-        setUpAll();
+        setUpAll(false);
         GUI gui = new GUI();
-
-
     }
 
     public static class Application {
