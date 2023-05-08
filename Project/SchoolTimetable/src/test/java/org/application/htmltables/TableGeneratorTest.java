@@ -1,16 +1,8 @@
 package org.application.htmltables;
 
-import com.google.inject.Inject;
 import org.application.Application;
 import org.application.GuiceInjectorSingleton;
 import org.application.Main;
-import org.application.application.disciplines.IDisciplinesService;
-import org.application.application.rooms.IRoomsService;
-import org.application.application.sessions.ISessionsService;
-import org.application.application.studentgroups.IStudentGroupsService;
-import org.application.application.students.IStudentsService;
-import org.application.application.teachers.ITeachersService;
-import org.application.application.timeslots.ITimeslotsService;
 import org.application.di.TestsDI;
 import org.application.domain.exceptions.Timeslot.TimeslotAdditionException;
 import org.application.domain.exceptions.Timeslot.TimeslotDeletionFailed;
@@ -39,12 +31,11 @@ import org.application.presentation.GUI;
 import org.application.presentation.MainGenerator;
 import org.junit.jupiter.api.*;
 
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.time.Duration;
-import java.util.Calendar;
-import java.util.Collections;
 import java.util.Date;
-import java.util.HashSet;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class TableGeneratorTest {
@@ -106,7 +97,7 @@ public class TableGeneratorTest {
     }
 
     @Test
-    public void TestSimpleUseCase() throws TeacherAdditionException, DisciplineAdditionException, StudentAdditionException, StudentGroupAdditionException, SessionAdditionException, java.text.ParseException, TimeslotAdditionException, RoomAdditionException, StudentUpdateException, StudentNotFoundException, DisciplineNotFoundException, TimeslotDeletionFailed, RoomNotFoundException, TimeslotNotFoundException, StudentGroupNotFoundException, SessionNotFoundException, TeacherNotFoundException {
+    public void TestSimpleUseCase() throws TeacherAdditionException, DisciplineAdditionException, StudentAdditionException, StudentGroupAdditionException, SessionAdditionException, java.text.ParseException, TimeslotAdditionException, RoomAdditionException, StudentUpdateException, StudentNotFoundException, DisciplineNotFoundException, TimeslotDeletionFailed, RoomNotFoundException, TimeslotNotFoundException, StudentGroupNotFoundException, SessionNotFoundException, TeacherNotFoundException, java.io.IOException {
         for (var name : this.teacherNames) {
             this.app.teachersService.addTeacher(name, Teacher.Type.TEACHER);
         }
@@ -152,8 +143,7 @@ public class TableGeneratorTest {
         var disciplines = this.app.disciplinesService.getDisciplines();
         var rooms = this.app.roomsService.getRooms();
 
-        for (int sessionIndex = 0; sessionIndex < Math.min(disciplines.size(), 4); sessionIndex++)
-        {
+        for (int sessionIndex = 0; sessionIndex < Math.min(disciplines.size(), 4); sessionIndex++) {
 
             var session = this.app.sessionsService.addSession(
                     Session.Type.COURSE,
@@ -229,6 +219,16 @@ public class TableGeneratorTest {
 
         generator.generateTimetables();
 
-        generator.saveAllData("./outtimetable");
+        var targetFolder = Paths.get("./outtimetable");
+
+        if (Files.exists(targetFolder)) {
+            if (!Files.isDirectory(targetFolder)) {
+                throw new RuntimeException("Unable to create directory!");
+            }
+        } else {
+            Files.createDirectory(targetFolder);
+        }
+
+        generator.saveAllData(targetFolder.toString());
     }
 }
