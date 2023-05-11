@@ -1,10 +1,13 @@
 package org.application.models;
 
+import org.application.Application;
+import org.application.GuiceInjectorSingleton;
 import org.application.dataaccess.database.IHibernateProvider;
 import org.application.dataaccess.database.TestsDatabaseHibernateProvider;
 import org.application.dataaccess.discipline.DisciplineRepository;
 import org.application.dataaccess.session.SessionRepository;
 import org.application.dataaccess.student.StudentRepository;
+import org.application.databaseseed.TimetableEntitiesFactory;
 import org.application.di.TestsDI;
 import org.application.domain.exceptions.RepositoryOperationException;
 import org.application.domain.models.Discipline;
@@ -23,23 +26,23 @@ public class StudentSessionManyToManyIntegrationTest {
     StudentRepository studentRepository;
     SessionRepository sessionRepository;
     DisciplineRepository disciplineRepository;
+    private Application app;
 
-    @BeforeEach
-    void setUp() {
-        TestsDI.initializeDi();
-
-    }
-
-    @AfterEach
-    void tearDown() {
-    }
 
     @BeforeAll
     void setUpAll() {
+        TestsDI.initializeDi();
+
+
         IHibernateProvider provider = new TestsDatabaseHibernateProvider();
+
         sessionRepository = new SessionRepository(provider);
         studentRepository = new StudentRepository(provider);
         disciplineRepository = new DisciplineRepository(provider);
+
+
+        this.app = GuiceInjectorSingleton.INSTANCE.getInjector().getInstance(Application.class);
+        new TimetableEntitiesFactory(app).createTimetableEntities();
     }
 
     @AfterAll
@@ -58,7 +61,7 @@ public class StudentSessionManyToManyIntegrationTest {
     public void saveStudentDiscipline() throws RepositoryOperationException {
         Discipline discipline = new Discipline();
         discipline.setCredits(6);
-        discipline.setName("test");
+        discipline.setName("test_discipline2000");
         discipline.setInsertTime(new Date());
 
         Session session = new Session();
@@ -69,7 +72,7 @@ public class StudentSessionManyToManyIntegrationTest {
         disciplineRepository.save(discipline);
 
         StudentGroup studentGroup = new StudentGroup();
-        studentGroup.setName("A1");
+        studentGroup.setName("B1");
         studentGroup.setYear(1);
         studentGroup.setType(StudentGroup.Type.BACHELOR);
         studentGroup.setInsertTime(new Date());
@@ -78,7 +81,7 @@ public class StudentSessionManyToManyIntegrationTest {
         student.setGroup(studentGroup);
         student.setYear(1);
         student.setName("test");
-        student.setRegistrationNumber("310910204006SM000000");
+        student.setRegistrationNumber("310910204006SM023000");
         student.setInsertTime(new Date());
         student.setDisciplines(Collections.singleton(discipline));
 

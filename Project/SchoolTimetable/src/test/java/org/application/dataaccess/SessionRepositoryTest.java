@@ -1,11 +1,21 @@
 package org.application.dataaccess;
 
+import org.application.Application;
+import org.application.GuiceInjectorSingleton;
 import org.application.dataaccess.database.IHibernateProvider;
 import org.application.dataaccess.database.TestsDatabaseHibernateProvider;
 import org.application.dataaccess.discipline.DisciplineRepository;
 import org.application.dataaccess.session.SessionRepository;
+import org.application.databaseseed.TimetableEntitiesFactory;
 import org.application.di.TestsDI;
 import org.application.domain.exceptions.RepositoryOperationException;
+import org.application.domain.exceptions.Timeslot.TimeslotDeletionFailed;
+import org.application.domain.exceptions.discipline.DisciplineDeletionFailed;
+import org.application.domain.exceptions.room.RoomDeletionFailed;
+import org.application.domain.exceptions.session.SessionDeletionFailed;
+import org.application.domain.exceptions.student.StudentDeletionFailed;
+import org.application.domain.exceptions.studentgroup.StudentGroupDeletionFailed;
+import org.application.domain.exceptions.teacher.TeacherDeletionFailed;
 import org.application.domain.models.Discipline;
 import org.application.domain.models.Session;
 import org.junit.jupiter.api.*;
@@ -18,15 +28,8 @@ class SessionRepositoryTest {
 
     private SessionRepository sessionRepository;
     private DisciplineRepository disciplineRepository;
+    private Application app;
 
-    @BeforeAll
-    public void setup() throws Exception {
-        TestsDI.initializeDi();
-    }
-
-    @AfterAll
-    void tearDownForAll() {
-    }
 
     @BeforeEach
     void setUp() {
@@ -38,26 +41,34 @@ class SessionRepositoryTest {
 
     @BeforeAll
     void setUpAll() {
+        TestsDI.initializeDi();
+
         IHibernateProvider provider = new TestsDatabaseHibernateProvider();
+
         sessionRepository = new SessionRepository(provider);
         disciplineRepository = new DisciplineRepository(provider);
+
+        this.app = GuiceInjectorSingleton.INSTANCE.getInjector().getInstance(Application.class);
+        new TimetableEntitiesFactory(app).createTimetableEntities();
     }
 
     @AfterAll
-    void tearDownAll() throws RepositoryOperationException {
-        List<Discipline> disciplines = disciplineRepository.readAll();
-        disciplineRepository.deleteMany(disciplines);
-
-        List<Session> sessions = sessionRepository.readAll();
-        sessionRepository.deleteMany(sessions);
+    void tearDownAll() throws TimeslotDeletionFailed, TeacherDeletionFailed, StudentDeletionFailed, StudentGroupDeletionFailed, SessionDeletionFailed, RoomDeletionFailed, DisciplineDeletionFailed {
+        app.disciplinesService.deleteAll();
+        app.roomsService.deleteAll();
+        app.sessionsService.deleteAll();
+        app.studentGroupsService.deleteAll();
+        app.studentsService.deleteAll();
+        app.teachersService.deleteAll();
+        app.timeslotsService.deleteAll();
     }
 
+//    public Session createNewSession(Session.Type type, String halfYear) throws RepositoryOperationException
+
     @Test
-    public void saveSession() throws RepositoryOperationException {
-        Discipline discipline = new Discipline();
-        discipline.setCredits(6);
-        discipline.setName("test");
-        discipline.setInsertTime(new Date());
+    public void Given__SessionRepository__When__createNewSession__Then__CreateANewSessionForDisciplineAndReturnIt() throws RepositoryOperationException {
+
+        var discipline = disciplineRepository.getByName("Discipline 01");
 
         Session session = new Session();
         session.setType(Session.Type.COURSE);
@@ -67,10 +78,14 @@ class SessionRepositoryTest {
         sessionRepository.save(session);
     }
 
+
+
+
+
     @Test()
     public void readSession() {
         List<Session> sessions = sessionRepository.readAll();
-        Assertions.assertEquals(1, sessions.size());
+        Assertions.assertTrue(sessions.size() > 1);
         for (Session r : sessions) {
             System.out.println(r);
         }

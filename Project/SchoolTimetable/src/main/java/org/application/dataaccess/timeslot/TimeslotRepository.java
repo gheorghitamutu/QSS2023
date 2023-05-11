@@ -37,6 +37,7 @@ public class TimeslotRepository extends BaseRepository<Timeslot> implements ITim
             save(timeslot);
         } catch (Exception e) {
             e.printStackTrace();
+
             throw new RepositoryOperationException("[TimeslotRepository] Couldn't create new timeslot.", e);
         }
 

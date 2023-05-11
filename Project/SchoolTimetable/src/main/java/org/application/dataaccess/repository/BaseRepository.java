@@ -61,8 +61,9 @@ public class BaseRepository<T> implements IRepository<T> {
             throw new RepositoryOperationException("Validation fails for object");
         }
 
+        var session = this.hibernateProvider.getEntityManager();
+
         try {
-            var session = this.hibernateProvider.getEntityManager();
 
             if (!session.getTransaction().isActive()) {
                 session.getTransaction().begin();
@@ -74,13 +75,17 @@ public class BaseRepository<T> implements IRepository<T> {
         } catch (Exception e) {
             System.out.println(e.getMessage());
 
+            session.getTransaction().rollback();
+
             throw new RepositoryOperationException("Save failed, check inner exception", e);
         }
     }
 
     public void delete(T object) throws RepositoryOperationException {
+
+        var session = this.hibernateProvider.getEntityManager();
+
         try {
-            var session = this.hibernateProvider.getEntityManager();
 
             if (!session.getTransaction().isActive()) {
                 session.getTransaction().begin();
@@ -90,14 +95,15 @@ public class BaseRepository<T> implements IRepository<T> {
         } catch (Exception e) {
             System.out.println(e.getMessage());
 
+            session.getTransaction().rollback();
             throw new RepositoryOperationException("Delete failed, check inner exception", e);
         }
     }
 
     public void deleteMany(List<T> objects) throws RepositoryOperationException {
-        try {
-            var session = this.hibernateProvider.getEntityManager();
+        var session = this.hibernateProvider.getEntityManager();
 
+        try {
             if (!session.getTransaction().isActive()) {
                 session.getTransaction().begin();
             }
@@ -107,6 +113,8 @@ public class BaseRepository<T> implements IRepository<T> {
             session.getTransaction().commit();
         } catch (Exception e) {
             System.out.println(e.getMessage());
+
+            session.getTransaction().rollback();
 
             throw new RepositoryOperationException("Delete many failed, check inner exception", e);
         }
