@@ -78,6 +78,7 @@ jobs:
         id: jacocoBadge
         uses: cicirello/jacoco-badge-generator@v2
         with:
+          working-directory: ./Project/SchoolTimetable
           generate-branches-badge: true
 
       - name: Log coverage percentage
