@@ -59,7 +59,7 @@ jobs:
           path: ${{ github.workspace }}/Project/SchoolTimetable/target/site/jacoco/jacoco.xml
 
       - name: Jacoco Report to PR
-        id: jacocoPR
+        id: report
         uses: madrapps/jacoco-report@v1.3
         with:
           paths: ${{ github.workspace }}/Project/SchoolTimetable/target/site/jacoco/jacoco.xml
@@ -80,7 +80,7 @@ jobs:
 
 
       - name: Generate JaCoCo Badge
-        id: jacocoBadge
+        id: report
         uses: cicirello/jacoco-badge-generator@v2
         with:
           jacoco-csv-file: ${{ github.workspace }}/Project/SchoolTimetable/target/site/jacoco/jacoco.csv
