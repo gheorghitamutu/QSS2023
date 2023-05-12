@@ -1,0 +1,238 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > BaseRepository</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">org.application.dataaccess.repository</a>
+</div>
+
+<h1>Coverage Summary for Class: BaseRepository (org.application.dataaccess.repository)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">BaseRepository</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (7/7)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    75.8%
+  </span>
+  <span class="absValue">
+    (47/62)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package org.application.dataaccess.repository;
+&nbsp;
+&nbsp;import jakarta.persistence.TypedQuery;
+&nbsp;import jakarta.persistence.criteria.CriteriaBuilder;
+&nbsp;import jakarta.persistence.criteria.CriteriaQuery;
+&nbsp;import jakarta.persistence.criteria.Root;
+&nbsp;import jakarta.validation.*;
+&nbsp;import org.application.dataaccess.database.IHibernateProvider;
+&nbsp;import org.application.domain.exceptions.RepositoryOperationException;
+&nbsp;import org.hibernate.validator.messageinterpolation.ParameterMessageInterpolator;
+&nbsp;
+&nbsp;import java.lang.reflect.ParameterizedType;
+&nbsp;import java.lang.reflect.Type;
+&nbsp;import java.util.List;
+&nbsp;import java.util.Set;
+&nbsp;
+&nbsp;public class BaseRepository&lt;T&gt; implements IRepository&lt;T&gt; {
+&nbsp;
+&nbsp;    protected final IHibernateProvider hibernateProvider;
+&nbsp;    protected Class&lt;T&gt; tClass;
+&nbsp;
+<b class="fc">&nbsp;    protected BaseRepository(IHibernateProvider hibernateProvider) {</b>
+&nbsp;
+&nbsp;        try {
+<b class="fc">&nbsp;            Type mySuperclass = getClass().getGenericSuperclass();</b>
+<b class="fc">&nbsp;            Type tType = ((ParameterizedType) mySuperclass).getActualTypeArguments()[0];</b>
+<b class="fc">&nbsp;            String className = tType.getTypeName();</b>
+<b class="fc">&nbsp;            tClass = (Class&lt;T&gt;) Class.forName(className);</b>
+<b class="nc">&nbsp;        } catch (Exception ex) {</b>
+<b class="nc">&nbsp;            System.out.println(&quot;Class not found!&quot;);</b>
+<b class="fc">&nbsp;        }</b>
+&nbsp;
+&nbsp;
+<b class="fc">&nbsp;        this.hibernateProvider = hibernateProvider;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public T getById(int id) {
+<b class="fc">&nbsp;        var session = this.hibernateProvider.getEntityManager();</b>
+<b class="fc">&nbsp;        return session.find(tClass, id);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public boolean validate(T object) {
+&nbsp;        Validator validator;
+<b class="fc">&nbsp;        try (ValidatorFactory validatorFactory = Validation.byDefaultProvider().configure().messageInterpolator(new ParameterMessageInterpolator()).buildValidatorFactory()) {</b>
+<b class="fc">&nbsp;            validator = validatorFactory.usingContext().messageInterpolator(new ParameterMessageInterpolator()).getValidator();</b>
+<b class="fc">&nbsp;        }</b>
+<b class="fc">&nbsp;        if (validator == null) {</b>
+<b class="nc">&nbsp;            return false;</b>
+&nbsp;        }
+&nbsp;
+<b class="fc">&nbsp;        Set&lt;ConstraintViolation&lt;T&gt;&gt; constraintViolationsInvalidObject = validator.validate(object);</b>
+<b class="fc">&nbsp;        for (ConstraintViolation&lt;T&gt; constraintViolation : constraintViolationsInvalidObject) {</b>
+<b class="fc">&nbsp;            System.out.println(constraintViolation.getMessage());</b>
+<b class="fc">&nbsp;        }</b>
+&nbsp;
+<b class="fc">&nbsp;        return constraintViolationsInvalidObject.size() == 0;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void save(T object) throws RepositoryOperationException {
+<b class="fc">&nbsp;        if (!validate(object)) {</b>
+<b class="fc">&nbsp;            throw new RepositoryOperationException(&quot;Validation fails for object&quot;);</b>
+&nbsp;        }
+&nbsp;
+<b class="fc">&nbsp;        var session = this.hibernateProvider.getEntityManager();</b>
+&nbsp;
+&nbsp;        try {
+&nbsp;
+<b class="fc">&nbsp;            if (!session.getTransaction().isActive()) {</b>
+<b class="fc">&nbsp;                session.getTransaction().begin();</b>
+&nbsp;            }
+&nbsp;
+<b class="fc">&nbsp;            session.persist(object);</b>
+&nbsp;
+<b class="fc">&nbsp;            session.getTransaction().commit();</b>
+<b class="nc">&nbsp;        } catch (Exception e) {</b>
+<b class="nc">&nbsp;            System.out.println(e.getMessage());</b>
+&nbsp;
+<b class="nc">&nbsp;            session.getTransaction().rollback();</b>
+&nbsp;
+<b class="nc">&nbsp;            throw new RepositoryOperationException(&quot;Save failed, check inner exception&quot;, e);</b>
+<b class="fc">&nbsp;        }</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void delete(T object) throws RepositoryOperationException {
+&nbsp;
+<b class="fc">&nbsp;        var session = this.hibernateProvider.getEntityManager();</b>
+&nbsp;
+&nbsp;        try {
+&nbsp;
+<b class="fc">&nbsp;            if (!session.getTransaction().isActive()) {</b>
+<b class="fc">&nbsp;                session.getTransaction().begin();</b>
+&nbsp;            }
+<b class="fc">&nbsp;            session.remove(object);</b>
+<b class="fc">&nbsp;            session.getTransaction().commit();</b>
+<b class="nc">&nbsp;        } catch (Exception e) {</b>
+<b class="nc">&nbsp;            System.out.println(e.getMessage());</b>
+&nbsp;
+<b class="nc">&nbsp;            session.getTransaction().rollback();</b>
+<b class="nc">&nbsp;            throw new RepositoryOperationException(&quot;Delete failed, check inner exception&quot;, e);</b>
+<b class="fc">&nbsp;        }</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void deleteMany(List&lt;T&gt; objects) throws RepositoryOperationException {
+<b class="fc">&nbsp;        var session = this.hibernateProvider.getEntityManager();</b>
+&nbsp;
+&nbsp;        try {
+<b class="fc">&nbsp;            if (!session.getTransaction().isActive()) {</b>
+<b class="fc">&nbsp;                session.getTransaction().begin();</b>
+&nbsp;            }
+<b class="fc">&nbsp;            for (T object : objects) {</b>
+<b class="fc">&nbsp;                session.remove(object);</b>
+<b class="fc">&nbsp;            }</b>
+<b class="fc">&nbsp;            session.getTransaction().commit();</b>
+<b class="nc">&nbsp;        } catch (Exception e) {</b>
+<b class="nc">&nbsp;            System.out.println(e.getMessage());</b>
+&nbsp;
+<b class="nc">&nbsp;            session.getTransaction().rollback();</b>
+&nbsp;
+<b class="nc">&nbsp;            throw new RepositoryOperationException(&quot;Delete many failed, check inner exception&quot;, e);</b>
+<b class="fc">&nbsp;        }</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public List&lt;T&gt; readAll() {
+<b class="fc">&nbsp;        var session = this.hibernateProvider.getEntityManager();</b>
+&nbsp;
+<b class="fc">&nbsp;        CriteriaBuilder cb = session.getCriteriaBuilder();</b>
+<b class="fc">&nbsp;        CriteriaQuery&lt;T&gt; cq = cb.createQuery(tClass);</b>
+<b class="fc">&nbsp;        Root&lt;T&gt; rootEntry = cq.from(tClass);</b>
+<b class="fc">&nbsp;        CriteriaQuery&lt;T&gt; all = cq.select(rootEntry);</b>
+&nbsp;
+<b class="fc">&nbsp;        TypedQuery&lt;T&gt; allQuery = session.createQuery(all);</b>
+&nbsp;
+<b class="fc">&nbsp;        return allQuery.getResultList();</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-05-12 17:55</div>
+</div>
+</body>
+</html>

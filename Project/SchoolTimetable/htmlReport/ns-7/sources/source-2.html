@@ -1,0 +1,91 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > ITeachersService</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">org.application.application.teachers</a>
+</div>
+
+<h1>Coverage Summary for Class: ITeachersService (org.application.application.teachers)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+</tr>
+<tr>
+  <td class="name">ITeachersService</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package org.application.application.teachers;
+&nbsp;
+&nbsp;import org.application.domain.exceptions.teacher.TeacherAdditionException;
+&nbsp;import org.application.domain.exceptions.teacher.TeacherDeletionFailed;
+&nbsp;import org.application.domain.exceptions.teacher.TeacherNotFoundException;
+&nbsp;import org.application.domain.models.Room;
+&nbsp;import org.application.domain.models.Teacher;
+&nbsp;
+&nbsp;import java.util.List;
+&nbsp;
+&nbsp;public interface ITeachersService {
+&nbsp;
+&nbsp;    public Teacher addTeacher(String name, Teacher.Type type) throws TeacherAdditionException;
+&nbsp;
+&nbsp;    public boolean deleteTeacher(int teacherId) throws TeacherNotFoundException, TeacherDeletionFailed;
+&nbsp;
+&nbsp;    public boolean deleteTeachers(String name) throws TeacherDeletionFailed;
+&nbsp;
+&nbsp;    public boolean deleteAll() throws TeacherDeletionFailed;
+&nbsp;
+&nbsp;    public Teacher getTeacherById(int teacherId) throws TeacherNotFoundException;
+&nbsp;
+&nbsp;    public List&lt;Teacher&gt; getTeachers();
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-05-12 17:55</div>
+</div>
+</body>
+</html>

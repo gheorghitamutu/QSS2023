@@ -1,0 +1,525 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > SessionSettings</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">org.application.presentation.swing</a>
+</div>
+
+<h1>Coverage Summary for Class: SessionSettings (org.application.presentation.swing)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">SessionSettings</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/8)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/171)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">SessionSettings$1</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/8)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">SessionSettings$2</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/8)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">SessionSettings$3</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/10)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">SessionSettings$4</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/8)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/16)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/205)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package org.application.presentation.swing;
+&nbsp;
+&nbsp;import org.application.domain.exceptions.discipline.DisciplineNotFoundException;
+&nbsp;import org.application.domain.exceptions.session.SessionAdditionException;
+&nbsp;import org.application.domain.exceptions.session.SessionDeletionFailed;
+&nbsp;import org.application.domain.exceptions.session.SessionNotFoundException;
+&nbsp;import org.application.domain.exceptions.studentgroup.StudentGroupNotFoundException;
+&nbsp;import org.application.domain.exceptions.teacher.TeacherNotFoundException;
+&nbsp;import org.application.domain.models.Session;
+&nbsp;import org.application.presentation.GUI;
+&nbsp;
+&nbsp;import javax.swing.*;
+&nbsp;import java.awt.*;
+&nbsp;import java.awt.event.ActionEvent;
+&nbsp;import java.awt.event.ActionListener;
+&nbsp;import java.util.Objects;
+&nbsp;
+&nbsp;public class SessionSettings implements BaseSettings{
+<b class="nc">&nbsp;    public SessionSettings(){</b>
+&nbsp;
+&nbsp;    }
+&nbsp;
+&nbsp;    private void addGroupToSessionForm(JPanel currentPanel){
+&nbsp;
+<b class="nc">&nbsp;        JLabel titleLabel1 = new JLabel(&quot;ADD GROUP TO SESSION&quot;);</b>
+<b class="nc">&nbsp;        titleLabel1.setFont(new Font(&quot;serif&quot;, Font.BOLD, 25));</b>
+<b class="nc">&nbsp;        titleLabel1.setForeground(Color.decode(&quot;#617A55&quot;));</b>
+<b class="nc">&nbsp;        titleLabel1.setAlignmentX(Component.CENTER_ALIGNMENT);</b>
+&nbsp;        // titleLabel.setBounds(50,30,300,25);
+<b class="nc">&nbsp;        currentPanel.add(titleLabel1);</b>
+&nbsp;
+&nbsp;        //add techer to session
+<b class="nc">&nbsp;        currentPanel.add(Box.createRigidArea(new Dimension(0, 10)));</b>
+<b class="nc">&nbsp;        JLabel sessionLabel = new JLabel(&quot;Discipline Session:&quot;);</b>
+<b class="nc">&nbsp;        sessionLabel.setFont(new Font(&quot;Arial&quot;, Font.PLAIN, 14));</b>
+<b class="nc">&nbsp;        sessionLabel.setBackground(Color.decode(&quot;#617A55&quot;));</b>
+<b class="nc">&nbsp;        JComboBox&lt;String&gt; sessionSelector = new JComboBox&lt;&gt;();</b>
+&nbsp;
+&nbsp;
+<b class="nc">&nbsp;        var allSession = GUI.app.sessionsService.getSessions();</b>
+<b class="nc">&nbsp;        for (var s : allSession) {</b>
+<b class="nc">&nbsp;            sessionSelector.addItem(s.getDiscipline().getName());</b>
+<b class="nc">&nbsp;        }</b>
+<b class="nc">&nbsp;        JPanel sessionPanel = createFieldPanel(sessionLabel, sessionSelector);</b>
+<b class="nc">&nbsp;        currentPanel.add(sessionPanel);</b>
+&nbsp;
+&nbsp;
+&nbsp;
+<b class="nc">&nbsp;        currentPanel.add(Box.createRigidArea(new Dimension(0, 10)));</b>
+<b class="nc">&nbsp;        JLabel groupLabel = new JLabel(&quot;Group:&quot;);</b>
+<b class="nc">&nbsp;        groupLabel.setFont(new Font(&quot;Arial&quot;, Font.PLAIN, 14));</b>
+<b class="nc">&nbsp;        groupLabel.setBackground(Color.decode(&quot;#617A55&quot;));</b>
+<b class="nc">&nbsp;        JComboBox&lt;String&gt; groupSelector = new JComboBox&lt;&gt;();</b>
+&nbsp;
+&nbsp;        // get all the disciplines from db
+<b class="nc">&nbsp;        var allGroupsName = GUI.app.studentGroupsService.getStudentGroups();</b>
+<b class="nc">&nbsp;        for (var group : allGroupsName) {</b>
+<b class="nc">&nbsp;            groupSelector.addItem(group.getName());</b>
+<b class="nc">&nbsp;        }</b>
+<b class="nc">&nbsp;        JPanel teacherPanel = createFieldPanel(groupLabel, groupSelector);</b>
+<b class="nc">&nbsp;        currentPanel.add(teacherPanel);</b>
+&nbsp;
+&nbsp;        // Add the submit button
+<b class="nc">&nbsp;        currentPanel.add(Box.createRigidArea(new Dimension(0, 10)));</b>
+<b class="nc">&nbsp;        JButton groupBtn = new JButton(&quot;Submit&quot;);</b>
+<b class="nc">&nbsp;        JPanel groupButtonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));</b>
+<b class="nc">&nbsp;        groupButtonPanel.setBackground(Color.decode(&quot;#F6FFDE&quot;));</b>
+<b class="nc">&nbsp;        groupBtn.addActionListener(new ActionListener() {</b>
+&nbsp;            public void actionPerformed(ActionEvent e) {
+<b class="nc">&nbsp;                System.out.println(&quot;ADD GROUP TO A SESSION CLICKED&quot;);</b>
+&nbsp;                try {
+<b class="nc">&nbsp;                    GUI.app.sessionsService.addGroupToSession((String) sessionSelector.getSelectedItem(), (String) groupSelector.getSelectedItem() );</b>
+<b class="nc">&nbsp;                } catch (DisciplineNotFoundException | StudentGroupNotFoundException | SessionNotFoundException ex) {</b>
+<b class="nc">&nbsp;                    JOptionPane.showMessageDialog(</b>
+&nbsp;                            null,
+<b class="nc">&nbsp;                            &quot;An exception occurred: &quot; + ex.getMessage(),</b>
+&nbsp;                            &quot;Error&quot;,
+&nbsp;                            JOptionPane.ERROR_MESSAGE);
+<b class="nc">&nbsp;                    throw new RuntimeException(ex);</b>
+<b class="nc">&nbsp;                }</b>
+&nbsp;
+&nbsp;            }
+&nbsp;        });
+<b class="nc">&nbsp;        groupButtonPanel.add(groupBtn);</b>
+<b class="nc">&nbsp;        currentPanel.add(groupButtonPanel);</b>
+&nbsp;
+&nbsp;    }
+&nbsp;    private JPanel createFieldPanel(JLabel label, JComponent component) {
+<b class="nc">&nbsp;        JPanel panel = new JPanel();</b>
+<b class="nc">&nbsp;        panel.setBackground(Color.decode(&quot;#F6FFDE&quot;));</b>
+<b class="nc">&nbsp;        panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));</b>
+<b class="nc">&nbsp;        panel.add(label);</b>
+<b class="nc">&nbsp;        panel.add(Box.createRigidArea(new Dimension(10, 0)));</b>
+<b class="nc">&nbsp;        panel.add(component);</b>
+<b class="nc">&nbsp;        panel.setMaximumSize(new Dimension(Short.MAX_VALUE, component.getPreferredSize().height));</b>
+<b class="nc">&nbsp;        return panel;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public JPanel deleteRoomForm(JPanel currentPanel){
+&nbsp;
+<b class="nc">&nbsp;        currentPanel.setBackground(Color.decode(&quot;#F6FFDE&quot;));</b>
+&nbsp;
+<b class="nc">&nbsp;        currentPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));</b>
+<b class="nc">&nbsp;        currentPanel.add(Box.createRigidArea(new Dimension(0, 30)));</b>
+&nbsp;
+<b class="nc">&nbsp;        JLabel titleLabel = new JLabel(&quot;DELETE SESSION&quot;);</b>
+<b class="nc">&nbsp;        titleLabel.setFont(new Font(&quot;serif&quot;, Font.BOLD, 25));</b>
+<b class="nc">&nbsp;        titleLabel.setForeground(Color.decode(&quot;#617A55&quot;));</b>
+&nbsp;        //titleLabel.setBounds(0,30,300,25);
+<b class="nc">&nbsp;        titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);</b>
+<b class="nc">&nbsp;        currentPanel.add(titleLabel);</b>
+&nbsp;
+<b class="nc">&nbsp;        currentPanel.add(Box.createRigidArea(new Dimension(0, 10)));</b>
+<b class="nc">&nbsp;        JLabel regLabel = new JLabel(&quot;Data:&quot;);</b>
+<b class="nc">&nbsp;        regLabel.setFont(new Font(&quot;Arial&quot;, Font.PLAIN, 14));</b>
+<b class="nc">&nbsp;        regLabel.setBackground(Color.decode(&quot;#617A55&quot;));</b>
+<b class="nc">&nbsp;        JComboBox&lt;String&gt; model = new JComboBox&lt;&gt;();</b>
+&nbsp;
+&nbsp;        // get all the disciplines from db
+<b class="nc">&nbsp;        var allSessions = GUI.app.sessionsService.getSessions();</b>
+<b class="nc">&nbsp;        for (var session : allSessions) {</b>
+<b class="nc">&nbsp;            model.addItem(session.getDiscipline().getName());</b>
+<b class="nc">&nbsp;        }</b>
+<b class="nc">&nbsp;        JPanel dataPanel = createFieldPanel(regLabel, model);</b>
+<b class="nc">&nbsp;        currentPanel.add(dataPanel);</b>
+&nbsp;
+&nbsp;        // Add the submit button
+<b class="nc">&nbsp;        currentPanel.add(Box.createRigidArea(new Dimension(0, 10)));</b>
+<b class="nc">&nbsp;        JButton submitButtonDelete = new JButton(&quot;Submit&quot;);</b>
+<b class="nc">&nbsp;        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));</b>
+<b class="nc">&nbsp;        buttonPanel.setBackground(Color.decode(&quot;#F6FFDE&quot;));</b>
+<b class="nc">&nbsp;        submitButtonDelete.addActionListener(new ActionListener() {</b>
+&nbsp;            public void actionPerformed(ActionEvent e) {
+<b class="nc">&nbsp;                System.out.println(&quot;Delete session btn clicked&quot;);</b>
+&nbsp;                try {
+<b class="nc">&nbsp;                    GUI.app.sessionsService.deleteSession((String) model.getSelectedItem());</b>
+<b class="nc">&nbsp;                } catch (DisciplineNotFoundException | SessionDeletionFailed | SessionNotFoundException ex) {</b>
+<b class="nc">&nbsp;                    JOptionPane.showMessageDialog(</b>
+&nbsp;                            null,
+<b class="nc">&nbsp;                            &quot;An exception occurred: &quot; + ex.getMessage(),</b>
+&nbsp;                            &quot;Error&quot;,
+&nbsp;                            JOptionPane.ERROR_MESSAGE);
+<b class="nc">&nbsp;                    throw new RuntimeException(ex);</b>
+<b class="nc">&nbsp;                }</b>
+&nbsp;            }
+&nbsp;        });
+&nbsp;
+&nbsp;
+<b class="nc">&nbsp;        buttonPanel.add(submitButtonDelete);</b>
+<b class="nc">&nbsp;        currentPanel.add(buttonPanel);</b>
+&nbsp;
+<b class="nc">&nbsp;        return currentPanel;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public JPanel addSessionForm(JPanel currentPanel){
+<b class="nc">&nbsp;        currentPanel.setBackground(Color.decode(&quot;#F6FFDE&quot;));</b>
+&nbsp;
+<b class="nc">&nbsp;        currentPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));</b>
+<b class="nc">&nbsp;        currentPanel.add(Box.createRigidArea(new Dimension(0, 10)));</b>
+&nbsp;
+<b class="nc">&nbsp;        JLabel titleLabel = new JLabel(&quot;CREATE SESSION&quot;);</b>
+<b class="nc">&nbsp;        titleLabel.setFont(new Font(&quot;serif&quot;, Font.BOLD, 25));</b>
+<b class="nc">&nbsp;        titleLabel.setForeground(Color.decode(&quot;#617A55&quot;));</b>
+<b class="nc">&nbsp;        titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);</b>
+&nbsp;        // titleLabel.setBounds(50,30,300,25);
+<b class="nc">&nbsp;        currentPanel.add(titleLabel);</b>
+&nbsp;
+&nbsp;        //add discipline selector
+<b class="nc">&nbsp;        currentPanel.add(Box.createRigidArea(new Dimension(0, 10)));</b>
+<b class="nc">&nbsp;        JLabel disciplineLabel = new JLabel(&quot;Discipline:&quot;);</b>
+<b class="nc">&nbsp;        disciplineLabel.setFont(new Font(&quot;Arial&quot;, Font.PLAIN, 14));</b>
+<b class="nc">&nbsp;        disciplineLabel.setBackground(Color.decode(&quot;#617A55&quot;));</b>
+<b class="nc">&nbsp;        JComboBox&lt;String&gt; model = new JComboBox&lt;&gt;();</b>
+&nbsp;
+&nbsp;        // get all the disciplines from db
+<b class="nc">&nbsp;        var allDisciplines = GUI.app.disciplinesService.getDisciplines();</b>
+<b class="nc">&nbsp;        for (var discipline : allDisciplines) {</b>
+<b class="nc">&nbsp;            model.addItem(discipline.getName());</b>
+<b class="nc">&nbsp;        }</b>
+<b class="nc">&nbsp;        JPanel dataPanel = createFieldPanel(disciplineLabel, model);</b>
+<b class="nc">&nbsp;        currentPanel.add(dataPanel);</b>
+&nbsp;
+<b class="nc">&nbsp;        currentPanel.add(Box.createRigidArea(new Dimension(0, 10)));</b>
+<b class="nc">&nbsp;        JLabel typeLabel = new JLabel(&quot;Type:&quot;);</b>
+<b class="nc">&nbsp;        typeLabel.setFont(new Font(&quot;Arial&quot;, Font.PLAIN, 14));</b>
+<b class="nc">&nbsp;        typeLabel.setBackground(Color.decode(&quot;#617A55&quot;));</b>
+<b class="nc">&nbsp;        String[] yearValues = {&quot;COURSE&quot;, &quot;LABORATORY&quot;, &quot;SEMINARY&quot;};</b>
+<b class="nc">&nbsp;        JComboBox&lt;String&gt; typeComboBox = new JComboBox&lt;&gt;(yearValues);</b>
+<b class="nc">&nbsp;        JPanel typePanel = createFieldPanel(typeLabel, typeComboBox);</b>
+<b class="nc">&nbsp;        currentPanel.add(typePanel);</b>
+&nbsp;
+&nbsp;
+&nbsp;        //Add half year values
+<b class="nc">&nbsp;        currentPanel.add(Box.createRigidArea(new Dimension(0, 10)));</b>
+<b class="nc">&nbsp;        JLabel halfyearLabel = new JLabel(&quot;Half Year:&quot;);</b>
+<b class="nc">&nbsp;        halfyearLabel.setFont(new Font(&quot;Arial&quot;, Font.PLAIN, 14));</b>
+<b class="nc">&nbsp;        halfyearLabel.setBackground(Color.decode(&quot;#617A55&quot;));</b>
+<b class="nc">&nbsp;        String[] halfyearValues = {&quot;A&quot;, &quot;B&quot;};</b>
+<b class="nc">&nbsp;        JComboBox&lt;String&gt; halfyearComboBox = new JComboBox&lt;&gt;(halfyearValues);</b>
+<b class="nc">&nbsp;        JPanel halfyearPanel = createFieldPanel(halfyearLabel, halfyearComboBox);</b>
+<b class="nc">&nbsp;        currentPanel.add(halfyearPanel);</b>
+&nbsp;
+&nbsp;        // Add the submit button
+<b class="nc">&nbsp;        currentPanel.add(Box.createRigidArea(new Dimension(0, 10)));</b>
+<b class="nc">&nbsp;        JButton submitButtonAdd = new JButton(&quot;Submit&quot;);</b>
+<b class="nc">&nbsp;        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));</b>
+<b class="nc">&nbsp;        buttonPanel.setBackground(Color.decode(&quot;#F6FFDE&quot;));</b>
+<b class="nc">&nbsp;        submitButtonAdd.addActionListener(new ActionListener() {</b>
+&nbsp;            public void actionPerformed(ActionEvent e) {
+&nbsp;                // TODO
+<b class="nc">&nbsp;                System.out.println(&quot;Insert session btn clicked&quot;);</b>
+&nbsp;                try {
+<b class="nc">&nbsp;                    GUI.app.sessionsService.addSession(Session.Type.valueOf((String) typeComboBox.getSelectedItem()),</b>
+<b class="nc">&nbsp;                            (String) halfyearComboBox.getSelectedItem(),</b>
+<b class="nc">&nbsp;                            (String) model.getSelectedItem());</b>
+<b class="nc">&nbsp;                } catch (SessionAdditionException | DisciplineNotFoundException ex) {</b>
+<b class="nc">&nbsp;                    JOptionPane.showMessageDialog(</b>
+&nbsp;                            null,
+<b class="nc">&nbsp;                            &quot;An exception occurred: &quot; + ex.getMessage(),</b>
+&nbsp;                            &quot;Error&quot;,
+&nbsp;                            JOptionPane.ERROR_MESSAGE);
+<b class="nc">&nbsp;                    throw new RuntimeException(ex);</b>
+<b class="nc">&nbsp;                }</b>
+&nbsp;            }
+&nbsp;        });
+<b class="nc">&nbsp;        buttonPanel.add(submitButtonAdd);</b>
+<b class="nc">&nbsp;        currentPanel.add(buttonPanel);</b>
+&nbsp;
+<b class="nc">&nbsp;        currentPanel.add(Box.createRigidArea(new Dimension(0, 10)));</b>
+<b class="nc">&nbsp;        JLabel titleLabel1 = new JLabel(&quot;ADD TEACHER TO SESSION&quot;);</b>
+<b class="nc">&nbsp;        titleLabel1.setFont(new Font(&quot;serif&quot;, Font.BOLD, 25));</b>
+<b class="nc">&nbsp;        titleLabel1.setForeground(Color.decode(&quot;#617A55&quot;));</b>
+<b class="nc">&nbsp;        titleLabel1.setAlignmentX(Component.CENTER_ALIGNMENT);</b>
+&nbsp;        // titleLabel.setBounds(50,30,300,25);
+<b class="nc">&nbsp;        currentPanel.add(titleLabel1);</b>
+&nbsp;
+&nbsp;        //add techer to session
+<b class="nc">&nbsp;        currentPanel.add(Box.createRigidArea(new Dimension(0, 10)));</b>
+<b class="nc">&nbsp;        JLabel sessionLabel = new JLabel(&quot;Discipline Session:&quot;);</b>
+<b class="nc">&nbsp;        sessionLabel.setFont(new Font(&quot;Arial&quot;, Font.PLAIN, 14));</b>
+<b class="nc">&nbsp;        sessionLabel.setBackground(Color.decode(&quot;#617A55&quot;));</b>
+<b class="nc">&nbsp;        JComboBox&lt;String&gt; sessionSelector = new JComboBox&lt;&gt;();</b>
+&nbsp;
+&nbsp;
+<b class="nc">&nbsp;        var allSession = GUI.app.sessionsService.getSessions();</b>
+<b class="nc">&nbsp;        for (var s : allSession) {</b>
+<b class="nc">&nbsp;            sessionSelector.addItem(s.getDiscipline().getName());</b>
+<b class="nc">&nbsp;        }</b>
+<b class="nc">&nbsp;        JPanel sessionPanel = createFieldPanel(sessionLabel, sessionSelector);</b>
+<b class="nc">&nbsp;        currentPanel.add(sessionPanel);</b>
+&nbsp;
+&nbsp;
+&nbsp;
+<b class="nc">&nbsp;        currentPanel.add(Box.createRigidArea(new Dimension(0, 10)));</b>
+<b class="nc">&nbsp;        JLabel teacherLabel = new JLabel(&quot;Teacher:&quot;);</b>
+<b class="nc">&nbsp;        teacherLabel.setFont(new Font(&quot;Arial&quot;, Font.PLAIN, 14));</b>
+<b class="nc">&nbsp;        teacherLabel.setBackground(Color.decode(&quot;#617A55&quot;));</b>
+<b class="nc">&nbsp;        JComboBox&lt;String&gt; teacherSelector = new JComboBox&lt;&gt;();</b>
+&nbsp;
+&nbsp;
+<b class="nc">&nbsp;        var allTeacher = GUI.app.teachersService.getTeachers();</b>
+<b class="nc">&nbsp;        for (var t : allTeacher) {</b>
+<b class="nc">&nbsp;            teacherSelector.addItem(t.getName());</b>
+<b class="nc">&nbsp;        }</b>
+<b class="nc">&nbsp;        JPanel teacherPanel = createFieldPanel(teacherLabel, teacherSelector);</b>
+<b class="nc">&nbsp;        currentPanel.add(teacherPanel);</b>
+&nbsp;
+&nbsp;        // Add the submit button
+<b class="nc">&nbsp;        currentPanel.add(Box.createRigidArea(new Dimension(0, 10)));</b>
+<b class="nc">&nbsp;        JButton teacherBtn = new JButton(&quot;Submit&quot;);</b>
+<b class="nc">&nbsp;        JPanel teacherButtonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));</b>
+<b class="nc">&nbsp;        teacherButtonPanel.setBackground(Color.decode(&quot;#F6FFDE&quot;));</b>
+<b class="nc">&nbsp;        teacherBtn.addActionListener(new ActionListener() {</b>
+&nbsp;            public void actionPerformed(ActionEvent e) {
+<b class="nc">&nbsp;                System.out.println(&quot;ADD TEACHER TO A SESSION CLICKED&quot;);</b>
+&nbsp;                try {
+<b class="nc">&nbsp;                    GUI.app.sessionsService.addTeacherToSession((String) sessionSelector.getSelectedItem(), (String) teacherSelector.getSelectedItem());</b>
+<b class="nc">&nbsp;                } catch (DisciplineNotFoundException | SessionNotFoundException | TeacherNotFoundException ex) {</b>
+<b class="nc">&nbsp;                    JOptionPane.showMessageDialog(</b>
+&nbsp;                            null,
+<b class="nc">&nbsp;                            &quot;An exception occurred: &quot; + ex.getMessage(),</b>
+&nbsp;                            &quot;Error&quot;,
+&nbsp;                            JOptionPane.ERROR_MESSAGE);
+<b class="nc">&nbsp;                    throw new RuntimeException(ex);</b>
+<b class="nc">&nbsp;                }</b>
+&nbsp;
+&nbsp;            }
+&nbsp;        });
+<b class="nc">&nbsp;        teacherButtonPanel.add(teacherBtn);</b>
+<b class="nc">&nbsp;        currentPanel.add(teacherButtonPanel);</b>
+&nbsp;
+&nbsp;        // ADD GROUP TO SESSION
+<b class="nc">&nbsp;        currentPanel.add(Box.createRigidArea(new Dimension(0, 10)));</b>
+<b class="nc">&nbsp;        addGroupToSessionForm(currentPanel);</b>
+&nbsp;
+<b class="nc">&nbsp;        return currentPanel;</b>
+&nbsp;    }
+&nbsp;    @Override
+&nbsp;    public JPanel createJPanel(JPanel main, String labelText) {
+&nbsp;        // Remove previous components from right panel and add result label
+<b class="nc">&nbsp;        main.removeAll();</b>
+&nbsp;        // create insertPanel
+<b class="nc">&nbsp;        JPanel leftPanel = createLeftJPanel();</b>
+&nbsp;        // create deletePanel
+<b class="nc">&nbsp;        JPanel rightPanel = createRightJPanel();</b>
+&nbsp;
+&nbsp;        //merge the 2 panelS into mainPanel
+<b class="nc">&nbsp;        main.add(leftPanel, BorderLayout.WEST);</b>
+<b class="nc">&nbsp;        main.add(rightPanel, BorderLayout.EAST);</b>
+&nbsp;
+<b class="nc">&nbsp;        return main;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public JPanel createLeftJPanel() {
+<b class="nc">&nbsp;        JPanel currentPanel = new JPanel();</b>
+<b class="nc">&nbsp;        currentPanel.setLayout(new BoxLayout(currentPanel, BoxLayout.Y_AXIS));</b>
+&nbsp;
+<b class="nc">&nbsp;        currentPanel = addSessionForm(currentPanel);</b>
+<b class="nc">&nbsp;        currentPanel = deleteRoomForm(currentPanel);</b>
+&nbsp;        // Set the frame size and center it on the screen
+<b class="nc">&nbsp;        return currentPanel;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public JPanel createRightJPanel() {
+<b class="nc">&nbsp;        JPanel currentPanel = new JPanel();</b>
+<b class="nc">&nbsp;        currentPanel.setLayout(null);</b>
+<b class="nc">&nbsp;        currentPanel.setBackground(Color.decode(&quot;#F6FFDE&quot;));</b>
+&nbsp;
+<b class="nc">&nbsp;        ImageIcon image = new ImageIcon(Objects.requireNonNull(SessionSettings.class.getResource(&quot;/icons/generator.png&quot;)));</b>
+<b class="nc">&nbsp;        Image rescaledImage = image.getImage().getScaledInstance(250,250, Image.SCALE_DEFAULT);</b>
+<b class="nc">&nbsp;        ImageIcon finalImage = new ImageIcon(rescaledImage);</b>
+<b class="nc">&nbsp;        JLabel imageLabel = new JLabel(finalImage);</b>
+<b class="nc">&nbsp;        imageLabel.setBounds(20,200,300,300);</b>
+<b class="nc">&nbsp;        currentPanel.add(imageLabel, BorderLayout.CENTER);</b>
+<b class="nc">&nbsp;        return currentPanel;</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-05-12 17:55</div>
+</div>
+</body>
+</html>

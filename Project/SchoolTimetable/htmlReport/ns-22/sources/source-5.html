@@ -1,0 +1,334 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > TeacherSettings</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">org.application.presentation.swing</a>
+</div>
+
+<h1>Coverage Summary for Class: TeacherSettings (org.application.presentation.swing)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">TeacherSettings</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/7)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/87)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">TeacherSettings$1</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/8)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">TeacherSettings$2</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/9)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/11)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/104)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package org.application.presentation.swing;
+&nbsp;
+&nbsp;import org.application.domain.exceptions.teacher.TeacherAdditionException;
+&nbsp;import org.application.domain.exceptions.teacher.TeacherDeletionFailed;
+&nbsp;import org.application.domain.models.Teacher;
+&nbsp;import org.application.presentation.GUI;
+&nbsp;
+&nbsp;import javax.swing.*;
+&nbsp;import java.awt.*;
+&nbsp;import java.awt.event.ActionEvent;
+&nbsp;import java.awt.event.ActionListener;
+&nbsp;import java.util.Objects;
+&nbsp;
+&nbsp;public class TeacherSettings implements BaseSettings {
+<b class="nc">&nbsp;    public TeacherSettings(){</b>
+&nbsp;
+&nbsp;    }
+&nbsp;    private JPanel createFieldPanel(JLabel label, JComponent component) {
+<b class="nc">&nbsp;        JPanel panel = new JPanel();</b>
+<b class="nc">&nbsp;        panel.setBackground(Color.decode(&quot;#F6FFDE&quot;));</b>
+<b class="nc">&nbsp;        panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));</b>
+<b class="nc">&nbsp;        panel.add(label);</b>
+<b class="nc">&nbsp;        panel.add(Box.createRigidArea(new Dimension(10, 0)));</b>
+<b class="nc">&nbsp;        panel.add(component);</b>
+<b class="nc">&nbsp;        panel.setMaximumSize(new Dimension(Short.MAX_VALUE, component.getPreferredSize().height));</b>
+<b class="nc">&nbsp;        return panel;</b>
+&nbsp;    }
+&nbsp;    public JPanel deleteTeacherForm(JPanel currentPanel){
+&nbsp;
+<b class="nc">&nbsp;        currentPanel.setBackground(Color.decode(&quot;#F6FFDE&quot;));</b>
+&nbsp;
+<b class="nc">&nbsp;        currentPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));</b>
+<b class="nc">&nbsp;        currentPanel.add(Box.createRigidArea(new Dimension(0, 30)));</b>
+&nbsp;
+<b class="nc">&nbsp;        JLabel titleLabel = new JLabel(&quot;DELETE TEACHER&quot;);</b>
+<b class="nc">&nbsp;        titleLabel.setFont(new Font(&quot;serif&quot;, Font.BOLD, 25));</b>
+<b class="nc">&nbsp;        titleLabel.setForeground(Color.decode(&quot;#617A55&quot;));</b>
+&nbsp;        //titleLabel.setBounds(20,30,300,25);
+<b class="nc">&nbsp;        titleLabel.setAlignmentX(Component.LEFT_ALIGNMENT);</b>
+<b class="nc">&nbsp;        currentPanel.add(titleLabel);</b>
+&nbsp;
+<b class="nc">&nbsp;        currentPanel.add(Box.createRigidArea(new Dimension(0, 10)));</b>
+<b class="nc">&nbsp;        JLabel regLabel = new JLabel(&quot;Data:&quot;);</b>
+<b class="nc">&nbsp;        regLabel.setFont(new Font(&quot;Arial&quot;, Font.PLAIN, 14));</b>
+<b class="nc">&nbsp;        regLabel.setBackground(Color.decode(&quot;#617A55&quot;));</b>
+<b class="nc">&nbsp;        JComboBox&lt;String&gt; model = new JComboBox&lt;&gt;();</b>
+&nbsp;
+&nbsp;        // get all the teachers from db
+<b class="nc">&nbsp;        var allTeachers = GUI.app.teachersService.getTeachers();</b>
+<b class="nc">&nbsp;        for (var teacher : allTeachers) {</b>
+<b class="nc">&nbsp;           model.addItem(teacher.getName());</b>
+<b class="nc">&nbsp;        }</b>
+<b class="nc">&nbsp;        JPanel typePanel = createFieldPanel(regLabel, model);</b>
+<b class="nc">&nbsp;        currentPanel.add(typePanel);</b>
+&nbsp;
+&nbsp;        // Add the submit button
+<b class="nc">&nbsp;        currentPanel.add(Box.createRigidArea(new Dimension(0, 10)));</b>
+<b class="nc">&nbsp;        JButton submitButtonDelete = new JButton(&quot;Submit&quot;);</b>
+<b class="nc">&nbsp;        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));</b>
+<b class="nc">&nbsp;        buttonPanel.setBackground(Color.decode(&quot;#F6FFDE&quot;));</b>
+<b class="nc">&nbsp;        submitButtonDelete.addActionListener(new ActionListener() {</b>
+&nbsp;            public void actionPerformed(ActionEvent e) {
+<b class="nc">&nbsp;                System.out.println(&quot;Delete teacher btn clicked&quot;);</b>
+&nbsp;                try {
+<b class="nc">&nbsp;                    GUI.app.teachersService.deleteTeachers((String) model.getSelectedItem());</b>
+<b class="nc">&nbsp;                } catch (TeacherDeletionFailed ex) {</b>
+<b class="nc">&nbsp;                    JOptionPane.showMessageDialog(</b>
+&nbsp;                            null,
+<b class="nc">&nbsp;                            &quot;An exception occurred: &quot; + ex.getMessage(),</b>
+&nbsp;                            &quot;Error&quot;,
+&nbsp;                            JOptionPane.ERROR_MESSAGE
+&nbsp;                    );
+<b class="nc">&nbsp;                    throw new RuntimeException(ex);</b>
+<b class="nc">&nbsp;                }</b>
+&nbsp;            }
+&nbsp;
+&nbsp;        });
+&nbsp;
+&nbsp;
+<b class="nc">&nbsp;        buttonPanel.add(submitButtonDelete);</b>
+<b class="nc">&nbsp;        currentPanel.add(buttonPanel);</b>
+&nbsp;
+<b class="nc">&nbsp;        return currentPanel;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public JPanel addTeacherForm(JPanel currentPanel){
+<b class="nc">&nbsp;        currentPanel.setBackground(Color.decode(&quot;#F6FFDE&quot;));</b>
+&nbsp;
+<b class="nc">&nbsp;        currentPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));</b>
+<b class="nc">&nbsp;        currentPanel.add(Box.createRigidArea(new Dimension(0, 10)));</b>
+&nbsp;
+<b class="nc">&nbsp;        JLabel titleLabel = new JLabel(&quot;ADD TEACHER&quot;);</b>
+<b class="nc">&nbsp;        titleLabel.setFont(new Font(&quot;serif&quot;, Font.BOLD, 25));</b>
+<b class="nc">&nbsp;        titleLabel.setForeground(Color.decode(&quot;#617A55&quot;));</b>
+<b class="nc">&nbsp;        titleLabel.setAlignmentX(Component.LEFT_ALIGNMENT);</b>
+&nbsp;        // titleLabel.setBounds(50,30,300,25);
+<b class="nc">&nbsp;        currentPanel.add(titleLabel);</b>
+&nbsp;        // Add the name field
+<b class="nc">&nbsp;        JLabel nameLabel = new JLabel(&quot;Name:&quot;);</b>
+<b class="nc">&nbsp;        nameLabel.setFont(new Font(&quot;Arial&quot;, Font.PLAIN, 14));</b>
+<b class="nc">&nbsp;        nameLabel.setBackground(Color.decode(&quot;#617A55&quot;));</b>
+<b class="nc">&nbsp;        JTextField nameField = new JTextField(20);</b>
+<b class="nc">&nbsp;        JPanel namePanel = createFieldPanel(nameLabel, nameField);</b>
+<b class="nc">&nbsp;        currentPanel.add(namePanel);</b>
+&nbsp;
+&nbsp;        // Add the type of teacher
+<b class="nc">&nbsp;        currentPanel.add(Box.createRigidArea(new Dimension(0, 10)));</b>
+<b class="nc">&nbsp;        JLabel typeLabel = new JLabel(&quot;Type:&quot;);</b>
+<b class="nc">&nbsp;        typeLabel.setFont(new Font(&quot;Arial&quot;, Font.PLAIN, 14));</b>
+<b class="nc">&nbsp;        typeLabel.setBackground(Color.decode(&quot;#617A55&quot;));</b>
+<b class="nc">&nbsp;        String[] yearValues = {&quot;TEACHER&quot;, &quot;COLLABORATOR&quot;};</b>
+<b class="nc">&nbsp;        JComboBox&lt;String&gt; typeComboBox = new JComboBox&lt;&gt;(yearValues);</b>
+<b class="nc">&nbsp;        JPanel typePanel = createFieldPanel(typeLabel, typeComboBox);</b>
+<b class="nc">&nbsp;        currentPanel.add(typePanel);</b>
+&nbsp;
+&nbsp;
+&nbsp;        // Add the submit button
+<b class="nc">&nbsp;        currentPanel.add(Box.createRigidArea(new Dimension(0, 10)));</b>
+<b class="nc">&nbsp;        JButton submitButtonAdd = new JButton(&quot;Submit&quot;);</b>
+<b class="nc">&nbsp;        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));</b>
+<b class="nc">&nbsp;        buttonPanel.setBackground(Color.decode(&quot;#F6FFDE&quot;));</b>
+<b class="nc">&nbsp;        submitButtonAdd.addActionListener(new ActionListener() {</b>
+&nbsp;            public void actionPerformed(ActionEvent e) {
+<b class="nc">&nbsp;                System.out.println(&quot;Insert - teacher - btn - clicked&quot;);</b>
+<b class="nc">&nbsp;                Teacher.Type type = Teacher.Type.valueOf((String) typeComboBox.getSelectedItem());</b>
+&nbsp;
+&nbsp;                try {
+<b class="nc">&nbsp;                    GUI.app.teachersService.addTeacher(nameField.getText(), type);</b>
+<b class="nc">&nbsp;                } catch (TeacherAdditionException ex) {</b>
+<b class="nc">&nbsp;                    JOptionPane.showMessageDialog(</b>
+&nbsp;                            null,
+<b class="nc">&nbsp;                            &quot;An exception occurred: &quot; + ex.getMessage(),</b>
+&nbsp;                            &quot;Error&quot;,
+&nbsp;                            JOptionPane.ERROR_MESSAGE
+&nbsp;                    );
+<b class="nc">&nbsp;                    throw new RuntimeException(ex);</b>
+<b class="nc">&nbsp;                }</b>
+&nbsp;            }
+&nbsp;        });
+<b class="nc">&nbsp;        buttonPanel.add(submitButtonAdd);</b>
+<b class="nc">&nbsp;        currentPanel.add(buttonPanel);</b>
+&nbsp;
+<b class="nc">&nbsp;        return currentPanel;</b>
+&nbsp;    }
+&nbsp;    @Override
+&nbsp;    public JPanel createJPanel(JPanel main, String labelText) {
+&nbsp;        // Remove previous components from right panel and add result label
+<b class="nc">&nbsp;        main.removeAll();</b>
+&nbsp;        // create insertPanel
+<b class="nc">&nbsp;        JPanel leftPanel = createLeftJPanel();</b>
+&nbsp;        // create deletePanel
+<b class="nc">&nbsp;        JPanel rightPanel = createRightJPanel();</b>
+&nbsp;
+&nbsp;        //merge the 2 panelS into mainPanel
+<b class="nc">&nbsp;        main.add(leftPanel, BorderLayout.WEST);</b>
+<b class="nc">&nbsp;        main.add(rightPanel, BorderLayout.EAST);</b>
+&nbsp;
+<b class="nc">&nbsp;        return main;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public JPanel createLeftJPanel() {
+<b class="nc">&nbsp;        JPanel currentPanel = new JPanel();</b>
+<b class="nc">&nbsp;        currentPanel.setLayout(new BoxLayout(currentPanel, BoxLayout.Y_AXIS));</b>
+&nbsp;
+<b class="nc">&nbsp;        currentPanel = addTeacherForm(currentPanel);</b>
+<b class="nc">&nbsp;        currentPanel = deleteTeacherForm(currentPanel);</b>
+&nbsp;        // Set the frame size and center it on the screen
+<b class="nc">&nbsp;        return currentPanel;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public JPanel createRightJPanel() {
+<b class="nc">&nbsp;        JPanel currentPanel = new JPanel();</b>
+<b class="nc">&nbsp;        currentPanel.setLayout(null);</b>
+<b class="nc">&nbsp;        currentPanel.setBackground(Color.decode(&quot;#F6FFDE&quot;));</b>
+&nbsp;
+<b class="nc">&nbsp;        ImageIcon image = new ImageIcon(Objects.requireNonNull(TeacherSettings.class.getResource(&quot;/icons/teacher.png&quot;)));</b>
+<b class="nc">&nbsp;        Image rescaledImage = image.getImage().getScaledInstance(350,350, Image.SCALE_DEFAULT);</b>
+<b class="nc">&nbsp;        ImageIcon finalImage = new ImageIcon(rescaledImage);</b>
+<b class="nc">&nbsp;        JLabel imageLabel = new JLabel(finalImage);</b>
+<b class="nc">&nbsp;        imageLabel.setBounds(30,20,350,350);</b>
+<b class="nc">&nbsp;        currentPanel.add(imageLabel, BorderLayout.CENTER);</b>
+<b class="nc">&nbsp;        return currentPanel;</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-05-12 17:55</div>
+</div>
+</body>
+</html>

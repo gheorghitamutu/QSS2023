@@ -1,0 +1,103 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > IStudentsService</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">org.application.application.students</a>
+</div>
+
+<h1>Coverage Summary for Class: IStudentsService (org.application.application.students)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+</tr>
+<tr>
+  <td class="name">IStudentsService</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package org.application.application.students;
+&nbsp;
+&nbsp;import org.application.domain.exceptions.RepositoryOperationException;
+&nbsp;import org.application.domain.exceptions.student.StudentAdditionException;
+&nbsp;import org.application.domain.exceptions.student.StudentDeletionFailed;
+&nbsp;import org.application.domain.exceptions.student.StudentNotFoundException;
+&nbsp;import org.application.domain.exceptions.student.StudentUpdateException;
+&nbsp;import org.application.domain.exceptions.studentgroup.StudentGroupReassignException;
+&nbsp;import org.application.domain.models.Student;
+&nbsp;
+&nbsp;import java.util.List;
+&nbsp;
+&nbsp;public interface IStudentsService {
+&nbsp;
+&nbsp;    public Student addStudent(String name, String registrationNumber, int year, String groupName) throws StudentAdditionException;
+&nbsp;
+&nbsp;    public Student updateStudent(int studentId, String name, int year) throws StudentUpdateException;
+&nbsp;
+&nbsp;    public boolean deleteStudent(int studentId) throws StudentNotFoundException, StudentDeletionFailed;
+&nbsp;
+&nbsp;    public boolean deleteStudents(String registrationNumber) throws StudentNotFoundException, StudentDeletionFailed;
+&nbsp;
+&nbsp;    public boolean deleteAll() throws StudentDeletionFailed;
+&nbsp;
+&nbsp;    public boolean deleteStudent(String registrationNumber) throws StudentNotFoundException, StudentDeletionFailed;
+&nbsp;
+&nbsp;    public Student reassignStudent(int studentId, String newGroupName) throws StudentGroupReassignException, RepositoryOperationException;
+&nbsp;
+&nbsp;    public Student getStudentById(int studentId) throws StudentNotFoundException;
+&nbsp;
+&nbsp;    public Student getStudentByRegistrationNumber(String registrationNumber) throws StudentNotFoundException;
+&nbsp;
+&nbsp;    public List&lt;Student&gt; getStudents();
+&nbsp;
+&nbsp;    public List&lt;Student&gt; getStudentsByGroupNameAndYear(String groupName, int year);
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-05-12 17:55</div>
+</div>
+</body>
+</html>

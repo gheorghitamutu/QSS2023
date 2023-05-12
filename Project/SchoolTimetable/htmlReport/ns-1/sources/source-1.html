@@ -1,0 +1,322 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > Application</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">org.application</a>
+</div>
+
+<h1>Coverage Summary for Class: Application (org.application)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Application</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    50%
+  </span>
+  <span class="absValue">
+    (1/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    88.9%
+  </span>
+  <span class="absValue">
+    (8/9)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package org.application;
+&nbsp;
+&nbsp;import com.google.inject.Inject;
+&nbsp;import org.application.application.disciplines.IDisciplinesService;
+&nbsp;import org.application.application.rooms.IRoomsService;
+&nbsp;import org.application.application.sessions.ISessionsService;
+&nbsp;import org.application.application.studentgroups.IStudentGroupsService;
+&nbsp;import org.application.application.students.IStudentsService;
+&nbsp;import org.application.application.teachers.ITeachersService;
+&nbsp;import org.application.application.timeslots.ITimeslotsService;
+&nbsp;import org.application.dataaccess.student.IStudentRepository;
+&nbsp;import org.application.domain.exceptions.student.StudentAdditionException;
+&nbsp;import org.application.domain.exceptions.student.StudentDeletionFailed;
+&nbsp;import org.application.domain.exceptions.student.StudentNotFoundException;
+&nbsp;import org.application.domain.exceptions.student.StudentUpdateException;
+&nbsp;import org.application.domain.exceptions.studentgroup.StudentGroupReassignException;
+&nbsp;import org.application.domain.models.Student;
+&nbsp;import org.application.domain.models.StudentGroup;
+&nbsp;
+&nbsp;import java.util.Date;
+&nbsp;import java.util.UUID;
+&nbsp;
+&nbsp;public class Application {
+&nbsp;
+&nbsp;    public final IDisciplinesService disciplinesService;
+&nbsp;    public final IRoomsService roomsService;
+&nbsp;    public final ISessionsService sessionsService;
+&nbsp;    public final IStudentGroupsService studentGroupsService;
+&nbsp;    public final IStudentsService studentsService;
+&nbsp;    public final ITeachersService teachersService;
+&nbsp;    public final ITimeslotsService timeslotsService;
+&nbsp;
+&nbsp;    @Inject
+&nbsp;    public Application(IDisciplinesService disciplinesService,
+&nbsp;                       IRoomsService roomsService,
+&nbsp;                       ISessionsService sessionsService,
+&nbsp;                       IStudentGroupsService studentGroupsService,
+&nbsp;                       IStudentsService studentsService,
+<b class="fc">&nbsp;                       ITeachersService teachersService, ITimeslotsService timeslotsService) {</b>
+<b class="fc">&nbsp;        this.disciplinesService = disciplinesService;</b>
+<b class="fc">&nbsp;        this.roomsService = roomsService;</b>
+<b class="fc">&nbsp;        this.sessionsService = sessionsService;</b>
+<b class="fc">&nbsp;        this.studentGroupsService = studentGroupsService;</b>
+<b class="fc">&nbsp;        this.studentsService = studentsService;</b>
+<b class="fc">&nbsp;        this.teachersService = teachersService;</b>
+<b class="fc">&nbsp;        this.timeslotsService = timeslotsService;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void run() {
+&nbsp;
+&nbsp;//        showcaseStudentsService();
+&nbsp;//
+&nbsp;//        showcaseSampleCodeForRepo();
+<b class="nc">&nbsp;    }</b>
+&nbsp;//
+&nbsp;//
+&nbsp;//    private void showcaseStudentsService() {
+&nbsp;//        var allStudents = studentsService.getStudents();
+&nbsp;//
+&nbsp;//        System.out.println(&quot;All students:&quot;);
+&nbsp;//        for (var student : allStudents) {
+&nbsp;//            System.out.println(student.getName());
+&nbsp;//        }
+&nbsp;//
+&nbsp;//        int newStudentId = 0;
+&nbsp;//        Student specificStudent = null;
+&nbsp;//
+&nbsp;//        StudentGroup studentGroup = new StudentGroup();
+&nbsp;//        studentGroup.setName(&quot;A6&quot;);
+&nbsp;//        studentGroup.setYear(1);
+&nbsp;//        studentGroup.setType(StudentGroup.Type.BACHELOR);
+&nbsp;//        studentGroup.setInsertTime(new Date());
+&nbsp;//        Student newStudent = new Student();
+&nbsp;//
+&nbsp;//        newStudent.setGroup(studentGroup);
+&nbsp;//        newStudent.setYear(1);
+&nbsp;//        newStudent.setRegistrationNumber(&quot;310910204006SM000000&quot;);
+&nbsp;//        newStudent.setName(&quot;test&quot; + UUID.randomUUID());
+&nbsp;//
+&nbsp;//        System.out.println(&quot;Creating Student...&quot;);
+&nbsp;//
+&nbsp;//        try {
+&nbsp;//            newStudent = studentsService.addStudent(newStudent.getName(), newStudent.getRegistrationNumber(), newStudent.getYear(), newStudent.getGroup().getName());
+&nbsp;//
+&nbsp;//            newStudentId = newStudent.getId();
+&nbsp;//
+&nbsp;//            System.out.println(&quot;Student with id &quot; + newStudentId + &quot; created.&quot;);
+&nbsp;//
+&nbsp;//        } catch (StudentAdditionException e) {
+&nbsp;//            System.out.println(&quot;Student with id &quot; + newStudentId + &quot; couldn&#39;t be created.&quot;);
+&nbsp;//
+&nbsp;//            throw new RuntimeException(e);
+&nbsp;//        }
+&nbsp;//
+&nbsp;//        try {
+&nbsp;//            specificStudent = studentsService.getStudentById(newStudentId);
+&nbsp;//        } catch (StudentNotFoundException e) {
+&nbsp;//            System.out.println(&quot;Student with id &quot; + newStudentId + &quot; couldn&#39;t be created.&quot;);
+&nbsp;//
+&nbsp;//            throw new RuntimeException(e);
+&nbsp;//        }
+&nbsp;//
+&nbsp;//        System.out.println(&quot;Student with id &quot; + newStudentId + &quot; is in group &quot; + specificStudent.getGroup().getName());
+&nbsp;//        System.out.println(&quot;Student with id &quot; + newStudentId + &quot; is in year &quot; + specificStudent.getYear());
+&nbsp;//        System.out.println(&quot;Student with id &quot; + newStudentId + &quot; is named &quot; + specificStudent.getName());
+&nbsp;//
+&nbsp;//
+&nbsp;//        System.out.println(&quot;Reassigning student with id &quot; + newStudentId + &quot; to group A1&quot;);
+&nbsp;//
+&nbsp;//        try {
+&nbsp;//            studentsService.reassignStudent(newStudentId, &quot;A1&quot;);
+&nbsp;//            System.out.println(&quot;Reassigned student with id &quot; + newStudentId + &quot; to group A1&quot;);
+&nbsp;//
+&nbsp;//        } catch (StudentGroupReassignException e) {
+&nbsp;//            System.out.println(&quot;Student with id &quot; + newStudentId + &quot; couldn&#39;t be reassigned.&quot;);
+&nbsp;//            throw new RuntimeException(e);
+&nbsp;//        }
+&nbsp;//
+&nbsp;//        try {
+&nbsp;//            specificStudent = studentsService.getStudentById(newStudentId);
+&nbsp;//        } catch (StudentNotFoundException e) {
+&nbsp;//            System.out.println(&quot;Student with id &quot; + newStudentId + &quot; couldn&#39;t be created.&quot;);
+&nbsp;//
+&nbsp;//            throw new RuntimeException(e);
+&nbsp;//        }
+&nbsp;//
+&nbsp;//        System.out.println(&quot;Student with id &quot; + newStudentId + &quot; is in group &quot; + specificStudent.getGroup().getName());
+&nbsp;//        System.out.println(&quot;Student with id &quot; + newStudentId + &quot; is in year &quot; + specificStudent.getYear());
+&nbsp;//        System.out.println(&quot;Student with id &quot; + newStudentId + &quot; is named &quot; + specificStudent.getName());
+&nbsp;//
+&nbsp;//
+&nbsp;//        System.out.println(&quot;Updating student with id &quot; + newStudentId + &quot; (year to become 2)&quot;);
+&nbsp;//
+&nbsp;//        try {
+&nbsp;//            studentsService.updateStudent(newStudentId, &quot;test&quot; + &quot;newtestupdatename&quot; + UUID.randomUUID(), 2);
+&nbsp;//        } catch (StudentUpdateException e) {
+&nbsp;//            System.out.println(&quot;Student with id &quot; + newStudentId + &quot; couldn&#39;t be updated.&quot;);
+&nbsp;//            throw new RuntimeException(e);
+&nbsp;//        }
+&nbsp;//
+&nbsp;//        try {
+&nbsp;//            specificStudent = studentsService.getStudentById(newStudentId);
+&nbsp;//        } catch (StudentNotFoundException e) {
+&nbsp;//            System.out.println(&quot;Student with id &quot; + newStudentId + &quot; couldn&#39;t be created.&quot;);
+&nbsp;//
+&nbsp;//            throw new RuntimeException(e);
+&nbsp;//        }
+&nbsp;//
+&nbsp;//        System.out.println(&quot;Student with id &quot; + newStudentId + &quot; is in group &quot; + specificStudent.getGroup().getName());
+&nbsp;//        System.out.println(&quot;Student with id &quot; + newStudentId + &quot; is in year &quot; + specificStudent.getYear());
+&nbsp;//        System.out.println(&quot;Student with id &quot; + newStudentId + &quot; is named &quot; + specificStudent.getName());
+&nbsp;//
+&nbsp;//
+&nbsp;//        System.out.println(&quot;Deleting student with id &quot; + newStudentId);
+&nbsp;//
+&nbsp;//        try {
+&nbsp;//            studentsService.deleteStudent(newStudentId);
+&nbsp;//        } catch (StudentNotFoundException e) {
+&nbsp;//            System.out.println(&quot;Student with id &quot; + newStudentId + &quot; couldn&#39;t be found for performing delete student.&quot;);
+&nbsp;//            throw new RuntimeException(e);
+&nbsp;//        } catch (StudentDeletionFailed e) {
+&nbsp;//            System.out.println(&quot;Student with id &quot; + newStudentId + &quot; couldn&#39;t be deleted.&quot;);
+&nbsp;//            throw new RuntimeException(e);
+&nbsp;//        }
+&nbsp;//
+&nbsp;//        try {
+&nbsp;//            specificStudent = studentsService.getStudentById(newStudentId);
+&nbsp;//        } catch (StudentNotFoundException e) {
+&nbsp;//            System.out.println(&quot;Student with id &quot; + newStudentId + &quot; couldn&#39;t be created.&quot;);
+&nbsp;//
+&nbsp;//            throw new RuntimeException(e);
+&nbsp;//        }
+&nbsp;//
+&nbsp;//        if (specificStudent == null) {
+&nbsp;//            System.out.println(&quot;Student with id &quot; + newStudentId + &quot; doesn&#39;t exist.&quot;);
+&nbsp;//        } else {
+&nbsp;//            System.out.println(&quot;Student with id &quot; + newStudentId + &quot;  exists.&quot;);
+&nbsp;//        }
+&nbsp;//    }
+&nbsp;//
+&nbsp;//    private void showcaseSampleCodeForRepo() {
+&nbsp;//        var students = this.studentsRepository.readAll();
+&nbsp;//
+&nbsp;//        if (students.size() &lt;= 45) {
+&nbsp;//            StudentGroup studentGroup = new StudentGroup();
+&nbsp;//
+&nbsp;//            // check group validator
+&nbsp;//            // studentGroup.setName(&quot;1A1&quot;);
+&nbsp;//            studentGroup.setName(&quot;A1&quot;);
+&nbsp;//            studentGroup.setYear(1);
+&nbsp;//            studentGroup.setType(StudentGroup.Type.BACHELOR);
+&nbsp;//
+&nbsp;//            studentGroup.setInsertTime(new Date());
+&nbsp;//
+&nbsp;//            Student newStudent = new Student();
+&nbsp;//            newStudent.setGroup(studentGroup);
+&nbsp;//            newStudent.setYear(1);
+&nbsp;//            newStudent.setName(&quot;test&quot; + UUID.randomUUID());
+&nbsp;//            newStudent.setInsertTime(new Date());
+&nbsp;//
+&nbsp;//            try {
+&nbsp;//                this.studentsRepository.save(newStudent);
+&nbsp;//            } catch (Exception e) {
+&nbsp;//                System.out.println(&quot;Couldn&#39;t insert student.&quot;);
+&nbsp;//                e.printStackTrace();
+&nbsp;//            }
+&nbsp;//
+&nbsp;//            students = this.studentsRepository.readAll();
+&nbsp;//        }
+&nbsp;//
+&nbsp;//        System.out.println(&quot;************************************** STUDENTS LIST *************************&quot;);
+&nbsp;//
+&nbsp;//        for (var student : students) {
+&nbsp;//            System.out.println(student.getName());
+&nbsp;//        }
+&nbsp;//
+&nbsp;//        System.out.println(&quot;************************************** END STUDENTS LIST *************************&quot;);
+&nbsp;//    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-05-12 17:55</div>
+</div>
+</body>
+</html>

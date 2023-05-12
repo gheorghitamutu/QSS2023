@@ -1,0 +1,108 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > ISessionsService</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">org.application.application.sessions</a>
+</div>
+
+<h1>Coverage Summary for Class: ISessionsService (org.application.application.sessions)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+</tr>
+<tr>
+  <td class="name">ISessionsService</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package org.application.application.sessions;
+&nbsp;
+&nbsp;import org.application.domain.exceptions.discipline.DisciplineNotFoundException;
+&nbsp;import org.application.domain.exceptions.room.RoomAdditionException;
+&nbsp;import org.application.domain.exceptions.room.RoomDeletionFailed;
+&nbsp;import org.application.domain.exceptions.room.RoomNotFoundException;
+&nbsp;import org.application.domain.exceptions.session.SessionAdditionException;
+&nbsp;import org.application.domain.exceptions.session.SessionDeletionFailed;
+&nbsp;import org.application.domain.exceptions.session.SessionNotFoundException;
+&nbsp;import org.application.domain.exceptions.student.StudentNotFoundException;
+&nbsp;import org.application.domain.exceptions.studentgroup.StudentGroupNotFoundException;
+&nbsp;import org.application.domain.exceptions.teacher.TeacherNotFoundException;
+&nbsp;import org.application.domain.models.Room;
+&nbsp;import org.application.domain.models.Session;
+&nbsp;
+&nbsp;import java.util.List;
+&nbsp;
+&nbsp;public interface ISessionsService {
+&nbsp;
+&nbsp;    public Session addSession(Session.Type type, String halfYear, String disciplineName) throws SessionAdditionException, DisciplineNotFoundException;
+&nbsp;
+&nbsp;    public boolean deleteSession(int sessionId) throws SessionNotFoundException, SessionDeletionFailed;
+&nbsp;
+&nbsp;    public boolean deleteSession(String disciplineName) throws DisciplineNotFoundException, SessionNotFoundException, SessionDeletionFailed;
+&nbsp;
+&nbsp;    public boolean deleteAll() throws SessionDeletionFailed;
+&nbsp;
+&nbsp;    public Session getSessionById(int SessionId) throws SessionNotFoundException;
+&nbsp;
+&nbsp;    public List&lt;Session&gt; getSessions();
+&nbsp;
+&nbsp;    public List&lt;Session&gt; getSessionsByHalfYear(String hf);
+&nbsp;
+&nbsp;    public Session addTeacherToSession(String disciplineName, String teacherName) throws DisciplineNotFoundException, SessionNotFoundException, TeacherNotFoundException;
+&nbsp;
+&nbsp;    public Session addTeacherToSession(int sessionId, String teacherName) throws SessionNotFoundException, TeacherNotFoundException;
+&nbsp;
+&nbsp;    public Session addGroupToSession(String disciplineName, String groupName) throws StudentGroupNotFoundException, DisciplineNotFoundException, SessionNotFoundException;
+&nbsp;
+&nbsp;    public Session addGroupToSession(int sessionId, String groupName) throws SessionNotFoundException, StudentGroupNotFoundException;
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-05-12 17:55</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,151 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > TeacherRepository</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">org.application.dataaccess.teacher</a>
+</div>
+
+<h1>Coverage Summary for Class: TeacherRepository (org.application.dataaccess.teacher)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">TeacherRepository</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (3/3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    83.3%
+  </span>
+  <span class="absValue">
+    (15/18)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package org.application.dataaccess.teacher;
+&nbsp;
+&nbsp;import com.google.inject.Inject;
+&nbsp;import org.application.dataaccess.database.IHibernateProvider;
+&nbsp;import org.application.dataaccess.repository.BaseRepository;
+&nbsp;import org.application.domain.exceptions.RepositoryOperationException;
+&nbsp;import org.application.domain.models.Discipline;
+&nbsp;import org.application.domain.models.Teacher;
+&nbsp;
+&nbsp;import java.util.Date;
+&nbsp;
+&nbsp;public class TeacherRepository extends BaseRepository&lt;Teacher&gt; implements ITeacherRepository {
+&nbsp;
+&nbsp;    @Inject
+&nbsp;    public TeacherRepository(IHibernateProvider hibernateProvider) {
+<b class="fc">&nbsp;        super(hibernateProvider);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public Teacher getByName(String name) throws RepositoryOperationException {
+<b class="fc">&nbsp;        var session = hibernateProvider.getEntityManager();</b>
+<b class="fc">&nbsp;        var query = session.createNamedQuery(&quot;Teacher.getByName&quot;, Teacher.class);</b>
+<b class="fc">&nbsp;        query.setParameter(&quot;name&quot;, name);</b>
+&nbsp;
+<b class="fc">&nbsp;        var result = query.getResultList();</b>
+<b class="fc">&nbsp;        if (result.size() == 0) {</b>
+<b class="fc">&nbsp;            return null;</b>
+&nbsp;        }
+&nbsp;
+<b class="fc">&nbsp;        return result.get(0);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public Teacher createNewTeacher(String name, Teacher.Type type) throws RepositoryOperationException {
+<b class="fc">&nbsp;        var teacher = new Teacher();</b>
+&nbsp;
+<b class="fc">&nbsp;        teacher.setName(name);</b>
+<b class="fc">&nbsp;        teacher.setType(type);</b>
+<b class="fc">&nbsp;        teacher.setInsertTime(new Date());</b>
+&nbsp;
+&nbsp;        try {
+<b class="fc">&nbsp;            save(teacher);</b>
+<b class="nc">&nbsp;        } catch (Exception e) {</b>
+<b class="nc">&nbsp;            e.printStackTrace();</b>
+<b class="nc">&nbsp;            throw new RepositoryOperationException(&quot;[TeacherRepository] Couldn&#39;t create new teacher.&quot;, e);</b>
+<b class="fc">&nbsp;        }</b>
+&nbsp;
+<b class="fc">&nbsp;        return teacher;</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-05-12 17:55</div>
+</div>
+</body>
+</html>

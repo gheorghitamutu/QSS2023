@@ -25,10 +25,12 @@
                     <useSystemClassLoader>false</useSystemClassLoader>
                 </configuration>
             </plugin>
+
             <plugin>
                 <artifactId>maven-failsafe-plugin</artifactId>
                 <version>3.0.0</version>
             </plugin>
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -43,6 +45,7 @@
                 <artifactId>maven-site-plugin</artifactId>
                 <version>4.0.0-M5</version>
             </plugin>
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-project-info-reports-plugin</artifactId>
@@ -71,9 +74,11 @@
 
                     <execution>
                         <id>jacoco-check</id>
+
                         <goals>
                             <goal>check</goal>
                         </goals>
+
                         <configuration>
                             <rules>
                                 <rule>
@@ -88,9 +93,20 @@
                                 </rule>
                             </rules>
                         </configuration>
+
                     </execution>
                 </executions>
             </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-scm-publish-plugin</artifactId>
+                <version>3.1.0</version>
+                <configuration>
+                    <scmBranch>gh-pages</scmBranch>
+                </configuration>
+            </plugin>
+
         </plugins>
 
         <resources>
@@ -114,11 +130,13 @@
             <version>4.6.1</version>
             <scope>test</scope>
         </dependency>
+
         <dependency>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-surefire-plugin</artifactId>
             <version>3.0.0</version>
         </dependency>
+
         <dependency>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-failsafe-plugin</artifactId>

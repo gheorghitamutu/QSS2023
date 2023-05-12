@@ -1,0 +1,110 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > ITimeslotsService</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">org.application.application.timeslots</a>
+</div>
+
+<h1>Coverage Summary for Class: ITimeslotsService (org.application.application.timeslots)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+</tr>
+<tr>
+  <td class="name">ITimeslotsService</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package org.application.application.timeslots;
+&nbsp;
+&nbsp;import org.application.domain.exceptions.Timeslot.TimeslotAdditionException;
+&nbsp;import org.application.domain.exceptions.Timeslot.TimeslotDeletionFailed;
+&nbsp;import org.application.domain.exceptions.Timeslot.TimeslotNotFoundException;
+&nbsp;import org.application.domain.exceptions.discipline.DisciplineNotFoundException;
+&nbsp;import org.application.domain.exceptions.room.RoomNotFoundException;
+&nbsp;import org.application.domain.exceptions.session.SessionNotFoundException;
+&nbsp;import org.application.domain.exceptions.teacher.TeacherAdditionException;
+&nbsp;import org.application.domain.exceptions.teacher.TeacherDeletionFailed;
+&nbsp;import org.application.domain.exceptions.teacher.TeacherNotFoundException;
+&nbsp;import org.application.domain.models.Room;
+&nbsp;import org.application.domain.models.Session;
+&nbsp;import org.application.domain.models.Teacher;
+&nbsp;import org.application.domain.models.Timeslot;
+&nbsp;
+&nbsp;import java.time.Duration;
+&nbsp;import java.util.Date;
+&nbsp;import java.util.List;
+&nbsp;
+&nbsp;public interface ITimeslotsService {
+&nbsp;
+&nbsp;    public Timeslot addTimeslot(Date startDate, Date endDate, Date time,
+&nbsp;                                Duration duration, Timeslot.Day day, Timeslot.Periodicity periodicity,
+&nbsp;                                Room room, Session session) throws TimeslotAdditionException;
+&nbsp;
+&nbsp;    public Timeslot addTimeslot(Date startDate, Date endDate, Date time, Duration duration, Timeslot.Day day,
+&nbsp;                                Timeslot.Periodicity periodicity, String roomName, String disciplineName) throws TimeslotAdditionException, SessionNotFoundException, DisciplineNotFoundException, RoomNotFoundException;
+&nbsp;
+&nbsp;    public boolean deleteTimeslot(int timeslotId) throws TimeslotNotFoundException, TimeslotDeletionFailed;
+&nbsp;
+&nbsp;    public boolean deleteTimeslot(Date startDate, Date time, Duration duration, String roomName) throws TimeslotNotFoundException, TimeslotDeletionFailed, RoomNotFoundException;
+&nbsp;
+&nbsp;    public boolean deleteAll() throws TimeslotDeletionFailed;
+&nbsp;
+&nbsp;    public Timeslot getTimeslotById(int timeslotId) throws TimeslotNotFoundException;
+&nbsp;
+&nbsp;    public List&lt;Timeslot&gt; getTimeslots();
+&nbsp;
+&nbsp;    public List&lt;Timeslot&gt; getSortedTimeslotsByStartDateAndTime();
+&nbsp;
+&nbsp;    public List&lt;Timeslot&gt; getSortedTimeslotsByStartTime();
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-05-12 17:55</div>
+</div>
+</body>
+</html>

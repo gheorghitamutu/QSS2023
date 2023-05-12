@@ -1,0 +1,169 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > DisciplinesGenerator</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">org.application.presentation.generators</a>
+</div>
+
+<h1>Coverage Summary for Class: DisciplinesGenerator (org.application.presentation.generators)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">DisciplinesGenerator</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (2/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (35/35)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package org.application.presentation.generators;
+&nbsp;
+&nbsp;import org.application.domain.models.*;
+&nbsp;import org.application.presentation.GUI;
+&nbsp;
+&nbsp;import java.util.ArrayList;
+&nbsp;import java.util.List;
+&nbsp;import java.util.Map;
+&nbsp;
+&nbsp;public class DisciplinesGenerator extends BaseGenerator{
+&nbsp;    private final List&lt;Discipline&gt; disciplines;
+&nbsp;    private final Map&lt;String, String&gt; timetablesNames;
+&nbsp;    private final Map&lt;String, String&gt; listsData;
+&nbsp;
+&nbsp;    public DisciplinesGenerator(String generationDateString, Map&lt;String, Map&lt;Timeslot.Day, StringBuilder&gt;&gt; timetablesDays, Map&lt;String, String&gt; timetablesNames, Map&lt;String, String&gt; listsData){
+<b class="fc">&nbsp;        super(generationDateString, timetablesDays);</b>
+&nbsp;
+<b class="fc">&nbsp;        this.disciplines = GUI.app.disciplinesService.getDisciplines();</b>
+<b class="fc">&nbsp;        this.timetablesNames = timetablesNames;</b>
+<b class="fc">&nbsp;        this.listsData = listsData;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void generate(){
+<b class="fc">&nbsp;        String disciplinesData = utils.getBaseTemplateData(&quot;disciplines&quot;);</b>
+<b class="fc">&nbsp;        disciplinesData = disciplinesData.replace(&quot;$generation_date&quot;, this.generationDateString);</b>
+<b class="fc">&nbsp;        StringBuilder elementsData = new StringBuilder();</b>
+&nbsp;
+<b class="fc">&nbsp;        for (Discipline discipline : this.disciplines){</b>
+<b class="fc">&nbsp;            StringBuilder disciplineData = new StringBuilder();</b>
+<b class="fc">&nbsp;            List&lt;Teacher&gt; teachers = new ArrayList&lt;&gt;();</b>
+<b class="fc">&nbsp;            List&lt;StudentGroup&gt; studentGroups = new ArrayList&lt;&gt;();</b>
+<b class="fc">&nbsp;            int credits = discipline.getCredits();</b>
+&nbsp;
+<b class="fc">&nbsp;            String disciplineEntry = utils.getBaseTemplateData(&quot;atomics&quot; + this.separator + &quot;disciplines_entry&quot;);</b>
+&nbsp;
+<b class="fc">&nbsp;            String name = discipline.getName();</b>
+<b class="fc">&nbsp;            String timetableName = &quot;timetable_d_&quot; + name.toLowerCase().replace(&quot; &quot;, &quot;_&quot;);</b>
+&nbsp;
+<b class="fc">&nbsp;            disciplineEntry = disciplineEntry.replace(&quot;$discipline_name&quot;, name);</b>
+<b class="fc">&nbsp;            disciplineEntry = disciplineEntry.replace(&quot;$discipline_ref&quot;, &quot;./&quot; + timetableName + &quot;.html&quot;);</b>
+&nbsp;
+<b class="fc">&nbsp;            for (Teacher teacher : discipline.getTeachers()){</b>
+<b class="fc">&nbsp;                if (teacher.getType() == Teacher.Type.TEACHER &amp;&amp; !teachers.contains(teacher)) teachers.add(teacher);</b>
+<b class="fc">&nbsp;            }</b>
+&nbsp;
+<b class="fc">&nbsp;            for (Session session : discipline.getSessions()){</b>
+<b class="fc">&nbsp;                for (StudentGroup group : session.getGroups()){</b>
+<b class="fc">&nbsp;                    if (!studentGroups.contains(group)) studentGroups.add(group);</b>
+<b class="fc">&nbsp;                }</b>
+<b class="fc">&nbsp;            }</b>
+&nbsp;
+<b class="fc">&nbsp;            for (Teacher teacher : teachers) disciplineData.append(teacher.getName()).append(&quot;, &quot;);</b>
+<b class="fc">&nbsp;            for (StudentGroup group : studentGroups) disciplineData.append(group.getYear()).append(group.getName()).append(&quot;, &quot;);</b>
+<b class="fc">&nbsp;            if (disciplineData.length() &gt; 2) disciplineData.setLength(disciplineData.length() - 2);</b>
+&nbsp;
+<b class="fc">&nbsp;            disciplineEntry = disciplineEntry.replace(&quot;$discipline_data&quot;, disciplineData.toString());</b>
+<b class="fc">&nbsp;            elementsData.append(disciplineEntry);</b>
+&nbsp;
+<b class="fc">&nbsp;            this.addToDaysMap(timetableName);</b>
+<b class="fc">&nbsp;            this.timetablesNames.put(timetableName, &quot;Timetable of &quot; + name + &quot;, &quot; + credits + &quot; credits discipline&quot;);</b>
+<b class="fc">&nbsp;        }</b>
+&nbsp;
+<b class="fc">&nbsp;        disciplinesData = disciplinesData.replace(&quot;$elements&quot;, elementsData.toString());</b>
+<b class="fc">&nbsp;        this.listsData.put(&quot;disciplines&quot;, disciplinesData);</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-05-12 17:55</div>
+</div>
+</body>
+</html>

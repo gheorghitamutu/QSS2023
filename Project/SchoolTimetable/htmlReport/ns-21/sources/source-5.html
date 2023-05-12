@@ -1,0 +1,158 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > RoomsGenerator</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">org.application.presentation.generators</a>
+</div>
+
+<h1>Coverage Summary for Class: RoomsGenerator (org.application.presentation.generators)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">RoomsGenerator</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (2/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    92.3%
+  </span>
+  <span class="absValue">
+    (24/26)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package org.application.presentation.generators;
+&nbsp;
+&nbsp;import org.application.domain.models.Room;
+&nbsp;import org.application.domain.models.Timeslot;
+&nbsp;import org.application.presentation.GUI;
+&nbsp;
+&nbsp;import java.util.List;
+&nbsp;import java.util.Map;
+&nbsp;
+&nbsp;public class RoomsGenerator extends BaseGenerator{
+&nbsp;    private final List&lt;Room&gt; rooms;
+&nbsp;    private final Map&lt;String, String&gt; timetablesNames;
+&nbsp;    private final Map&lt;String, String&gt; listsData;
+&nbsp;
+&nbsp;    public RoomsGenerator(String generationDateString, Map&lt;String, Map&lt;Timeslot.Day, StringBuilder&gt;&gt; timetablesDays, Map&lt;String, String&gt; timetablesNames, Map&lt;String, String&gt; listsData){
+<b class="fc">&nbsp;        super(generationDateString, timetablesDays);</b>
+&nbsp;
+<b class="fc">&nbsp;        this.rooms = GUI.app.roomsService.getRooms();</b>
+<b class="fc">&nbsp;        this.timetablesNames = timetablesNames;</b>
+<b class="fc">&nbsp;        this.listsData = listsData;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void generate(){
+<b class="fc">&nbsp;        String roomsData = utils.getBaseTemplateData(&quot;rooms&quot;);</b>
+<b class="fc">&nbsp;        roomsData = roomsData.replace(&quot;$generation_date&quot;, this.generationDateString);</b>
+<b class="fc">&nbsp;        StringBuilder labElementsData = new StringBuilder();</b>
+<b class="fc">&nbsp;        StringBuilder courseElementsData = new StringBuilder();</b>
+&nbsp;
+<b class="fc">&nbsp;        for (Room room : this.rooms){</b>
+<b class="fc">&nbsp;            String roomEntry = utils.getBaseTemplateData(&quot;atomics&quot; + this.separator + &quot;list_entry&quot;);</b>
+&nbsp;
+<b class="fc">&nbsp;            String name = room.getName();</b>
+<b class="fc">&nbsp;            int floor = room.getFloor();</b>
+<b class="fc">&nbsp;            int capacity = room.getCapacity();</b>
+<b class="fc">&nbsp;            String timetableName = &quot;timetable_r_&quot; + name.toLowerCase().replace(&quot; &quot;, &quot;_&quot;);</b>
+&nbsp;
+<b class="fc">&nbsp;            roomEntry = roomEntry.replace(&quot;$entry_name&quot;, name);</b>
+<b class="fc">&nbsp;            roomEntry = roomEntry.replace(&quot;$entry_ref&quot;, &quot;./&quot; + timetableName + &quot;.html&quot;);</b>
+&nbsp;
+<b class="fc">&nbsp;            if (room.getType() == Room.Type.COURSE){</b>
+<b class="fc">&nbsp;                courseElementsData.append(roomEntry);</b>
+&nbsp;            }
+<b class="nc">&nbsp;            else if (room.getType() == Room.Type.LABORATORY){</b>
+<b class="nc">&nbsp;                labElementsData.append(roomEntry);</b>
+&nbsp;            }
+&nbsp;
+<b class="fc">&nbsp;            this.addToDaysMap(timetableName);</b>
+<b class="fc">&nbsp;            this.timetablesNames.put(timetableName, &quot;Timetable of Room &quot; + name + &quot;, Floor &quot; + floor + &quot;, Capacity of &quot; + capacity + &quot; seats&quot;);</b>
+<b class="fc">&nbsp;        }</b>
+&nbsp;
+<b class="fc">&nbsp;        roomsData = roomsData.replace(&quot;$lab_elements&quot;, labElementsData.toString());</b>
+<b class="fc">&nbsp;        roomsData = roomsData.replace(&quot;$course_elements&quot;, courseElementsData.toString());</b>
+<b class="fc">&nbsp;        this.listsData.put(&quot;rooms&quot;, roomsData);</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-05-12 17:55</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,94 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > IStudentGroupsService</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">org.application.application.studentgroups</a>
+</div>
+
+<h1>Coverage Summary for Class: IStudentGroupsService (org.application.application.studentgroups)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+</tr>
+<tr>
+  <td class="name">IStudentGroupsService</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package org.application.application.studentgroups;
+&nbsp;
+&nbsp;import org.application.domain.exceptions.studentgroup.StudentGroupAdditionException;
+&nbsp;import org.application.domain.exceptions.studentgroup.StudentGroupDeletionFailed;
+&nbsp;import org.application.domain.exceptions.studentgroup.StudentGroupNotFoundException;
+&nbsp;import org.application.domain.models.StudentGroup;
+&nbsp;
+&nbsp;import java.util.List;
+&nbsp;
+&nbsp;public interface IStudentGroupsService {
+&nbsp;
+&nbsp;    public StudentGroup addStudentGroup(String name, int year, StudentGroup.Type type) throws StudentGroupAdditionException;
+&nbsp;
+&nbsp;    public boolean deleteStudentGroup(int studentGroupId) throws StudentGroupNotFoundException, StudentGroupDeletionFailed;
+&nbsp;
+&nbsp;    public boolean deleteStudentGroup(String name) throws StudentGroupDeletionFailed;
+&nbsp;
+&nbsp;    public boolean deleteAll() throws StudentGroupDeletionFailed;
+&nbsp;
+&nbsp;    public StudentGroup getStudentGroupById(int studentGroupId) throws StudentGroupNotFoundException;
+&nbsp;
+&nbsp;    public List&lt;StudentGroup&gt; getStudentGroups();
+&nbsp;
+&nbsp;    public List&lt;StudentGroup&gt; getStudentGroupsByYear(int year);
+&nbsp;
+&nbsp;    public List&lt;StudentGroup&gt; getStudentGroupsByType(StudentGroup.Type type);
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-05-12 17:55</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,304 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > StudentsService</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">org.application.application.students</a>
+</div>
+
+<h1>Coverage Summary for Class: StudentsService (org.application.application.students)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">StudentsService</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    83.3%
+  </span>
+  <span class="absValue">
+    (10/12)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    74.4%
+  </span>
+  <span class="absValue">
+    (64/86)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package org.application.application.students;
+&nbsp;
+&nbsp;import com.google.inject.Inject;
+&nbsp;import org.application.dataaccess.student.IStudentRepository;
+&nbsp;import org.application.dataaccess.studentgroup.IStudentGroupRepository;
+&nbsp;import org.application.domain.exceptions.*;
+&nbsp;import org.application.domain.exceptions.student.StudentAdditionException;
+&nbsp;import org.application.domain.exceptions.student.StudentDeletionFailed;
+&nbsp;import org.application.domain.exceptions.student.StudentNotFoundException;
+&nbsp;import org.application.domain.exceptions.student.StudentUpdateException;
+&nbsp;import org.application.domain.exceptions.studentgroup.StudentGroupReassignException;
+&nbsp;import org.application.domain.models.Student;
+&nbsp;import org.application.domain.models.StudentGroup;
+&nbsp;
+&nbsp;import java.text.MessageFormat;
+&nbsp;import java.util.ArrayList;
+&nbsp;import java.util.Date;
+&nbsp;import java.util.List;
+&nbsp;
+&nbsp;public class StudentsService implements IStudentsService {
+&nbsp;
+&nbsp;    private final IStudentRepository studentRepository;
+&nbsp;    private final IStudentGroupRepository studentGroupRepository;
+&nbsp;
+&nbsp;    @Inject
+&nbsp;
+<b class="fc">&nbsp;    public StudentsService(IStudentRepository studentRepository, IStudentGroupRepository studentGroupRepository) {</b>
+<b class="fc">&nbsp;        this.studentRepository = studentRepository;</b>
+<b class="fc">&nbsp;        this.studentGroupRepository = studentGroupRepository;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public Student addStudent(String name, String registrationNumber, int year, String groupName) throws StudentAdditionException {
+<b class="fc">&nbsp;        var student = new Student();</b>
+&nbsp;
+<b class="fc">&nbsp;        student.setName(name);</b>
+<b class="fc">&nbsp;        student.setYear(year);</b>
+<b class="fc">&nbsp;        student.setRegistrationNumber(registrationNumber);</b>
+<b class="fc">&nbsp;        student.setInsertTime(new Date());</b>
+&nbsp;
+<b class="fc">&nbsp;        var group = studentGroupRepository.getByGroupName(groupName);</b>
+<b class="fc">&nbsp;        if (group == null) {</b>
+&nbsp;            try {
+<b class="fc">&nbsp;                System.out.println(MessageFormat.format(&quot;[StudentsService] Creating new group with name {0}.&quot;, groupName));</b>
+&nbsp;
+<b class="fc">&nbsp;                group = studentGroupRepository.createNewGroup(groupName);</b>
+&nbsp;
+<b class="fc">&nbsp;                System.out.println(MessageFormat.format(&quot;[StudentsService] Created new group with name {0}.&quot;, groupName));</b>
+&nbsp;
+<b class="fc">&nbsp;            } catch (RepositoryOperationException e) {</b>
+<b class="fc">&nbsp;                throw new StudentAdditionException(&quot;[StudentsService] Couldn&#39;t create new group for adding the student (group doesnt exist yet).&quot;, e);</b>
+<b class="fc">&nbsp;            }</b>
+&nbsp;        }
+<b class="fc">&nbsp;        student.setGroup(group);</b>
+&nbsp;
+&nbsp;        try {
+<b class="fc">&nbsp;            studentRepository.save(student);</b>
+<b class="fc">&nbsp;        } catch (Exception e) {</b>
+<b class="fc">&nbsp;            throw new StudentAdditionException(&quot;[StudentsService] Couldn&#39;t add student.&quot;, e);</b>
+<b class="fc">&nbsp;        }</b>
+&nbsp;
+<b class="fc">&nbsp;        return student;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public Student updateStudent(int studentId, String name, int year) throws StudentUpdateException {
+<b class="fc">&nbsp;        var student = studentRepository.getById(studentId);</b>
+&nbsp;
+<b class="fc">&nbsp;        if (student == null) {</b>
+<b class="fc">&nbsp;            throw new StudentUpdateException(MessageFormat.format(&quot;[StudentsService] Couldn&#39;t update student with id {0}. Student not found.&quot;, studentId));</b>
+&nbsp;        }
+&nbsp;
+<b class="fc">&nbsp;        student.setName(name);</b>
+<b class="fc">&nbsp;        student.setYear(year);</b>
+&nbsp;
+&nbsp;        try {
+<b class="fc">&nbsp;            studentRepository.updateStudent(student);</b>
+<b class="fc">&nbsp;        } catch (Exception e) {</b>
+<b class="fc">&nbsp;            throw new StudentUpdateException(&quot;[StudentsService] Couldn&#39;t update student.&quot;, e);</b>
+<b class="fc">&nbsp;        }</b>
+&nbsp;
+<b class="fc">&nbsp;        return student;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public Student reassignStudent(int studentId, String newGroupName) throws StudentGroupReassignException, RepositoryOperationException {
+<b class="fc">&nbsp;        var student = studentRepository.getById(studentId);</b>
+&nbsp;
+<b class="fc">&nbsp;        StudentGroup group = studentGroupRepository.getByGroupName(newGroupName);</b>
+&nbsp;
+<b class="fc">&nbsp;        if (group == null) {</b>
+&nbsp;            try {
+<b class="fc">&nbsp;                group = studentGroupRepository.createNewGroup(newGroupName);</b>
+<b class="nc">&nbsp;            } catch (RepositoryOperationException e) {</b>
+<b class="nc">&nbsp;                throw new StudentGroupReassignException(MessageFormat.format(&quot;[StudentsService] Couldn&#39;t reassign student to group {0}.&quot;, newGroupName), e);</b>
+<b class="fc">&nbsp;            }</b>
+&nbsp;        }
+&nbsp;
+<b class="fc">&nbsp;        student.setGroup(group);</b>
+&nbsp;
+<b class="fc">&nbsp;        studentGroupRepository.save(group);</b>
+&nbsp;
+<b class="fc">&nbsp;        return student;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public Student getStudentById(int studentId) throws StudentNotFoundException {
+<b class="fc">&nbsp;        var student = studentRepository.getById(studentId);</b>
+<b class="fc">&nbsp;        if (student == null) {</b>
+<b class="fc">&nbsp;            throw new StudentNotFoundException(MessageFormat.format(&quot;[StudentsService DELETE student] Student with id {0} not found.&quot;, studentId));</b>
+&nbsp;        }
+&nbsp;
+<b class="fc">&nbsp;        return studentRepository.getById(studentId);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public Student getStudentByRegistrationNumber(String registrationNumber) throws StudentNotFoundException {
+<b class="fc">&nbsp;        var students = studentRepository.readAll().stream().filter(s -&gt; s.getRegistrationNumber().equals(registrationNumber)).toList();</b>
+<b class="fc">&nbsp;        if (students.size() != 1) {</b>
+<b class="fc">&nbsp;            throw new StudentNotFoundException(MessageFormat.format(&quot;[StudentsService DELETE student] Student with id {0} not found.&quot;, registrationNumber));</b>
+&nbsp;        }
+<b class="fc">&nbsp;        return students.get(0);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public boolean deleteStudent(int studentId) throws StudentNotFoundException, StudentDeletionFailed {
+<b class="nc">&nbsp;        var student = studentRepository.getById(studentId);</b>
+&nbsp;
+<b class="nc">&nbsp;        if (student == null) {</b>
+<b class="nc">&nbsp;            throw new StudentNotFoundException(MessageFormat.format(&quot;[StudentsService DELETE student] Student with id {0} not found.&quot;, studentId));</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        try {
+<b class="nc">&nbsp;            studentRepository.deleteStudent(student);</b>
+<b class="nc">&nbsp;        } catch (Exception e) {</b>
+<b class="nc">&nbsp;            throw new StudentDeletionFailed(&quot; [StudentsService] Couldn&#39;t delete student.&quot;, e);</b>
+<b class="nc">&nbsp;        }</b>
+&nbsp;
+<b class="nc">&nbsp;        return true;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public boolean deleteStudents(String registrationNumber) throws StudentNotFoundException, StudentDeletionFailed {
+<b class="nc">&nbsp;        var students = studentRepository.readAll().stream().filter(s -&gt; s.getRegistrationNumber().equals(registrationNumber)).toList();</b>
+&nbsp;
+&nbsp;        try {
+<b class="nc">&nbsp;            studentRepository.deleteMany(students);</b>
+<b class="nc">&nbsp;        } catch (Exception e) {</b>
+<b class="nc">&nbsp;            throw new StudentDeletionFailed(&quot; [StudentsService] Couldn&#39;t delete students.&quot;, e);</b>
+<b class="nc">&nbsp;        }</b>
+&nbsp;
+<b class="nc">&nbsp;        return true;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public boolean deleteAll() throws StudentDeletionFailed {
+&nbsp;        try {
+<b class="fc">&nbsp;            studentRepository.deleteMany(studentRepository.readAll());</b>
+<b class="fc">&nbsp;        } catch (Exception e) {</b>
+<b class="fc">&nbsp;            throw new StudentDeletionFailed(&quot; [StudentsService] Couldn&#39;t delete students.&quot;, e);</b>
+<b class="fc">&nbsp;        }</b>
+&nbsp;
+<b class="fc">&nbsp;        return true;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public boolean deleteStudent(String registrationNumber) throws StudentNotFoundException, StudentDeletionFailed {
+<b class="fc">&nbsp;        var students = studentRepository.readAll().stream().filter(s -&gt; s.getRegistrationNumber().equals(registrationNumber)).toList();</b>
+<b class="fc">&nbsp;        if (students.size() != 1) {</b>
+<b class="fc">&nbsp;            throw new StudentNotFoundException(MessageFormat.format(&quot;[StudentsService DELETE student] Student with id {0} not found.&quot;, registrationNumber));</b>
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        var student = students.get(0);</b>
+&nbsp;        try {
+<b class="nc">&nbsp;            studentRepository.deleteStudent(student);</b>
+<b class="nc">&nbsp;        } catch (Exception e) {</b>
+<b class="nc">&nbsp;            throw new StudentDeletionFailed(&quot; [StudentsService] Couldn&#39;t delete student.&quot;, e);</b>
+<b class="nc">&nbsp;        }</b>
+&nbsp;
+<b class="nc">&nbsp;        return true;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public List&lt;Student&gt; getStudents() {
+<b class="fc">&nbsp;        return studentRepository.readAll();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public List&lt;Student&gt; getStudentsByGroupNameAndYear(String groupName, int year) {
+&nbsp;
+<b class="fc">&nbsp;        var allGroups = studentGroupRepository.readAll();</b>
+&nbsp;
+<b class="fc">&nbsp;        var groupsFiltered = allGroups.stream().filter(group -&gt; group.getName().equals(groupName) &amp;&amp; group.getYear() == year).toList();</b>
+&nbsp;
+<b class="fc">&nbsp;        List&lt;Student&gt; foundStudents = new ArrayList&lt;&gt;();</b>
+<b class="fc">&nbsp;        for (var group : groupsFiltered) {</b>
+<b class="fc">&nbsp;            foundStudents.addAll(group.getStudents());</b>
+<b class="fc">&nbsp;        }</b>
+&nbsp;
+<b class="fc">&nbsp;        return foundStudents;</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-05-12 17:55</div>
+</div>
+</body>
+</html>

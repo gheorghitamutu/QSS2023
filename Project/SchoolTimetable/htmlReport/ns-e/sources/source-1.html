@@ -1,0 +1,239 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > StudentRepository</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">org.application.dataaccess.student</a>
+</div>
+
+<h1>Coverage Summary for Class: StudentRepository (org.application.dataaccess.student)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">StudentRepository</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (4/4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    65.7%
+  </span>
+  <span class="absValue">
+    (23/35)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">StudentRepository$MockitoMock$Ha3f0tMX</td>
+  </tr>
+  <tr>
+    <td class="name">StudentRepository$MockitoMock$Ha3f0tMX$auxiliary$4Hn1fe5k</td>
+  </tr>
+  <tr>
+    <td class="name">StudentRepository$MockitoMock$Ha3f0tMX$auxiliary$aSaqQEO4</td>
+  </tr>
+  <tr>
+    <td class="name">StudentRepository$MockitoMock$Ha3f0tMX$auxiliary$BC0cFN9X</td>
+  </tr>
+  <tr>
+    <td class="name">StudentRepository$MockitoMock$Ha3f0tMX$auxiliary$ehtOtkUI</td>
+  </tr>
+  <tr>
+    <td class="name">StudentRepository$MockitoMock$Ha3f0tMX$auxiliary$iNSBUPn8</td>
+  </tr>
+  <tr>
+    <td class="name">StudentRepository$MockitoMock$Ha3f0tMX$auxiliary$qKRirE52</td>
+  </tr>
+  <tr>
+    <td class="name">StudentRepository$MockitoMock$Ha3f0tMX$auxiliary$RnPBgicj</td>
+  </tr>
+  <tr>
+    <td class="name">StudentRepository$MockitoMock$Ha3f0tMX$auxiliary$rSFmQr2v</td>
+  </tr>
+  <tr>
+    <td class="name">StudentRepository$MockitoMock$Ha3f0tMX$auxiliary$vRUb3dGq</td>
+  </tr>
+  <tr>
+    <td class="name">StudentRepository$MockitoMock$Ha3f0tMX$auxiliary$W0pjfMPs</td>
+  </tr>
+  <tr>
+    <td class="name">StudentRepository$MockitoMock$Ha3f0tMX$auxiliary$zoLLxgMU</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (4/4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    65.7%
+  </span>
+  <span class="absValue">
+    (23/35)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package org.application.dataaccess.student;
+&nbsp;
+&nbsp;import com.google.inject.Inject;
+&nbsp;import org.application.dataaccess.repository.BaseRepository;
+&nbsp;import org.application.dataaccess.database.IHibernateProvider;
+&nbsp;import org.application.domain.exceptions.RepositoryOperationException;
+&nbsp;import org.application.domain.models.Student;
+&nbsp;import org.application.domain.models.StudentGroup;
+&nbsp;
+&nbsp;public class StudentRepository extends BaseRepository&lt;Student&gt; implements IStudentRepository {
+&nbsp;
+&nbsp;    @Inject
+&nbsp;    public StudentRepository(IHibernateProvider hibernateProvider) {
+<b class="fc">&nbsp;        super(hibernateProvider);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public Student updateStudent(Student student) throws RepositoryOperationException {
+&nbsp;
+<b class="fc">&nbsp;        var session = hibernateProvider.getEntityManager();</b>
+&nbsp;
+<b class="fc">&nbsp;        if (!session.getTransaction().isActive()) {</b>
+<b class="fc">&nbsp;            session.getTransaction().begin();</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        try {
+<b class="fc">&nbsp;            session.merge(student);</b>
+<b class="nc">&nbsp;        } catch (Exception e) {</b>
+<b class="nc">&nbsp;            e.printStackTrace();</b>
+&nbsp;
+<b class="nc">&nbsp;            session.getTransaction().rollback();</b>
+&nbsp;
+<b class="nc">&nbsp;            throw new RepositoryOperationException(&quot;[StudentRepository] Couldn&#39;t update student.&quot;, e);</b>
+<b class="fc">&nbsp;        }</b>
+&nbsp;
+<b class="fc">&nbsp;        session.getTransaction().commit();</b>
+&nbsp;
+<b class="fc">&nbsp;        return student;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public Student deleteStudent(Student student) throws RepositoryOperationException {
+&nbsp;
+<b class="fc">&nbsp;        var session = hibernateProvider.getEntityManager();</b>
+&nbsp;
+<b class="fc">&nbsp;        if (!session.getTransaction().isActive()) {</b>
+<b class="fc">&nbsp;            session.getTransaction().begin();</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        try {
+<b class="fc">&nbsp;            session.remove(student);</b>
+&nbsp;
+<b class="nc">&nbsp;        } catch (Exception e) {</b>
+<b class="nc">&nbsp;            e.printStackTrace();</b>
+&nbsp;
+<b class="nc">&nbsp;            session.getTransaction().rollback();</b>
+&nbsp;
+<b class="nc">&nbsp;            throw new RepositoryOperationException(&quot;[StudentRepository] Couldn&#39;t delete student.&quot;, e);</b>
+&nbsp;
+<b class="fc">&nbsp;        }</b>
+&nbsp;
+<b class="fc">&nbsp;        session.getTransaction().commit();</b>
+&nbsp;
+<b class="fc">&nbsp;        return student;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public Student changeStudentGroup(Student student, StudentGroup newGroup) throws RepositoryOperationException {
+&nbsp;
+<b class="fc">&nbsp;        var session = hibernateProvider.getEntityManager();</b>
+&nbsp;
+<b class="fc">&nbsp;        if (!session.getTransaction().isActive()) {</b>
+<b class="fc">&nbsp;            session.getTransaction().begin();</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        try {
+<b class="fc">&nbsp;            student.setGroup(newGroup);</b>
+&nbsp;
+<b class="fc">&nbsp;            session.persist(student);</b>
+&nbsp;
+<b class="fc">&nbsp;            session.getTransaction().commit();</b>
+&nbsp;
+<b class="nc">&nbsp;        } catch (Exception e) {</b>
+<b class="nc">&nbsp;            e.printStackTrace();</b>
+<b class="nc">&nbsp;            session.getTransaction().rollback();</b>
+&nbsp;
+<b class="nc">&nbsp;            throw new RepositoryOperationException(&quot;[StudentRepository] Couldn&#39;t change student group.&quot;, e);</b>
+<b class="fc">&nbsp;        }</b>
+&nbsp;
+&nbsp;
+<b class="fc">&nbsp;        return student;</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-05-12 17:55</div>
+</div>
+</body>
+</html>
