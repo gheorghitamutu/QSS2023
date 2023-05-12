@@ -30,13 +30,13 @@
 
         <property name="jakarta.persistence.schema-generation.database.action">drop-and-create</property>
 
-        <mapping class="org.application.domain.models.Room"/>
-        <mapping class="org.application.domain.models.Student"/>
-        <mapping class="org.application.domain.models.Session"/>
-        <mapping class="org.application.domain.models.Discipline"/>
-        <mapping class="org.application.domain.models.Timeslot"/>
-        <mapping class="org.application.domain.models.Teacher"/>
-        <mapping class="org.application.domain.models.StudentGroup"/>
+        <mapping class="org.domain.models.Room"/>
+        <mapping class="org.domain.models.Student"/>
+        <mapping class="org.domain.models.Session"/>
+        <mapping class="org.domain.models.Discipline"/>
+        <mapping class="org.domain.models.Timeslot"/>
+        <mapping class="org.domain.models.Teacher"/>
+        <mapping class="org.domain.models.StudentGroup"/>
 
     </session-factory>
 </hibernate-configuration>
