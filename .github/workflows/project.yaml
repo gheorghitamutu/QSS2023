@@ -59,7 +59,7 @@ jobs:
           path: ${{ github.workspace }}/Project/SchoolTimetable/target/site/jacoco/jacoco.xml
 
       - name: Jacoco Report to PR
-        id: report
+        id: reportPR
         uses: madrapps/jacoco-report@v1.3
         with:
           paths: ${{ github.workspace }}/Project/SchoolTimetable/target/site/jacoco/jacoco.xml
