@@ -43,6 +43,16 @@ public class Student implements Serializable {
     @Column(name = "insert_time", nullable = false)
     private Date insertTime;
 
+    public Student() {
+    }
+
+    public Student(String name, int year, String registrationNumber) {
+        this.name = name;
+        this.year = year;
+        this.registrationNumber = registrationNumber;
+        this.insertTime = new Date();
+    }
+
     public int getId() {
         return id;
     }

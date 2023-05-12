@@ -54,6 +54,16 @@ public class StudentGroup implements Serializable {
     @Column(name = "insert_time", nullable = false)
     private Date insertTime;
 
+    public StudentGroup() {
+    }
+
+    public StudentGroup(String name, int year, Type type) {
+        this.name = name;
+        this.year = year;
+        this.type = type;
+        this.insertTime = new Date();
+    }
+
     public Set<Student> getStudents() {
         return students;
     }

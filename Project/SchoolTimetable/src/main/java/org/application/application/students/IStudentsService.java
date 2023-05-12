@@ -1,5 +1,6 @@
 package org.application.application.students;
 
+import org.application.domain.exceptions.RepositoryOperationException;
 import org.application.domain.exceptions.student.StudentAdditionException;
 import org.application.domain.exceptions.student.StudentDeletionFailed;
 import org.application.domain.exceptions.student.StudentNotFoundException;
@@ -23,7 +24,7 @@ public interface IStudentsService {
 
     public boolean deleteStudent(String registrationNumber) throws StudentNotFoundException, StudentDeletionFailed;
 
-    public Student reassignStudent(int studentId, String newGroupName) throws StudentGroupReassignException;
+    public Student reassignStudent(int studentId, String newGroupName) throws StudentGroupReassignException, RepositoryOperationException;
 
     public Student getStudentById(int studentId) throws StudentNotFoundException;
 

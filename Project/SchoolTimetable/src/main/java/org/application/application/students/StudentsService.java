@@ -48,8 +48,7 @@ public class StudentsService implements IStudentsService {
                 System.out.println(MessageFormat.format("[StudentsService] Created new group with name {0}.", groupName));
 
             } catch (RepositoryOperationException e) {
-                System.out.println("[StudentsService] Couldn't create new group.");
-                throw new RuntimeException(e);
+                throw new StudentAdditionException("[StudentsService] Couldn't create new group for adding the student (group doesnt exist yet).", e);
             }
         }
         student.setGroup(group);
@@ -66,6 +65,11 @@ public class StudentsService implements IStudentsService {
     @Override
     public Student updateStudent(int studentId, String name, int year) throws StudentUpdateException {
         var student = studentRepository.getById(studentId);
+
+        if (student == null) {
+            throw new StudentUpdateException(MessageFormat.format("[StudentsService] Couldn't update student with id {0}. Student not found.", studentId));
+        }
+
         student.setName(name);
         student.setYear(year);
 
@@ -79,7 +83,7 @@ public class StudentsService implements IStudentsService {
     }
 
     @Override
-    public Student reassignStudent(int studentId, String newGroupName) throws StudentGroupReassignException {
+    public Student reassignStudent(int studentId, String newGroupName) throws StudentGroupReassignException, RepositoryOperationException {
         var student = studentRepository.getById(studentId);
 
         StudentGroup group = studentGroupRepository.getByGroupName(newGroupName);
@@ -93,6 +97,8 @@ public class StudentsService implements IStudentsService {
         }
 
         student.setGroup(group);
+
+        studentGroupRepository.save(group);
 
         return student;
     }
@@ -180,12 +186,16 @@ public class StudentsService implements IStudentsService {
 
     @Override
     public List<Student> getStudentsByGroupNameAndYear(String groupName, int year) {
-        var groups = studentGroupRepository.readAll().stream().filter(group -> group.getName().equals(groupName) && group.getYear() == year).toList();
-        List<Student> students = new ArrayList<>();
-        for (var group : groups) {
-            students.addAll(group.getStudents());
+
+        var allGroups = studentGroupRepository.readAll();
+
+        var groupsFiltered = allGroups.stream().filter(group -> group.getName().equals(groupName) && group.getYear() == year).toList();
+
+        List<Student> foundStudents = new ArrayList<>();
+        for (var group : groupsFiltered) {
+            foundStudents.addAll(group.getStudents());
         }
 
-        return students;
+        return foundStudents;
     }
 }
