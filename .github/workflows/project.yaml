@@ -96,7 +96,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: jacoco-report
-          path: target/site/jacoco/
+          path: ${{ github.workspace }}/Project/SchoolTimetable/target/site/jacoco/
         
       - run: mkdir staging && cp ./Project/SchoolTimetable/target/*.jar staging
       - uses: actions/upload-artifact@v3
