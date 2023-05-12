@@ -73,7 +73,12 @@ jobs:
         run: |
           echo "Total coverage ${{ steps.jacoco.outputs.coverage-overall }}"
           echo "Changed Files coverage ${{ steps.jacoco.outputs.coverage-changed-files }}"
-          
+
+      - name: List Jacoco Folder Content
+        working-directory: ${{ github.workspace }}/Project/SchoolTimetable/target/site/jacoco
+        run: ls -R .
+
+
       - name: Generate JaCoCo Badge
         id: jacocoBadge
         uses: cicirello/jacoco-badge-generator@v2
