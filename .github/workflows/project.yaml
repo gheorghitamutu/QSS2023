@@ -51,6 +51,28 @@ jobs:
           # path: '**/Project/SchoolTimetable/target/surefire-reports/TEST-*.xml'
           # report_paths: '**/Project/SchoolTimetable/target/surefire-reports/TEST-*.xml'
           files: '**/Project/SchoolTimetable/target/surefire-reports/TEST-*.xml'
+          
+      - name: Upload Report
+        uses: 'actions/upload-artifact@v2'
+        with:
+          name: report.xml
+          path: ${{ github.workspace }}/build/reports/jacoco/testCoverage/testCoverage.xml
+
+      - name: Jacoco Report to PR
+        id: jacoco
+        uses: madrapps/jacoco-report@v1.3
+        with:
+          paths: ${{ github.workspace }}/build/reports/jacoco/testCoverage/testCoverage.xml
+          token: ${{ secrets.GITHUB_TOKEN }}
+          min-coverage-overall: 30
+          min-coverage-changed-files: 60
+          debug-mode: false
+          title: Code Coverage
+
+      - name: Get the Coverage info
+        run: |
+          echo "Total coverage ${{ steps.jacoco.outputs.coverage-overall }}"
+          echo "Changed Files coverage ${{ steps.jacoco.outputs.coverage-changed-files }}"
         
       - run: mkdir staging && cp ./Project/SchoolTimetable/target/*.jar staging
       - uses: actions/upload-artifact@v3
