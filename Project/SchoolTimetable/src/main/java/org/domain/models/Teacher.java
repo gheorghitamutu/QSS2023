@@ -37,6 +37,14 @@ public class Teacher implements Serializable {
     @Column(name = "insert_time", nullable = false)
     private Date insertTime;
 
+    public Teacher() {
+    }
+
+    public Teacher(String name, Type type){
+        this.name = name;
+        this.type = type;
+    }
+
     public int getId() {
         return id;
     }
