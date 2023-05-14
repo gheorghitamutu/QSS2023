@@ -41,13 +41,6 @@ public class TimeslotsService implements ITimeslotsService {
         try {
             timeslot = timeslotRepository.createNewTimeslot(startDate, endDate, time, duration, day, periodicity, room, session);
         } catch (RepositoryOperationException e) {
-            throw new RuntimeException(e);
-        }
-
-
-        try {
-            timeslotRepository.save(timeslot);
-        } catch (Exception e) {
             throw new TimeslotAdditionException("[TimeslotService] Failed adding timeslot!", e);
         }
 

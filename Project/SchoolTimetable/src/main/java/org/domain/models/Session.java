@@ -3,6 +3,7 @@ package org.domain.models;
 import jakarta.persistence.*;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Pattern;
+import org.domain.models.validators.session.ValidSession;
 import org.hibernate.validator.constraints.Length;
 
 import java.io.Serializable;
@@ -10,6 +11,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+@ValidSession
 @Entity(name = "Session")
 @Table(name = "session", uniqueConstraints = {@UniqueConstraint(columnNames = {"Id"})})
 public class Session implements Serializable {

@@ -1,7 +1,7 @@
 package org.services;
 
-import org.GuiceInjectorSingleton;
 import org.Application;
+import org.GuiceInjectorSingleton;
 import org.application.students.IStudentsService;
 import org.application.students.StudentsService;
 import org.dataaccess.student.StudentRepository;
@@ -25,7 +25,10 @@ import org.domain.models.StudentGroup;
 import org.junit.jupiter.api.*;
 import org.mockito.Mockito;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
 
 import static org.mockito.ArgumentMatchers.anyList;
 
@@ -53,14 +56,8 @@ public class StudentsServiceTests {
         app.timeslotsService.deleteAll();
     }
 
-//public List<Student> getStudentsByGroupNameAndYear(String groupName, int year)
-
     @Test
     public void Given__StudentsService__When__getStudentsByGroupNameAndYearWithAtLeastOneExistentStudent__Then__ReturnTheFoundStudents() {
-
-
-        //mock IStudentsGroupRepository
-        //mock IStudentsRepository
 
         var studentGroupRepository = Mockito.mock(StudentGroupRepository.class);
         var studentRepository = Mockito.mock(StudentRepository.class);
@@ -88,8 +85,6 @@ public class StudentsServiceTests {
 
         Assertions.assertEquals(2, studentsService.getStudentsByGroupNameAndYear("A1", 1).size());
     }
-
-//public List<Student> getStudents()
 
     @Test
     public void Given__StudentsService__When__getStudentsWithAtLeastOneExistentStudent__Then__ReturnTheFoundStudents() {
@@ -122,9 +117,6 @@ public class StudentsServiceTests {
 
         Assertions.assertEquals(2, studentsService.getStudents().size());
     }
-
-
-//public boolean deleteStudent(String registrationNumber) throws StudentNotFoundException, StudentDeletionFailed
 
     @Test
     public void Given__StudentsService__When__deleteStudentWithInexistentStudent__Then__ShouldThrow() {
@@ -159,10 +151,8 @@ public class StudentsServiceTests {
         Assertions.assertThrows(StudentNotFoundException.class, () -> studentsService.deleteStudent("301401RSL191124"));
     }
 
-
     @Test
     public void Given__StudentsService__When__deleteStudentIsCalledAndMultipleMatchingStudentsWithThatRegistrationNumberAreFound__Then__ShouldThrow() {
-
 
         var studentGroupRepository = Mockito.mock(StudentGroupRepository.class);
         var studentRepository = Mockito.mock(StudentRepository.class);
@@ -179,7 +169,6 @@ public class StudentsServiceTests {
 
         studentGroup.setStudents(new HashSet<>(Arrays.asList(student1, student2)));
 
-
         Mockito.when(studentRepository.readAll())
                 .thenReturn(new ArrayList<>() {
                     {
@@ -193,9 +182,6 @@ public class StudentsServiceTests {
 
         Assertions.assertThrows(StudentNotFoundException.class, () -> studentsService.deleteStudent("301401RSL191124"));
     }
-
-
-//public boolean deleteAll() throws StudentDeletionFailed
 
     @Test
     public void Given__StudentsService__When__deleteAllIsCalledAndRepositoryFails__Then__ShouldWrapExceptionAndThrowItFurther() throws RepositoryOperationException {
@@ -230,9 +216,6 @@ public class StudentsServiceTests {
 
         Assertions.assertThrows(StudentDeletionFailed.class, () -> studentsService.deleteAll());
     }
-
-
-//public Student getStudentByRegistrationNumber(String registrationNumber) throws StudentNotFoundException
 
     @Test
     public void Given__StudentsService__When__getStudentByRegistrationNumberIsCalledAndStudentIsFound__Then__ShouldReturnTheFoundStudent() throws StudentNotFoundException {
@@ -300,9 +283,6 @@ public class StudentsServiceTests {
         Assertions.assertThrows(StudentNotFoundException.class, () -> studentsService.getStudentByRegistrationNumber("301401RSL191124"));
     }
 
-
-//public Student getStudentById(int studentId) throws StudentNotFoundException
-
     @Test
     public void Given__StudentsService__When__getStudentByIdIsCalledAndStudentIsFound__Then__ShouldReturnTheFoundStudent() throws StudentNotFoundException {
 
@@ -367,9 +347,6 @@ public class StudentsServiceTests {
         Assertions.assertThrows(StudentNotFoundException.class, () -> studentsService.getStudentById(3));
     }
 
-
-//public Student reassignStudent(int studentId, String newGroupName) throws StudentGroupReassignException
-
     @Test
     public void Given__StudentsService__When__reassignStudentIsCalledAndStudentIsFoundWhichIsAlreadyInAGroup__Then__ShouldReturnTheFoundStudentWithDifferentGroup() throws StudentGroupReassignException, RepositoryOperationException {
 
@@ -398,7 +375,6 @@ public class StudentsServiceTests {
 
         Assertions.assertEquals(student1.getGroup().getName(), "A2");
     }
-
 
     @Test
     public void Given__StudentsService__When__reassignStudentIsCalledWithAStudentThatIsFoundAndHasNoGroup__Then__ShouldReturnTheFoundStudentWithTheNewlyProvidedGroup() throws StudentGroupReassignException, RepositoryOperationException {
@@ -448,8 +424,6 @@ public class StudentsServiceTests {
 
         Assertions.assertEquals(student1.getGroup().getName(), "A2");
     }
-
-//public Student addStudent(String name, String registrationNumber, int year, String groupName) throws StudentAdditionException
 
     @Test
     public void Given__StudentsService__When__addStudentIsCalledAndTargetGroupDoesntExist__Then__ShouldReturnTheFoundStudentWithTheNewlyCreatedGroup() throws StudentAdditionException, RepositoryOperationException {
@@ -530,11 +504,8 @@ public class StudentsServiceTests {
         });
     }
 
-
-//public Student updateStudent(int studentId, String name, int year) throws StudentUpdateException
-
     @Test
-    public void Given__StudentsService__When__updateStudentIsCalledWithValidData__Then__ShouldReturnTheUpdatedStudent() throws StudentUpdateException, RepositoryOperationException, StudentUpdateException {
+    public void Given__StudentsService__When__updateStudentIsCalledWithValidData__Then__ShouldReturnTheUpdatedStudent() throws RepositoryOperationException, StudentUpdateException {
 
         var studentGroupRepository = Mockito.mock(StudentGroupRepository.class);
         var studentRepository = Mockito.mock(StudentRepository.class);
@@ -555,7 +526,7 @@ public class StudentsServiceTests {
     }
 
     @Test
-    public void Given__StudentsService__When__updateStudentIsCalledWithInexistentStudentId__Then__ShouldThrowStudentUpdateException() throws StudentUpdateException, RepositoryOperationException, StudentUpdateException {
+    public void Given__StudentsService__When__updateStudentIsCalledWithInexistentStudentId__Then__ShouldThrowStudentUpdateException() throws RepositoryOperationException, StudentUpdateException {
 
         var studentGroupRepository = Mockito.mock(StudentGroupRepository.class);
         var studentRepository = Mockito.mock(StudentRepository.class);
@@ -572,7 +543,7 @@ public class StudentsServiceTests {
     }
 
     @Test
-    public void Given__StudentsService__When__updateStudentIsCalledAndRepositoryThrows__Then__ShouldWrapExceptionAndThrowAsWell() throws StudentUpdateException, RepositoryOperationException, StudentUpdateException {
+    public void Given__StudentsService__When__updateStudentIsCalledAndRepositoryThrows__Then__ShouldWrapExceptionAndThrowAsWell() throws RepositoryOperationException, StudentUpdateException {
 
         var studentGroupRepository = Mockito.mock(StudentGroupRepository.class);
         var studentRepository = Mockito.mock(StudentRepository.class);

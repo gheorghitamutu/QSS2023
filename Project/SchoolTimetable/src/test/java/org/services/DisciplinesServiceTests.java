@@ -60,16 +60,15 @@ public class DisciplinesServiceTests {
         var discipline1 = new Discipline("discipline1", 4);
         var discipline2 = new Discipline("discipline2", 4);
 
-        Mockito.when(disciplineRepository.readAll())
-                .thenReturn(new ArrayList<>() {
-                    {
-                        add(discipline1);
-                    }
+        Mockito.when(disciplineRepository.readAll()).thenReturn(new ArrayList<>() {
+            {
+                add(discipline1);
+            }
 
-                    {
-                        add(discipline2);
-                    }
-                });
+            {
+                add(discipline2);
+            }
+        });
 
         IDisciplinesService disciplinesService = new DisciplinesService(disciplineRepository, teacherRepository);
 
@@ -82,8 +81,7 @@ public class DisciplinesServiceTests {
         var disciplineRepository = Mockito.mock(DisciplineRepository.class);
         var teacherRepository = Mockito.mock(TeacherRepository.class);
 
-        Mockito.when(disciplineRepository.getById(1))
-                .thenReturn(null);
+        Mockito.when(disciplineRepository.getById(1)).thenReturn(null);
 
         IDisciplinesService disciplinesService = new DisciplinesService(disciplineRepository, teacherRepository);
 
@@ -99,16 +97,15 @@ public class DisciplinesServiceTests {
         var discipline1 = new Discipline("discipline1", 4);
         var discipline2 = new Discipline("discipline2", 4);
 
-        Mockito.when(disciplineRepository.readAll())
-                .thenReturn(new ArrayList<>() {
-                    {
-                        add(discipline1);
-                    }
+        Mockito.when(disciplineRepository.readAll()).thenReturn(new ArrayList<>() {
+            {
+                add(discipline1);
+            }
 
-                    {
-                        add(discipline2);
-                    }
-                });
+            {
+                add(discipline2);
+            }
+        });
 
         Mockito.doThrow(new RepositoryOperationException("Repo failure")).when(disciplineRepository).deleteMany(anyList());
 
@@ -126,16 +123,15 @@ public class DisciplinesServiceTests {
         var discipline1 = new Discipline("discipline1", 4);
         var discipline2 = new Discipline("discipline2", 4);
 
-        Mockito.when(disciplineRepository.readAll())
-                .thenReturn(new ArrayList<>() {
-                    {
-                        add(discipline1);
-                    }
+        Mockito.when(disciplineRepository.readAll()).thenReturn(new ArrayList<>() {
+            {
+                add(discipline1);
+            }
 
-                    {
-                        add(discipline2);
-                    }
-                });
+            {
+                add(discipline2);
+            }
+        });
 
         Mockito.doThrow(new RepositoryOperationException("Repo failure")).when(disciplineRepository).deleteMany(anyList());
 
@@ -154,8 +150,7 @@ public class DisciplinesServiceTests {
 
         discipline1.setId(1);
 
-        Mockito.when(disciplineRepository.getById(1))
-                .thenReturn(null);
+        Mockito.when(disciplineRepository.getById(1)).thenReturn(null);
 
         IDisciplinesService disciplinesService = new DisciplinesService(disciplineRepository, teacherRepository);
 
@@ -170,8 +165,7 @@ public class DisciplinesServiceTests {
 
         Mockito.doThrow(new RepositoryOperationException("")).when(disciplineRepository).save(Mockito.any(Discipline.class));
 
-        Mockito.when(disciplineRepository.getByName("discipline1"))
-                .thenReturn(new Discipline("discipline1", 4));
+        Mockito.when(disciplineRepository.getByName("discipline1")).thenReturn(new Discipline("discipline1", 4));
 
 
         Assertions.assertThrows(DisciplineAdditionException.class, () -> {
@@ -188,11 +182,9 @@ public class DisciplinesServiceTests {
         var teacherRepository = Mockito.mock(TeacherRepository.class);
 
 
-        Mockito.when(disciplineRepository.getByName("discipline1"))
-                .thenReturn(new Discipline("discipline1", 4));
+        Mockito.when(disciplineRepository.getByName("discipline1")).thenReturn(new Discipline("discipline1", 4));
 
-        Mockito.when(disciplineRepository.createNewDiscipline("discipline1", 5))
-                .thenReturn(null);
+        Mockito.when(disciplineRepository.createNewDiscipline("discipline1", 5)).thenReturn(null);
 
         IDisciplinesService disciplinesService = new DisciplinesService(disciplineRepository, teacherRepository);
 
@@ -210,16 +202,15 @@ public class DisciplinesServiceTests {
         var teacher1 = new Teacher("teacher1", Teacher.Type.TEACHER);
         var teacher2 = new Teacher("teacher2", Teacher.Type.TEACHER);
 
-        Mockito.when(teacherRepository.readAll())
-                .thenReturn(new ArrayList<>() {
-                    {
-                        add(teacher1);
-                    }
+        Mockito.when(teacherRepository.readAll()).thenReturn(new ArrayList<>() {
+            {
+                add(teacher1);
+            }
 
-                    {
-                        add(teacher2);
-                    }
-                });
+            {
+                add(teacher2);
+            }
+        });
 
         IDisciplinesService disciplinesService = new DisciplinesService(disciplineRepository, teacherRepository);
 

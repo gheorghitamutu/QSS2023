@@ -102,6 +102,9 @@ public class TimeslotValidator implements ConstraintValidator<ValidTimeslot, Tim
             var tet = Date.from(tt.toInstant().plus(timeslot.getTimespan()));
 
             if (value.getWeekday() == timeslot.getWeekday()) {
+                if (vsd.equals(tsd) && vt.equals(tt)) {
+                    return false;
+                }
                 if (vsd.after(tsd) && vsd.before(ted)) {
                     if (vt.after(tt) && vt.before(tet)) {
                         return false;

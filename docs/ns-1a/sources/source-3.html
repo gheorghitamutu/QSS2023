@@ -56,10 +56,10 @@ Current scope:     <a href="../../index.html">all classes</a>
 </td>
 </tr>
   <tr>
-    <td class="name">Session$HibernateInstantiator$G7YlsjN4</td>
+    <td class="name">Session$HibernateInstantiator$Poz1kNSD</td>
   </tr>
   <tr>
-    <td class="name">Session$HibernateProxy$9mSmXkyp</td>
+    <td class="name">Session$HibernateProxy$IJrhfqYk</td>
   </tr>
   <tr>
     <td class="name">Session$Type</td>
@@ -111,6 +111,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;import jakarta.persistence.*;
 &nbsp;import jakarta.validation.Valid;
 &nbsp;import jakarta.validation.constraints.Pattern;
+&nbsp;import org.domain.models.validators.session.ValidSession;
 &nbsp;import org.hibernate.validator.constraints.Length;
 &nbsp;
 &nbsp;import java.io.Serializable;
@@ -118,6 +119,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;import java.util.HashSet;
 &nbsp;import java.util.Set;
 &nbsp;
+&nbsp;@ValidSession
 &nbsp;@Entity(name = &quot;Session&quot;)
 &nbsp;@Table(name = &quot;session&quot;, uniqueConstraints = {@UniqueConstraint(columnNames = {&quot;Id&quot;})})
 &nbsp;public class Session implements Serializable {
@@ -251,7 +253,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2023-05-14 23:45</div>
+    <div style="float:right;">generated on 2023-05-15 00:38</div>
 </div>
 </body>
 </html>

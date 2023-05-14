@@ -36,7 +36,6 @@ public class TeachersServiceTests {
         new TimetableEntitiesFactory(app).createTimetableEntities();
     }
 
-
     @AfterAll
     void tearDownAll() throws TimeslotDeletionFailed, TeacherDeletionFailed, StudentDeletionFailed, StudentGroupDeletionFailed, SessionDeletionFailed, RoomDeletionFailed, DisciplineDeletionFailed {
         app.disciplinesService.deleteAll();
@@ -56,16 +55,15 @@ public class TeachersServiceTests {
         var teacher1 = new Teacher("teacher1", Teacher.Type.TEACHER);
         var teacher2 = new Teacher("teacher2", Teacher.Type.TEACHER);
 
-        Mockito.when(teacherRepository.readAll())
-                .thenReturn(new ArrayList<>() {
-                    {
-                        add(teacher1);
-                    }
+        Mockito.when(teacherRepository.readAll()).thenReturn(new ArrayList<>() {
+            {
+                add(teacher1);
+            }
 
-                    {
-                        add(teacher2);
-                    }
-                });
+            {
+                add(teacher2);
+            }
+        });
 
         ITeachersService teachersService = new TeachersService(teacherRepository);
 
@@ -77,8 +75,7 @@ public class TeachersServiceTests {
 
         var teacherRepository = Mockito.mock(TeacherRepository.class);
 
-        Mockito.when(teacherRepository.getById(1))
-                .thenReturn(null);
+        Mockito.when(teacherRepository.getById(1)).thenReturn(null);
 
         ITeachersService teachersService = new TeachersService(teacherRepository);
 
@@ -93,16 +90,15 @@ public class TeachersServiceTests {
         var teacher1 = new Teacher("teacher1", Teacher.Type.TEACHER);
         var teacher2 = new Teacher("teacher2", Teacher.Type.TEACHER);
 
-        Mockito.when(teacherRepository.readAll())
-                .thenReturn(new ArrayList<>() {
-                    {
-                        add(teacher1);
-                    }
+        Mockito.when(teacherRepository.readAll()).thenReturn(new ArrayList<>() {
+            {
+                add(teacher1);
+            }
 
-                    {
-                        add(teacher2);
-                    }
-                });
+            {
+                add(teacher2);
+            }
+        });
 
         Mockito.doThrow(new RepositoryOperationException("Repo failure")).when(teacherRepository).deleteMany(anyList());
 
@@ -119,16 +115,15 @@ public class TeachersServiceTests {
         var teacher1 = new Teacher("teacher1", Teacher.Type.TEACHER);
         var teacher2 = new Teacher("teacher2", Teacher.Type.TEACHER);
 
-        Mockito.when(teacherRepository.readAll())
-                .thenReturn(new ArrayList<>() {
-                    {
-                        add(teacher1);
-                    }
+        Mockito.when(teacherRepository.readAll()).thenReturn(new ArrayList<>() {
+            {
+                add(teacher1);
+            }
 
-                    {
-                        add(teacher2);
-                    }
-                });
+            {
+                add(teacher2);
+            }
+        });
 
         Mockito.doThrow(new RepositoryOperationException("Repo failure")).when(teacherRepository).deleteMany(anyList());
 
@@ -146,8 +141,7 @@ public class TeachersServiceTests {
 
         teacher1.setId(1);
 
-        Mockito.when(teacherRepository.getById(1))
-                .thenReturn(null);
+        Mockito.when(teacherRepository.getById(1)).thenReturn(null);
 
         ITeachersService teachersService = new TeachersService(teacherRepository);
 
@@ -161,14 +155,11 @@ public class TeachersServiceTests {
 
         Mockito.doThrow(new RepositoryOperationException("")).when(teacherRepository).save(Mockito.any(Teacher.class));
 
-        Mockito.when(teacherRepository.getByName("teacher1"))
-                .thenReturn(new Teacher("teacher1", Teacher.Type.TEACHER));
-
+        Mockito.when(teacherRepository.getByName("teacher1")).thenReturn(new Teacher("teacher1", Teacher.Type.TEACHER));
 
         Assertions.assertThrows(TeacherAdditionException.class, () -> {
             ITeachersService teachersService = new TeachersService(teacherRepository);
-
-            var teacher = teachersService.addTeacher("teacher1", Teacher.Type.TEACHER);
+            teachersService.addTeacher("teacher1", Teacher.Type.TEACHER);
         });
     }
 
@@ -177,11 +168,9 @@ public class TeachersServiceTests {
 
         var teacherRepository = Mockito.mock(TeacherRepository.class);
 
-        Mockito.when(teacherRepository.getByName("teacher1"))
-                .thenReturn(new Teacher("teacher1", Teacher.Type.TEACHER));
+        Mockito.when(teacherRepository.getByName("teacher1")).thenReturn(new Teacher("teacher1", Teacher.Type.TEACHER));
 
-        Mockito.when(teacherRepository.createNewTeacher("teacher1", Teacher.Type.COLLABORATOR))
-                .thenReturn(null);
+        Mockito.when(teacherRepository.createNewTeacher("teacher1", Teacher.Type.COLLABORATOR)).thenReturn(null);
 
         ITeachersService teachersService = new TeachersService(teacherRepository);
 

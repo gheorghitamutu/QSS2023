@@ -69,16 +69,15 @@ public class SessionsServiceTests {
         var session1 = new Session(Session.Type.COURSE, "A");
         var session2 = new Session(Session.Type.COURSE, "B");
 
-        Mockito.when(sessionRepository.readAll())
-                .thenReturn(new ArrayList<>() {
-                    {
-                        add(session1);
-                    }
+        Mockito.when(sessionRepository.readAll()).thenReturn(new ArrayList<>() {
+            {
+                add(session1);
+            }
 
-                    {
-                        add(session2);
-                    }
-                });
+            {
+                add(session2);
+            }
+        });
 
         ISessionsService sessionsService = new SessionsService(sessionRepository, disciplineRepository, teacherRepository, studentGroupRepository);
 
@@ -93,8 +92,7 @@ public class SessionsServiceTests {
         var teacherRepository = Mockito.mock(TeacherRepository.class);
         var studentGroupRepository = Mockito.mock(StudentGroupRepository.class);
 
-        Mockito.when(sessionRepository.getById(1))
-                .thenReturn(null);
+        Mockito.when(sessionRepository.getById(1)).thenReturn(null);
 
         ISessionsService sessionsService = new SessionsService(sessionRepository, disciplineRepository, teacherRepository, studentGroupRepository);
 
@@ -112,16 +110,15 @@ public class SessionsServiceTests {
         var session1 = new Session(Session.Type.COURSE, "A");
         var session2 = new Session(Session.Type.COURSE, "B");
 
-        Mockito.when(sessionRepository.readAll())
-                .thenReturn(new ArrayList<>() {
-                    {
-                        add(session1);
-                    }
+        Mockito.when(sessionRepository.readAll()).thenReturn(new ArrayList<>() {
+            {
+                add(session1);
+            }
 
-                    {
-                        add(session2);
-                    }
-                });
+            {
+                add(session2);
+            }
+        });
 
         Mockito.doThrow(new RepositoryOperationException("Repo failure")).when(sessionRepository).deleteMany(anyList());
 
@@ -142,12 +139,11 @@ public class SessionsServiceTests {
         var discipline1 = new Discipline("discipline1", 4);
         discipline1.setSessions(new HashSet<>(List.of(session1)));
 
-        Mockito.when(disciplineRepository.readAll())
-                .thenReturn(new ArrayList<>() {
-                    {
-                        add(discipline1);
-                    }
-                });
+        Mockito.when(disciplineRepository.readAll()).thenReturn(new ArrayList<>() {
+            {
+                add(discipline1);
+            }
+        });
 
         Mockito.doThrow(new RepositoryOperationException("Repo failure")).when(sessionRepository).delete(any(Session.class));
 
@@ -168,8 +164,7 @@ public class SessionsServiceTests {
 
         session1.setId(1);
 
-        Mockito.when(sessionRepository.getById(1))
-                .thenReturn(null);
+        Mockito.when(sessionRepository.getById(1)).thenReturn(null);
 
         ISessionsService sessionsService = new SessionsService(sessionRepository, disciplineRepository, teacherRepository, studentGroupRepository);
 
@@ -187,16 +182,15 @@ public class SessionsServiceTests {
         var session1 = new Session(Session.Type.COURSE, "A");
         var session2 = new Session(Session.Type.COURSE, "B");
 
-        Mockito.when(sessionRepository.readAll())
-                .thenReturn(new ArrayList<>() {
-                    {
-                        add(session1);
-                    }
+        Mockito.when(sessionRepository.readAll()).thenReturn(new ArrayList<>() {
+            {
+                add(session1);
+            }
 
-                    {
-                        add(session2);
-                    }
-                });
+            {
+                add(session2);
+            }
+        });
 
         ISessionsService sessionsService = new SessionsService(sessionRepository, disciplineRepository, teacherRepository, studentGroupRepository);
         Assertions.assertEquals(List.of(session1), sessionsService.getSessionsByHalfYear("A"));
@@ -214,15 +208,13 @@ public class SessionsServiceTests {
 
         Mockito.doThrow(new RepositoryOperationException("")).when(sessionRepository).save(Mockito.any(Session.class));
 
-        Mockito.when(disciplineRepository.readAll())
-                .thenReturn(new ArrayList<>() {
-                    {
-                        add(discipline1);
-                    }
-                });
+        Mockito.when(disciplineRepository.readAll()).thenReturn(new ArrayList<>() {
+            {
+                add(discipline1);
+            }
+        });
 
-        Mockito.when(sessionRepository.createNewSession(Session.Type.COURSE, "A"))
-                .thenReturn(new Session(Session.Type.COURSE, "A"));
+        Mockito.when(sessionRepository.createNewSession(Session.Type.COURSE, "A")).thenReturn(new Session(Session.Type.COURSE, "A"));
 
         Assertions.assertThrows(SessionAdditionException.class, () -> {
             ISessionsService sessionsService = new SessionsService(sessionRepository, disciplineRepository, teacherRepository, studentGroupRepository);
@@ -243,23 +235,21 @@ public class SessionsServiceTests {
         var teacher1 = new Teacher("teacher1", Teacher.Type.TEACHER);
         var teacher2 = new Teacher("teacher2", Teacher.Type.TEACHER);
 
-        Mockito.when(disciplineRepository.readAll())
-                .thenReturn(new ArrayList<>() {
-                    {
-                        add(discipline1);
-                    }
-                });
+        Mockito.when(disciplineRepository.readAll()).thenReturn(new ArrayList<>() {
+            {
+                add(discipline1);
+            }
+        });
 
-        Mockito.when(teacherRepository.readAll())
-                .thenReturn(new ArrayList<>() {
-                    {
-                        add(teacher1);
-                    }
+        Mockito.when(teacherRepository.readAll()).thenReturn(new ArrayList<>() {
+            {
+                add(teacher1);
+            }
 
-                    {
-                        add(teacher2);
-                    }
-                });
+            {
+                add(teacher2);
+            }
+        });
 
         ISessionsService sessionsService = new SessionsService(sessionRepository, disciplineRepository, teacherRepository, studentGroupRepository);
 
@@ -276,15 +266,15 @@ public class SessionsServiceTests {
         var group1 = new StudentGroup("group1", 1, StudentGroup.Type.BACHELOR);
         var group2 = new StudentGroup("group2", 1, StudentGroup.Type.BACHELOR);
 
-        Mockito.when(studentGroupRepository.readAll())
-                .thenReturn(new ArrayList<>() {
-                    {
-                        add(group1);
-                    }
-                    {
-                        add(group2);
-                    }
-                });
+        Mockito.when(studentGroupRepository.readAll()).thenReturn(new ArrayList<>() {
+            {
+                add(group1);
+            }
+
+            {
+                add(group2);
+            }
+        });
 
         ISessionsService sessionsService = new SessionsService(sessionRepository, disciplineRepository, teacherRepository, studentGroupRepository);
 
