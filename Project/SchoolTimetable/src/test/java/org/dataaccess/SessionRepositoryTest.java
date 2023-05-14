@@ -73,13 +73,10 @@ class SessionRepositoryTest {
         session.setType(Session.Type.COURSE);
         session.setInsertTime(new Date());
         session.setDiscipline(discipline);
+        session.setHalfYear("A");
 
         sessionRepository.save(session);
     }
-
-
-
-
 
     @Test()
     public void readSession() {

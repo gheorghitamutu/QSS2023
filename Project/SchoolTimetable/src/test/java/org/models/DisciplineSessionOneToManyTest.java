@@ -63,6 +63,7 @@ public class DisciplineSessionOneToManyTest {
         session.setInsertTime(new Date());
         session.setType(Session.Type.COURSE);
         session.setDiscipline(discipline);
+        session.setHalfYear("A");
 
         discipline.setSessions(Collections.singleton(session));
 
