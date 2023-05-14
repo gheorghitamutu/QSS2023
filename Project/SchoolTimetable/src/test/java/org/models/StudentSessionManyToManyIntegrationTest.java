@@ -42,7 +42,6 @@ public class StudentSessionManyToManyIntegrationTest {
 
 
         this.app = GuiceInjectorSingleton.INSTANCE.getInjector().getInstance(Application.class);
-        new TimetableEntitiesFactory(app).createTimetableEntities();
     }
 
     @AfterAll
@@ -89,5 +88,9 @@ public class StudentSessionManyToManyIntegrationTest {
         sessionRepository.save(session);
 
         studentRepository.save(student);
+
+        Assertions.assertEquals(1, disciplineRepository.readAll().size());
+        Assertions.assertEquals(1, sessionRepository.readAll().size());
+        Assertions.assertEquals(1, studentRepository.readAll().size());
     }
 }

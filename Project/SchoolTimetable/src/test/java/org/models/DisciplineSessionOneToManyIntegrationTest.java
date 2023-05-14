@@ -40,7 +40,6 @@ public class DisciplineSessionOneToManyIntegrationTest {
         disciplineRepository = new DisciplineRepository(provider);
 
         this.app = GuiceInjectorSingleton.INSTANCE.getInjector().getInstance(Application.class);
-        new TimetableEntitiesFactory(app).createTimetableEntities();
     }
 
     @AfterAll
@@ -70,5 +69,8 @@ public class DisciplineSessionOneToManyIntegrationTest {
 
         disciplineRepository.save(discipline);
         sessionRepository.save(session);
+
+        Assertions.assertEquals(1, disciplineRepository.readAll().size());
+        Assertions.assertEquals(1, sessionRepository.readAll().size());
     }
 }
