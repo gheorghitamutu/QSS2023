@@ -40,26 +40,26 @@ Current scope:     <a href="../../index.html">all classes</a>
   <td class="name">Teacher</td>
 <td class="coverageStat">
   <span class="percent">
-    76.9%
+    85.7%
   </span>
   <span class="absValue">
-    (10/13)
+    (12/14)
   </span>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    80%
+    88.9%
   </span>
   <span class="absValue">
-    (12/15)
+    (16/18)
   </span>
 </td>
 </tr>
   <tr>
-    <td class="name">Teacher$HibernateInstantiator$A5rbC3H5</td>
+    <td class="name">Teacher$HibernateInstantiator$3BgE31Uv</td>
   </tr>
   <tr>
-    <td class="name">Teacher$HibernateProxy$cWgNFJWJ</td>
+    <td class="name">Teacher$HibernateProxy$RLS3Y99s</td>
   </tr>
   <tr>
     <td class="name">Teacher$Type</td>
@@ -84,18 +84,18 @@ Current scope:     <a href="../../index.html">all classes</a>
   <td class="name"><strong>Total</strong></td>
 <td class="coverageStat">
   <span class="percent">
-    80%
+    87.5%
   </span>
   <span class="absValue">
-    (12/15)
+    (14/16)
   </span>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    82.4%
+    90%
   </span>
   <span class="absValue">
-    (14/17)
+    (18/20)
   </span>
 </td>
 </tr>
@@ -121,7 +121,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;@Entity(name = &quot;Teacher&quot;)
 &nbsp;@Table(name = &quot;teacher&quot;, uniqueConstraints = {@UniqueConstraint(columnNames = {&quot;Id&quot;})})
 &nbsp;@NamedQuery(name = &quot;Teacher.getByName&quot;, query = &quot;SELECT t FROM Teacher t WHERE t.name = :name&quot;)
-<b class="fc">&nbsp;public class Teacher implements Serializable {</b>
+&nbsp;public class Teacher implements Serializable {
 &nbsp;
 <b class="fc">&nbsp;    @ManyToMany(cascade = {CascadeType.ALL})</b>
 &nbsp;    @JoinTable(name = &quot;Teacher_Session&quot;, joinColumns = {@JoinColumn(name = &quot;teacher_id&quot;)}, inverseJoinColumns = {@JoinColumn(name = &quot;session_id&quot;)})
@@ -145,12 +145,20 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;    @Column(name = &quot;insert_time&quot;, nullable = false)
 &nbsp;    private Date insertTime;
 &nbsp;
+<b class="fc">&nbsp;    public Teacher() {</b>
+&nbsp;    }
+&nbsp;
+<b class="fc">&nbsp;    public Teacher(String name, Type type){</b>
+<b class="fc">&nbsp;        this.name = name;</b>
+<b class="fc">&nbsp;        this.type = type;</b>
+&nbsp;    }
+&nbsp;
 &nbsp;    public int getId() {
 <b class="nc">&nbsp;        return id;</b>
 &nbsp;    }
 &nbsp;
 &nbsp;    public void setId(int id) {
-<b class="nc">&nbsp;        this.id = id;</b>
+<b class="fc">&nbsp;        this.id = id;</b>
 &nbsp;    }
 &nbsp;
 &nbsp;    public String getName() {
@@ -221,7 +229,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2023-05-12 18:23</div>
+    <div style="float:right;">generated on 2023-05-14 23:45</div>
 </div>
 </body>
 </html>

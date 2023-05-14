@@ -51,18 +51,18 @@ Current scope:     <a href="../../index.html">all classes</a>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    44.4%
+    100%
   </span>
   <span class="absValue">
-    (4/9)
+    (9/9)
   </span>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    40.9%
+    77.3%
   </span>
   <span class="absValue">
-    (18/44)
+    (34/44)
   </span>
 </td>
 </tr>
@@ -116,8 +116,8 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;
 &nbsp;        try {
 <b class="fc">&nbsp;            studentGroupRepository.save(group);</b>
-<b class="nc">&nbsp;        } catch (Exception e) {</b>
-<b class="nc">&nbsp;            throw new StudentGroupAdditionException(&quot;[StudentGroupsService] Failed adding group!&quot;, e);</b>
+<b class="fc">&nbsp;        } catch (Exception e) {</b>
+<b class="fc">&nbsp;            throw new StudentGroupAdditionException(&quot;[StudentGroupsService] Failed adding group!&quot;, e);</b>
 <b class="fc">&nbsp;        }</b>
 &nbsp;
 <b class="fc">&nbsp;        return group;</b>
@@ -125,9 +125,9 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;
 &nbsp;    @Override
 &nbsp;    public boolean deleteStudentGroup(int studentGroupId) throws StudentGroupNotFoundException, StudentGroupDeletionFailed {
-<b class="nc">&nbsp;        var group = studentGroupRepository.getById(studentGroupId);</b>
-<b class="nc">&nbsp;        if (group == null) {</b>
-<b class="nc">&nbsp;            throw new StudentGroupNotFoundException(MessageFormat.format(&quot;[StudentGroupsService] Student Group with id {0} not found.&quot;, studentGroupId));</b>
+<b class="fc">&nbsp;        var group = studentGroupRepository.getById(studentGroupId);</b>
+<b class="fc">&nbsp;        if (group == null) {</b>
+<b class="fc">&nbsp;            throw new StudentGroupNotFoundException(MessageFormat.format(&quot;[StudentGroupsService] Student Group with id {0} not found.&quot;, studentGroupId));</b>
 &nbsp;        }
 &nbsp;
 &nbsp;        try {
@@ -141,12 +141,12 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;
 &nbsp;    @Override
 &nbsp;    public boolean deleteStudentGroup(String name) throws StudentGroupDeletionFailed {
-<b class="nc">&nbsp;        var groups = studentGroupRepository.readAll().stream().filter(sg -&gt; sg.getName().equals(name)).toList();</b>
+<b class="fc">&nbsp;        var groups = studentGroupRepository.readAll().stream().filter(sg -&gt; sg.getName().equals(name)).toList();</b>
 &nbsp;
 &nbsp;        try {
-<b class="nc">&nbsp;            studentGroupRepository.deleteMany(groups);</b>
-<b class="nc">&nbsp;        } catch (Exception e) {</b>
-<b class="nc">&nbsp;            throw new StudentGroupDeletionFailed(&quot; [StudentGroupsService] Failed to delete student groups.&quot;, e);</b>
+<b class="fc">&nbsp;            studentGroupRepository.deleteMany(groups);</b>
+<b class="fc">&nbsp;        } catch (Exception e) {</b>
+<b class="fc">&nbsp;            throw new StudentGroupDeletionFailed(&quot; [StudentGroupsService] Failed to delete student groups.&quot;, e);</b>
 <b class="nc">&nbsp;        }</b>
 &nbsp;
 <b class="nc">&nbsp;        return true;</b>
@@ -157,8 +157,8 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;
 &nbsp;        try {
 <b class="fc">&nbsp;            studentGroupRepository.deleteMany(studentGroupRepository.readAll());</b>
-<b class="nc">&nbsp;        } catch (Exception e) {</b>
-<b class="nc">&nbsp;            throw new StudentGroupDeletionFailed(&quot; [StudentGroupsService] Failed to delete student groups.&quot;, e);</b>
+<b class="fc">&nbsp;        } catch (Exception e) {</b>
+<b class="fc">&nbsp;            throw new StudentGroupDeletionFailed(&quot; [StudentGroupsService] Failed to delete student groups.&quot;, e);</b>
 <b class="fc">&nbsp;        }</b>
 &nbsp;
 <b class="fc">&nbsp;        return true;</b>
@@ -166,9 +166,9 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;
 &nbsp;    @Override
 &nbsp;    public StudentGroup getStudentGroupById(int studentGroupId) throws StudentGroupNotFoundException {
-<b class="nc">&nbsp;        var group = studentGroupRepository.getById(studentGroupId);</b>
-<b class="nc">&nbsp;        if (group == null) {</b>
-<b class="nc">&nbsp;            throw new StudentGroupNotFoundException(MessageFormat.format(&quot;[StudentGroupsService] Student Group with id {0} not found.&quot;, studentGroupId));</b>
+<b class="fc">&nbsp;        var group = studentGroupRepository.getById(studentGroupId);</b>
+<b class="fc">&nbsp;        if (group == null) {</b>
+<b class="fc">&nbsp;            throw new StudentGroupNotFoundException(MessageFormat.format(&quot;[StudentGroupsService] Student Group with id {0} not found.&quot;, studentGroupId));</b>
 &nbsp;        }
 <b class="nc">&nbsp;        return group;</b>
 &nbsp;    }
@@ -180,12 +180,12 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;
 &nbsp;    @Override
 &nbsp;    public List&lt;StudentGroup&gt; getStudentGroupsByYear(int year) {
-<b class="nc">&nbsp;        return studentGroupRepository.readAll().stream().filter(group -&gt; group.getYear() == year).toList();</b>
+<b class="fc">&nbsp;        return studentGroupRepository.readAll().stream().filter(group -&gt; group.getYear() == year).toList();</b>
 &nbsp;    }
 &nbsp;
 &nbsp;    @Override
 &nbsp;    public List&lt;StudentGroup&gt; getStudentGroupsByType(StudentGroup.Type type) {
-<b class="nc">&nbsp;        return studentGroupRepository.readAll().stream().filter(group -&gt; group.getType() == type).toList();</b>
+<b class="fc">&nbsp;        return studentGroupRepository.readAll().stream().filter(group -&gt; group.getType() == type).toList();</b>
 &nbsp;    }
 &nbsp;}
 </code>
@@ -211,7 +211,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2023-05-12 18:23</div>
+    <div style="float:right;">generated on 2023-05-14 23:45</div>
 </div>
 </body>
 </html>

@@ -51,18 +51,18 @@ Current scope:     <a href="../../index.html">all classes</a>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    57.1%
+    100%
   </span>
   <span class="absValue">
-    (4/7)
+    (7/7)
   </span>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    36.6%
+    70.7%
   </span>
   <span class="absValue">
-    (15/41)
+    (29/41)
   </span>
 </td>
 </tr>
@@ -116,8 +116,8 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;
 &nbsp;        try {
 <b class="fc">&nbsp;            roomRepository.save(room);</b>
-<b class="nc">&nbsp;        } catch (Exception e) {</b>
-<b class="nc">&nbsp;            throw new RoomAdditionException(&quot;[RoomService] Failed adding room!&quot;, e);</b>
+<b class="fc">&nbsp;        } catch (Exception e) {</b>
+<b class="fc">&nbsp;            throw new RoomAdditionException(&quot;[RoomService] Failed adding room!&quot;, e);</b>
 <b class="fc">&nbsp;        }</b>
 &nbsp;
 <b class="fc">&nbsp;        return room;</b>
@@ -125,9 +125,9 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;
 &nbsp;    @Override
 &nbsp;    public boolean deleteRoom(int roomId) throws RoomNotFoundException, RoomDeletionFailed {
-<b class="nc">&nbsp;        var room = roomRepository.getById(roomId);</b>
-<b class="nc">&nbsp;        if (room == null) {</b>
-<b class="nc">&nbsp;            throw new RoomNotFoundException(MessageFormat.format(&quot;[RoomService] Room with id {0} not found.&quot;, roomId));</b>
+<b class="fc">&nbsp;        var room = roomRepository.getById(roomId);</b>
+<b class="fc">&nbsp;        if (room == null) {</b>
+<b class="fc">&nbsp;            throw new RoomNotFoundException(MessageFormat.format(&quot;[RoomService] Room with id {0} not found.&quot;, roomId));</b>
 &nbsp;        }
 &nbsp;
 &nbsp;        try {
@@ -141,12 +141,12 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;
 &nbsp;    @Override
 &nbsp;    public boolean deleteRooms(String name) throws RoomDeletionFailed {
-<b class="nc">&nbsp;        var rooms = roomRepository.readAll().stream().filter(r -&gt; r.getName().equals(name)).toList();</b>
+<b class="fc">&nbsp;        var rooms = roomRepository.readAll().stream().filter(r -&gt; r.getName().equals(name)).toList();</b>
 &nbsp;
 &nbsp;        try {
-<b class="nc">&nbsp;            roomRepository.deleteMany(rooms);</b>
-<b class="nc">&nbsp;        } catch (Exception e) {</b>
-<b class="nc">&nbsp;            throw new RoomDeletionFailed(&quot; [RoomService] Failed to delete rooms.&quot;, e);</b>
+<b class="fc">&nbsp;            roomRepository.deleteMany(rooms);</b>
+<b class="fc">&nbsp;        } catch (Exception e) {</b>
+<b class="fc">&nbsp;            throw new RoomDeletionFailed(&quot; [RoomService] Failed to delete rooms.&quot;, e);</b>
 <b class="nc">&nbsp;        }</b>
 &nbsp;
 <b class="nc">&nbsp;        return true;</b>
@@ -156,8 +156,8 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;    public boolean deleteAll() throws RoomDeletionFailed {
 &nbsp;        try {
 <b class="fc">&nbsp;            roomRepository.deleteMany(roomRepository.readAll());</b>
-<b class="nc">&nbsp;        } catch (Exception e) {</b>
-<b class="nc">&nbsp;            throw new RoomDeletionFailed(&quot; [RoomService] Failed to delete rooms.&quot;, e);</b>
+<b class="fc">&nbsp;        } catch (Exception e) {</b>
+<b class="fc">&nbsp;            throw new RoomDeletionFailed(&quot; [RoomService] Failed to delete rooms.&quot;, e);</b>
 <b class="fc">&nbsp;        }</b>
 &nbsp;
 <b class="fc">&nbsp;        return true;</b>
@@ -165,9 +165,9 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;
 &nbsp;    @Override
 &nbsp;    public Room getRoomById(int roomId) throws RoomNotFoundException {
-<b class="nc">&nbsp;        var room = roomRepository.getById(roomId);</b>
-<b class="nc">&nbsp;        if (room == null) {</b>
-<b class="nc">&nbsp;            throw new RoomNotFoundException(MessageFormat.format(&quot;[RoomService] Room with id {0} not found.&quot;, roomId));</b>
+<b class="fc">&nbsp;        var room = roomRepository.getById(roomId);</b>
+<b class="fc">&nbsp;        if (room == null) {</b>
+<b class="fc">&nbsp;            throw new RoomNotFoundException(MessageFormat.format(&quot;[RoomService] Room with id {0} not found.&quot;, roomId));</b>
 &nbsp;        }
 <b class="nc">&nbsp;        return room;</b>
 &nbsp;    }
@@ -200,7 +200,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2023-05-12 18:23</div>
+    <div style="float:right;">generated on 2023-05-14 23:45</div>
 </div>
 </body>
 </html>
