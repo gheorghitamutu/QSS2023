@@ -6,7 +6,6 @@ import org.dataaccess.database.IHibernateProvider;
 import org.dataaccess.database.TestsDatabaseHibernateProvider;
 import org.dataaccess.discipline.DisciplineRepository;
 import org.dataaccess.session.SessionRepository;
-import org.databaseseed.TimetableEntitiesFactory;
 import org.di.TestsDI;
 import org.domain.exceptions.RepositoryOperationException;
 import org.domain.exceptions.Timeslot.TimeslotDeletionFailed;
@@ -24,7 +23,7 @@ import java.util.Collections;
 import java.util.Date;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class DisciplineSessionOneToManyIntegrationTest {
+public class DisciplineSessionOneToManyTest {
 
     private DisciplineRepository disciplineRepository;
     private SessionRepository sessionRepository;

@@ -106,13 +106,7 @@ public class MinimalAllServicesTest {
 
         var tssSorted = app.timeslotsService.getSortedTimeslotsByStartDateAndTime();
         Assertions.assertEquals(tssSorted.size(), 2);
-        Assertions.assertTrue(
-                tssSorted.get(0).getStartDate().before(tssSorted.get(1).getStartDate())
-                || (tssSorted.get(0).getStartDate().equals(tssSorted.get(1).getStartDate())
-                        && tssSorted.get(0).getTime().before(tssSorted.get(1).getTime()))
-                || (tssSorted.get(0).getStartDate().equals(tssSorted.get(1).getStartDate())
-                        && tssSorted.get(0).getTime().equals(tssSorted.get(1).getTime()))
-        );
+        Assertions.assertTrue(tssSorted.get(0).getStartDate().before(tssSorted.get(1).getStartDate()) || (tssSorted.get(0).getStartDate().equals(tssSorted.get(1).getStartDate()) && tssSorted.get(0).getTime().before(tssSorted.get(1).getTime())) || (tssSorted.get(0).getStartDate().equals(tssSorted.get(1).getStartDate()) && tssSorted.get(0).getTime().equals(tssSorted.get(1).getTime())));
 
         app.timeslotsService.deleteTimeslot(new SimpleDateFormat("dd-MM-yyyy").parse("01-01-2023"), new SimpleDateFormat("HH:mm:ss").parse("15:30:00"), Duration.ofMinutes(120), "C100");
     }

@@ -56,16 +56,15 @@ public class RoomsServiceTests {
         var room1 = new Room("room1", Room.Type.COURSE, 100, 1);
         var room2 = new Room("room2", Room.Type.COURSE, 100, 1);
 
-        Mockito.when(roomRepository.readAll())
-                .thenReturn(new ArrayList<>() {
-                    {
-                        add(room1);
-                    }
+        Mockito.when(roomRepository.readAll()).thenReturn(new ArrayList<>() {
+            {
+                add(room1);
+            }
 
-                    {
-                        add(room2);
-                    }
-                });
+            {
+                add(room2);
+            }
+        });
 
         IRoomsService roomsService = new RoomsService(roomRepository);
 
@@ -77,8 +76,7 @@ public class RoomsServiceTests {
 
         var roomRepository = Mockito.mock(RoomRepository.class);
 
-        Mockito.when(roomRepository.getById(1))
-                .thenReturn(null);
+        Mockito.when(roomRepository.getById(1)).thenReturn(null);
 
         IRoomsService roomsService = new RoomsService(roomRepository);
 
@@ -93,16 +91,15 @@ public class RoomsServiceTests {
         var room1 = new Room("room1", Room.Type.COURSE, 100, 1);
         var room2 = new Room("room2", Room.Type.COURSE, 100, 1);
 
-        Mockito.when(roomRepository.readAll())
-                .thenReturn(new ArrayList<>() {
-                    {
-                        add(room1);
-                    }
+        Mockito.when(roomRepository.readAll()).thenReturn(new ArrayList<>() {
+            {
+                add(room1);
+            }
 
-                    {
-                        add(room2);
-                    }
-                });
+            {
+                add(room2);
+            }
+        });
 
         Mockito.doThrow(new RepositoryOperationException("Repo failure")).when(roomRepository).deleteMany(anyList());
 
@@ -119,16 +116,15 @@ public class RoomsServiceTests {
         var room1 = new Room("room1", Room.Type.COURSE, 100, 1);
         var room2 = new Room("room2", Room.Type.COURSE, 100, 1);
 
-        Mockito.when(roomRepository.readAll())
-                .thenReturn(new ArrayList<>() {
-                    {
-                        add(room1);
-                    }
+        Mockito.when(roomRepository.readAll()).thenReturn(new ArrayList<>() {
+            {
+                add(room1);
+            }
 
-                    {
-                        add(room2);
-                    }
-                });
+            {
+                add(room2);
+            }
+        });
 
         Mockito.doThrow(new RepositoryOperationException("Repo failure")).when(roomRepository).deleteMany(anyList());
 
@@ -146,8 +142,7 @@ public class RoomsServiceTests {
 
         room1.setId(1);
 
-        Mockito.when(roomRepository.getById(1))
-                .thenReturn(null);
+        Mockito.when(roomRepository.getById(1)).thenReturn(null);
 
         IRoomsService roomsService = new RoomsService(roomRepository);
 
@@ -161,8 +156,7 @@ public class RoomsServiceTests {
 
         Mockito.doThrow(new RepositoryOperationException("")).when(roomRepository).save(Mockito.any(Room.class));
 
-        Mockito.when(roomRepository.getByName("room1"))
-                .thenReturn(new Room("room1", Room.Type.COURSE, 100, 1));
+        Mockito.when(roomRepository.getByName("room1")).thenReturn(new Room("room1", Room.Type.COURSE, 100, 1));
 
 
         Assertions.assertThrows(RoomAdditionException.class, () -> {
@@ -177,11 +171,9 @@ public class RoomsServiceTests {
 
         var roomRepository = Mockito.mock(RoomRepository.class);
 
-        Mockito.when(roomRepository.getByName("room1"))
-                .thenReturn(new Room("room1", Room.Type.COURSE, 100, 1));
+        Mockito.when(roomRepository.getByName("room1")).thenReturn(new Room("room1", Room.Type.COURSE, 100, 1));
 
-        Mockito.when(roomRepository.createNewRoom("room1", 50, 2, Room.Type.LABORATORY))
-                .thenReturn(null);
+        Mockito.when(roomRepository.createNewRoom("room1", 50, 2, Room.Type.LABORATORY)).thenReturn(null);
 
         IRoomsService roomsService = new RoomsService(roomRepository);
 

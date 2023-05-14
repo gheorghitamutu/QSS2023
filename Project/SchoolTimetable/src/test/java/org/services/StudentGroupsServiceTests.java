@@ -57,16 +57,15 @@ public class StudentGroupsServiceTests {
         var studentGroup1 = new StudentGroup("group1", 1, StudentGroup.Type.BACHELOR);
         var studentGroup2 = new StudentGroup("group2", 1, StudentGroup.Type.BACHELOR);
 
-        Mockito.when(studentGroupRepository.readAll())
-                .thenReturn(new ArrayList<>() {
-                    {
-                        add(studentGroup1);
-                    }
+        Mockito.when(studentGroupRepository.readAll()).thenReturn(new ArrayList<>() {
+            {
+                add(studentGroup1);
+            }
 
-                    {
-                        add(studentGroup2);
-                    }
-                });
+            {
+                add(studentGroup2);
+            }
+        });
 
         IStudentGroupsService studentGroupsService = new StudentGroupsService(studentGroupRepository);
 
@@ -78,8 +77,7 @@ public class StudentGroupsServiceTests {
 
         var studentGroupRepository = Mockito.mock(StudentGroupRepository.class);
 
-        Mockito.when(studentGroupRepository.getById(1))
-                .thenReturn(null);
+        Mockito.when(studentGroupRepository.getById(1)).thenReturn(null);
 
         IStudentGroupsService studentGroupsService = new StudentGroupsService(studentGroupRepository);
 
@@ -94,16 +92,15 @@ public class StudentGroupsServiceTests {
         var studentGroup1 = new StudentGroup("group1", 1, StudentGroup.Type.BACHELOR);
         var studentGroup2 = new StudentGroup("group2", 1, StudentGroup.Type.BACHELOR);
 
-        Mockito.when(studentGroupRepository.readAll())
-                .thenReturn(new ArrayList<>() {
-                    {
-                        add(studentGroup1);
-                    }
+        Mockito.when(studentGroupRepository.readAll()).thenReturn(new ArrayList<>() {
+            {
+                add(studentGroup1);
+            }
 
-                    {
-                        add(studentGroup2);
-                    }
-                });
+            {
+                add(studentGroup2);
+            }
+        });
 
         Mockito.doThrow(new RepositoryOperationException("Repo failure")).when(studentGroupRepository).deleteMany(anyList());
 
@@ -120,16 +117,15 @@ public class StudentGroupsServiceTests {
         var studentGroup1 = new StudentGroup("group1", 1, StudentGroup.Type.BACHELOR);
         var studentGroup2 = new StudentGroup("group2", 1, StudentGroup.Type.BACHELOR);
 
-        Mockito.when(studentGroupRepository.readAll())
-                .thenReturn(new ArrayList<>() {
-                    {
-                        add(studentGroup1);
-                    }
+        Mockito.when(studentGroupRepository.readAll()).thenReturn(new ArrayList<>() {
+            {
+                add(studentGroup1);
+            }
 
-                    {
-                        add(studentGroup2);
-                    }
-                });
+            {
+                add(studentGroup2);
+            }
+        });
 
         Mockito.doThrow(new RepositoryOperationException("Repo failure")).when(studentGroupRepository).deleteMany(anyList());
 
@@ -147,8 +143,7 @@ public class StudentGroupsServiceTests {
 
         studentGroup1.setId(1);
 
-        Mockito.when(studentGroupRepository.getById(1))
-                .thenReturn(null);
+        Mockito.when(studentGroupRepository.getById(1)).thenReturn(null);
 
         IStudentGroupsService studentGroupsService = new StudentGroupsService(studentGroupRepository);
 
@@ -163,16 +158,15 @@ public class StudentGroupsServiceTests {
         var studentGroup1 = new StudentGroup("group1", 1, StudentGroup.Type.BACHELOR);
         var studentGroup2 = new StudentGroup("group2", 2, StudentGroup.Type.BACHELOR);
 
-        Mockito.when(studentGroupRepository.readAll())
-                .thenReturn(new ArrayList<>() {
-                    {
-                        add(studentGroup1);
-                    }
+        Mockito.when(studentGroupRepository.readAll()).thenReturn(new ArrayList<>() {
+            {
+                add(studentGroup1);
+            }
 
-                    {
-                        add(studentGroup2);
-                    }
-                });
+            {
+                add(studentGroup2);
+            }
+        });
 
         IStudentGroupsService studentGroupsService = new StudentGroupsService(studentGroupRepository);
         Assertions.assertEquals(List.of(studentGroup1), studentGroupsService.getStudentGroupsByYear(1));
@@ -186,16 +180,15 @@ public class StudentGroupsServiceTests {
         var studentGroup1 = new StudentGroup("group1", 1, StudentGroup.Type.BACHELOR);
         var studentGroup2 = new StudentGroup("group2", 1, StudentGroup.Type.MASTER);
 
-        Mockito.when(studentGroupRepository.readAll())
-                .thenReturn(new ArrayList<>() {
-                    {
-                        add(studentGroup1);
-                    }
+        Mockito.when(studentGroupRepository.readAll()).thenReturn(new ArrayList<>() {
+            {
+                add(studentGroup1);
+            }
 
-                    {
-                        add(studentGroup2);
-                    }
-                });
+            {
+                add(studentGroup2);
+            }
+        });
 
         IStudentGroupsService studentGroupsService = new StudentGroupsService(studentGroupRepository);
         Assertions.assertEquals(List.of(studentGroup1), studentGroupsService.getStudentGroupsByType(StudentGroup.Type.BACHELOR));
@@ -208,8 +201,7 @@ public class StudentGroupsServiceTests {
 
         Mockito.doThrow(new RepositoryOperationException("")).when(studentGroupRepository).save(Mockito.any(StudentGroup.class));
 
-        Mockito.when(studentGroupRepository.getByGroupName("group1"))
-                .thenReturn(new StudentGroup("group1", 1, StudentGroup.Type.BACHELOR));
+        Mockito.when(studentGroupRepository.getByGroupName("group1")).thenReturn(new StudentGroup("group1", 1, StudentGroup.Type.BACHELOR));
 
 
         Assertions.assertThrows(StudentGroupAdditionException.class, () -> {
