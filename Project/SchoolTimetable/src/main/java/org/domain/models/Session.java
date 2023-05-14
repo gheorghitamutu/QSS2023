@@ -44,6 +44,14 @@ public class Session implements Serializable {
     @Column(name = "insert_time", nullable = false)
     private Date insertTime;
 
+    public Session(){
+    }
+
+    public Session(Type type, String halfYear){
+        this.type = type;
+        this.halfYear = halfYear;
+    }
+
     public int getId() {
         return id;
     }

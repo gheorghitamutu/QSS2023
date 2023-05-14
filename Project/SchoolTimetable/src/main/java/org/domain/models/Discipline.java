@@ -36,6 +36,14 @@ public class Discipline implements Serializable {
     @Column(name = "insert_time", nullable = false)
     private Date insertTime;
 
+    public Discipline() {
+    }
+
+    public Discipline(String name, int credits){
+        this.name = name;
+        this.credits = credits;
+    }
+
     public int getId() {
         return id;
     }

@@ -38,6 +38,16 @@ public class Room implements Serializable {
     @Column(name = "insert_time", nullable = false)
     private Date insertTime;
 
+    public Room() {
+    }
+
+    public Room(String name, Type type, int capacity, int floor){
+        this.name = name;
+        this.type = type;
+        this.capacity = capacity;
+        this.floor = floor;
+    }
+
     public int getId() {
         return id;
     }
