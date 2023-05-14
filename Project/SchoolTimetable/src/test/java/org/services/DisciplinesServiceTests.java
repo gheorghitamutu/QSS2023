@@ -30,7 +30,6 @@ import static org.mockito.ArgumentMatchers.anyList;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class DisciplinesServiceTests {
-
     private Application app;
 
     @BeforeAll
@@ -152,25 +151,15 @@ public class DisciplinesServiceTests {
         var teacherRepository = Mockito.mock(TeacherRepository.class);
 
         var discipline1 = new Discipline("discipline1", 4);
-        var discipline2 = new Discipline("discipline2", 4);
 
         discipline1.setId(1);
-        discipline2.setId(2);
 
-        Mockito.when(disciplineRepository.readAll())
-                .thenReturn(new ArrayList<>() {
-                    {
-                        add(discipline1);
-                    }
-
-                    {
-                        add(discipline2);
-                    }
-                });
+        Mockito.when(disciplineRepository.getById(1))
+                .thenReturn(null);
 
         IDisciplinesService disciplinesService = new DisciplinesService(disciplineRepository, teacherRepository);
 
-        Assertions.assertThrows(DisciplineNotFoundException.class, () -> disciplinesService.getDisciplineById(3));
+        Assertions.assertThrows(DisciplineNotFoundException.class, () -> disciplinesService.getDisciplineById(1));
     }
 
     @Test
