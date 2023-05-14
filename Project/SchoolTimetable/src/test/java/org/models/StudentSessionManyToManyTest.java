@@ -78,7 +78,7 @@ public class StudentSessionManyToManyTest {
         Student student = new Student();
         student.setGroup(studentGroup);
         student.setYear(1);
-        student.setName("test");
+        student.setName("test student");
         student.setRegistrationNumber("310910204006SM023000");
         student.setInsertTime(new Date());
         student.setDisciplines(Collections.singleton(discipline));

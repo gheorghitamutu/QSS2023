@@ -59,10 +59,10 @@ Current scope:     <a href="../../index.html">all classes</a>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    76.9%
+    75.9%
   </span>
   <span class="absValue">
-    (40/52)
+    (41/54)
   </span>
 </td>
 </tr>
@@ -166,7 +166,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 <b class="fc">&nbsp;        Set&lt;Timeslot&gt; timeslots = timeslotRepository.readAll().stream().filter(t -&gt; t.getRoom().equals(room)).collect(Collectors.toSet());</b>
 <b class="fc">&nbsp;        for (Timeslot timeslot : timeslots) {</b>
 <b class="fc">&nbsp;            if (value == timeslot) { // don&#39;t check against current timeslot</b>
-<b class="fc">&nbsp;                continue;</b>
+<b class="nc">&nbsp;                continue;</b>
 &nbsp;            }
 &nbsp;
 <b class="fc">&nbsp;            var vsd = value.getStartDate();</b>
@@ -178,6 +178,9 @@ Current scope:     <a href="../../index.html">all classes</a>
 <b class="fc">&nbsp;            var tet = Date.from(tt.toInstant().plus(timeslot.getTimespan()));</b>
 &nbsp;
 <b class="fc">&nbsp;            if (value.getWeekday() == timeslot.getWeekday()) {</b>
+<b class="fc">&nbsp;                if (vsd.equals(tsd) &amp;&amp; vt.equals(tt)) {</b>
+<b class="fc">&nbsp;                    return false;</b>
+&nbsp;                }
 <b class="fc">&nbsp;                if (vsd.after(tsd) &amp;&amp; vsd.before(ted)) {</b>
 <b class="fc">&nbsp;                    if (vt.after(tt) &amp;&amp; vt.before(tet)) {</b>
 <b class="nc">&nbsp;                        return false;</b>
@@ -213,7 +216,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2023-05-15 00:05</div>
+    <div style="float:right;">generated on 2023-05-15 00:38</div>
 </div>
 </body>
 </html>

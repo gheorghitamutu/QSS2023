@@ -157,11 +157,9 @@ public class TeachersServiceTests {
 
         Mockito.when(teacherRepository.getByName("teacher1")).thenReturn(new Teacher("teacher1", Teacher.Type.TEACHER));
 
-
         Assertions.assertThrows(TeacherAdditionException.class, () -> {
             ITeachersService teachersService = new TeachersService(teacherRepository);
-
-            var teacher = teachersService.addTeacher("teacher1", Teacher.Type.TEACHER);
+            teachersService.addTeacher("teacher1", Teacher.Type.TEACHER);
         });
     }
 

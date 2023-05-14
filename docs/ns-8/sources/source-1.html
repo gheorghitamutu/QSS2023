@@ -59,10 +59,10 @@ Current scope:     <a href="../../index.html">all classes</a>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    51.4%
+    54.4%
   </span>
   <span class="absValue">
-    (37/72)
+    (37/68)
   </span>
 </td>
 </tr>
@@ -116,15 +116,8 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;
 &nbsp;        try {
 <b class="fc">&nbsp;            timeslot = timeslotRepository.createNewTimeslot(startDate, endDate, time, duration, day, periodicity, room, session);</b>
-<b class="nc">&nbsp;        } catch (RepositoryOperationException e) {</b>
-<b class="nc">&nbsp;            throw new RuntimeException(e);</b>
-<b class="fc">&nbsp;        }</b>
-&nbsp;
-&nbsp;
-&nbsp;        try {
-<b class="fc">&nbsp;            timeslotRepository.save(timeslot);</b>
-<b class="nc">&nbsp;        } catch (Exception e) {</b>
-<b class="nc">&nbsp;            throw new TimeslotAdditionException(&quot;[TimeslotService] Failed adding timeslot!&quot;, e);</b>
+<b class="fc">&nbsp;        } catch (RepositoryOperationException e) {</b>
+<b class="fc">&nbsp;            throw new TimeslotAdditionException(&quot;[TimeslotService] Failed adding timeslot!&quot;, e);</b>
 <b class="fc">&nbsp;        }</b>
 &nbsp;
 <b class="fc">&nbsp;        return timeslot;</b>
@@ -263,7 +256,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2023-05-15 00:05</div>
+    <div style="float:right;">generated on 2023-05-15 00:38</div>
 </div>
 </body>
 </html>
