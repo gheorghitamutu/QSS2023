@@ -49,10 +49,6 @@ public class TeacherValidator implements ConstraintValidator<ValidTeacher, Teach
 
         Set<Discipline> disciplines = value.getDisciplines();
         for (Discipline discipline : disciplines) {
-            if (!disciplineRepository.validate(discipline)) {
-                return false;
-            }
-
             if (!discipline.getTeachers().contains(value)) {
                 return false;
             }
