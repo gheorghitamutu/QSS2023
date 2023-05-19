@@ -103,8 +103,7 @@ public class Discipline implements Serializable {
         return insertTime;
     }
 
-    @Valid
-    public Set<Student> getStudents() {
+    public Set<@Valid Student> getStudents() {
         return students;
     }
 
@@ -116,8 +115,7 @@ public class Discipline implements Serializable {
         this.students = students;
     }
 
-    @Valid
-    public Set<Session> getSessions() {
+    public Set<@Valid Session> getSessions() {
         return sessions;
     }
 
@@ -128,8 +126,7 @@ public class Discipline implements Serializable {
         this.sessions = sessions;
     }
 
-    @Valid
-    public Set<Teacher> getTeachers() {
+    public Set<@Valid Teacher> getTeachers() {
         return teachers;
     }
 
