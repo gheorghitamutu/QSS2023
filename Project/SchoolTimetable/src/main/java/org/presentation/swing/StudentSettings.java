@@ -1,5 +1,7 @@
 package org.presentation.swing;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 import org.domain.exceptions.student.StudentAdditionException;
 import org.domain.exceptions.student.StudentDeletionFailed;
 import org.domain.exceptions.student.StudentNotFoundException;
@@ -15,7 +17,9 @@ import java.util.Objects;
 public class StudentSettings extends JFrame implements BaseSettings {
     public StudentSettings(){
     }
-    public JPanel addStudentForm(JPanel currentPanel){
+    public JPanel addStudentForm(
+            @NotEmpty(message = "Current panel shoul not be empty.")
+            JPanel currentPanel){
         currentPanel.setBackground(Color.decode("#F6FFDE"));
 
         currentPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
@@ -74,11 +78,17 @@ public class StudentSettings extends JFrame implements BaseSettings {
             public void actionPerformed(ActionEvent e) {
                 // TODO
                 System.out.println("Insert student button  clicked");
+                @NotBlank(message = "Year combo selector value should not be empty.")
                 String yearComboValue = (String) yearComboBox.getSelectedItem();
+                @NotBlank(message = "Group combo selector value should not be empty.")
                 String groupComboValue = (String) groupComboBox.getSelectedItem();
                 try {
                     assert yearComboValue != null;
-                     GUI.app.studentsService.addStudent(nameField.getText(), regField.getText(), Integer.parseInt(yearComboValue), groupComboValue);
+                     GUI.app.studentsService.addStudent(
+                             Objects.requireNonNull(nameField.getText(),"Student combo selector value should not be blank."),
+                             Objects.requireNonNull(regField.getText(),"Registration value should not be blank."),
+                             Objects.requireNonNull(Integer.parseInt(yearComboValue), "Year combo selector value should not be null;"),
+                             groupComboValue);
 
                 } catch (StudentAdditionException ex) {
                     JOptionPane.showMessageDialog(
@@ -97,7 +107,9 @@ public class StudentSettings extends JFrame implements BaseSettings {
         return currentPanel;
     }
 
-    public JPanel deleteStudentForm(JPanel currentPanel){
+    public JPanel deleteStudentForm(
+            @NotEmpty(message = "Current value should not be empty")
+            JPanel currentPanel){
 
         currentPanel.setBackground(Color.decode("#F6FFDE"));
 
@@ -126,10 +138,9 @@ public class StudentSettings extends JFrame implements BaseSettings {
         buttonPanel.setBackground(Color.decode("#F6FFDE"));
         submitButtonDelete.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                // TODO
                 System.out.println("Delete btn clicked");
                 try {
-                    GUI.app.studentsService.deleteStudent(regField.getText());
+                    GUI.app.studentsService.deleteStudent(Objects.requireNonNull(regField.getText(), "Registration value should not be null."));
                 } catch (StudentNotFoundException ex) {
                     JOptionPane.showMessageDialog(
                             null,
@@ -193,7 +204,10 @@ public class StudentSettings extends JFrame implements BaseSettings {
     }
 
     @Override
-    public JPanel createJPanel(JPanel main, String labelText) {
+    public JPanel createJPanel( @NotEmpty(message = "Main panel should not be empty.")
+                                    JPanel main,
+                                @NotBlank(message = "Label text should not be blank.")
+                                    String labelText) {
         // Remove previous components from right panel and add result label
         main.removeAll();
         // create insertPanel
