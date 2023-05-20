@@ -1,5 +1,8 @@
 package org.presentation.swing;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import org.domain.exceptions.discipline.DisciplineNotFoundException;
 import org.domain.exceptions.session.SessionAdditionException;
 import org.domain.exceptions.session.SessionDeletionFailed;
@@ -20,7 +23,9 @@ public class SessionSettings implements BaseSettings{
 
     }
 
-    private void addGroupToSessionForm(JPanel currentPanel){
+    private void addGroupToSessionForm(
+            @NotEmpty(message = "Group to Session label should not be empty.")
+            JPanel currentPanel){
 
         JLabel titleLabel1 = new JLabel("ADD GROUP TO SESSION");
         titleLabel1.setFont(new Font("serif", Font.BOLD, 25));
@@ -39,7 +44,7 @@ public class SessionSettings implements BaseSettings{
 
         var allSession = GUI.app.sessionsService.getSessions();
         for (var s : allSession) {
-            sessionSelector.addItem(s.getDiscipline().getName());
+            sessionSelector.addItem(Objects.requireNonNull(s.getDiscipline().getName(), "Discipline name should not be blank.") );
         }
         JPanel sessionPanel = createFieldPanel(sessionLabel, sessionSelector);
         currentPanel.add(sessionPanel);
@@ -55,7 +60,7 @@ public class SessionSettings implements BaseSettings{
         // get all the disciplines from db
         var allGroupsName = GUI.app.studentGroupsService.getStudentGroups();
         for (var group : allGroupsName) {
-            groupSelector.addItem(group.getName());
+            groupSelector.addItem(Objects.requireNonNull(group.getName(), "Group name shuld not be blank"));
         }
         JPanel teacherPanel = createFieldPanel(groupLabel, groupSelector);
         currentPanel.add(teacherPanel);
@@ -66,10 +71,14 @@ public class SessionSettings implements BaseSettings{
         JPanel groupButtonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         groupButtonPanel.setBackground(Color.decode("#F6FFDE"));
         groupBtn.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+            public void actionPerformed(
+                    @NotEmpty(message = "Current event e should not be empty")
+                    ActionEvent e) {
                 System.out.println("ADD GROUP TO A SESSION CLICKED");
                 try {
-                    GUI.app.sessionsService.addGroupToSession((String) sessionSelector.getSelectedItem(), (String) groupSelector.getSelectedItem() );
+                    GUI.app.sessionsService.addGroupToSession(
+                            Objects.requireNonNull((String) sessionSelector.getSelectedItem(),"Session combo selector value should not be blank."),
+                            Objects.requireNonNull((String) groupSelector.getSelectedItem(),"Group combo selector value should not be blank.") );
                 } catch (DisciplineNotFoundException | StudentGroupNotFoundException | SessionNotFoundException ex) {
                     JOptionPane.showMessageDialog(
                             null,
@@ -85,7 +94,11 @@ public class SessionSettings implements BaseSettings{
         currentPanel.add(groupButtonPanel);
 
     }
-    private JPanel createFieldPanel(JLabel label, JComponent component) {
+    private JPanel createFieldPanel(
+            @NotEmpty(message = "Current label should not be empty")
+            JLabel label,
+            @NotEmpty(message = "Current component should not be empty")
+            JComponent component) {
         JPanel panel = new JPanel();
         panel.setBackground(Color.decode("#F6FFDE"));
         panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
@@ -96,7 +109,9 @@ public class SessionSettings implements BaseSettings{
         return panel;
     }
 
-    public JPanel deleteRoomForm(JPanel currentPanel){
+    public JPanel deleteRoomForm(
+            @NotEmpty(message = "Current panel should not be empty.")
+            JPanel currentPanel){
 
         currentPanel.setBackground(Color.decode("#F6FFDE"));
 
@@ -119,7 +134,7 @@ public class SessionSettings implements BaseSettings{
         // get all the disciplines from db
         var allSessions = GUI.app.sessionsService.getSessions();
         for (var session : allSessions) {
-            model.addItem(session.getDiscipline().getName());
+            model.addItem(Objects.requireNonNull(session.getDiscipline().getName(), "Session name should not be null."));
         }
         JPanel dataPanel = createFieldPanel(regLabel, model);
         currentPanel.add(dataPanel);
@@ -133,7 +148,7 @@ public class SessionSettings implements BaseSettings{
             public void actionPerformed(ActionEvent e) {
                 System.out.println("Delete session btn clicked");
                 try {
-                    GUI.app.sessionsService.deleteSession((String) model.getSelectedItem());
+                    GUI.app.sessionsService.deleteSession(Objects.requireNonNull((String) model.getSelectedItem(), "Session combo selector value should not be null."));
                 } catch (DisciplineNotFoundException | SessionDeletionFailed | SessionNotFoundException ex) {
                     JOptionPane.showMessageDialog(
                             null,
@@ -152,7 +167,9 @@ public class SessionSettings implements BaseSettings{
         return currentPanel;
     }
 
-    public JPanel addSessionForm(JPanel currentPanel){
+    public JPanel addSessionForm(
+            @NotEmpty(message = "Current panel should not be empty.")
+            JPanel currentPanel){
         currentPanel.setBackground(Color.decode("#F6FFDE"));
 
         currentPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
@@ -210,9 +227,9 @@ public class SessionSettings implements BaseSettings{
                 // TODO
                 System.out.println("Insert session btn clicked");
                 try {
-                    GUI.app.sessionsService.addSession(Session.Type.valueOf((String) typeComboBox.getSelectedItem()),
-                            (String) halfyearComboBox.getSelectedItem(),
-                            (String) model.getSelectedItem());
+                    GUI.app.sessionsService.addSession(Objects.requireNonNull(Session.Type.valueOf((String) typeComboBox.getSelectedItem()), "Session type combo selector value should not be empty."),
+                           Objects.requireNonNull ((String) halfyearComboBox.getSelectedItem(),"Half year combo selector value should not be empty."),
+                            Objects.requireNonNull((String) model.getSelectedItem(), "Model combo selector value should not be empty."));
                 } catch (SessionAdditionException | DisciplineNotFoundException ex) {
                     JOptionPane.showMessageDialog(
                             null,
@@ -244,7 +261,7 @@ public class SessionSettings implements BaseSettings{
 
         var allSession = GUI.app.sessionsService.getSessions();
         for (var s : allSession) {
-            sessionSelector.addItem(s.getDiscipline().getName());
+            sessionSelector.addItem(Objects.requireNonNull(s.getDiscipline().getName(), "Sesssion name should be not null"));
         }
         JPanel sessionPanel = createFieldPanel(sessionLabel, sessionSelector);
         currentPanel.add(sessionPanel);
@@ -260,7 +277,7 @@ public class SessionSettings implements BaseSettings{
 
         var allTeacher = GUI.app.teachersService.getTeachers();
         for (var t : allTeacher) {
-            teacherSelector.addItem(t.getName());
+            teacherSelector.addItem(Objects.requireNonNull(t.getName(), "Teacher name should be not blank."));
         }
         JPanel teacherPanel = createFieldPanel(teacherLabel, teacherSelector);
         currentPanel.add(teacherPanel);
@@ -274,7 +291,9 @@ public class SessionSettings implements BaseSettings{
             public void actionPerformed(ActionEvent e) {
                 System.out.println("ADD TEACHER TO A SESSION CLICKED");
                 try {
-                    GUI.app.sessionsService.addTeacherToSession((String) sessionSelector.getSelectedItem(), (String) teacherSelector.getSelectedItem());
+                    GUI.app.sessionsService.addTeacherToSession(
+                            Objects.requireNonNull((String) sessionSelector.getSelectedItem(), "Session combo selector value should not be empty."),
+                            Objects.requireNonNull((String) teacherSelector.getSelectedItem(), "Teacher combo selector value should not be empty."));
                 } catch (DisciplineNotFoundException | SessionNotFoundException | TeacherNotFoundException ex) {
                     JOptionPane.showMessageDialog(
                             null,
@@ -296,7 +315,11 @@ public class SessionSettings implements BaseSettings{
         return currentPanel;
     }
     @Override
-    public JPanel createJPanel(JPanel main, String labelText) {
+    public JPanel createJPanel(
+            @NotEmpty(message = "Main panel should not be empty.")
+            JPanel main,
+            @NotBlank(message = "Label text should not be blank.")
+            String labelText) {
         // Remove previous components from right panel and add result label
         main.removeAll();
         // create insertPanel

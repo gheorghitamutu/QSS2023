@@ -1,5 +1,8 @@
 package org.presentation.swing;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import org.domain.exceptions.room.RoomAdditionException;
 import org.domain.exceptions.room.RoomDeletionFailed;
 import org.domain.models.Room;
@@ -15,7 +18,11 @@ public class RoomSettings implements BaseSettings {
     public RoomSettings(){
 
     }
-    private JPanel createFieldPanel(JLabel label, JComponent component) {
+    private JPanel createFieldPanel(
+            @NotEmpty(message = "Room label should not be empty.")
+            JLabel label,
+            @NotEmpty (message = "Room component should not be empty.")
+            JComponent component) {
         JPanel panel = new JPanel();
         panel.setBackground(Color.decode("#F6FFDE"));
         panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
@@ -26,7 +33,9 @@ public class RoomSettings implements BaseSettings {
         return panel;
     }
 
-    public JPanel deleteRoomForm(JPanel currentPanel){
+    public JPanel deleteRoomForm(
+            @NotEmpty(message = "Current panel should not be empty.")
+            JPanel currentPanel){
 
         currentPanel.setBackground(Color.decode("#F6FFDE"));
 
@@ -60,10 +69,13 @@ public class RoomSettings implements BaseSettings {
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         buttonPanel.setBackground(Color.decode("#F6FFDE"));
         submitButtonDelete.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+            public void actionPerformed(@NotEmpty(message = "Current event should not be empty")
+                                        ActionEvent e) {
                 System.out.println("Delete room btn clicked");
                 try {
-                    GUI.app.roomsService.deleteRooms((String) model.getSelectedItem());
+                    @NotBlank(message = "Current model should not be blank")
+                    String param = (String) model.getSelectedItem();
+                    GUI.app.roomsService.deleteRooms(param);
                 } catch (RoomDeletionFailed ex) {
                     JOptionPane.showMessageDialog(
                             null,
@@ -83,7 +95,9 @@ public class RoomSettings implements BaseSettings {
         return currentPanel;
     }
 
-    public JPanel addRoomForm(JPanel currentPanel){
+    public JPanel addRoomForm(
+            @NotEmpty(message = "Current panel should not be empty.")
+            JPanel currentPanel){
         currentPanel.setBackground(Color.decode("#F6FFDE"));
 
         currentPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
@@ -141,14 +155,16 @@ public class RoomSettings implements BaseSettings {
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         buttonPanel.setBackground(Color.decode("#F6FFDE"));
         submitButtonAdd.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+            public void actionPerformed(@NotEmpty(message = "Current event should not be empty.")
+                                        ActionEvent e) {
                 System.out.println("Insert room btn clicked");
                 try {
-                    assert nameField.getText() != null;
-                    GUI.app.roomsService.addRoom(nameField.getText(),
-                                                Integer.parseInt((String) Objects.requireNonNull(capacityComboBox.getSelectedItem())),
-                                                Integer.parseInt((String) Objects.requireNonNull(floorComboBox.getSelectedItem())),
-                                                Room.Type.valueOf((String) typeComboBox.getSelectedItem()));
+                    @NotBlank(message = "Room name should not be blank.")
+                    String param1 = nameField.getText();
+                    GUI.app.roomsService.addRoom(param1,
+                                                Integer.parseInt((String) Objects.requireNonNull(capacityComboBox.getSelectedItem(), "Capacity combo selector value should not be blank")),
+                                                Integer.parseInt((String) Objects.requireNonNull(floorComboBox.getSelectedItem(), "Floor combo selector value should not be blank")),
+                                                Room.Type.valueOf((String) Objects.requireNonNull(typeComboBox.getSelectedItem(), "Type combo selector value should not be blank")));
                 } catch (RoomAdditionException ex) {
                     JOptionPane.showMessageDialog(
                             null,
@@ -166,7 +182,11 @@ public class RoomSettings implements BaseSettings {
         return currentPanel;
     }
     @Override
-    public JPanel createJPanel(JPanel main, String labelText) {
+    public JPanel createJPanel(
+            @NotEmpty(message = "Main panel should not be empty.")
+            JPanel main,
+            @NotBlank(message = "Current text label should not be empty.")
+            String labelText) {
         // Remove previous components from right panel and add result label
         main.removeAll();
         // create insertPanel
