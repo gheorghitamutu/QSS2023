@@ -86,7 +86,7 @@ public class MinimalAllServicesTest {
         student.setDisciplines(Collections.singleton(discipline));
 
         var course = app.sessionsService.addSession(Session.Type.COURSE, "A", "Discipline 01");
-        var laboratory = app.sessionsService.addSession(Session.Type.LABORATORY, null, "Discipline 01");
+        var laboratory = app.sessionsService.addSession(Session.Type.LABORATORY, "A", "Discipline 01");
 
         course.setDiscipline(discipline);
         course.setGroups(Collections.singleton(group));

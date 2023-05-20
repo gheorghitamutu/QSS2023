@@ -34,12 +34,6 @@ public class TeacherValidator implements ConstraintValidator<ValidTeacher, Teach
     public boolean isValid(Teacher value, ConstraintValidatorContext context) {
 
         Set<Session> sessions = value.getSessions();
-        for (Session session : sessions) {
-            if (!sessionRepository.validate(session)) {
-                return false;
-            }
-        }
-
         Teacher.Type teacherType = value.getType();
         for (Session session : sessions) {
             if (session.getType() == Session.Type.COURSE && teacherType != Teacher.Type.TEACHER) {
