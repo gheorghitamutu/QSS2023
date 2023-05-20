@@ -41,9 +41,6 @@ public class TimeslotValidator implements ConstraintValidator<ValidTimeslot, Tim
         if (room == null) {
             return false;
         }
-        if (!roomRepository.validate(room)) {
-            return false;
-        }
 
         Session session = value.getSession();
         if (session.getType() == Session.Type.COURSE && room.getType() != Room.Type.COURSE) {
