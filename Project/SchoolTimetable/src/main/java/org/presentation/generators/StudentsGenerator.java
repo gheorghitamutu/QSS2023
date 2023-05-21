@@ -1,5 +1,8 @@
 package org.presentation.generators;
 
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import org.domain.models.StudentGroup;
 import org.domain.models.Timeslot;
 import org.presentation.GUI;
@@ -7,11 +10,22 @@ import org.presentation.GUI;
 import java.util.*;
 
 public class StudentsGenerator extends BaseGenerator{
-    private final List<StudentGroup> groups;
+    @NotNull(message = "Groups list must not be null")
+    private final List<@Valid StudentGroup> groups;
+    @NotNull(message = "Timetables names map must not be null")
     private final Map<String, String> timetablesNames;
+    @NotNull(message = "Lists data map must not be null")
     private final Map<String, String> listsData;
 
-    public StudentsGenerator(String generationDateString, Map<String, Map<Timeslot.Day, StringBuilder>> timetablesDays, Map<String, String> timetablesNames, Map<String, String> listsData){
+    public StudentsGenerator(
+            @NotBlank(message = "Generation string must not be blank")
+            String generationDateString,
+            @NotNull(message = "Days data map must not be null")
+            Map<String, Map<Timeslot.Day, StringBuilder>> timetablesDays,
+            @NotNull(message = "Timetables names map must not be null")
+            Map<String, String> timetablesNames,
+            @NotNull(message = "Lists data map must not be null")
+            Map<String, String> listsData){
         super(generationDateString, timetablesDays);
 
         this.groups = GUI.app.studentGroupsService.getStudentGroups();
@@ -31,8 +45,8 @@ public class StudentsGenerator extends BaseGenerator{
 
         for (StudentGroup studentGroup : this.groups){
             Integer year = studentGroup.getYear();
-            String name = studentGroup.getName();
-            StudentGroup.Type groupType = studentGroup.getType();
+            String name = Objects.requireNonNull(studentGroup.getName(), "Group name should not be null.");
+            StudentGroup.Type groupType = Objects.requireNonNull(studentGroup.getType(), "Group type should not be null.");
             Map<Integer, List<String>> currentMap = typeGroupMap.get(groupType);
 
             if (currentMap.containsKey(year)){

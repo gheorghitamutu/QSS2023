@@ -1,5 +1,9 @@
 package org.presentation.swing;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import org.domain.exceptions.discipline.DisciplineAdditionException;
 import org.domain.exceptions.discipline.DisciplineDeletionFailed;
 import org.domain.exceptions.discipline.DisciplineNotFoundException;
@@ -17,7 +21,11 @@ public class DisciplineSettings implements BaseSettings {
     public DisciplineSettings(){
 
     }
-    private JPanel createFieldPanel(JLabel label, JComponent component) {
+    private JPanel createFieldPanel(
+            @NotNull(message = "Discipline label should not be null")
+            JLabel label,
+            @NotEmpty(message = "Discipline component must not be empty.")
+            JComponent component) {
         JPanel panel = new JPanel();
         panel.setBackground(Color.decode("#F6FFDE"));
         panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
@@ -27,7 +35,9 @@ public class DisciplineSettings implements BaseSettings {
         panel.setMaximumSize(new Dimension(Short.MAX_VALUE, component.getPreferredSize().height));
         return panel;
     }
-    private void addTeacherToDisciplineForm(JPanel currentPanel){
+    private void addTeacherToDisciplineForm(
+            @NotEmpty(message = "Teacher to discipline label form must not be empty")
+            JPanel currentPanel){
 
         JLabel titleLabel1 = new JLabel("ADD TEACHER TO DISCIPLINE");
         titleLabel1.setFont(new Font("serif", Font.BOLD, 25));
@@ -74,11 +84,14 @@ public class DisciplineSettings implements BaseSettings {
         teacherButtonPanel.setBackground(Color.decode("#F6FFDE"));
         teacherBtn.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                // TODO
                 System.out.println("ADD TEACHER TO A DISICPLINE");
                 try {
-                    GUI.app.disciplinesService.addTeacherToDiscipline((String) teacherSelector.getSelectedItem(), (String) disciplineSelector.getSelectedItem());
-                } catch (DisciplineNotFoundException | TeacherNotFoundException ex) {
+                    @NotBlank(message= "Teacher name should not be blank.")
+                    String param1 = (String) teacherSelector.getSelectedItem();
+                    @NotBlank(message = "Discipline name should not be blank.")
+                    String param2 = (String) disciplineSelector.getSelectedItem();
+                    GUI.app.disciplinesService.addTeacherToDiscipline(param1, param2);
+                }catch (DisciplineNotFoundException | TeacherNotFoundException ex) {
                     JOptionPane.showMessageDialog(
                             null,
                             "An exception occurred: " + ex.getMessage(),
@@ -94,7 +107,9 @@ public class DisciplineSettings implements BaseSettings {
         currentPanel.add(teacherButtonPanel);
     }
 
-    public JPanel deleteDisciplineForm(JPanel currentPanel){
+    public JPanel deleteDisciplineForm(
+            @NotEmpty(message = "Delete discipline panel should not be empty")
+            JPanel currentPanel){
 
         currentPanel.setBackground(Color.decode("#F6FFDE"));
 
@@ -130,7 +145,10 @@ public class DisciplineSettings implements BaseSettings {
             public void actionPerformed(ActionEvent e) {
                 System.out.println("Delete room btn clicked");
                 try {
-                    GUI.app.disciplinesService.deleteDisciplines((String) model.getSelectedItem());
+                    @NotBlank(message = "Current model should not be empty")
+                    String param = (String) model.getSelectedItem();
+
+                    GUI.app.disciplinesService.deleteDisciplines(param);
                 } catch ( DisciplineDeletionFailed ex) {
                     JOptionPane.showMessageDialog(
                             null,
@@ -150,7 +168,9 @@ public class DisciplineSettings implements BaseSettings {
         return currentPanel;
     }
 
-    public JPanel addDisciplineForm(JPanel currentPanel){
+    public JPanel addDisciplineForm(
+            @NotEmpty(message = "Add Disicipline panel must not be empty.")
+            JPanel currentPanel){
         currentPanel.setBackground(Color.decode("#F6FFDE"));
 
         currentPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
@@ -188,11 +208,15 @@ public class DisciplineSettings implements BaseSettings {
         submitButtonAdd.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 System.out.println("Insert discipline btn clicked");
+                @NotNull(message = "The combo value selected should not be null.")
                 String creditsComboValue = (String) creditComboBox.getSelectedItem();
                 try {
-                    assert creditsComboValue != null;
-                    assert nameField.getText() != null;
-                    GUI.app.disciplinesService.addDiscipline(nameField.getText(), Integer.parseInt(creditsComboValue));
+                    @NotBlank(message = "Disicpline name should not be blank.")
+                    String param1 = nameField.getText();
+                    @NotNull(message = "Credits value should not be null")
+                    @Positive(message = "Credits value should be positive")
+                    int param2 = Integer.parseInt(creditsComboValue);
+                    GUI.app.disciplinesService.addDiscipline(param1, param2);
                 } catch (DisciplineAdditionException | ValidationException ex) {
                     JOptionPane.showMessageDialog(
                             null,
@@ -215,7 +239,11 @@ public class DisciplineSettings implements BaseSettings {
         return currentPanel;
     }
     @Override
-    public JPanel createJPanel(JPanel main, String labelText) {
+    public JPanel createJPanel(
+            @NotEmpty(message = "Main panel should not be empty")
+            JPanel main,
+            @NotBlank(message = "The label text should not be blank")
+            String labelText) {
         // Remove previous components from right panel and add result label
         main.removeAll();
         // create insertPanel

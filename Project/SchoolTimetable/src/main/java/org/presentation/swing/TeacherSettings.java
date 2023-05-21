@@ -1,5 +1,7 @@
 package org.presentation.swing;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 import org.domain.exceptions.teacher.TeacherAdditionException;
 import org.domain.exceptions.teacher.TeacherDeletionFailed;
 import org.domain.exceptions.validations.ValidationException;
@@ -16,7 +18,10 @@ public class TeacherSettings implements BaseSettings {
     public TeacherSettings(){
 
     }
-    private JPanel createFieldPanel(JLabel label, JComponent component) {
+    private JPanel createFieldPanel( @NotEmpty(message = "Teacher label should not be empty.")
+                                     JLabel label,
+                                     @NotEmpty (message = "Teacher component should not be empty.")
+                                     JComponent component) {
         JPanel panel = new JPanel();
         panel.setBackground(Color.decode("#F6FFDE"));
         panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
@@ -26,7 +31,7 @@ public class TeacherSettings implements BaseSettings {
         panel.setMaximumSize(new Dimension(Short.MAX_VALUE, component.getPreferredSize().height));
         return panel;
     }
-    public JPanel deleteTeacherForm(JPanel currentPanel){
+    public JPanel deleteTeacherForm(@NotEmpty(message = "Current panel must not be empty.") JPanel currentPanel){
 
         currentPanel.setBackground(Color.decode("#F6FFDE"));
 
@@ -84,7 +89,7 @@ public class TeacherSettings implements BaseSettings {
         return currentPanel;
     }
 
-    public JPanel addTeacherForm(JPanel currentPanel){
+    public JPanel addTeacherForm(@NotEmpty(message = "Current panel must not be empty.") JPanel currentPanel){
         currentPanel.setBackground(Color.decode("#F6FFDE"));
 
         currentPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
@@ -123,10 +128,12 @@ public class TeacherSettings implements BaseSettings {
         submitButtonAdd.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 System.out.println("Insert - teacher - btn - clicked");
-                Teacher.Type type = Teacher.Type.valueOf((String) typeComboBox.getSelectedItem());
+                Teacher.@NotEmpty(message = "Teacher type must not be empty.") Type type = Teacher.Type.valueOf((String) typeComboBox.getSelectedItem());
 
                 try {
-                    GUI.app.teachersService.addTeacher(nameField.getText(), type);
+                    GUI.app.teachersService.addTeacher(
+                            Objects.requireNonNull(nameField.getText(), "Teacher name combo selector value must not be empty."),
+                            type);
                 } catch (TeacherAdditionException | ValidationException ex) {
                     JOptionPane.showMessageDialog(
                             null,
@@ -144,7 +151,10 @@ public class TeacherSettings implements BaseSettings {
         return currentPanel;
     }
     @Override
-    public JPanel createJPanel(JPanel main, String labelText) {
+    public JPanel createJPanel(@NotEmpty(message = "Main panel should not be empty.")
+                                   JPanel main,
+                               @NotBlank(message = "Label text should not be blank.")
+                                   String labelText) {
         // Remove previous components from right panel and add result label
         main.removeAll();
         // create insertPanel

@@ -1,5 +1,8 @@
 package org.presentation.swing;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import org.domain.exceptions.Timeslot.TimeslotAdditionException;
 import org.domain.exceptions.Timeslot.TimeslotDeletionFailed;
 import org.domain.exceptions.Timeslot.TimeslotNotFoundException;
@@ -25,13 +28,19 @@ import java.util.Objects;
 
 public class TimeslotSettings implements BaseSettings {
     private int timeslotVersion = 0;
+
+    @NotEmpty(message = "Date format must not be empty.")
     private final SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
+    @NotEmpty(message = "Time format must not be empty.")
     private final SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
     public TimeslotSettings(){
 
     }
-    private JPanel createFieldPanel(JLabel label, JComponent component) {
+    private JPanel createFieldPanel(@NotEmpty(message = "Timeslot label should not be empty.")
+                                    JLabel label,
+                                    @NotEmpty (message = "Timeslot component should not be empty.")
+                                    JComponent component) {
         JPanel panel = new JPanel();
         panel.setBackground(Color.decode("#F6FFDE"));
         panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
@@ -65,7 +74,7 @@ public class TimeslotSettings implements BaseSettings {
         return optionList;
     }
 
-    private Duration durationConvertor(String s){
+    private Duration durationConvertor(@NotBlank(message = "Duration parameter must not be null.")String s){
 
         String[] parts = s.split(":");
         long hours = Long.parseLong(parts[0].trim());
@@ -75,7 +84,7 @@ public class TimeslotSettings implements BaseSettings {
         return Duration.ofMinutes(totalMinutes);
     }
 
-    public JPanel deleteRoomForm(JPanel currentPanel){
+    public JPanel deleteRoomForm(@NotEmpty(message = "Current panel should not be empty") JPanel currentPanel){
 
         currentPanel.setBackground(Color.decode("#F6FFDE"));
 
@@ -109,13 +118,16 @@ public class TimeslotSettings implements BaseSettings {
         buttonPanel.setBackground(Color.decode("#F6FFDE"));
         submitButtonDelete.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                // TODO
-                System.out.println("Delete timeslot btn clicked");
 
+                System.out.println("Delete timeslot btn clicked");
+                @NotNull(message = "List of options should not be null")
                 String[] options =((String) model.getSelectedItem()).split(",");
                 try {
-                    GUI.app.timeslotsService.deleteTimeslot(dateFormat.parse(options[1]),
-                            timeFormat.parse(options[2]),durationConvertor(options[3]),options[4]);
+                    GUI.app.timeslotsService.deleteTimeslot(
+                            Objects.requireNonNull(dateFormat.parse(options[1]), "Date format value should not be null."),
+                            Objects.requireNonNull(timeFormat.parse(options[2]),"Time format value should not be null."),
+                            Objects.requireNonNull(durationConvertor(options[3]), "Duration convertor value should not be null."),
+                            options[4]);
                 } catch (ParseException | TimeslotDeletionFailed | RoomNotFoundException | TimeslotNotFoundException ex) {
                     JOptionPane.showMessageDialog(
                             null,
@@ -159,7 +171,7 @@ public class TimeslotSettings implements BaseSettings {
         return currentPanel;
     }
 
-    public JPanel addRoomForm(JPanel currentPanel){
+    public JPanel addRoomForm(@NotEmpty(message = "Current panel should not be empty") JPanel currentPanel){
         currentPanel.setBackground(Color.decode("#F6FFDE"));
 
         currentPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
@@ -268,7 +280,7 @@ public class TimeslotSettings implements BaseSettings {
         // get all the disciplines from db
         var allRooms = GUI.app.roomsService.getRooms();
         for (var room : allRooms) {
-            model.addItem(room.getName());
+            model.addItem(Objects.requireNonNull(room.getName(), "Room name should not be null."));
         }
         JPanel roomPanel = createFieldPanel(roomLabel, model);
         currentPanel.add(roomPanel);
@@ -282,7 +294,7 @@ public class TimeslotSettings implements BaseSettings {
         // get all the disciplines from db
         var allSession = GUI.app.sessionsService.getSessions();
         for (var session : allSession) {
-            sessionModel.addItem(session.getDiscipline().getName());
+            sessionModel.addItem(Objects.requireNonNull(session.getDiscipline().getName(), "Session name should not be null."));
         }
         JPanel sessionPanel = createFieldPanel(sessionLabel, sessionModel);
         currentPanel.add(sessionPanel);
@@ -297,14 +309,15 @@ public class TimeslotSettings implements BaseSettings {
                 System.out.println("Insert timeslot btn clicked");
                 try {
                     assert startDateField != null;
-                    GUI.app.timeslotsService.addTimeslot(dateFormat.parse(startDateField.getText()),
-                            dateFormat.parse(endDateField.getText()),
-                            timeFormat.parse(timeField.getText()),
-                            Duration.ofMinutes(Integer.parseInt(timespanField.getText())),
-                            Timeslot.Day.valueOf((String) dayComboBox.getSelectedItem()),
-                            Timeslot.Periodicity.valueOf((String) periodicityComboBox.getSelectedItem()),
-                            (String) model.getSelectedItem(),
-                            (String) sessionModel.getSelectedItem());
+                    GUI.app.timeslotsService.addTimeslot(
+                            Objects.requireNonNull(dateFormat.parse(startDateField.getText()),"Start date format should not be null. "),
+                            Objects.requireNonNull(dateFormat.parse(endDateField.getText()), "End date format should not be null."),
+                            Objects.requireNonNull(timeFormat.parse(timeField.getText()), "Time format should not be null. "),
+                            Objects.requireNonNull(Duration.ofMinutes(Integer.parseInt(timespanField.getText())),"Timeslot format should not be null."),
+                            Objects.requireNonNull(Timeslot.Day.valueOf((String) dayComboBox.getSelectedItem()),"Day format should not be null. "),
+                            Objects.requireNonNull(Timeslot.Periodicity.valueOf((String) periodicityComboBox.getSelectedItem()),"Periodicity format should not be null."),
+                            Objects.requireNonNull((String) model.getSelectedItem(),"Model format should not be null."),
+                            Objects.requireNonNull((String) sessionModel.getSelectedItem(),"Session format should not be null."));
                 } catch (ParseException | RoomNotFoundException | DisciplineNotFoundException |
                          TimeslotAdditionException | SessionNotFoundException | ValidationException ex) {
                     JOptionPane.showMessageDialog(
@@ -324,7 +337,10 @@ public class TimeslotSettings implements BaseSettings {
         return currentPanel;
     }
     @Override
-    public JPanel createJPanel(JPanel main, String labelText) {
+    public JPanel createJPanel(@NotEmpty(message = "Main panel should not be empty.")
+                                   JPanel main,
+                               @NotBlank(message = "Label text should not be blank.")
+                                   String labelText) {
         // Remove previous components from right panel and add result label
         main.removeAll();
         // create insertPanel

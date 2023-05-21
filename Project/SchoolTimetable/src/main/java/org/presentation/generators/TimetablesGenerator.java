@@ -1,19 +1,40 @@
 package org.presentation.generators;
 
+import jakarta.validation.constraints.Min;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import org.domain.models.*;
 import org.presentation.GUI;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.Objects;
 
 public class TimetablesGenerator extends BaseGenerator{
-    private final List<Timeslot> timeslots;
-    private final List<Room> rooms;
+    @NotNull(message = "Timeslots list must not be null")
+    private final List<@Valid Timeslot> timeslots;
+    @NotNull(message = "Rooms list must not be null")
+    private final List<@Valid Room> rooms;
+    @NotNull(message = "Timetables names map must not be null")
     private final Map<String, String> timetablesNames;
+    @NotNull(message = "Timetables data map must not be null")
     private final Map<String, String> timetablesData;
+    @NotNull(message = "Free rooms map must not be null")
     private final Map<Room, Map<Integer, Map<Timeslot.Day, Boolean>>> freeRooms;
 
-    public TimetablesGenerator(String generationDateString, Map<String, Map<Timeslot.Day, StringBuilder>> timetablesDays, Map<String, String> timetablesNames, Map<String, String> timetablesData, Map<Room, Map<Integer, Map<Timeslot.Day, Boolean>>> freeRooms){
+    public TimetablesGenerator(
+            @NotBlank(message = "Generation string must not be blank")
+            String generationDateString,
+            @NotNull(message = "Days data map must not be null")
+            Map<String, Map<Timeslot.Day, StringBuilder>> timetablesDays,
+            @NotNull(message = "Timetables names map must not be null")
+            Map<String, String> timetablesNames,
+            @NotNull(message = "Timetables data map must not be null")
+            Map<String, String> timetablesData,
+            @NotNull(message = "Free rooms map must not be null")
+            Map<Room, Map<Integer, Map<Timeslot.Day, Boolean>>> freeRooms){
         super(generationDateString, timetablesDays);
 
         this.timeslots = GUI.app.timeslotsService.getSortedTimeslotsByStartTime();
@@ -59,10 +80,16 @@ public class TimetablesGenerator extends BaseGenerator{
         }
     }
 
-    private void extractTeachersForTimetable(Set<Teacher> teachers, List<String> tableNames, Map<String, String> teacherNamesTables){
+    private void extractTeachersForTimetable(
+            @NotNull(message = "Teachers set must not be null")
+            Set<@Valid Teacher> teachers,
+            @NotEmpty(message = "Table names list must not be empty")
+            List<String> tableNames,
+            @NotNull(message = "Teachers names map must not be null")
+            Map<String, String> teacherNamesTables){
         for (Teacher teacher : teachers){
-            String timetableName = "timetable_t_" + teacher.getName().toLowerCase().replace(" ", "_");
-            String teacherName = teacher.getName();
+            String teacherName = Objects.requireNonNull(teacher.getName(), "Teacher name should not be null.");
+            String timetableName = "timetable_t_" + teacherName.toLowerCase().replace(" ", "_");
             tableNames.add(timetableName);
 
             if (teacher.getType() == Teacher.Type.TEACHER) teacherName = "Prof. " + teacherName;
@@ -71,9 +98,15 @@ public class TimetablesGenerator extends BaseGenerator{
         }
     }
 
-    private void extractGroupsForTimetable(Set<StudentGroup> studentGroups, List<String> tableNames, Map<String, String> groupsNamesTables){
+    private void extractGroupsForTimetable(
+            @NotNull(message = "Groups set must not be null")
+            Set<@Valid StudentGroup> studentGroups,
+            @NotEmpty(message = "Table names list must not be empty")
+            List<String> tableNames,
+            @NotNull(message = "Groups names map must not be null")
+            Map<String, String> groupsNamesTables){
         for (StudentGroup studentGroup : studentGroups){
-            String groupName = studentGroup.getName();
+            String groupName = Objects.requireNonNull(studentGroup.getName(), "Group name should not be null.");
             int year = studentGroup.getYear();
             String timetableName = "timetable_g_" + year + groupName.toLowerCase().replace(" ", "_");
             tableNames.add(timetableName);
@@ -82,7 +115,16 @@ public class TimetablesGenerator extends BaseGenerator{
         }
     }
 
-    private String addElementsToTimetableEntry(String name, String timetableEntry, Map<String, String> elementsNamesTables, String endLine){
+    @NotBlank(message = "Timetable entry string must not be blank")
+    private String addElementsToTimetableEntry(
+            @NotBlank(message = "Entry name must not be blank")
+            String name,
+            @NotBlank(message = "Entry data must not be blank")
+            String timetableEntry,
+            @NotNull(message = "Elements names map must not be null")
+            Map<String, String> elementsNamesTables,
+            @NotBlank(message = "Endline must not be blank")
+            String endLine){
         StringBuilder allElements = new StringBuilder();
 
         for (Map.Entry<String, String> mapEntry : elementsNamesTables.entrySet()){
@@ -101,13 +143,27 @@ public class TimetablesGenerator extends BaseGenerator{
         return timetableEntry;
     }
 
-    private void addEntryToTables(String timetableEntry, List<String> tableNames, Timeslot.Day day){
+    private void addEntryToTables(
+            @NotBlank(message = "Timetable entry data must not be blank")
+            String timetableEntry,
+            @NotEmpty(message = "Table names list must not be empty")
+            List<String> tableNames,
+            @NotNull(message = "Day must not be null")
+            Timeslot.Day day){
         for (String tableName : tableNames){
             this.timetablesDays.get(tableName).get(day).append(timetableEntry);
         }
     }
 
-    private void addToFreeRoomsTable(Timeslot.Day day, Room room, int startHour, int endHour){
+    private void addToFreeRoomsTable(
+            @NotNull(message = "Day must not be null")
+            Timeslot.Day day,
+            @NotNull(message = "Room must not be null")
+            Room room,
+            @Min(value = 0, message = "Start hour must be greater than -1")
+            int startHour,
+            @Min(value = 0, message = "End hour must be greater than -1")
+            int endHour){
         for (int i = startHour; i < endHour; i++) {
             freeRooms.get(room).get(i).replace(day, false);
         }
