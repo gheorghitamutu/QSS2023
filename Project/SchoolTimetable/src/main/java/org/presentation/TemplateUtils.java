@@ -2,6 +2,8 @@ package org.presentation;
 
 import org.apache.commons.io.FileUtils;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -13,7 +15,10 @@ public class TemplateUtils {
     public TemplateUtils() {
     }
 
-    private String getDataFromResources(String path) {
+    @NotBlank(message = "Resources data string must not be blank")
+    private String getDataFromResources(
+            @NotBlank(message = "Resources load path must not be blank")
+            String path) {
         File dataFile;
         String dataString;
 
@@ -32,14 +37,21 @@ public class TemplateUtils {
         return dataString;
     }
 
-    public String getBaseTemplateData(String templateName) {
+    @NotBlank(message = "Template data string must not be blank")
+    public String getBaseTemplateData(
+            @NotBlank(message = "Template name must not be blank")
+            String templateName) {
         String separator = "/";
         String currentPath = separator + "templates" + separator + templateName + ".html";
 
         return getDataFromResources(currentPath);
     }
 
-    public void saveTemplateDataToFile(String templateData, String savePath) {
+    public void saveTemplateDataToFile(
+            @NotEmpty(message = "Template data string must not be empty")
+            String templateData,
+            @NotBlank(message = "Save path must not be blank")
+            String savePath) {
         try {
             BufferedWriter writer = new BufferedWriter(new FileWriter(savePath));
             writer.write(templateData);
@@ -49,7 +61,9 @@ public class TemplateUtils {
         }
     }
 
-    public void copyStyle(String savePathBase) {
+    public void copyStyle(
+            @NotBlank(message = "Save path must not be blank")
+            String savePathBase) {
         String path = "/templates/style.css";
         String savePath = savePathBase + System.getProperty("file.separator") + "style.css";
         String data = getDataFromResources(path);
