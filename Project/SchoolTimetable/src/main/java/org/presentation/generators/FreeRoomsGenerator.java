@@ -3,21 +3,37 @@ package org.presentation.generators;
 import org.domain.models.Room;
 import org.domain.models.Timeslot;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class FreeRoomsGenerator extends BaseGenerator{
+    @NotNull(message = "Free rooms map must not be null")
     private final Map<Room, Map<Integer, Map<Timeslot.Day, Boolean>>> freeRooms;
+    @NotEmpty(message = "Day decoder map must not be empty")
     private final Map<Timeslot.Day, Integer> dayDecoder;
+    @NotNull(message = "Lists data map must not be null")
     private final Map<String, String> listsData;
 
-    public FreeRoomsGenerator(String generationDateString, Map<String, Map<Timeslot.Day, StringBuilder>> timetablesDays, Map<Room, Map<Integer, Map<Timeslot.Day, Boolean>>> freeRooms, Map<String, String> listsData){
+    public FreeRoomsGenerator(
+            @NotBlank(message = "Generation string must not be blank")
+            String generationDateString,
+            @NotNull(message = "Days data map must not be null")
+            Map<String, Map<Timeslot.Day, StringBuilder>> timetablesDays,
+            @NotNull(message = "Free rooms map must not be null")
+            Map<Room, Map<Integer, Map<Timeslot.Day, Boolean>>> freeRooms,
+            @NotNull(message = "Lists data map must not be null")
+            Map<String, String> listsData){
         super(generationDateString, timetablesDays);
         this.freeRooms = freeRooms;
         this.dayDecoder = generateDayDecoder();
         this.listsData = listsData;
     }
 
+    @NotEmpty(message = "Day decoder map must not be empty")
     private Map<Timeslot.Day, Integer> generateDayDecoder(){
         Map<Timeslot.Day, Integer> decoder = new HashMap<>();
         Timeslot.Day[] daysArray = Timeslot.Day.class.getEnumConstants();
@@ -47,8 +63,8 @@ public class FreeRoomsGenerator extends BaseGenerator{
                 tableEntries.append("</tr><tr>");
             }
 
-            roomData = roomData.replace("$room_name", room.getName());
-
+            roomData = roomData.replace("$room_name", Objects.requireNonNull(room.getName(), "Room name should not be null."));
+            
             Map<Integer, Map<Timeslot.Day, Boolean>> hoursMap = mapEntry1.getValue();
 
             for (Map.Entry<Integer, Map<Timeslot.Day, Boolean>> mapEntry2 : hoursMap.entrySet())
