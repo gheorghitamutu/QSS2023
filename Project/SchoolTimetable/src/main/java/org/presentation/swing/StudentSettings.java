@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotEmpty;
 import org.domain.exceptions.student.StudentAdditionException;
 import org.domain.exceptions.student.StudentDeletionFailed;
 import org.domain.exceptions.student.StudentNotFoundException;
+import org.domain.exceptions.validations.ValidationException;
 import org.presentation.GUI;
 
 import javax.swing.*;
@@ -90,7 +91,7 @@ public class StudentSettings extends JFrame implements BaseSettings {
                              Objects.requireNonNull(Integer.parseInt(yearComboValue), "Year combo selector value should not be null;"),
                              groupComboValue);
 
-                } catch (StudentAdditionException ex) {
+                } catch (StudentAdditionException | ValidationException ex) {
                     JOptionPane.showMessageDialog(
                             null,
                             "An exception occurred: " + ex.getMessage(),

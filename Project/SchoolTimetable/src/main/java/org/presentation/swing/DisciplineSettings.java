@@ -8,6 +8,7 @@ import org.domain.exceptions.discipline.DisciplineAdditionException;
 import org.domain.exceptions.discipline.DisciplineDeletionFailed;
 import org.domain.exceptions.discipline.DisciplineNotFoundException;
 import org.domain.exceptions.teacher.TeacherNotFoundException;
+import org.domain.exceptions.validations.ValidationException;
 import org.presentation.GUI;
 
 import javax.swing.*;
@@ -210,14 +211,13 @@ public class DisciplineSettings implements BaseSettings {
                 @NotNull(message = "The combo value selected should not be null.")
                 String creditsComboValue = (String) creditComboBox.getSelectedItem();
                 try {
-
                     @NotBlank(message = "Disicpline name should not be blank.")
                     String param1 = nameField.getText();
                     @NotNull(message = "Credits value should not be null")
                     @Positive(message = "Credits value should be positive")
                     int param2 = Integer.parseInt(creditsComboValue);
                     GUI.app.disciplinesService.addDiscipline(param1, param2);
-                } catch (DisciplineAdditionException ex) {
+                } catch (DisciplineAdditionException | ValidationException ex) {
                     JOptionPane.showMessageDialog(
                             null,
                             "An exception occurred: " + ex.getMessage(),

@@ -22,6 +22,7 @@ import org.domain.exceptions.studentgroup.StudentGroupDeletionFailed;
 import org.domain.exceptions.studentgroup.StudentGroupNotFoundException;
 import org.domain.exceptions.teacher.TeacherDeletionFailed;
 import org.domain.exceptions.teacher.TeacherNotFoundException;
+import org.domain.exceptions.validations.ValidationException;
 import org.domain.models.Discipline;
 import org.domain.models.Session;
 import org.domain.models.StudentGroup;
@@ -172,7 +173,7 @@ public class SessionsServiceTests {
     }
 
     @Test
-    public void Given__SessionsService__When__getSessionsByHalfYearIsCalledAndSessionIsFound__Then__ShouldReturnTheFoundSession() {
+    public void Given__SessionsService__When__getSessionsByHalfYearIsCalledAndSessionIsFound__Then__ShouldReturnTheFoundSession() throws SessionNotFoundException, ValidationException {
 
         var sessionRepository = Mockito.mock(SessionRepository.class);
         var disciplineRepository = Mockito.mock(DisciplineRepository.class);
@@ -197,7 +198,7 @@ public class SessionsServiceTests {
     }
 
     @Test
-    public void Given__SessionsService__When__addSessionIsCalledAndRepositorySaveThrows__Then__ShouldWrapExceptionAndThrowAsWell() throws RepositoryOperationException {
+    public void Given__SessionsService__When__addSessionIsCalledAndRepositorySaveThrows__Then__ShouldWrapExceptionAndThrowAsWell() throws RepositoryOperationException, ValidationException {
 
         var sessionRepository = Mockito.mock(SessionRepository.class);
         var disciplineRepository = Mockito.mock(DisciplineRepository.class);

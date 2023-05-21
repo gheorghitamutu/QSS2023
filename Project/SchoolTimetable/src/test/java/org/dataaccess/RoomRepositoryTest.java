@@ -14,6 +14,7 @@ import org.domain.exceptions.session.SessionDeletionFailed;
 import org.domain.exceptions.student.StudentDeletionFailed;
 import org.domain.exceptions.studentgroup.StudentGroupDeletionFailed;
 import org.domain.exceptions.teacher.TeacherDeletionFailed;
+import org.domain.exceptions.validations.ValidationException;
 import org.domain.models.Room;
 import org.junit.jupiter.api.*;
 
@@ -58,19 +59,19 @@ class RoomRepositoryTest {
     }
 
     @Test
-    public void Given__RoomRepository__When__getByNameIsCalledWithExistentRoomName__Then__ReturnNotNullRoomWithThatName() throws RepositoryOperationException {
+    public void Given__RoomRepository__When__getByNameIsCalledWithExistentRoomName__Then__ReturnNotNullRoomWithThatName() throws RepositoryOperationException, ValidationException {
         Room room = roomRepository.getByName("C100");
         Assertions.assertNotNull(room);
     }
 
     @Test
-    public void Given__RoomRepository__When__getByNameIsCalledWithInexistentRoomName__Then__ReturnNotNullRoomWithThatName() throws RepositoryOperationException {
+    public void Given__RoomRepository__When__getByNameIsCalledWithInexistentRoomName__Then__ReturnNotNullRoomWithThatName() throws RepositoryOperationException, ValidationException {
         Room room = roomRepository.getByName("C99999");
         Assertions.assertNull(room);
     }
 
     @Test
-    public void Given__RoomRepository__When__createNewRoomIsCalled__Then__CreateAndPersistThatRoom() throws RepositoryOperationException {
+    public void Given__RoomRepository__When__createNewRoomIsCalled__Then__CreateAndPersistThatRoom() throws RepositoryOperationException, ValidationException {
         Room room = new Room();
         room.setCapacity(30);
         room.setFloor(1);

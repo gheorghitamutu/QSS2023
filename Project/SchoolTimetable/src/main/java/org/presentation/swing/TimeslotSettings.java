@@ -9,6 +9,7 @@ import org.domain.exceptions.Timeslot.TimeslotNotFoundException;
 import org.domain.exceptions.discipline.DisciplineNotFoundException;
 import org.domain.exceptions.room.RoomNotFoundException;
 import org.domain.exceptions.session.SessionNotFoundException;
+import org.domain.exceptions.validations.ValidationException;
 import org.domain.models.Timeslot;
 import org.presentation.GUI;
 import org.presentation.MainGenerator;
@@ -318,7 +319,7 @@ public class TimeslotSettings implements BaseSettings {
                             Objects.requireNonNull((String) model.getSelectedItem(),"Model format should not be null."),
                             Objects.requireNonNull((String) sessionModel.getSelectedItem(),"Session format should not be null."));
                 } catch (ParseException | RoomNotFoundException | DisciplineNotFoundException |
-                         TimeslotAdditionException | SessionNotFoundException ex) {
+                         TimeslotAdditionException | SessionNotFoundException | ValidationException ex) {
                     JOptionPane.showMessageDialog(
                             null,
                             "An exception occurred: " + ex.getMessage(),

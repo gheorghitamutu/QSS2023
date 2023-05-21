@@ -2,9 +2,7 @@ package org.domain.models;
 
 import jakarta.persistence.*;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.*;
 import org.domain.models.validators.studentgroup.ValidStudentGroup;
 import org.hibernate.validator.constraints.Length;
 
@@ -26,11 +24,11 @@ import java.util.Set;
 public class StudentGroup implements Serializable {
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Student> students = new HashSet<>();
+    private Set<@Valid Student> students = new HashSet<>();
 
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "StudentGroup_Session", joinColumns = {@JoinColumn(name = "studentgroup_id", referencedColumnName = "Id")}, inverseJoinColumns = {@JoinColumn(name = "session_id", referencedColumnName = "Id")})
-    private Set<Session> sessions = new HashSet<>();
+    private Set<@Valid Session> sessions = new HashSet<>();
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -39,11 +37,12 @@ public class StudentGroup implements Serializable {
 
     @Length(min = 2, max = 2)
     @Pattern(regexp = "[A-Z]{1}[0-9]{1}")
+    @NotBlank(message = "Name must not be blank")
     @Column(name = "Name", nullable = false)
     private String name;
 
-    @Min(1)
-    @Max(3)
+    @Min(value = 1, message = "Year must be greater than 0")
+    @Max(value = 3, message = "Year must be less than 4")
     @Column(name = "\"Year\"", nullable = false)
     private int year;
 
@@ -51,48 +50,65 @@ public class StudentGroup implements Serializable {
     @Column(name = "Type", nullable = false)
     private StudentGroup.Type type;
 
+    @NotNull(message = "Insert time must not be null")
     @Column(name = "insert_time", nullable = false)
     private Date insertTime;
 
     public StudentGroup() {
     }
 
-    public StudentGroup(String name, int year, Type type) {
+    public StudentGroup(
+            @NotBlank(message = "Name must not be blank")
+            String name,
+            @Min(value = 1, message = "Year must be greater than 0")
+            @Max(value = 3, message = "Year must be less than 4")
+            int year,
+            Type type) {
         this.name = name;
         this.year = year;
         this.type = type;
         this.insertTime = new Date();
     }
 
-    public Set<Student> getStudents() {
+    public Set<@Valid Student> getStudents() {
         return students;
     }
 
-    public void setStudents(Set<@Valid Student> students) {
+    public void setStudents(
+            @NotEmpty(message = "Students must not be empty")
+            Set<@Valid Student> students) {
         this.students = students;
     }
 
+    @NotEmpty(message = "Name must not be empty")
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(
+            @NotEmpty(message = "Name must not be empty")
+            String name) {
         this.name = name;
     }
 
+    @NotNull(message = "Insert time must not be null")
     public Date getInsertTime() {
         return insertTime;
     }
 
-    public void setInsertTime(Date insertTime) {
+    public void setInsertTime(
+            @NotNull(message = "Insert time must not be null")
+            Date insertTime) {
         this.insertTime = insertTime;
     }
 
-    public Set<Session> getSessions() {
+    public Set<@Valid Session> getSessions() {
         return sessions;
     }
 
-    public void setSessions(Set<@Valid Session> sessions) {
+    public void setSessions(
+            @NotEmpty(message = "Sessions must not be empty")
+            Set<@Valid Session> sessions) {
         this.sessions = sessions;
     }
 
@@ -104,11 +120,16 @@ public class StudentGroup implements Serializable {
         this.id = id;
     }
 
+    @Min(value = 1, message = "Year must be greater than 0")
+    @Max(value = 3, message = "Year must be less than 4")
     public int getYear() {
         return year;
     }
 
-    public void setYear(int year) {
+    public void setYear(
+            @Min(value = 1, message = "Year must be greater than 0")
+            @Max(value = 3, message = "Year must be less than 4")
+            int year) {
         this.year = year;
     }
 

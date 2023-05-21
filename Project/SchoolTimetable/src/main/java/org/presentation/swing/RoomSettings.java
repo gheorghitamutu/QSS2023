@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import org.domain.exceptions.room.RoomAdditionException;
 import org.domain.exceptions.room.RoomDeletionFailed;
+import org.domain.exceptions.validations.ValidationException;
 import org.domain.models.Room;
 import org.presentation.GUI;
 
@@ -76,7 +77,7 @@ public class RoomSettings implements BaseSettings {
                     @NotBlank(message = "Current model should not be blank")
                     String param = (String) model.getSelectedItem();
                     GUI.app.roomsService.deleteRooms(param);
-                } catch (RoomDeletionFailed ex) {
+                } catch (RoomDeletionFailed | ValidationException ex) {
                     JOptionPane.showMessageDialog(
                             null,
                             "An exception occurred: " + ex.getMessage(),
@@ -165,7 +166,7 @@ public class RoomSettings implements BaseSettings {
                                                 Integer.parseInt((String) Objects.requireNonNull(capacityComboBox.getSelectedItem(), "Capacity combo selector value should not be blank")),
                                                 Integer.parseInt((String) Objects.requireNonNull(floorComboBox.getSelectedItem(), "Floor combo selector value should not be blank")),
                                                 Room.Type.valueOf((String) Objects.requireNonNull(typeComboBox.getSelectedItem(), "Type combo selector value should not be blank")));
-                } catch (RoomAdditionException ex) {
+                } catch (RoomAdditionException | ValidationException ex) {
                     JOptionPane.showMessageDialog(
                             null,
                             "An exception occurred: " + ex.getMessage(),

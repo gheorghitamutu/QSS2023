@@ -6,15 +6,16 @@ import org.domain.exceptions.student.StudentDeletionFailed;
 import org.domain.exceptions.student.StudentNotFoundException;
 import org.domain.exceptions.student.StudentUpdateException;
 import org.domain.exceptions.studentgroup.StudentGroupReassignException;
+import org.domain.exceptions.validations.ValidationException;
 import org.domain.models.Student;
 
 import java.util.List;
 
 public interface IStudentsService {
 
-    public Student addStudent(String name, String registrationNumber, int year, String groupName) throws StudentAdditionException;
+    public Student addStudent(String name, String registrationNumber, int year, String groupName) throws StudentAdditionException, ValidationException;
 
-    public Student updateStudent(int studentId, String name, int year) throws StudentUpdateException;
+    public Student updateStudent(int studentId, String name, int year) throws StudentUpdateException, ValidationException;
 
     public boolean deleteStudent(int studentId) throws StudentNotFoundException, StudentDeletionFailed;
 
@@ -24,7 +25,7 @@ public interface IStudentsService {
 
     public boolean deleteStudent(String registrationNumber) throws StudentNotFoundException, StudentDeletionFailed;
 
-    public Student reassignStudent(int studentId, String newGroupName) throws StudentGroupReassignException, RepositoryOperationException;
+    public Student reassignStudent(int studentId, String newGroupName) throws StudentGroupReassignException, RepositoryOperationException, ValidationException;
 
     public Student getStudentById(int studentId) throws StudentNotFoundException;
 

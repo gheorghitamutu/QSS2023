@@ -57,6 +57,7 @@ jobs:
         with:
           name: report.xml
           path: ${{ github.workspace }}/Project/SchoolTimetable/target/site/jacoco/jacoco.xml
+          retention-days: 1
 
       - name: Jacoco Report to PR
         id: reportPR
@@ -73,10 +74,6 @@ jobs:
         run: |
           echo "Total coverage ${{ steps.jacoco.outputs.coverage-overall }}"
           echo "Changed Files coverage ${{ steps.jacoco.outputs.coverage-changed-files }}"
-
-      - name: List Jacoco Folder Content
-        working-directory: ${{ github.workspace }}/Project/SchoolTimetable/target/site/jacoco
-        run: ls -R .
 
       - name: Generate JaCoCo Badge
         id: report
@@ -120,6 +117,7 @@ jobs:
         with:
           name: jacoco-report
           path: ${{ github.workspace }}/Project/SchoolTimetable/target/site/jacoco/
+          retention-days: 1
         
       - run: mkdir staging && cp ./Project/SchoolTimetable/target/*.jar staging
       - uses: actions/upload-artifact@v3
@@ -137,7 +135,7 @@ jobs:
 
     - name: Add tag data to enviroment
       run: echo "VERSION=0.0.1" >> $GITHUB_ENV
-
+     
     - uses: actions/download-artifact@v2
       with:
         name: Package

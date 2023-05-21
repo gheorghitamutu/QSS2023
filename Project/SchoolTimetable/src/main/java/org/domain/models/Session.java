@@ -2,6 +2,9 @@ package org.domain.models;
 
 import jakarta.persistence.*;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import org.domain.models.validators.session.ValidSession;
 import org.hibernate.validator.constraints.Length;
@@ -21,16 +24,17 @@ public class Session implements Serializable {
     private Discipline discipline;
 
     @ManyToMany(mappedBy = "sessions", cascade=CascadeType.ALL)
-    private Set<StudentGroup> studentGroups = new HashSet<>();
+    private Set<@Valid StudentGroup> studentGroups = new HashSet<>();
 
     @ManyToMany(mappedBy = "sessions", cascade=CascadeType.ALL)
-    private Set<Teacher> teachers = new HashSet<>();
+    private Set<@Valid Teacher> teachers = new HashSet<>();
 
     @OneToMany(mappedBy = "session", cascade=CascadeType.ALL, orphanRemoval = true)
-    private Set<Timeslot> timeslots = new HashSet<>();
+    private Set<@Valid Timeslot> timeslots = new HashSet<>();
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @NotNull(message = "Id must not be null")
     @Column(name = "Id", nullable = false, unique = true)
     private int id;
 
@@ -40,25 +44,32 @@ public class Session implements Serializable {
 
     @Length(min = 1, max = 1)
     @Pattern(regexp = "[A-Z]{1}")
+    @NotBlank(message = "Half year must not be blank")
     @Column(name = "HalfYear")
     private String halfYear;
 
+    @NotNull(message = "Insert time must not be null")
     @Column(name = "insert_time", nullable = false)
     private Date insertTime;
 
     public Session(){
     }
 
-    public Session(Type type, String halfYear){
+    public Session(Type type,
+                   @NotBlank(message = "Half year must not be blank")
+                   String halfYear){
         this.type = type;
         this.halfYear = halfYear;
     }
 
+    @NotNull(message = "Id must not be null")
     public int getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(
+            @NotNull(message = "Id must not be null")
+            int id) {
         this.id = id;
     }
 
@@ -70,51 +81,64 @@ public class Session implements Serializable {
         this.type = type;
     }
 
+    @NotNull(message = "Half year must not be null")
     public Date getInsertTime() {
         return insertTime;
     }
 
-    public void setInsertTime(Date insertTime) {
+    public void setInsertTime(
+            @NotNull(message = "Insert time must not be null")
+            Date insertTime) {
         this.insertTime = insertTime;
     }
 
+    @Valid
     public Discipline getDiscipline() {
         return discipline;
     }
 
-    public void setDiscipline(Discipline discipline) {
+    public void setDiscipline(@Valid Discipline discipline) {
         this.discipline = discipline;
     }
 
-    public Set<Timeslot> getTimeslots() {
+    public Set<@Valid Timeslot> getTimeslots() {
         return timeslots;
     }
 
-    public void setTimeslots(Set<@Valid Timeslot> timeslots) {
+    public void setTimeslots(
+            @NotEmpty(message = "Timeslots must not be empty")
+            Set<@Valid Timeslot> timeslots) {
         this.timeslots = timeslots;
     }
 
-    public Set<Teacher> getTeachers() {
+    public Set<@Valid Teacher> getTeachers() {
         return teachers;
     }
 
-    public void setTeachers(Set<@Valid Teacher> teachers) {
+    public void setTeachers(
+            @NotEmpty(message = "Teachers must not be empty")
+            Set<@Valid Teacher> teachers) {
         this.teachers = teachers;
     }
 
-    public Set<StudentGroup> getGroups() {
+    public Set<@Valid StudentGroup> getGroups() {
         return studentGroups;
     }
 
-    public void setGroups(Set<@Valid StudentGroup> studentGroups) {
+    public void setGroups(
+            @NotEmpty(message = "Student groups must not be empty")
+            Set<@Valid StudentGroup> studentGroups) {
         this.studentGroups = studentGroups;
     }
 
+    @NotBlank(message = "Half year must not be blank")
     public String getHalfYear() {
         return halfYear;
     }
 
-    public void setHalfYear(String halfYear) {
+    public void setHalfYear(
+            @NotBlank(message = "Half year must not be blank")
+            String halfYear) {
         this.halfYear = halfYear;
     }
 

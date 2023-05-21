@@ -19,6 +19,7 @@ import org.domain.exceptions.session.SessionDeletionFailed;
 import org.domain.exceptions.student.StudentDeletionFailed;
 import org.domain.exceptions.studentgroup.StudentGroupDeletionFailed;
 import org.domain.exceptions.teacher.TeacherDeletionFailed;
+import org.domain.exceptions.validations.ValidationException;
 import org.domain.models.Discipline;
 import org.domain.models.Room;
 import org.domain.models.Session;
@@ -71,7 +72,7 @@ class TimeslotRepositoryTest {
 
 //    public Timeslot createNewTimeslot(Date startDate, Date endDate, Date time, Duration duration, Timeslot.Day day, Timeslot.Periodicity periodicity, Room room, Session session) throws RepositoryOperationException
     @Test
-    public void Given__TimeslotRepository__When__createTimeslotIsCalledWithValidDateAndTimes__Then__ShouldCreateTheTimeslotAndReturnIt() throws RepositoryOperationException, java.text.ParseException, TimeslotAdditionException {
+    public void Given__TimeslotRepository__When__createTimeslotIsCalledWithValidDateAndTimes__Then__ShouldCreateTheTimeslotAndReturnIt() throws RepositoryOperationException, java.text.ParseException, TimeslotAdditionException, ValidationException {
 
         Room room = roomRepository.getByName("C100");
         Session session = sessionRepository.readAll().get(0);
@@ -92,7 +93,7 @@ class TimeslotRepositoryTest {
     }
 
     @Test
-    public void Given__TimeslotRepository__When__createTimeslotIsCalledWithInvalidDateAndTimes__Then__ShouldThrow() throws RepositoryOperationException, java.text.ParseException, TimeslotAdditionException {
+    public void Given__TimeslotRepository__When__createTimeslotIsCalledWithInvalidDateAndTimes__Then__ShouldThrow() throws RepositoryOperationException, java.text.ParseException, TimeslotAdditionException, ValidationException {
 
         Room room = roomRepository.getByName("C100");
         Session session = sessionRepository.readAll().get(0);

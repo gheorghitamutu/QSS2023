@@ -65,6 +65,7 @@ public class StudentSessionManyToManyTest {
         Session session = new Session();
         session.setInsertTime(new Date());
         session.setType(Session.Type.SEMINARY);
+        session.setHalfYear("A");
 
         discipline.setSessions(Collections.singleton(session));
         disciplineRepository.save(discipline);

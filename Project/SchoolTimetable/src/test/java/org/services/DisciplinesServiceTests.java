@@ -19,6 +19,7 @@ import org.domain.exceptions.student.StudentDeletionFailed;
 import org.domain.exceptions.studentgroup.StudentGroupDeletionFailed;
 import org.domain.exceptions.teacher.TeacherDeletionFailed;
 import org.domain.exceptions.teacher.TeacherNotFoundException;
+import org.domain.exceptions.validations.ValidationException;
 import org.domain.models.Discipline;
 import org.domain.models.Teacher;
 import org.junit.jupiter.api.*;
@@ -158,7 +159,7 @@ public class DisciplinesServiceTests {
     }
 
     @Test
-    public void Given__DisciplinesService__When__addDisciplineIsCalledAndRepositorySaveThrows__Then__ShouldWrapExceptionAndThrowAsWell() throws RepositoryOperationException {
+    public void Given__DisciplinesService__When__addDisciplineIsCalledAndRepositorySaveThrows__Then__ShouldWrapExceptionAndThrowAsWell() throws RepositoryOperationException, ValidationException {
 
         var disciplineRepository = Mockito.mock(DisciplineRepository.class);
         var teacherRepository = Mockito.mock(TeacherRepository.class);
@@ -176,7 +177,7 @@ public class DisciplinesServiceTests {
     }
 
     @Test
-    public void Given__DisciplinesService__When__addDisciplineIsCalledAndTargetDisciplineExists__Then__ShouldReturnTheFoundDiscipline() throws DisciplineAdditionException, RepositoryOperationException {
+    public void Given__DisciplinesService__When__addDisciplineIsCalledAndTargetDisciplineExists__Then__ShouldReturnTheFoundDiscipline() throws DisciplineAdditionException, RepositoryOperationException, ValidationException {
 
         var disciplineRepository = Mockito.mock(DisciplineRepository.class);
         var teacherRepository = Mockito.mock(TeacherRepository.class);

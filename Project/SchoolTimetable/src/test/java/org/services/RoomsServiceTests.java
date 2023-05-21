@@ -17,6 +17,7 @@ import org.domain.exceptions.session.SessionDeletionFailed;
 import org.domain.exceptions.student.StudentDeletionFailed;
 import org.domain.exceptions.studentgroup.StudentGroupDeletionFailed;
 import org.domain.exceptions.teacher.TeacherDeletionFailed;
+import org.domain.exceptions.validations.ValidationException;
 import org.domain.models.Room;
 import org.junit.jupiter.api.*;
 import org.mockito.Mockito;
@@ -150,7 +151,7 @@ public class RoomsServiceTests {
     }
 
     @Test
-    public void Given__RoomsService__When__addRoomIsCalledAndRepositorySaveThrows__Then__ShouldWrapExceptionAndThrowAsWell() throws RepositoryOperationException {
+    public void Given__RoomsService__When__addRoomIsCalledAndRepositorySaveThrows__Then__ShouldWrapExceptionAndThrowAsWell() throws RepositoryOperationException, ValidationException {
 
         var roomRepository = Mockito.mock(RoomRepository.class);
 
@@ -167,7 +168,7 @@ public class RoomsServiceTests {
     }
 
     @Test
-    public void Given__RoomsService__When__addRoomIsCalledAndTargetRoomExists__Then__ShouldReturnTheFoundRoom() throws RoomAdditionException, RepositoryOperationException {
+    public void Given__RoomsService__When__addRoomIsCalledAndTargetRoomExists__Then__ShouldReturnTheFoundRoom() throws RoomAdditionException, RepositoryOperationException, ValidationException {
 
         var roomRepository = Mockito.mock(RoomRepository.class);
 

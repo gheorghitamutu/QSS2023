@@ -9,6 +9,7 @@ import org.domain.exceptions.session.SessionDeletionFailed;
 import org.domain.exceptions.session.SessionNotFoundException;
 import org.domain.exceptions.studentgroup.StudentGroupNotFoundException;
 import org.domain.exceptions.teacher.TeacherNotFoundException;
+import org.domain.exceptions.validations.ValidationException;
 import org.domain.models.Session;
 import org.presentation.GUI;
 
@@ -230,7 +231,7 @@ public class SessionSettings implements BaseSettings{
                     GUI.app.sessionsService.addSession(Objects.requireNonNull(Session.Type.valueOf((String) typeComboBox.getSelectedItem()), "Session type combo selector value should not be empty."),
                            Objects.requireNonNull ((String) halfyearComboBox.getSelectedItem(),"Half year combo selector value should not be empty."),
                             Objects.requireNonNull((String) model.getSelectedItem(), "Model combo selector value should not be empty."));
-                } catch (SessionAdditionException | DisciplineNotFoundException ex) {
+                } catch (SessionAdditionException | DisciplineNotFoundException | ValidationException ex) {
                     JOptionPane.showMessageDialog(
                             null,
                             "An exception occurred: " + ex.getMessage(),
