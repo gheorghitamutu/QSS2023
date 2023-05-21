@@ -121,33 +121,33 @@ jobs:
           name: jacoco-report
           path: ${{ github.workspace }}/Project/SchoolTimetable/target/site/jacoco/
         
-      - run: mkdir staging && cp ./Project/SchoolTimetable/target/*.jar staging
-      - uses: actions/upload-artifact@v3
-        with:
-          name: Package
-          path: staging
+      # - run: mkdir staging && cp ./Project/SchoolTimetable/target/*.jar staging
+      # - uses: actions/upload-artifact@v3
+      #   with:
+      #     name: Package
+      #     path: staging
   
-  publish:
-    name: "Publish to release"
-    permissions: write-all
-    runs-on: ubuntu-latest
-    needs: build
-    steps:
-    - uses: actions/checkout@v2
-
-    - name: Add tag data to enviroment
-      run: echo "VERSION=0.0.1" >> $GITHUB_ENV
-
-    - uses: actions/download-artifact@v2
-      with:
-        name: Package
-        path: staging
-
-    - uses: "marvinpinto/action-automatic-releases@latest"
-      with:
-        repo_token: "${{ secrets.GITHUB_TOKEN }}"
-        automatic_release_tag: "${{env.VERSION}}"
-        prerelease: true # ${{ github.event.inputs.isPreRelease }}
-        title: Build ${{env.VERSION}}
-        files: |
-            staging/*
+  # publish:
+  #   name: "Publish to release"
+  #   permissions: write-all
+  #   runs-on: ubuntu-latest
+  #   needs: build
+  #   steps:
+  #   - uses: actions/checkout@v2
+# 
+  #   - name: Add tag data to enviroment
+  #     run: echo "VERSION=0.0.1" >> $GITHUB_ENV
+# 
+  #   - uses: actions/download-artifact@v2
+  #     with:
+  #       name: Package
+  #       path: staging
+# 
+  #   - uses: "marvinpinto/action-automatic-releases@latest"
+  #     with:
+  #       repo_token: "${{ secrets.GITHUB_TOKEN }}"
+  #       automatic_release_tag: "${{env.VERSION}}"
+  #       prerelease: true # ${{ github.event.inputs.isPreRelease }}
+  #       title: Build ${{env.VERSION}}
+  #       files: |
+  #           staging/*
