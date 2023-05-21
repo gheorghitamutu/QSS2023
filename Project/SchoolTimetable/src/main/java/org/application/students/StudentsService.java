@@ -31,6 +31,7 @@ public class StudentsService implements IStudentsService {
 
     @Override
     public Student addStudent(String name, String registrationNumber, int year, String groupName) throws StudentAdditionException {
+
         var student = new Student();
 
         student.setName(name);
@@ -38,7 +39,12 @@ public class StudentsService implements IStudentsService {
         student.setRegistrationNumber(registrationNumber);
         student.setInsertTime(new Date());
 
-        var group = studentGroupRepository.getByGroupName(groupName);
+        StudentGroup group = null;
+        try {
+            group = studentGroupRepository.getByGroupName(groupName);
+        } catch (RepositoryOperationException e) {
+            throw new StudentAdditionException("[Students Service] (New) Group name is invalid",e);
+        }
         if (group == null) {
             try {
                 System.out.println(MessageFormat.format("[StudentsService] Creating new group with name {0}.", groupName));

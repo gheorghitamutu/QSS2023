@@ -172,7 +172,7 @@ public class SessionsServiceTests {
     }
 
     @Test
-    public void Given__SessionsService__When__getSessionsByHalfYearIsCalledAndSessionIsFound__Then__ShouldReturnTheFoundSession() {
+    public void Given__SessionsService__When__getSessionsByHalfYearIsCalledAndSessionIsFound__Then__ShouldReturnTheFoundSession() throws SessionNotFoundException {
 
         var sessionRepository = Mockito.mock(SessionRepository.class);
         var disciplineRepository = Mockito.mock(DisciplineRepository.class);

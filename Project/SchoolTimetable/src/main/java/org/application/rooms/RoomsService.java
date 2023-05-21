@@ -24,6 +24,18 @@ public class RoomsService implements IRoomsService {
     public Room addRoom(String name, int capacity, int floor, Room.Type type) throws RoomAdditionException {
         Room room = null;
 
+        if (name == null || name.isEmpty()) {
+            throw new RoomAdditionException("[Rooms Service] Room name is invalid");
+        }
+
+        if (capacity <= 0) {
+            throw new RoomAdditionException("[Rooms Service] Room capacity is invalid");
+        }
+
+        if (type == null) {
+            throw new RoomAdditionException("[Rooms Service] Room type is invalid");
+        }
+
         try {
             room = roomRepository.getByName(name);
         } catch (Exception e) {
@@ -49,6 +61,11 @@ public class RoomsService implements IRoomsService {
 
     @Override
     public boolean deleteRoom(int roomId) throws RoomNotFoundException, RoomDeletionFailed {
+
+        if (roomId < 0) {
+            throw new RoomNotFoundException("[RoomService] Room id is invalid");
+        }
+
         var room = roomRepository.getById(roomId);
         if (room == null) {
             throw new RoomNotFoundException(MessageFormat.format("[RoomService] Room with id {0} not found.", roomId));
@@ -65,6 +82,11 @@ public class RoomsService implements IRoomsService {
 
     @Override
     public boolean deleteRooms(String name) throws RoomDeletionFailed {
+
+        if (name == null || name.isEmpty()) {
+            throw new RoomDeletionFailed("[RoomService] Room name is invalid");
+        }
+
         var rooms = roomRepository.readAll().stream().filter(r -> r.getName().equals(name)).toList();
 
         try {
@@ -89,6 +111,11 @@ public class RoomsService implements IRoomsService {
 
     @Override
     public Room getRoomById(int roomId) throws RoomNotFoundException {
+
+        if (roomId < 0) {
+            throw new RoomNotFoundException("[RoomService] Room id is invalid");
+        }
+
         var room = roomRepository.getById(roomId);
         if (room == null) {
             throw new RoomNotFoundException(MessageFormat.format("[RoomService] Room with id {0} not found.", roomId));

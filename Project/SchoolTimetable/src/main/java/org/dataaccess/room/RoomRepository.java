@@ -16,6 +16,11 @@ public class RoomRepository extends BaseRepository<Room> implements IRoomReposit
     }
 
     public Room getByName(String name) throws RepositoryOperationException {
+
+        if (name == null) {
+            throw new RepositoryOperationException("[RoomRepository Validation] Name cannot be null.");
+        }
+
         var session = hibernateProvider.getEntityManager();
         var query = session.createNamedQuery("Room.getByName", Room.class);
         query.setParameter("name", name);
@@ -29,6 +34,19 @@ public class RoomRepository extends BaseRepository<Room> implements IRoomReposit
     }
 
     public Room createNewRoom(String name, int capacity, int floor, Room.Type type) throws RepositoryOperationException  {
+
+        if (name == null) {
+            throw new RepositoryOperationException("[RoomRepository Validation] Name cannot be null.");
+        }
+
+        if (capacity <= 0) {
+            throw new RepositoryOperationException("[RoomRepository Validation] Capacity cannot be negative.");
+        }
+
+        if (type == null) {
+            throw new RepositoryOperationException("[RoomRepository Validation] Type cannot be null.");
+        }
+
         var room = new Room();
         room.setName(name);
         room.setCapacity(capacity);

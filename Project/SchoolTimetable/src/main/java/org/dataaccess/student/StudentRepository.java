@@ -1,6 +1,7 @@
 package org.dataaccess.student;
 
 import com.google.inject.Inject;
+import jakarta.validation.Valid;
 import org.dataaccess.repository.BaseRepository;
 import org.dataaccess.database.IHibernateProvider;
 import org.domain.exceptions.RepositoryOperationException;
@@ -15,7 +16,7 @@ public class StudentRepository extends BaseRepository<Student> implements IStude
     }
 
     @Override
-    public Student updateStudent(Student student) throws RepositoryOperationException {
+    public Student updateStudent(@Valid Student student) throws RepositoryOperationException {
 
         var session = hibernateProvider.getEntityManager();
 
@@ -39,7 +40,7 @@ public class StudentRepository extends BaseRepository<Student> implements IStude
     }
 
     @Override
-    public Student deleteStudent(Student student) throws RepositoryOperationException {
+    public Student deleteStudent(@Valid Student student) throws RepositoryOperationException {
 
         var session = hibernateProvider.getEntityManager();
 
@@ -65,7 +66,7 @@ public class StudentRepository extends BaseRepository<Student> implements IStude
     }
 
     @Override
-    public Student changeStudentGroup(Student student, StudentGroup newGroup) throws RepositoryOperationException {
+    public Student changeStudentGroup(@Valid Student student, @Valid StudentGroup newGroup) throws RepositoryOperationException {
 
         var session = hibernateProvider.getEntityManager();
 

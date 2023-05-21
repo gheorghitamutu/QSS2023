@@ -23,7 +23,26 @@ public class StudentGroupsService implements IStudentGroupsService {
 
     @Override
     public StudentGroup addStudentGroup(String name, int year, StudentGroup.Type type) throws StudentGroupAdditionException {
-        StudentGroup group = studentGroupRepository.getByGroupName(name);
+
+        if (name == null || name.isEmpty()) {
+            throw new StudentGroupAdditionException("[StudentGroups Service] Group name is invalid");
+        }
+
+        if (year <= 0) {
+            throw new StudentGroupAdditionException("[StudentGroups Service] Group year is invalid");
+        }
+
+        if (type == null) {
+            throw new StudentGroupAdditionException("[StudentGroups Service] Group type is invalid");
+        }
+
+        StudentGroup group = null;
+        try {
+            group = studentGroupRepository.getByGroupName(name);
+        } catch (RepositoryOperationException e) {
+            throw new StudentGroupAdditionException("Group name is invalid", e);
+        }
+
         if (group == null) {
             group = new StudentGroup();
             group.setName(name);
@@ -49,6 +68,11 @@ public class StudentGroupsService implements IStudentGroupsService {
 
     @Override
     public boolean deleteStudentGroup(int studentGroupId) throws StudentGroupNotFoundException, StudentGroupDeletionFailed {
+
+        if (studentGroupId < 0) {
+            throw new IllegalArgumentException("[StudentGroups Service] Group id is invalid");
+        }
+
         var group = studentGroupRepository.getById(studentGroupId);
         if (group == null) {
             throw new StudentGroupNotFoundException(MessageFormat.format("[StudentGroupsService] Student Group with id {0} not found.", studentGroupId));
@@ -65,6 +89,11 @@ public class StudentGroupsService implements IStudentGroupsService {
 
     @Override
     public boolean deleteStudentGroup(String name) throws StudentGroupDeletionFailed {
+
+        if (name == null || name.isEmpty()) {
+            throw new StudentGroupDeletionFailed("[StudentGroups Service] Group name is null");
+        }
+
         var groups = studentGroupRepository.readAll().stream().filter(sg -> sg.getName().equals(name)).toList();
 
         try {
@@ -90,6 +119,10 @@ public class StudentGroupsService implements IStudentGroupsService {
 
     @Override
     public StudentGroup getStudentGroupById(int studentGroupId) throws StudentGroupNotFoundException {
+        if (studentGroupId < 0) {
+            throw new IllegalArgumentException("[StudentGroups Service] Group id is invalid");
+        }
+
         var group = studentGroupRepository.getById(studentGroupId);
         if (group == null) {
             throw new StudentGroupNotFoundException(MessageFormat.format("[StudentGroupsService] Student Group with id {0} not found.", studentGroupId));

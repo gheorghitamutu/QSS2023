@@ -22,6 +22,15 @@ public class TeachersService implements ITeachersService {
 
     @Override
     public Teacher addTeacher(String name, Teacher.Type type) throws TeacherAdditionException {
+
+        if (name == null || name.isEmpty()) {
+            throw new TeacherAdditionException("[Teachers Service] Teacher name is invalid");
+        }
+
+        if (type == null) {
+            throw new TeacherAdditionException("[Teachers Service] Teacher type is invalid");
+        }
+
         Teacher teacher = null;
 
         try {
@@ -49,6 +58,11 @@ public class TeachersService implements ITeachersService {
 
     @Override
     public boolean deleteTeacher(int teacherId) throws TeacherNotFoundException, TeacherDeletionFailed {
+
+        if (teacherId < 0) {
+            throw new IllegalArgumentException("[TeacherService] Teacher id is invalid");
+        }
+
         var teacher = teacherRepository.getById(teacherId);
         if (teacher == null) {
             throw new TeacherNotFoundException(MessageFormat.format("[TeacherService] Discipline with id {0} not found.", teacherId));
@@ -65,6 +79,11 @@ public class TeachersService implements ITeachersService {
 
     @Override
     public boolean deleteTeachers(String name) throws TeacherDeletionFailed {
+
+        if (name == null || name.isEmpty()) {
+            throw new IllegalArgumentException("[TeacherService] Teacher name is invalid");
+        }
+
         var teachers = teacherRepository.readAll().stream().filter(t -> t.getName().equals(name)).toList();
 
         try {
@@ -89,6 +108,11 @@ public class TeachersService implements ITeachersService {
 
     @Override
     public Teacher getTeacherById(int teacherId) throws TeacherNotFoundException {
+
+        if (teacherId < 0) {
+            throw new IllegalArgumentException("[TeacherService] Teacher id is invalid");
+        }
+
         var teacher = teacherRepository.getById(teacherId);
         if (teacher == null) {
             throw new TeacherNotFoundException(MessageFormat.format("[TeacherService] Teacher with id {0} not found.", teacherId));

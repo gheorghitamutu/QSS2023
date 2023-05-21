@@ -28,6 +28,15 @@ public class DisciplinesService implements IDisciplinesService {
     public Discipline addDiscipline(String name, int credits) throws DisciplineAdditionException {
         Discipline discipline = null;
 
+        if (name == null || name.isBlank()) {
+            throw new DisciplineAdditionException("[Discipline Service] Discipline name is invalid");
+        }
+
+        if (credits <= 0) {
+            throw new DisciplineAdditionException("[Discipline Service] Discipline credits are invalid");
+        }
+
+
         try {
             discipline = disciplineRepository.getByName(name);
         } catch (Exception e) {
@@ -53,6 +62,11 @@ public class DisciplinesService implements IDisciplinesService {
 
     @Override
     public boolean deleteDiscipline(int disciplineId) throws DisciplineNotFoundException, DisciplineDeletionFailed {
+
+        if (disciplineId < 0) {
+            throw new DisciplineNotFoundException("[Discipline Service] Discipline id is invalid");
+        }
+
         var discipline = disciplineRepository.getById(disciplineId);
         if (discipline == null) {
             throw new DisciplineNotFoundException(MessageFormat.format("[DisciplineService] Discipline with id {0} not found.", disciplineId));
@@ -69,6 +83,11 @@ public class DisciplinesService implements IDisciplinesService {
 
     @Override
     public boolean deleteDisciplines(String name) throws DisciplineDeletionFailed {
+
+        if (name == null || name.isBlank()) {
+            throw new DisciplineDeletionFailed("[Discipline Service] Discipline name is invalid");
+        }
+
         var disciplines = disciplineRepository.readAll().stream().filter(d -> d.getName().equals(name)).toList();
 
         try {
@@ -93,6 +112,11 @@ public class DisciplinesService implements IDisciplinesService {
 
     @Override
     public Discipline getDisciplineById(int disciplineId) throws DisciplineNotFoundException {
+
+        if (disciplineId < 0) {
+            throw new DisciplineNotFoundException("[Discipline Service] Discipline id is invalid");
+        }
+
         var discipline = disciplineRepository.getById(disciplineId);
         if (discipline == null) {
             throw new DisciplineNotFoundException(MessageFormat.format("[DisciplineService] Student Group with id {0} not found.", disciplineId));
@@ -107,6 +131,15 @@ public class DisciplinesService implements IDisciplinesService {
 
     @Override
     public Discipline addTeacherToDiscipline(String teacherName, String disciplineName) throws TeacherNotFoundException, DisciplineNotFoundException {
+
+        if (teacherName == null || teacherName.isBlank()) {
+            throw new TeacherNotFoundException("[Discipline Service] Teacher name is invalid");
+        }
+
+        if (disciplineName == null || disciplineName.isBlank()) {
+            throw new DisciplineNotFoundException("[Discipline Service] Discipline name is invalid");
+        }
+
         var teachers = this.teacherRepository.readAll().stream().filter(t -> t.getName().equals(teacherName)).toList();
 
         if (teachers.isEmpty()) {

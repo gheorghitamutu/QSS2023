@@ -70,7 +70,7 @@ class StudentGroupRepositoryTest {
 
     @Test
     public void Given__StudentGroupRepository__When__getByGroupNameIsCalledWithNonExistentGroup__Then__ShouldReturnANullGroup() throws RepositoryOperationException {
-        StudentGroup group = studentGroupRepository.getByGroupName("A99");
+        StudentGroup group = studentGroupRepository.getByGroupName("A9");
 
         Assertions.assertNull(group);
     }

@@ -34,6 +34,19 @@ public class SessionsService implements ISessionsService {
 
     @Override
     public Session addSession(Session.Type type, String halfYear, String disciplineName) throws SessionAdditionException, DisciplineNotFoundException {
+
+        if (type == null) {
+            throw new SessionAdditionException("[Session Service] Session type is invalid");
+        }
+
+        if (halfYear == null || halfYear.isBlank()) {
+            throw new SessionAdditionException("[Session Service] Session half year is invalid");
+        }
+
+        if (disciplineName == null || disciplineName.isBlank()) {
+            throw new SessionAdditionException("[Session Service] Session discipline name is invalid");
+        }
+
         var disciplines = disciplineRepository.readAll().stream().filter(d -> d.getName().equals(disciplineName)).toList();
         if (disciplines.isEmpty()) {
             throw new DisciplineNotFoundException("[SessionService] Discipline not found!");
@@ -59,6 +72,11 @@ public class SessionsService implements ISessionsService {
 
     @Override
     public boolean deleteSession(int sessionId) throws SessionNotFoundException, SessionDeletionFailed {
+
+        if (sessionId < 0) {
+            throw new SessionNotFoundException("[Session Service] Session id is invalid");
+        }
+
         var session = sessionRepository.getById(sessionId);
         if (session == null) {
             throw new SessionNotFoundException(MessageFormat.format("[SessionService] Session with id {0} not found.", sessionId));
@@ -106,6 +124,11 @@ public class SessionsService implements ISessionsService {
 
     @Override
     public Session getSessionById(int sessionId) throws SessionNotFoundException {
+
+        if (sessionId < 0) {
+            throw new SessionNotFoundException("[Session Service] Session id is invalid");
+        }
+
         var session = sessionRepository.getById(sessionId);
         if (session == null) {
             throw new SessionNotFoundException(MessageFormat.format("[SessionService] Session with id {0} not found.", sessionId));
@@ -120,6 +143,11 @@ public class SessionsService implements ISessionsService {
 
     @Override
     public List<Session> getSessionsByHalfYear(String hf) {
+
+        if (hf == null || hf.isBlank()) {
+            throw new IllegalArgumentException("[Session Service] Session half year is invalid");
+        }
+
         return sessionRepository.readAll().stream().filter(session -> session.getHalfYear().equals(hf)).toList();
     }
 
@@ -159,6 +187,15 @@ public class SessionsService implements ISessionsService {
 
     @Override
     public Session addTeacherToSession(int sessionId, String teacherName) throws SessionNotFoundException, TeacherNotFoundException {
+
+        if (sessionId < 0) {
+            throw new SessionNotFoundException("[Session Service] Session id is invalid");
+        }
+
+        if (teacherName == null || teacherName.isBlank()) {
+            throw new SessionNotFoundException("[Session Service] Teacher name is invalid");
+        }
+
         var session = this.sessionRepository.getById(sessionId);
         if (session == null) {
             throw new SessionNotFoundException("[SessionService] Session not found!");
@@ -186,6 +223,15 @@ public class SessionsService implements ISessionsService {
 
     @Override
     public Session addGroupToSession(String disciplineName, String groupName) throws StudentGroupNotFoundException, DisciplineNotFoundException, SessionNotFoundException {
+
+        if (groupName == null || groupName.isBlank()) {
+            throw new StudentGroupNotFoundException("[Session Service] Group name is invalid");
+        }
+
+        if (disciplineName == null || disciplineName.isBlank()) {
+            throw new DisciplineNotFoundException("[Session Service] Discipline name is invalid");
+        }
+
         var groups = studentGroupRepository.readAll().stream().filter(d -> d.getName().equals(groupName)).toList();
         if (groups.isEmpty()) {
             throw new StudentGroupNotFoundException("[SessionService] Student group not found!");
@@ -218,6 +264,15 @@ public class SessionsService implements ISessionsService {
 
     @Override
     public Session addGroupToSession(int sessionId, String groupName) throws SessionNotFoundException, StudentGroupNotFoundException {
+
+        if (sessionId < 0) {
+            throw new IllegalArgumentException("[Session Service] Session id is invalid");
+        }
+
+        if (groupName == null || groupName.isBlank()) {
+            throw new IllegalArgumentException("[Session Service] Group name is invalid");
+        }
+        
         var session = this.sessionRepository.getById(sessionId);
         if (session == null) {
             throw new SessionNotFoundException("[SessionService] Session not found!");

@@ -16,7 +16,13 @@ public class StudentGroupRepository extends BaseRepository<StudentGroup> impleme
     }
 
     @Override
-    public StudentGroup getByGroupName(String groupName) {
+    public StudentGroup getByGroupName(String groupName) throws RepositoryOperationException {
+
+        if (groupName == null) {
+            throw new RepositoryOperationException("[Student Group Repository Validation] Group name cannot be null.");
+        }
+
+        //regex for group name is enforced so if groupname is invalid => no results
 
         var session = hibernateProvider.getEntityManager();
         var query = session.createNamedQuery("StudentGroup.getByGroupName", StudentGroup.class);
@@ -32,6 +38,14 @@ public class StudentGroupRepository extends BaseRepository<StudentGroup> impleme
 
     @Override
     public StudentGroup createNewGroup(String groupName) throws RepositoryOperationException {
+
+        if (groupName == null) {
+            throw new RepositoryOperationException("[Student Group Repository Validation] Group name cannot be null.");
+        }
+
+        if (!groupName.matches("[A-Z]{1}[0-9]{1}")) {
+            throw new RepositoryOperationException("[Student Group Repository Validation] Group name must match regex [A-Z]{1}[0-9]{1}.");
+        }
 
         StudentGroup studentGroup = new StudentGroup();
 

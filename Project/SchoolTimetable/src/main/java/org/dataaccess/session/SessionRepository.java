@@ -16,6 +16,15 @@ public class SessionRepository extends BaseRepository<Session> implements ISessi
     }
 
     public Session createNewSession(Session.Type type, String halfYear) throws RepositoryOperationException {
+
+        if (type == null) {
+            throw new RepositoryOperationException("[SessionRepository Validation] Type cannot be null.");
+        }
+
+        if (halfYear == null) {
+            throw new RepositoryOperationException("[SessionRepository Validation] Half year cannot be null.");
+        }
+
         var session = new Session();
         session.setType(type);
         session.setHalfYear(halfYear);

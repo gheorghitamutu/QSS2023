@@ -17,6 +17,11 @@ public class DisciplineRepository extends BaseRepository<Discipline> implements 
 
     @Override
     public Discipline getByName(String name) throws RepositoryOperationException {
+
+        if (name == null) {
+            throw new RepositoryOperationException("[DisciplineRepository Validation] Name cannot be null.");
+        }
+
         var session = hibernateProvider.getEntityManager();
         var query = session.createNamedQuery("Discipline.getByName", Discipline.class);
         query.setParameter("name", name);
@@ -31,6 +36,14 @@ public class DisciplineRepository extends BaseRepository<Discipline> implements 
 
     @Override
     public Discipline createNewDiscipline(String name, int credits) throws RepositoryOperationException {
+
+        if (name == null) {
+            throw new RepositoryOperationException("[DisciplineRepository Validation] Name cannot be null.");
+        }
+
+        if (credits <= 0) {
+            throw new RepositoryOperationException("[DisciplineRepository Validation] Credits cannot be negative.");
+        }
 
         var discipline = new Discipline();
         discipline.setName(name);

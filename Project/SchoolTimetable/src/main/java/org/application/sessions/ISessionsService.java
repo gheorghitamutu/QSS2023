@@ -24,7 +24,7 @@ public interface ISessionsService {
 
     public List<Session> getSessions();
 
-    public List<Session> getSessionsByHalfYear(String hf);
+    public List<Session> getSessionsByHalfYear(String hf) throws SessionNotFoundException;
 
     public Session addTeacherToSession(String disciplineName, String teacherName) throws DisciplineNotFoundException, SessionNotFoundException, TeacherNotFoundException;
 

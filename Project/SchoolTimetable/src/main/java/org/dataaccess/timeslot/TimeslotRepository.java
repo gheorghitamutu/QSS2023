@@ -1,6 +1,7 @@
 package org.dataaccess.timeslot;
 
 import com.google.inject.Inject;
+import jakarta.validation.Valid;
 import org.dataaccess.database.IHibernateProvider;
 import org.dataaccess.repository.BaseRepository;
 import org.domain.exceptions.RepositoryOperationException;
@@ -20,6 +21,8 @@ public class TimeslotRepository extends BaseRepository<Timeslot> implements ITim
 
     @Override
     public Timeslot createNewTimeslot(Date startDate, Date endDate, Date time, Duration duration, Timeslot.Day day, Timeslot.Periodicity periodicity, Room room, Session session) throws RepositoryOperationException {
+
+        validateTimeslotRelatedParams(startDate, endDate, time, duration, day, periodicity, room, session);
 
         var timeslot = new Timeslot();
 
@@ -42,6 +45,53 @@ public class TimeslotRepository extends BaseRepository<Timeslot> implements ITim
         }
 
         return timeslot;
+    }
+
+    private void validateTimeslotRelatedParams(Date startDate, Date endDate, Date time, Duration duration, Timeslot.Day day, Timeslot.Periodicity periodicity,
+                                               @Valid Room room, @Valid Session session) throws RepositoryOperationException {
+        if (startDate == null) {
+            throw new RepositoryOperationException("[TimeslotRepository Validation] Start date cannot be null.");
+        }
+
+        if (endDate == null) {
+            throw new RepositoryOperationException("[TimeslotRepository Validation] End date cannot be null.");
+        }
+
+        if (startDate.after(endDate)) {
+            throw new RepositoryOperationException("[TimeslotRepository Validation] Start date cannot be after end date.");
+        }
+
+        if (startDate.equals(endDate)) {
+            throw new RepositoryOperationException("[TimeslotRepository Validation] Start date cannot be equal to end date.");
+        }
+
+        if (time == null) {
+            throw new RepositoryOperationException("[TimeslotRepository Validation] Time cannot be null.");
+        }
+
+        if (duration == null) {
+            throw new RepositoryOperationException("[TimeslotRepository Validation] Duration cannot be null.");
+        }
+
+        if (duration.isNegative()) {
+            throw new RepositoryOperationException("[TimeslotRepository Validation] Duration cannot be negative.");
+        }
+
+        if (day == null) {
+            throw new RepositoryOperationException("[TimeslotRepository Validation] Day cannot be null.");
+        }
+
+        if (periodicity == null) {
+            throw new RepositoryOperationException("[TimeslotRepository Validation] Periodicity cannot be null.");
+        }
+
+        if (room == null) {
+            throw new RepositoryOperationException("[TimeslotRepository Validation] Room cannot be null.");
+        }
+
+        if (session == null) {
+            throw new RepositoryOperationException("[TimeslotRepository Validation] Session cannot be null.");
+        }
     }
 
 }
