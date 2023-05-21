@@ -1,9 +1,11 @@
 package org.dataaccess.session;
 
 import com.google.inject.Inject;
+import org.application.helpers.ValidationHelpers;
 import org.dataaccess.database.IHibernateProvider;
 import org.dataaccess.repository.BaseRepository;
 import org.domain.exceptions.RepositoryOperationException;
+import org.domain.exceptions.validations.ValidationException;
 import org.domain.models.Session;
 
 import java.util.Date;
@@ -15,7 +17,11 @@ public class SessionRepository extends BaseRepository<Session> implements ISessi
         super(hibernateProvider);
     }
 
-    public Session createNewSession(Session.Type type, String halfYear) throws RepositoryOperationException {
+    public Session createNewSession(Session.Type type, String halfYear) throws RepositoryOperationException, ValidationException {
+
+        ValidationHelpers.requireNotBlank(halfYear, IllegalArgumentException.class, "Half year cannot be blank.", null);
+        ValidationHelpers.requireNotNull(type, IllegalArgumentException.class, "Type cannot be null.", null);
+
         var session = new Session();
         session.setType(type);
         session.setHalfYear(halfYear);

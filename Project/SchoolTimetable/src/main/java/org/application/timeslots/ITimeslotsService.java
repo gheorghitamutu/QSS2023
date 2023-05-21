@@ -6,6 +6,7 @@ import org.domain.exceptions.Timeslot.TimeslotNotFoundException;
 import org.domain.exceptions.discipline.DisciplineNotFoundException;
 import org.domain.exceptions.room.RoomNotFoundException;
 import org.domain.exceptions.session.SessionNotFoundException;
+import org.domain.exceptions.validations.ValidationException;
 import org.domain.models.Room;
 import org.domain.models.Session;
 import org.domain.models.Timeslot;
@@ -18,18 +19,18 @@ public interface ITimeslotsService {
 
     public Timeslot addTimeslot(Date startDate, Date endDate, Date time,
                                 Duration duration, Timeslot.Day day, Timeslot.Periodicity periodicity,
-                                Room room, Session session) throws TimeslotAdditionException;
+                                Room room, Session session) throws TimeslotAdditionException, ValidationException;
 
     public Timeslot addTimeslot(Date startDate, Date endDate, Date time, Duration duration, Timeslot.Day day,
-                                Timeslot.Periodicity periodicity, String roomName, String disciplineName) throws TimeslotAdditionException, SessionNotFoundException, DisciplineNotFoundException, RoomNotFoundException;
+                                Timeslot.Periodicity periodicity, String roomName, String disciplineName) throws TimeslotAdditionException, SessionNotFoundException, DisciplineNotFoundException, RoomNotFoundException, ValidationException;
 
-    public boolean deleteTimeslot(int timeslotId) throws TimeslotNotFoundException, TimeslotDeletionFailed;
+    public boolean deleteTimeslot(int timeslotId) throws TimeslotNotFoundException, TimeslotDeletionFailed, ValidationException;
 
     public boolean deleteTimeslot(Date startDate, Date time, Duration duration, String roomName) throws TimeslotNotFoundException, TimeslotDeletionFailed, RoomNotFoundException;
 
     public boolean deleteAll() throws TimeslotDeletionFailed;
 
-    public Timeslot getTimeslotById(int timeslotId) throws TimeslotNotFoundException;
+    public Timeslot getTimeslotById(int timeslotId) throws TimeslotNotFoundException, ValidationException;
 
     public List<Timeslot> getTimeslots();
 

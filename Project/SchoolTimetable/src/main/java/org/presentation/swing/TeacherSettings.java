@@ -2,6 +2,7 @@ package org.presentation.swing;
 
 import org.domain.exceptions.teacher.TeacherAdditionException;
 import org.domain.exceptions.teacher.TeacherDeletionFailed;
+import org.domain.exceptions.validations.ValidationException;
 import org.domain.models.Teacher;
 import org.presentation.GUI;
 
@@ -63,7 +64,7 @@ public class TeacherSettings implements BaseSettings {
                 System.out.println("Delete teacher btn clicked");
                 try {
                     GUI.app.teachersService.deleteTeachers((String) model.getSelectedItem());
-                } catch (TeacherDeletionFailed ex) {
+                } catch (TeacherDeletionFailed | ValidationException ex) {
                     JOptionPane.showMessageDialog(
                             null,
                             "An exception occurred: " + ex.getMessage(),
@@ -126,7 +127,7 @@ public class TeacherSettings implements BaseSettings {
 
                 try {
                     GUI.app.teachersService.addTeacher(nameField.getText(), type);
-                } catch (TeacherAdditionException ex) {
+                } catch (TeacherAdditionException | ValidationException ex) {
                     JOptionPane.showMessageDialog(
                             null,
                             "An exception occurred: " + ex.getMessage(),

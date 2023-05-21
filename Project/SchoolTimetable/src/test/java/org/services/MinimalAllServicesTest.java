@@ -23,6 +23,7 @@ import org.domain.exceptions.studentgroup.StudentGroupAdditionException;
 import org.domain.exceptions.studentgroup.StudentGroupDeletionFailed;
 import org.domain.exceptions.teacher.TeacherAdditionException;
 import org.domain.exceptions.teacher.TeacherDeletionFailed;
+import org.domain.exceptions.validations.ValidationException;
 import org.domain.models.*;
 import org.junit.jupiter.api.*;
 
@@ -65,7 +66,7 @@ public class MinimalAllServicesTest {
     }
 
     @Test
-    public void TestSimpleUseCase() throws TeacherAdditionException, DisciplineAdditionException, StudentAdditionException, StudentGroupAdditionException, SessionAdditionException, java.text.ParseException, TimeslotAdditionException, RoomAdditionException, StudentUpdateException, StudentNotFoundException, DisciplineNotFoundException, TimeslotDeletionFailed, RoomNotFoundException, TimeslotNotFoundException {
+    public void TestSimpleUseCase() throws TeacherAdditionException, DisciplineAdditionException, StudentAdditionException, StudentGroupAdditionException, SessionAdditionException, java.text.ParseException, TimeslotAdditionException, RoomAdditionException, StudentUpdateException, StudentNotFoundException, DisciplineNotFoundException, TimeslotDeletionFailed, RoomNotFoundException, TimeslotNotFoundException, ValidationException {
         var teacher = app.teachersService.addTeacher("Teacher 01", Teacher.Type.TEACHER);
         var collaborator = app.teachersService.addTeacher("Teacher 02", Teacher.Type.COLLABORATOR);
 

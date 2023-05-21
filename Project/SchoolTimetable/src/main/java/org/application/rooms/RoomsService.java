@@ -1,11 +1,13 @@
 package org.application.rooms;
 
 import com.google.inject.Inject;
+import org.application.helpers.ValidationHelpers;
 import org.dataaccess.room.IRoomRepository;
 import org.domain.exceptions.RepositoryOperationException;
 import org.domain.exceptions.room.RoomAdditionException;
 import org.domain.exceptions.room.RoomDeletionFailed;
 import org.domain.exceptions.room.RoomNotFoundException;
+import org.domain.exceptions.validations.ValidationException;
 import org.domain.models.Room;
 
 import java.text.MessageFormat;
@@ -21,8 +23,14 @@ public class RoomsService implements IRoomsService {
     }
 
     @Override
-    public Room addRoom(String name, int capacity, int floor, Room.Type type) throws RoomAdditionException {
+    public Room addRoom(String name, int capacity, int floor, Room.Type type) throws RoomAdditionException, ValidationException {
         Room room = null;
+
+        ValidationHelpers.requireNotBlank(name, IllegalArgumentException.class, "[RoomService] Room name is invalid", null);
+        ValidationHelpers.requirePositive(capacity, IllegalArgumentException.class, "[RoomService] Room capacity is invalid", null);
+        ValidationHelpers.requireNotNull(type, IllegalArgumentException.class, "[RoomService] Room type is invalid", null);
+
+
 
         try {
             room = roomRepository.getByName(name);
@@ -33,7 +41,7 @@ public class RoomsService implements IRoomsService {
         if (room == null) {
             try {
                 room = roomRepository.createNewRoom(name, capacity, floor, type);
-            } catch (RepositoryOperationException e) {
+            } catch (RepositoryOperationException | ValidationException e) {
                 throw new RuntimeException(e);
             }
         }
@@ -48,7 +56,9 @@ public class RoomsService implements IRoomsService {
     }
 
     @Override
-    public boolean deleteRoom(int roomId) throws RoomNotFoundException, RoomDeletionFailed {
+    public boolean deleteRoom(int roomId) throws RoomNotFoundException, RoomDeletionFailed, ValidationException {
+        ValidationHelpers.requirePositiveOrZero(roomId, IllegalArgumentException.class, "[RoomService] Room id is invalid", null);
+
         var room = roomRepository.getById(roomId);
         if (room == null) {
             throw new RoomNotFoundException(MessageFormat.format("[RoomService] Room with id {0} not found.", roomId));
@@ -64,7 +74,11 @@ public class RoomsService implements IRoomsService {
     }
 
     @Override
-    public boolean deleteRooms(String name) throws RoomDeletionFailed {
+    public boolean deleteRooms(String name) throws RoomDeletionFailed, ValidationException {
+
+        ValidationHelpers.requireNotBlank(name, IllegalArgumentException.class, "[RoomService] Room name is invalid", null);
+
+
         var rooms = roomRepository.readAll().stream().filter(r -> r.getName().equals(name)).toList();
 
         try {
@@ -88,7 +102,10 @@ public class RoomsService implements IRoomsService {
     }
 
     @Override
-    public Room getRoomById(int roomId) throws RoomNotFoundException {
+    public Room getRoomById(int roomId) throws RoomNotFoundException, ValidationException {
+
+        ValidationHelpers.requirePositiveOrZero(roomId, IllegalArgumentException.class, "[RoomService] Room id is invalid", null);
+
         var room = roomRepository.getById(roomId);
         if (room == null) {
             throw new RoomNotFoundException(MessageFormat.format("[RoomService] Room with id {0} not found.", roomId));

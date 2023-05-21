@@ -1,9 +1,11 @@
 package org.dataaccess.teacher;
 
 import com.google.inject.Inject;
+import org.application.helpers.ValidationHelpers;
 import org.dataaccess.database.IHibernateProvider;
 import org.dataaccess.repository.BaseRepository;
 import org.domain.exceptions.RepositoryOperationException;
+import org.domain.exceptions.validations.ValidationException;
 import org.domain.models.Teacher;
 
 import java.util.Date;
@@ -15,7 +17,10 @@ public class TeacherRepository extends BaseRepository<Teacher> implements ITeach
         super(hibernateProvider);
     }
 
-    public Teacher getByName(String name) throws RepositoryOperationException {
+    public Teacher getByName(String name) throws RepositoryOperationException, ValidationException {
+
+        ValidationHelpers.requireNotBlank(name, IllegalArgumentException.class, "Teacher name cannot be blank.", null);
+
         var session = hibernateProvider.getEntityManager();
         var query = session.createNamedQuery("Teacher.getByName", Teacher.class);
         query.setParameter("name", name);
@@ -28,7 +33,10 @@ public class TeacherRepository extends BaseRepository<Teacher> implements ITeach
         return result.get(0);
     }
 
-    public Teacher createNewTeacher(String name, Teacher.Type type) throws RepositoryOperationException {
+    public Teacher createNewTeacher(String name, Teacher.Type type) throws RepositoryOperationException, ValidationException {
+        ValidationHelpers.requireNotBlank(name, IllegalArgumentException.class, "Teacher name cannot be blank.", null);
+        ValidationHelpers.requireNotNull(type, IllegalArgumentException.class, "Teacher type cannot be null.", null);
+
         var teacher = new Teacher();
 
         teacher.setName(name);

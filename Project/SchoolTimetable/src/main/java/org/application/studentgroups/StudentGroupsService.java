@@ -1,11 +1,13 @@
 package org.application.studentgroups;
 
 import com.google.inject.Inject;
+import org.application.helpers.ValidationHelpers;
 import org.dataaccess.studentgroup.IStudentGroupRepository;
 import org.domain.exceptions.RepositoryOperationException;
 import org.domain.exceptions.studentgroup.StudentGroupAdditionException;
 import org.domain.exceptions.studentgroup.StudentGroupDeletionFailed;
 import org.domain.exceptions.studentgroup.StudentGroupNotFoundException;
+import org.domain.exceptions.validations.ValidationException;
 import org.domain.models.StudentGroup;
 
 import java.text.MessageFormat;
@@ -22,8 +24,21 @@ public class StudentGroupsService implements IStudentGroupsService {
     }
 
     @Override
-    public StudentGroup addStudentGroup(String name, int year, StudentGroup.Type type) throws StudentGroupAdditionException {
-        StudentGroup group = studentGroupRepository.getByGroupName(name);
+    public StudentGroup addStudentGroup(String name, int year, StudentGroup.Type type) throws StudentGroupAdditionException, ValidationException {
+
+        ValidationHelpers.requireNotBlank(name, IllegalArgumentException.class, "[StudentGroups Service] Group name is invalid", null);
+        ValidationHelpers.requirePositive(year, IllegalArgumentException.class, "[StudentGroups Service] Group year is invalid", null);
+        ValidationHelpers.requireNotNull(type, IllegalArgumentException.class, "[StudentGroups Service] Group type is invalid", null);
+
+        StudentGroup group = null;
+        try {
+            group = studentGroupRepository.getByGroupName(name);
+        } catch (RepositoryOperationException e) {
+            throw new StudentGroupAdditionException("Group name is invalid", e);
+        } catch (ValidationException e) {
+            throw new IllegalArgumentException("Some parameters are invalid", e);
+        }
+
         if (group == null) {
             group = new StudentGroup();
             group.setName(name);
@@ -33,7 +48,7 @@ public class StudentGroupsService implements IStudentGroupsService {
 
             try {
                 group = studentGroupRepository.createNewGroup(name);
-            } catch (RepositoryOperationException e) {
+            } catch (RepositoryOperationException | ValidationException e) {
                 throw new RuntimeException(e);
             }
         }
@@ -48,7 +63,10 @@ public class StudentGroupsService implements IStudentGroupsService {
     }
 
     @Override
-    public boolean deleteStudentGroup(int studentGroupId) throws StudentGroupNotFoundException, StudentGroupDeletionFailed {
+    public boolean deleteStudentGroup(int studentGroupId) throws StudentGroupNotFoundException, StudentGroupDeletionFailed, ValidationException {
+
+        ValidationHelpers.requirePositiveOrZero(studentGroupId, IllegalArgumentException.class, "[StudentGroups Service] Group id is invalid", null);
+
         var group = studentGroupRepository.getById(studentGroupId);
         if (group == null) {
             throw new StudentGroupNotFoundException(MessageFormat.format("[StudentGroupsService] Student Group with id {0} not found.", studentGroupId));
@@ -64,7 +82,10 @@ public class StudentGroupsService implements IStudentGroupsService {
     }
 
     @Override
-    public boolean deleteStudentGroup(String name) throws StudentGroupDeletionFailed {
+    public boolean deleteStudentGroup(String name) throws StudentGroupDeletionFailed, ValidationException {
+
+        ValidationHelpers.requireNotBlank(name, IllegalArgumentException.class, "[StudentGroups Service] Group name is invalid", null);
+
         var groups = studentGroupRepository.readAll().stream().filter(sg -> sg.getName().equals(name)).toList();
 
         try {
@@ -89,7 +110,9 @@ public class StudentGroupsService implements IStudentGroupsService {
     }
 
     @Override
-    public StudentGroup getStudentGroupById(int studentGroupId) throws StudentGroupNotFoundException {
+    public StudentGroup getStudentGroupById(int studentGroupId) throws StudentGroupNotFoundException, ValidationException {
+        ValidationHelpers.requirePositiveOrZero(studentGroupId, IllegalArgumentException.class, "[StudentGroups Service] Group id is invalid", null);
+
         var group = studentGroupRepository.getById(studentGroupId);
         if (group == null) {
             throw new StudentGroupNotFoundException(MessageFormat.format("[StudentGroupsService] Student Group with id {0} not found.", studentGroupId));

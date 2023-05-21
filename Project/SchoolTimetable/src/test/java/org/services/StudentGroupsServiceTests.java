@@ -17,6 +17,7 @@ import org.domain.exceptions.studentgroup.StudentGroupAdditionException;
 import org.domain.exceptions.studentgroup.StudentGroupDeletionFailed;
 import org.domain.exceptions.studentgroup.StudentGroupNotFoundException;
 import org.domain.exceptions.teacher.TeacherDeletionFailed;
+import org.domain.exceptions.validations.ValidationException;
 import org.domain.models.StudentGroup;
 import org.junit.jupiter.api.*;
 import org.mockito.Mockito;
@@ -195,7 +196,7 @@ public class StudentGroupsServiceTests {
     }
 
     @Test
-    public void Given__StudentGroupsService__When__addStudentGroupIsCalledAndRepositorySaveThrows__Then__ShouldWrapExceptionAndThrowAsWell() throws RepositoryOperationException {
+    public void Given__StudentGroupsService__When__addStudentGroupIsCalledAndRepositorySaveThrows__Then__ShouldWrapExceptionAndThrowAsWell() throws RepositoryOperationException, ValidationException {
 
         var studentGroupRepository = Mockito.mock(StudentGroupRepository.class);
 

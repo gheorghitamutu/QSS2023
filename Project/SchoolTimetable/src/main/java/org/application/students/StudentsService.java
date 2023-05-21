@@ -1,6 +1,7 @@
 package org.application.students;
 
 import com.google.inject.Inject;
+import org.application.helpers.ValidationHelpers;
 import org.dataaccess.student.IStudentRepository;
 import org.dataaccess.studentgroup.IStudentGroupRepository;
 import org.domain.exceptions.RepositoryOperationException;
@@ -9,6 +10,7 @@ import org.domain.exceptions.student.StudentDeletionFailed;
 import org.domain.exceptions.student.StudentNotFoundException;
 import org.domain.exceptions.student.StudentUpdateException;
 import org.domain.exceptions.studentgroup.StudentGroupReassignException;
+import org.domain.exceptions.validations.ValidationException;
 import org.domain.models.Student;
 import org.domain.models.StudentGroup;
 
@@ -30,7 +32,13 @@ public class StudentsService implements IStudentsService {
     }
 
     @Override
-    public Student addStudent(String name, String registrationNumber, int year, String groupName) throws StudentAdditionException {
+    public Student addStudent(String name, String registrationNumber, int year, String groupName) throws StudentAdditionException, ValidationException {
+
+        ValidationHelpers.requireNotBlank(name, IllegalArgumentException.class, "[Students Service] Student name is invalid", null);
+        ValidationHelpers.requireNotBlank(registrationNumber, IllegalArgumentException.class, "[Students Service] Student registration number is invalid", null);
+        ValidationHelpers.requirePositive(year, IllegalArgumentException.class, "[Students Service] Student year is invalid", null);
+        ValidationHelpers.requireNotBlank(groupName, IllegalArgumentException.class, "[Students Service] Student group name is invalid", null);
+
         var student = new Student();
 
         student.setName(name);
@@ -38,7 +46,12 @@ public class StudentsService implements IStudentsService {
         student.setRegistrationNumber(registrationNumber);
         student.setInsertTime(new Date());
 
-        var group = studentGroupRepository.getByGroupName(groupName);
+        StudentGroup group = null;
+        try {
+            group = studentGroupRepository.getByGroupName(groupName);
+        } catch (RepositoryOperationException | ValidationException e) {
+            throw new StudentAdditionException("[Students Service] (New) Group name is invalid",e);
+        }
         if (group == null) {
             try {
                 System.out.println(MessageFormat.format("[StudentsService] Creating new group with name {0}.", groupName));
@@ -47,7 +60,7 @@ public class StudentsService implements IStudentsService {
 
                 System.out.println(MessageFormat.format("[StudentsService] Created new group with name {0}.", groupName));
 
-            } catch (RepositoryOperationException e) {
+            } catch (RepositoryOperationException | ValidationException e) {
                 throw new StudentAdditionException("[StudentsService] Couldn't create new group for adding the student (group doesnt exist yet).", e);
             }
         }
@@ -63,7 +76,12 @@ public class StudentsService implements IStudentsService {
     }
 
     @Override
-    public Student updateStudent(int studentId, String name, int year) throws StudentUpdateException {
+    public Student updateStudent(int studentId, String name, int year) throws StudentUpdateException, ValidationException {
+
+        ValidationHelpers.requireNotBlank(name, IllegalArgumentException.class, "[Students Service] Student name is invalid", null);
+        ValidationHelpers.requirePositive(year, IllegalArgumentException.class, "[Students Service] Student year is invalid", null);
+        ValidationHelpers.requirePositiveOrZero(studentId, IllegalArgumentException.class, "[Students Service] Student id is invalid", null);
+
         var student = studentRepository.getById(studentId);
 
         if (student == null) {
@@ -83,7 +101,7 @@ public class StudentsService implements IStudentsService {
     }
 
     @Override
-    public Student reassignStudent(int studentId, String newGroupName) throws StudentGroupReassignException, RepositoryOperationException {
+    public Student reassignStudent(int studentId, String newGroupName) throws StudentGroupReassignException, RepositoryOperationException, ValidationException {
         var student = studentRepository.getById(studentId);
 
         StudentGroup group = studentGroupRepository.getByGroupName(newGroupName);
@@ -91,7 +109,7 @@ public class StudentsService implements IStudentsService {
         if (group == null) {
             try {
                 group = studentGroupRepository.createNewGroup(newGroupName);
-            } catch (RepositoryOperationException e) {
+            } catch (RepositoryOperationException | ValidationException e) {
                 throw new StudentGroupReassignException(MessageFormat.format("[StudentsService] Couldn't reassign student to group {0}.", newGroupName), e);
             }
         }

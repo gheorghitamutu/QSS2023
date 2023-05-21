@@ -26,6 +26,7 @@ import org.domain.exceptions.studentgroup.StudentGroupNotFoundException;
 import org.domain.exceptions.teacher.TeacherAdditionException;
 import org.domain.exceptions.teacher.TeacherDeletionFailed;
 import org.domain.exceptions.teacher.TeacherNotFoundException;
+import org.domain.exceptions.validations.ValidationException;
 import org.domain.models.*;
 import org.presentation.GUI;
 import org.presentation.MainGenerator;
@@ -97,7 +98,7 @@ public class TableGeneratorTest {
     }
 
     @Test
-    public void TestSimpleUseCase() throws TeacherAdditionException, DisciplineAdditionException, StudentAdditionException, StudentGroupAdditionException, SessionAdditionException, java.text.ParseException, TimeslotAdditionException, RoomAdditionException, StudentUpdateException, StudentNotFoundException, DisciplineNotFoundException, TimeslotDeletionFailed, RoomNotFoundException, TimeslotNotFoundException, StudentGroupNotFoundException, SessionNotFoundException, TeacherNotFoundException, java.io.IOException {
+    public void TestSimpleUseCase() throws TeacherAdditionException, DisciplineAdditionException, StudentAdditionException, StudentGroupAdditionException, SessionAdditionException, java.text.ParseException, TimeslotAdditionException, RoomAdditionException, StudentUpdateException, StudentNotFoundException, DisciplineNotFoundException, TimeslotDeletionFailed, RoomNotFoundException, TimeslotNotFoundException, StudentGroupNotFoundException, SessionNotFoundException, TeacherNotFoundException, java.io.IOException, ValidationException {
         for (var name : this.teacherNames) {
             this.app.teachersService.addTeacher(name, Teacher.Type.TEACHER);
         }

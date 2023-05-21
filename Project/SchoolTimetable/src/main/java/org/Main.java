@@ -36,10 +36,12 @@ import org.dataaccess.teacher.ITeacherRepository;
 import org.dataaccess.teacher.TeacherRepository;
 import org.dataaccess.timeslot.ITimeslotRepository;
 import org.dataaccess.timeslot.TimeslotRepository;
+import org.domain.exceptions.RepositoryOperationException;
+import org.domain.exceptions.validations.ValidationException;
 
 public class Main {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws RepositoryOperationException, ValidationException {
 
         var appInjector = setupDependenciesInjector(false);
         var app = appInjector.getInstance(Application.class);

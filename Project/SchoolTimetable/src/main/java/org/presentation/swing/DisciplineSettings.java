@@ -4,6 +4,7 @@ import org.domain.exceptions.discipline.DisciplineAdditionException;
 import org.domain.exceptions.discipline.DisciplineDeletionFailed;
 import org.domain.exceptions.discipline.DisciplineNotFoundException;
 import org.domain.exceptions.teacher.TeacherNotFoundException;
+import org.domain.exceptions.validations.ValidationException;
 import org.presentation.GUI;
 
 import javax.swing.*;
@@ -192,7 +193,7 @@ public class DisciplineSettings implements BaseSettings {
                     assert creditsComboValue != null;
                     assert nameField.getText() != null;
                     GUI.app.disciplinesService.addDiscipline(nameField.getText(), Integer.parseInt(creditsComboValue));
-                } catch (DisciplineAdditionException ex) {
+                } catch (DisciplineAdditionException | ValidationException ex) {
                     JOptionPane.showMessageDialog(
                             null,
                             "An exception occurred: " + ex.getMessage(),

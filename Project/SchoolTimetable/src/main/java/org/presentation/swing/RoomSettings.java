@@ -2,6 +2,7 @@ package org.presentation.swing;
 
 import org.domain.exceptions.room.RoomAdditionException;
 import org.domain.exceptions.room.RoomDeletionFailed;
+import org.domain.exceptions.validations.ValidationException;
 import org.domain.models.Room;
 import org.presentation.GUI;
 
@@ -64,7 +65,7 @@ public class RoomSettings implements BaseSettings {
                 System.out.println("Delete room btn clicked");
                 try {
                     GUI.app.roomsService.deleteRooms((String) model.getSelectedItem());
-                } catch (RoomDeletionFailed ex) {
+                } catch (RoomDeletionFailed | ValidationException ex) {
                     JOptionPane.showMessageDialog(
                             null,
                             "An exception occurred: " + ex.getMessage(),
@@ -149,7 +150,7 @@ public class RoomSettings implements BaseSettings {
                                                 Integer.parseInt((String) Objects.requireNonNull(capacityComboBox.getSelectedItem())),
                                                 Integer.parseInt((String) Objects.requireNonNull(floorComboBox.getSelectedItem())),
                                                 Room.Type.valueOf((String) typeComboBox.getSelectedItem()));
-                } catch (RoomAdditionException ex) {
+                } catch (RoomAdditionException | ValidationException ex) {
                     JOptionPane.showMessageDialog(
                             null,
                             "An exception occurred: " + ex.getMessage(),

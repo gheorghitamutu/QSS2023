@@ -15,6 +15,7 @@ import org.domain.exceptions.session.SessionDeletionFailed;
 import org.domain.exceptions.student.StudentDeletionFailed;
 import org.domain.exceptions.studentgroup.StudentGroupDeletionFailed;
 import org.domain.exceptions.teacher.TeacherDeletionFailed;
+import org.domain.exceptions.validations.ValidationException;
 import org.domain.models.Discipline;
 import org.domain.models.Session;
 import org.domain.models.Student;
@@ -67,7 +68,7 @@ class DisciplineRepositoryTest {
     //    public Discipline createNewDiscipline(String name, int credits) throws RepositoryOperationException {
 
     @Test
-    public void Given__RoomRepository__When__createNewDisciplineIsCalled__Then__PersistDesciplineAndReturnValidDiscipline() throws RepositoryOperationException {
+    public void Given__RoomRepository__When__createNewDisciplineIsCalled__Then__PersistDesciplineAndReturnValidDiscipline() throws RepositoryOperationException, ValidationException {
         Discipline discipline = disciplineRepository.createNewDiscipline("testDiscipline", 6);
 
         Assertions.assertEquals("testDiscipline", discipline.getName());
@@ -76,7 +77,7 @@ class DisciplineRepositoryTest {
     }
 
     @Test
-    public void getByName() throws RepositoryOperationException {
+    public void getByName() throws RepositoryOperationException, ValidationException {
         Discipline discipline = disciplineRepository.getByName("Discipline 02");
         Assertions.assertEquals("Discipline 02", discipline.getName());
     }
