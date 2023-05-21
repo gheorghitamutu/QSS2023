@@ -70,7 +70,7 @@ public class TimeslotServiceTest {
         student.setDisciplines(Collections.singleton(discipline));
 
         var course = app.sessionsService.addSession(Session.Type.COURSE, "B", "Discipline 001");
-        var laboratory = app.sessionsService.addSession(Session.Type.LABORATORY, null, "Discipline 001");
+        var laboratory = app.sessionsService.addSession(Session.Type.LABORATORY, "B", "Discipline 001");
 
         course.setDiscipline(discipline);
         course.setGroups(Collections.singleton(group));

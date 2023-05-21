@@ -29,12 +29,6 @@ public class StudentGroupValidator implements ConstraintValidator<ValidStudentGr
     public boolean isValid(StudentGroup value, ConstraintValidatorContext context) {
 
         Set<Session> sessions = value.getSessions();
-        for (Session session : sessions) {
-            if (!sessionRepository.validate(session)) {
-                return false;
-            }
-        }
-
         Set<Timeslot> timeslots = new HashSet<>();
         for (Session session : sessions) {
             timeslots.addAll(session.getTimeslots());

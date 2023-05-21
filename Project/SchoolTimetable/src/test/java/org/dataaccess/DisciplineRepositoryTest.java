@@ -86,6 +86,7 @@ class DisciplineRepositoryTest {
 
         Session session = new Session();
         session.setType(Session.Type.COURSE);
+        session.setHalfYear("A");
         session.setInsertTime(new Date());
 
         Discipline discipline = new Discipline();
