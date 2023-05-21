@@ -18,6 +18,7 @@ import org.domain.exceptions.studentgroup.StudentGroupAdditionException;
 import org.domain.exceptions.studentgroup.StudentGroupDeletionFailed;
 import org.domain.exceptions.teacher.TeacherAdditionException;
 import org.domain.exceptions.teacher.TeacherDeletionFailed;
+import org.domain.exceptions.validations.ValidationException;
 import org.domain.models.*;
 import org.junit.jupiter.api.*;
 
@@ -49,7 +50,7 @@ public class TimeslotServiceTest {
     }
 
     @Test
-    public void Given_TimeslotService_When_doubleOverlappingAddition_Then_throwAdditionException() throws TeacherAdditionException, DisciplineAdditionException, StudentAdditionException, StudentGroupAdditionException, SessionAdditionException, DisciplineNotFoundException, RoomAdditionException, ParseException, TimeslotAdditionException {
+    public void Given_TimeslotService_When_doubleOverlappingAddition_Then_throwAdditionException() throws TeacherAdditionException, DisciplineAdditionException, StudentAdditionException, StudentGroupAdditionException, SessionAdditionException, DisciplineNotFoundException, RoomAdditionException, ParseException, TimeslotAdditionException, ValidationException {
         var teacher = app.teachersService.addTeacher("Teacher 001", Teacher.Type.TEACHER);
         var collaborator = app.teachersService.addTeacher("Teacher 002", Teacher.Type.COLLABORATOR);
 

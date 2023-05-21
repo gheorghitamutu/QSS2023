@@ -1,6 +1,7 @@
 package org.application.sessions;
 
 import com.google.inject.Inject;
+import org.application.helpers.ValidationHelpers;
 import org.dataaccess.discipline.IDisciplineRepository;
 import org.dataaccess.session.ISessionRepository;
 import org.dataaccess.studentgroup.IStudentGroupRepository;
@@ -12,6 +13,7 @@ import org.domain.exceptions.session.SessionDeletionFailed;
 import org.domain.exceptions.session.SessionNotFoundException;
 import org.domain.exceptions.studentgroup.StudentGroupNotFoundException;
 import org.domain.exceptions.teacher.TeacherNotFoundException;
+import org.domain.exceptions.validations.ValidationException;
 import org.domain.models.Session;
 
 import java.text.MessageFormat;
@@ -33,19 +35,11 @@ public class SessionsService implements ISessionsService {
     }
 
     @Override
-    public Session addSession(Session.Type type, String halfYear, String disciplineName) throws SessionAdditionException, DisciplineNotFoundException {
+    public Session addSession(Session.Type type, String halfYear, String disciplineName) throws SessionAdditionException, DisciplineNotFoundException, ValidationException {
 
-        if (type == null) {
-            throw new SessionAdditionException("[Session Service] Session type is invalid");
-        }
-
-        if (halfYear == null || halfYear.isBlank()) {
-            throw new SessionAdditionException("[Session Service] Session half year is invalid");
-        }
-
-        if (disciplineName == null || disciplineName.isBlank()) {
-            throw new SessionAdditionException("[Session Service] Session discipline name is invalid");
-        }
+        ValidationHelpers.requireNotNull(type, IllegalArgumentException.class, "[RoomService] Room type is invalid", null);
+        ValidationHelpers.requireNotBlank(halfYear, IllegalArgumentException.class, "[Session Service] Session half year is invalid", null);
+        ValidationHelpers.requireNotBlank(disciplineName, IllegalArgumentException.class, "[Session Service] Session discipline name is invalid", null);
 
         var disciplines = disciplineRepository.readAll().stream().filter(d -> d.getName().equals(disciplineName)).toList();
         if (disciplines.isEmpty()) {
@@ -63,7 +57,7 @@ public class SessionsService implements ISessionsService {
             disciplineSessions.add(session);
             discipline.setSessions(disciplineSessions);
             disciplineRepository.save(discipline);
-        } catch (RepositoryOperationException e) {
+        } catch (RepositoryOperationException | ValidationException e) {
             throw new SessionAdditionException("[SessionService] Failed adding session!", e);
         }
 
@@ -71,11 +65,9 @@ public class SessionsService implements ISessionsService {
     }
 
     @Override
-    public boolean deleteSession(int sessionId) throws SessionNotFoundException, SessionDeletionFailed {
+    public boolean deleteSession(int sessionId) throws SessionNotFoundException, SessionDeletionFailed, ValidationException {
 
-        if (sessionId < 0) {
-            throw new SessionNotFoundException("[Session Service] Session id is invalid");
-        }
+        ValidationHelpers.requirePositiveOrZero(sessionId, IllegalArgumentException.class, "[SessionService] Session id is invalid", null);
 
         var session = sessionRepository.getById(sessionId);
         if (session == null) {
@@ -123,11 +115,9 @@ public class SessionsService implements ISessionsService {
     }
 
     @Override
-    public Session getSessionById(int sessionId) throws SessionNotFoundException {
+    public Session getSessionById(int sessionId) throws SessionNotFoundException, ValidationException {
 
-        if (sessionId < 0) {
-            throw new SessionNotFoundException("[Session Service] Session id is invalid");
-        }
+        ValidationHelpers.requirePositiveOrZero(sessionId, IllegalArgumentException.class, "[SessionService] Session id is invalid", null);
 
         var session = sessionRepository.getById(sessionId);
         if (session == null) {
@@ -142,11 +132,9 @@ public class SessionsService implements ISessionsService {
     }
 
     @Override
-    public List<Session> getSessionsByHalfYear(String hf) {
+    public List<Session> getSessionsByHalfYear(String hf) throws ValidationException {
 
-        if (hf == null || hf.isBlank()) {
-            throw new IllegalArgumentException("[Session Service] Session half year is invalid");
-        }
+        ValidationHelpers.requireNotBlank(hf, IllegalArgumentException.class, "[Session Service] Session half year is invalid", null);
 
         return sessionRepository.readAll().stream().filter(session -> session.getHalfYear().equals(hf)).toList();
     }
@@ -154,9 +142,11 @@ public class SessionsService implements ISessionsService {
     @Override
     public Session addTeacherToSession(String disciplineName, String teacherName) throws DisciplineNotFoundException, SessionNotFoundException, TeacherNotFoundException {
         var disciplines = disciplineRepository.readAll().stream().filter(d -> d.getName().equals(disciplineName)).toList();
+
         if (disciplines.isEmpty()) {
             throw new DisciplineNotFoundException("[SessionService] Discipline not found!");
         }
+
         var discipline = disciplines.get(0);
 
         var teachers = teacherRepository.readAll().stream().filter(d -> d.getName().equals(teacherName)).toList();

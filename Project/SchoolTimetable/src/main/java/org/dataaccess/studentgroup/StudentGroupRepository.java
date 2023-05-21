@@ -1,9 +1,11 @@
 package org.dataaccess.studentgroup;
 
 import com.google.inject.Inject;
+import org.application.helpers.ValidationHelpers;
 import org.dataaccess.database.IHibernateProvider;
 import org.dataaccess.repository.BaseRepository;
 import org.domain.exceptions.RepositoryOperationException;
+import org.domain.exceptions.validations.ValidationException;
 import org.domain.models.StudentGroup;
 
 import java.util.Date;
@@ -16,11 +18,9 @@ public class StudentGroupRepository extends BaseRepository<StudentGroup> impleme
     }
 
     @Override
-    public StudentGroup getByGroupName(String groupName) throws RepositoryOperationException {
+    public StudentGroup getByGroupName(String groupName) throws RepositoryOperationException, ValidationException {
 
-        if (groupName == null) {
-            throw new RepositoryOperationException("[Student Group Repository Validation] Group name cannot be null.");
-        }
+        ValidationHelpers.requireNotBlank(groupName, IllegalArgumentException.class, "Group name cannot be blank.", null);
 
         //regex for group name is enforced so if groupname is invalid => no results
 
@@ -37,15 +37,10 @@ public class StudentGroupRepository extends BaseRepository<StudentGroup> impleme
     }
 
     @Override
-    public StudentGroup createNewGroup(String groupName) throws RepositoryOperationException {
+    public StudentGroup createNewGroup(String groupName) throws RepositoryOperationException, ValidationException {
 
-        if (groupName == null) {
-            throw new RepositoryOperationException("[Student Group Repository Validation] Group name cannot be null.");
-        }
-
-        if (!groupName.matches("[A-Z]{1}[0-9]{1}")) {
-            throw new RepositoryOperationException("[Student Group Repository Validation] Group name must match regex [A-Z]{1}[0-9]{1}.");
-        }
+        ValidationHelpers.requireNotBlank(groupName, IllegalArgumentException.class, "Group name cannot be blank.", null);
+        ValidationHelpers.requireMatchesRegex(groupName, "[A-Z]{1}[0-9]{1}", IllegalArgumentException.class, "Group name must match regex [A-Z]{1}[0-9]{1}.", null);
 
         StudentGroup studentGroup = new StudentGroup();
 

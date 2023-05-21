@@ -8,6 +8,10 @@ import org.application.studentgroups.IStudentGroupsService;
 import org.application.students.IStudentsService;
 import org.application.teachers.ITeachersService;
 import org.application.timeslots.ITimeslotsService;
+import org.dataaccess.database.MainDatabaseHibernateProvider;
+import org.dataaccess.discipline.DisciplineRepository;
+import org.domain.exceptions.RepositoryOperationException;
+import org.domain.exceptions.validations.ValidationException;
 
 public class Application {
 
@@ -35,7 +39,11 @@ public class Application {
         this.timeslotsService = timeslotsService;
     }
 
-    public void run() {
+    public void run() throws RepositoryOperationException, ValidationException {
+
+        var dr = new DisciplineRepository(new MainDatabaseHibernateProvider());
+
+        dr.createNewDiscipline("test", -1);
 
 //        showcaseStudentsService();
 //

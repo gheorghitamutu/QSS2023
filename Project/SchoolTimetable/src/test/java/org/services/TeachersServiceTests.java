@@ -17,6 +17,7 @@ import org.domain.exceptions.studentgroup.StudentGroupDeletionFailed;
 import org.domain.exceptions.teacher.TeacherAdditionException;
 import org.domain.exceptions.teacher.TeacherDeletionFailed;
 import org.domain.exceptions.teacher.TeacherNotFoundException;
+import org.domain.exceptions.validations.ValidationException;
 import org.domain.models.Teacher;
 import org.junit.jupiter.api.*;
 import org.mockito.Mockito;
@@ -149,7 +150,7 @@ public class TeachersServiceTests {
     }
 
     @Test
-    public void Given__TeachersService__When__addTeacherIsCalledAndRepositorySaveThrows__Then__ShouldWrapExceptionAndThrowAsWell() throws RepositoryOperationException {
+    public void Given__TeachersService__When__addTeacherIsCalledAndRepositorySaveThrows__Then__ShouldWrapExceptionAndThrowAsWell() throws RepositoryOperationException, ValidationException {
 
         var teacherRepository = Mockito.mock(TeacherRepository.class);
 
@@ -164,7 +165,7 @@ public class TeachersServiceTests {
     }
 
     @Test
-    public void Given__TeachersService__When__addTeacherIsCalledAndTargetTeacherExists__Then__ShouldReturnTheFoundTeacher() throws TeacherAdditionException, RepositoryOperationException {
+    public void Given__TeachersService__When__addTeacherIsCalledAndTargetTeacherExists__Then__ShouldReturnTheFoundTeacher() throws TeacherAdditionException, RepositoryOperationException, ValidationException {
 
         var teacherRepository = Mockito.mock(TeacherRepository.class);
 

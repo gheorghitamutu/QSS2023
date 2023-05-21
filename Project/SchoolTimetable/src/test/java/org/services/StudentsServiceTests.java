@@ -20,6 +20,7 @@ import org.domain.exceptions.student.StudentUpdateException;
 import org.domain.exceptions.studentgroup.StudentGroupDeletionFailed;
 import org.domain.exceptions.studentgroup.StudentGroupReassignException;
 import org.domain.exceptions.teacher.TeacherDeletionFailed;
+import org.domain.exceptions.validations.ValidationException;
 import org.domain.models.Student;
 import org.domain.models.StudentGroup;
 import org.junit.jupiter.api.*;
@@ -348,7 +349,7 @@ public class StudentsServiceTests {
     }
 
     @Test
-    public void Given__StudentsService__When__reassignStudentIsCalledAndStudentIsFoundWhichIsAlreadyInAGroup__Then__ShouldReturnTheFoundStudentWithDifferentGroup() throws StudentGroupReassignException, RepositoryOperationException {
+    public void Given__StudentsService__When__reassignStudentIsCalledAndStudentIsFoundWhichIsAlreadyInAGroup__Then__ShouldReturnTheFoundStudentWithDifferentGroup() throws StudentGroupReassignException, RepositoryOperationException, ValidationException {
 
         var studentGroupRepository = Mockito.mock(StudentGroupRepository.class);
         var studentRepository = Mockito.mock(StudentRepository.class);
@@ -377,7 +378,7 @@ public class StudentsServiceTests {
     }
 
     @Test
-    public void Given__StudentsService__When__reassignStudentIsCalledWithAStudentThatIsFoundAndHasNoGroup__Then__ShouldReturnTheFoundStudentWithTheNewlyProvidedGroup() throws StudentGroupReassignException, RepositoryOperationException {
+    public void Given__StudentsService__When__reassignStudentIsCalledWithAStudentThatIsFoundAndHasNoGroup__Then__ShouldReturnTheFoundStudentWithTheNewlyProvidedGroup() throws StudentGroupReassignException, RepositoryOperationException, ValidationException {
 
         var studentGroupRepository = Mockito.mock(StudentGroupRepository.class);
         var studentRepository = Mockito.mock(StudentRepository.class);
@@ -400,7 +401,7 @@ public class StudentsServiceTests {
     }
 
     @Test
-    public void Given__StudentsService__When__reassignStudentIsCalledWithAStudentThatIsFoundAndHasNoGroupAndTargetGroupDoesntExist__Then__ShouldReturnTheFoundStudentWithTheNewlyProvidedGroupAfterTheGroupWasCreated() throws StudentGroupReassignException, RepositoryOperationException {
+    public void Given__StudentsService__When__reassignStudentIsCalledWithAStudentThatIsFoundAndHasNoGroupAndTargetGroupDoesntExist__Then__ShouldReturnTheFoundStudentWithTheNewlyProvidedGroupAfterTheGroupWasCreated() throws StudentGroupReassignException, RepositoryOperationException, ValidationException {
 
         var studentGroupRepository = Mockito.mock(StudentGroupRepository.class);
         var studentRepository = Mockito.mock(StudentRepository.class);
@@ -426,7 +427,7 @@ public class StudentsServiceTests {
     }
 
     @Test
-    public void Given__StudentsService__When__addStudentIsCalledAndTargetGroupDoesntExist__Then__ShouldReturnTheFoundStudentWithTheNewlyCreatedGroup() throws StudentAdditionException, RepositoryOperationException {
+    public void Given__StudentsService__When__addStudentIsCalledAndTargetGroupDoesntExist__Then__ShouldReturnTheFoundStudentWithTheNewlyCreatedGroup() throws StudentAdditionException, RepositoryOperationException, ValidationException {
 
         var studentGroupRepository = Mockito.mock(StudentGroupRepository.class);
         var studentRepository = Mockito.mock(StudentRepository.class);
@@ -447,7 +448,7 @@ public class StudentsServiceTests {
     }
 
     @Test
-    public void Given__StudentsService__When__addStudentIsCalledAndTargetGroupExists__Then__ShouldReturnTheFoundStudentWithTheExistentGroup() throws StudentAdditionException, RepositoryOperationException {
+    public void Given__StudentsService__When__addStudentIsCalledAndTargetGroupExists__Then__ShouldReturnTheFoundStudentWithTheExistentGroup() throws StudentAdditionException, RepositoryOperationException, ValidationException {
 
         var studentGroupRepository = Mockito.mock(StudentGroupRepository.class);
         var studentRepository = Mockito.mock(StudentRepository.class);
@@ -468,7 +469,7 @@ public class StudentsServiceTests {
     }
 
     @Test
-    public void Given__StudentsService__When__addStudentIsCalledAndRepositorySaveThrows__Then__ShouldWrapExceptionAndThrowAsWell() throws StudentAdditionException, RepositoryOperationException {
+    public void Given__StudentsService__When__addStudentIsCalledAndRepositorySaveThrows__Then__ShouldWrapExceptionAndThrowAsWell() throws StudentAdditionException, RepositoryOperationException, ValidationException {
 
         var studentGroupRepository = Mockito.mock(StudentGroupRepository.class);
         var studentRepository = Mockito.mock(StudentRepository.class);
@@ -487,7 +488,7 @@ public class StudentsServiceTests {
     }
 
     @Test
-    public void Given__StudentsService__When__addStudentIsCalledAndRepositoryCreateNewGroupThrows__Then__ShouldWrapExceptionAndThrowAsWell() throws StudentAdditionException, RepositoryOperationException {
+    public void Given__StudentsService__When__addStudentIsCalledAndRepositoryCreateNewGroupThrows__Then__ShouldWrapExceptionAndThrowAsWell() throws StudentAdditionException, RepositoryOperationException, ValidationException {
 
         var studentGroupRepository = Mockito.mock(StudentGroupRepository.class);
         var studentRepository = Mockito.mock(StudentRepository.class);
@@ -505,7 +506,7 @@ public class StudentsServiceTests {
     }
 
     @Test
-    public void Given__StudentsService__When__updateStudentIsCalledWithValidData__Then__ShouldReturnTheUpdatedStudent() throws RepositoryOperationException, StudentUpdateException {
+    public void Given__StudentsService__When__updateStudentIsCalledWithValidData__Then__ShouldReturnTheUpdatedStudent() throws RepositoryOperationException, StudentUpdateException, ValidationException {
 
         var studentGroupRepository = Mockito.mock(StudentGroupRepository.class);
         var studentRepository = Mockito.mock(StudentRepository.class);
@@ -543,7 +544,7 @@ public class StudentsServiceTests {
     }
 
     @Test
-    public void Given__StudentsService__When__updateStudentIsCalledAndRepositoryThrows__Then__ShouldWrapExceptionAndThrowAsWell() throws RepositoryOperationException, StudentUpdateException {
+    public void Given__StudentsService__When__updateStudentIsCalledAndRepositoryThrows__Then__ShouldWrapExceptionAndThrowAsWell() throws RepositoryOperationException, StudentUpdateException, ValidationException {
 
         var studentGroupRepository = Mockito.mock(StudentGroupRepository.class);
         var studentRepository = Mockito.mock(StudentRepository.class);

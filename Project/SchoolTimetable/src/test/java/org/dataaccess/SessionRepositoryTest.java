@@ -16,6 +16,7 @@ import org.domain.exceptions.session.SessionDeletionFailed;
 import org.domain.exceptions.student.StudentDeletionFailed;
 import org.domain.exceptions.studentgroup.StudentGroupDeletionFailed;
 import org.domain.exceptions.teacher.TeacherDeletionFailed;
+import org.domain.exceptions.validations.ValidationException;
 import org.domain.models.Session;
 import org.junit.jupiter.api.*;
 
@@ -65,7 +66,7 @@ class SessionRepositoryTest {
 //    public Session createNewSession(Session.Type type, String halfYear) throws RepositoryOperationException
 
     @Test
-    public void Given__SessionRepository__When__createNewSession__Then__CreateANewSessionForDisciplineAndReturnIt() throws RepositoryOperationException {
+    public void Given__SessionRepository__When__createNewSession__Then__CreateANewSessionForDisciplineAndReturnIt() throws RepositoryOperationException, ValidationException {
 
         var discipline = disciplineRepository.getByName("Discipline 01");
 

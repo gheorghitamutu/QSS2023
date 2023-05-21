@@ -17,6 +17,7 @@ import org.domain.exceptions.student.StudentDeletionFailed;
 import org.domain.exceptions.student.StudentNotFoundException;
 import org.domain.exceptions.studentgroup.StudentGroupDeletionFailed;
 import org.domain.exceptions.teacher.TeacherDeletionFailed;
+import org.domain.exceptions.validations.ValidationException;
 import org.domain.models.Student;
 import org.junit.jupiter.api.*;
 
@@ -61,7 +62,7 @@ class StudentRepositoryTest {
 
     @Test
 //    @Disabled
-    public void Given__StudentRepository__When__changeStudentGroupIsCalled__Then__ReturnStudentWithGroupChanged() throws RepositoryOperationException, StudentNotFoundException {
+    public void Given__StudentRepository__When__changeStudentGroupIsCalled__Then__ReturnStudentWithGroupChanged() throws RepositoryOperationException, StudentNotFoundException, ValidationException {
         var studentGroup = studentGroupRepository.getByGroupName("A2");
 
         //student with id 310910204006SM000004 is in group A4
@@ -76,7 +77,7 @@ class StudentRepositoryTest {
 //    public Student deleteStudent(Student student)
 
     @Test
-    public void Given__StudentRepository__When__deleteStudentIsCalled__Then__StudentIsDeleted() throws RepositoryOperationException, StudentNotFoundException {
+    public void Given__StudentRepository__When__deleteStudentIsCalled__Then__StudentIsDeleted() throws RepositoryOperationException, StudentNotFoundException, ValidationException {
         var student = studentRepository.readAll().stream().filter(s -> s.getRegistrationNumber().equals("310910204006SM000002"))
                 .toList().get(0);
 
@@ -92,7 +93,7 @@ class StudentRepositoryTest {
 //    public Student updateStudent(Student student)
 
     @Test
-    public void Given__StudentRepository__When__updateStudentIsCalled__Then__StudentIsUpdated() throws RepositoryOperationException, StudentNotFoundException {
+    public void Given__StudentRepository__When__updateStudentIsCalled__Then__StudentIsUpdated() throws RepositoryOperationException, StudentNotFoundException, ValidationException {
         var student = this.app.studentsService.getStudentByRegistrationNumber("310910204006SM000003");
 
         student.setName("updated_name");
@@ -110,7 +111,7 @@ class StudentRepositoryTest {
 
 
     @Test
-    public void saveStudent() throws RepositoryOperationException {
+    public void saveStudent() throws RepositoryOperationException, ValidationException {
         var studentGroup = studentGroupRepository.getByGroupName("A1");
 
         Student student = new Student();

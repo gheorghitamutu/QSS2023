@@ -6,6 +6,7 @@ import org.domain.exceptions.session.SessionDeletionFailed;
 import org.domain.exceptions.session.SessionNotFoundException;
 import org.domain.exceptions.studentgroup.StudentGroupNotFoundException;
 import org.domain.exceptions.teacher.TeacherNotFoundException;
+import org.domain.exceptions.validations.ValidationException;
 import org.domain.models.Session;
 import org.presentation.GUI;
 
@@ -213,7 +214,7 @@ public class SessionSettings implements BaseSettings{
                     GUI.app.sessionsService.addSession(Session.Type.valueOf((String) typeComboBox.getSelectedItem()),
                             (String) halfyearComboBox.getSelectedItem(),
                             (String) model.getSelectedItem());
-                } catch (SessionAdditionException | DisciplineNotFoundException ex) {
+                } catch (SessionAdditionException | DisciplineNotFoundException | ValidationException ex) {
                     JOptionPane.showMessageDialog(
                             null,
                             "An exception occurred: " + ex.getMessage(),

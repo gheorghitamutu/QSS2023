@@ -14,6 +14,7 @@ import org.domain.exceptions.session.SessionDeletionFailed;
 import org.domain.exceptions.student.StudentDeletionFailed;
 import org.domain.exceptions.studentgroup.StudentGroupDeletionFailed;
 import org.domain.exceptions.teacher.TeacherDeletionFailed;
+import org.domain.exceptions.validations.ValidationException;
 import org.domain.models.StudentGroup;
 import org.junit.jupiter.api.*;
 
@@ -61,7 +62,7 @@ class StudentGroupRepositoryTest {
 //        public StudentGroup getByGroupName(String groupName) {
 
     @Test
-    public void Given__StudentGroupRepository__When__getByGroupNameIsCalledWithExistentGroup__Then__ShouldReturnANonNullGroup() throws RepositoryOperationException {
+    public void Given__StudentGroupRepository__When__getByGroupNameIsCalledWithExistentGroup__Then__ShouldReturnANonNullGroup() throws RepositoryOperationException, ValidationException {
         StudentGroup group = studentGroupRepository.getByGroupName("A1");
 
         Assertions.assertNotNull(group);
@@ -69,7 +70,7 @@ class StudentGroupRepositoryTest {
     }
 
     @Test
-    public void Given__StudentGroupRepository__When__getByGroupNameIsCalledWithNonExistentGroup__Then__ShouldReturnANullGroup() throws RepositoryOperationException {
+    public void Given__StudentGroupRepository__When__getByGroupNameIsCalledWithNonExistentGroup__Then__ShouldReturnANullGroup() throws RepositoryOperationException, ValidationException {
         StudentGroup group = studentGroupRepository.getByGroupName("A9");
 
         Assertions.assertNull(group);
@@ -79,7 +80,7 @@ class StudentGroupRepositoryTest {
 //    public StudentGroup createNewGroup(String groupName) throws RepositoryOperationException {
     @Test
     public void Given__StudentGroupRepository__When__createNewGroupIsCalledWithInvalidGroupName__Then__ShouldThrow() {
-        Assertions.assertThrows(RepositoryOperationException.class, () -> {
+        Assertions.assertThrows(ValidationException.class, () -> {
             studentGroupRepository.createNewGroup("111A1");
         });
     }

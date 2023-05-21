@@ -4,15 +4,16 @@ import org.domain.exceptions.discipline.DisciplineAdditionException;
 import org.domain.exceptions.discipline.DisciplineDeletionFailed;
 import org.domain.exceptions.discipline.DisciplineNotFoundException;
 import org.domain.exceptions.teacher.TeacherNotFoundException;
+import org.domain.exceptions.validations.ValidationException;
 import org.domain.models.Discipline;
 
 import java.util.List;
 
 public interface IDisciplinesService {
 
-    public Discipline addDiscipline(String name, int credits) throws DisciplineAdditionException;
+    public Discipline addDiscipline(String name, int credits) throws DisciplineAdditionException, ValidationException;
 
-    public boolean deleteDiscipline(int disciplineId) throws DisciplineNotFoundException, DisciplineDeletionFailed;
+    public boolean deleteDiscipline(int disciplineId) throws DisciplineNotFoundException, DisciplineDeletionFailed, ValidationException;
 
     public boolean deleteDisciplines(String name) throws DisciplineDeletionFailed;
 

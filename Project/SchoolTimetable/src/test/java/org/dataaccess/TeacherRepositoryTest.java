@@ -15,6 +15,7 @@ import org.domain.exceptions.session.SessionDeletionFailed;
 import org.domain.exceptions.student.StudentDeletionFailed;
 import org.domain.exceptions.studentgroup.StudentGroupDeletionFailed;
 import org.domain.exceptions.teacher.TeacherDeletionFailed;
+import org.domain.exceptions.validations.ValidationException;
 import org.domain.models.Teacher;
 import org.junit.jupiter.api.*;
 
@@ -62,7 +63,7 @@ class TeacherRepositoryTest {
 
 
     @Test
-    public void Given__TeacherRepository__When__createNewTeacher__Then__ReturnsNewTeacher() throws RepositoryOperationException {
+    public void Given__TeacherRepository__When__createNewTeacher__Then__ReturnsNewTeacher() throws RepositoryOperationException, ValidationException {
         teacherRepository.createNewTeacher("test_9999", Teacher.Type.COLLABORATOR);
 
         Teacher foundTeacher = teacherRepository.readAll().stream().filter(t -> t.getName().equals("test_9999")).findFirst()
@@ -75,7 +76,7 @@ class TeacherRepositoryTest {
 //    public Teacher getByName(String name) throws RepositoryOperationException
 
     @Test
-    public void Given__TeacherRepository__When__getByNameIsCalledWithExistentName__Then__ReturnsTeacher() throws RepositoryOperationException {
+    public void Given__TeacherRepository__When__getByNameIsCalledWithExistentName__Then__ReturnsTeacher() throws RepositoryOperationException, ValidationException {
         Teacher foundTeacher = teacherRepository.getByName("Teacher 01");
 
         Assertions.assertNotNull(foundTeacher);
@@ -83,7 +84,7 @@ class TeacherRepositoryTest {
     }
 
     @Test
-    public void Given__TeacherRepository__When__getByNameIsCalledWithNonExistentName__Then__ReturnsNull() throws RepositoryOperationException {
+    public void Given__TeacherRepository__When__getByNameIsCalledWithNonExistentName__Then__ReturnsNull() throws RepositoryOperationException, ValidationException {
         Teacher foundTeacher = teacherRepository.getByName("Non existent name");
 
         Assertions.assertNull(foundTeacher);

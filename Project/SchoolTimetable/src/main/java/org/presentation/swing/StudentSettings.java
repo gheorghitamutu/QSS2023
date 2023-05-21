@@ -3,6 +3,7 @@ package org.presentation.swing;
 import org.domain.exceptions.student.StudentAdditionException;
 import org.domain.exceptions.student.StudentDeletionFailed;
 import org.domain.exceptions.student.StudentNotFoundException;
+import org.domain.exceptions.validations.ValidationException;
 import org.presentation.GUI;
 
 import javax.swing.*;
@@ -80,7 +81,7 @@ public class StudentSettings extends JFrame implements BaseSettings {
                     assert yearComboValue != null;
                      GUI.app.studentsService.addStudent(nameField.getText(), regField.getText(), Integer.parseInt(yearComboValue), groupComboValue);
 
-                } catch (StudentAdditionException ex) {
+                } catch (StudentAdditionException | ValidationException ex) {
                     JOptionPane.showMessageDialog(
                             null,
                             "An exception occurred: " + ex.getMessage(),

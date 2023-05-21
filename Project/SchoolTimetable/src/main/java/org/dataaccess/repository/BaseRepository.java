@@ -57,6 +57,9 @@ public class BaseRepository<T> implements IRepository<T> {
     }
 
     public void save(T object) throws RepositoryOperationException {
+
+        // preconditions
+
         if (!validate(object)) {
             throw new RepositoryOperationException("Validation fails for object");
         }
@@ -78,6 +81,12 @@ public class BaseRepository<T> implements IRepository<T> {
             session.getTransaction().rollback();
 
             throw new RepositoryOperationException("Save failed, check inner exception", e);
+        }
+
+
+        //postconditions
+        if (!validate(object)) {
+            throw new RepositoryOperationException("DB left in inconsistent state after save");
         }
     }
 

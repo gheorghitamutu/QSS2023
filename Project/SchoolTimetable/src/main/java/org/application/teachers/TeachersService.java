@@ -1,11 +1,13 @@
 package org.application.teachers;
 
 import com.google.inject.Inject;
+import org.application.helpers.ValidationHelpers;
 import org.dataaccess.teacher.ITeacherRepository;
 import org.domain.exceptions.RepositoryOperationException;
 import org.domain.exceptions.teacher.TeacherAdditionException;
 import org.domain.exceptions.teacher.TeacherDeletionFailed;
 import org.domain.exceptions.teacher.TeacherNotFoundException;
+import org.domain.exceptions.validations.ValidationException;
 import org.domain.models.Teacher;
 
 import java.text.MessageFormat;
@@ -21,15 +23,10 @@ public class TeachersService implements ITeachersService {
     }
 
     @Override
-    public Teacher addTeacher(String name, Teacher.Type type) throws TeacherAdditionException {
+    public Teacher addTeacher(String name, Teacher.Type type) throws TeacherAdditionException, ValidationException {
 
-        if (name == null || name.isEmpty()) {
-            throw new TeacherAdditionException("[Teachers Service] Teacher name is invalid");
-        }
-
-        if (type == null) {
-            throw new TeacherAdditionException("[Teachers Service] Teacher type is invalid");
-        }
+        ValidationHelpers.requireNotBlank(name, IllegalArgumentException.class, "[Teachers Service] Teacher name is invalid", null);
+        ValidationHelpers.requireNotNull(type, IllegalArgumentException.class, "[Teachers Service] Teacher type is invalid", null);
 
         Teacher teacher = null;
 
@@ -42,7 +39,7 @@ public class TeachersService implements ITeachersService {
         if (teacher == null) {
             try {
                 teacher = teacherRepository.createNewTeacher(name, type);
-            } catch (RepositoryOperationException e) {
+            } catch (RepositoryOperationException | ValidationException e) {
                 throw new RuntimeException(e);
             }
         }
@@ -57,11 +54,9 @@ public class TeachersService implements ITeachersService {
     }
 
     @Override
-    public boolean deleteTeacher(int teacherId) throws TeacherNotFoundException, TeacherDeletionFailed {
+    public boolean deleteTeacher(int teacherId) throws TeacherNotFoundException, TeacherDeletionFailed, ValidationException {
 
-        if (teacherId < 0) {
-            throw new IllegalArgumentException("[TeacherService] Teacher id is invalid");
-        }
+        ValidationHelpers.requirePositiveOrZero(teacherId, IllegalArgumentException.class, "[TeacherService] Teacher id is invalid", null);
 
         var teacher = teacherRepository.getById(teacherId);
         if (teacher == null) {
@@ -78,11 +73,9 @@ public class TeachersService implements ITeachersService {
     }
 
     @Override
-    public boolean deleteTeachers(String name) throws TeacherDeletionFailed {
+    public boolean deleteTeachers(String name) throws TeacherDeletionFailed, ValidationException {
 
-        if (name == null || name.isEmpty()) {
-            throw new IllegalArgumentException("[TeacherService] Teacher name is invalid");
-        }
+        ValidationHelpers.requireNotBlank(name, IllegalArgumentException.class, "[TeacherService] Teacher name is invalid", null);
 
         var teachers = teacherRepository.readAll().stream().filter(t -> t.getName().equals(name)).toList();
 
@@ -107,11 +100,9 @@ public class TeachersService implements ITeachersService {
     }
 
     @Override
-    public Teacher getTeacherById(int teacherId) throws TeacherNotFoundException {
+    public Teacher getTeacherById(int teacherId) throws TeacherNotFoundException, ValidationException {
 
-        if (teacherId < 0) {
-            throw new IllegalArgumentException("[TeacherService] Teacher id is invalid");
-        }
+        ValidationHelpers.requirePositiveOrZero(teacherId, IllegalArgumentException.class, "[TeacherService] Teacher id is invalid", null);
 
         var teacher = teacherRepository.getById(teacherId);
         if (teacher == null) {
