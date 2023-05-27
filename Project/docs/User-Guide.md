@@ -103,3 +103,7 @@ By following these steps, the backend ensures that the selected group of student
 2. Click on "SUBMIT" button under the last bulk of fields.
 
 Once the user clicks the "SUBMIT" button, the backend validates the request, searches for the session based on the provided discipline name, and performs the necessary operations to delete the session from the database.
+
+## Conclusion
+
+This user guide manual has provided an overview of the application, including student and teacher management, room availability, session details, timeslot configuration, and timetable generation. Use this manual as a reference to efficiently navigate and utilize the Timetable Generator to create well-organized and optimized timetables for your institution.
