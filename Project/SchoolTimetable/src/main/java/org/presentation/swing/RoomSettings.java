@@ -14,11 +14,23 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Objects;
-
+/**
+ * Represents the settings for managing rooms in the GUI.
+ */
 public class RoomSettings implements BaseSettings {
     public RoomSettings(){
 
     }
+    /**
+     * Creates a panel with a label and a component.
+     *
+     * @param label     the label for the field
+     * @param component the component to be added
+     * @return the panel containing the label and the component
+     * It uses a BoxLayout with a horizontal axis to arrange the label and the component in a row.
+     * The panel's maximum size is set to allow it to expand horizontally within its container
+     * while keeping its preferred height based on the component's preferred size.
+     */
     private JPanel createFieldPanel(
             @NotEmpty(message = "Room label should not be empty.")
             JLabel label,
@@ -33,7 +45,15 @@ public class RoomSettings implements BaseSettings {
         panel.setMaximumSize(new Dimension(Short.MAX_VALUE, component.getPreferredSize().height));
         return panel;
     }
-
+    /**
+     * Creates a panel for deleting a room.
+     *
+     * @param currentPanel the current panel to which the delete room form is added
+     * @return the panel containing the delete room form
+     * Get all the rooms from the database and add their names to the combo box.
+     * Add vertical spacing below the data panel.
+     * Display an error message if room deletion fails.
+     */
     public JPanel deleteRoomForm(
             @NotEmpty(message = "Current panel should not be empty.")
             JPanel currentPanel){
@@ -95,7 +115,12 @@ public class RoomSettings implements BaseSettings {
 
         return currentPanel;
     }
-
+    /**
+     * Creates a panel for adding a new room.
+     *
+     * @param currentPanel the current panel to which the add room form is added
+     * @return the panel containing the add room form
+     */
     public JPanel addRoomForm(
             @NotEmpty(message = "Current panel should not be empty.")
             JPanel currentPanel){
@@ -182,6 +207,13 @@ public class RoomSettings implements BaseSettings {
 
         return currentPanel;
     }
+    /**
+     * Creates a JPanel with left and right panels merged into the main panel.
+     *
+     * @param main      The JPanel representing the main panel. Must not be empty.
+     * @param labelText The text for the label. Must not be blank.
+     * @return The JPanel with the left and right panels merged into the main panel.
+     */
     @Override
     public JPanel createJPanel(
             @NotEmpty(message = "Main panel should not be empty.")
@@ -201,7 +233,11 @@ public class RoomSettings implements BaseSettings {
 
         return main;
     }
-
+    /**
+     * Creates a left JPanel containing the addDisciplineForm and deleteDisciplineForm.
+     *
+     * @return The left JPanel containing the addDisciplineForm and deleteDisciplineForm.
+     */
     @Override
     public JPanel createLeftJPanel() {
         JPanel currentPanel = new JPanel();
@@ -212,7 +248,11 @@ public class RoomSettings implements BaseSettings {
         // Set the frame size and center it on the screen
         return currentPanel;
     }
-
+    /**
+     * Creates a right JPanel with an image displayed at the center.
+     *
+     * @return The right JPanel with the image displayed at the center.
+     */
     @Override
     public JPanel createRightJPanel() {
         JPanel currentPanel = new JPanel();
