@@ -72,3 +72,34 @@ Upon clicking the "SUBMIT" button, the system will validate the entered data to 
 
 From the available list of rooms, select the room name that you wish to delete.
 Ensure that you have identified the correct room for deletion, as this action cannot be undone.Upon successful deletion, the selected room will be removed from the database, and its details will no longer be accessible in the system.
+### Session Details
+
+The Session Details section allows you to define and manage various sessions within the Timetable Generator. You can create sessions for different subjects, assign teachers to sessions, assing a group to  session. This feature helps in organizing and structuring the overall timetable.
+#### Add Session Operation:
+1. Complete the corresponding information: the discipline you want to assign, type of the discipline and select the specific half-year.
+2. Click on "SUMBIT" button under the first bulk of fields.
+
+elect the discipline you want to assign to the session from the list of available disciplines. This list contains disciplines stored in the database.
+Choose the specific half-year for which the session is scheduled. By completing the required fields and clicking "SUBMIT," you are instructing the system to create a new session with the provided details.
+nce submitted, the session will be created and become part of the system's database.
+
+#### Assign Teacher To Session Operation:
+1. Select the teacher you want to assign from a list of available teachers into the current database.
+2. Select the session you want to book for the corresponding teacher.
+3. Click on "SUMBIT" button under the second bulk of fields.
+
+By performing this operation, you are associating a teacher with a particular session, indicating that the teacher will be responsible for conducting that session.
+The backend receives the request, validates the data, and performs the corresponding operation.
+
+#### Assign Group of Students To Session Operation:
+1. Select the group of students you want to assign from a list of available groups into the current database.
+2. Select the session you want to book for the corresponding group of students.
+3. Click on "SUMBIT" button under the third bulk of fields.
+
+By following these steps, the backend ensures that the selected group of students is properly assigned to the chosen session. This allows the Timetable Generator application to keep track of the student-group-session relationships, enabling efficient scheduling and management of the timetable.
+
+#### Delete Session Operation:
+1. The user selects the corresponding session for which wants to perform the deletion.
+2. Click on "SUBMIT" button under the last bulk of fields.
+
+Once the user clicks the "SUBMIT" button, the backend validates the request, searches for the session based on the provided discipline name, and performs the necessary operations to delete the session from the database.
