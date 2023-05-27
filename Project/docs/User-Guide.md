@@ -32,7 +32,7 @@ The Student Management section allows you to add and delete student records. You
 #### Add Student Operation:
 
 1. Complete the corresponding information: student name, registration ID (unique constraint), year of study,group of study.
-2. Click on "SUMBIT" button under the first bulk of fields.
+2. Click on "SUBMIT" button under the first bulk of fields.
 
 Once the user has properly entered the data, a connection is established to the backend. A call is made to the appropriate service for inserting a student into the database, using the information collected on the frontend. At the implementation level, validation checks are performed on the entered data, and the actual operation is carried out.
 #### Delete Student Operation:
@@ -47,7 +47,7 @@ During the implementation of the delete operation, the system performs necessary
 The Teacher Management section enables you to manage teacher information. You can add new teachers, remove existing one. This section is particularly useful for maintaining a comprehensive record of teachers within the institution.
 #### Add Teacher Operation:
 1. Complete the corresponding information: teacher name, role of the teacher in the current institution.
-2. Click on "SUMBIT" button under the first bulk of fields.
+2. Click on "SUBMIT" button under the first bulk of fields.
 
 To add a teacher, the user enters the teacher's name and selects their role.The system utilizes the provided data from the user interface and invokes the appropriate service responsible for handling teacher insertion. The service performs necessary validations to ensure the accuracy and completeness of the entered information.
 
@@ -61,7 +61,7 @@ To delete a teacher, the user is presented with a list of existing teachers in t
 The Room Availability section provides a way to manage the creation/deletion of available rooms. This functionality ensures efficient utilization of the available space.
 #### Add Room Operation:
 1. Complete the corresponding information: room name, type of activities that can be sustained into the current room, capacity, floor.
-2. Click on "SUMBIT" button under the first bulk of fields.
+2. Click on "SUBMIT" button under the first bulk of fields.
 
 The room name should be unique and identifiable, while the room type should accurately represent the purpose or function of the room.
 Upon clicking the "SUBMIT" button, the system will validate the entered data to ensure its completeness and correctness. If any required field is left blank or contains invalid information, an error message will be displayed, prompting the user to correct the input accordingly.
@@ -79,14 +79,14 @@ The Session Details section allows you to define and manage various sessions wit
 1. Complete the corresponding information: the discipline you want to assign, type of the discipline and select the specific half-year.
 2. Click on "SUMBIT" button under the first bulk of fields.
 
-elect the discipline you want to assign to the session from the list of available disciplines. This list contains disciplines stored in the database.
+Select the discipline you want to assign to the session from the list of available disciplines. This list contains disciplines stored in the database.
 Choose the specific half-year for which the session is scheduled. By completing the required fields and clicking "SUBMIT," you are instructing the system to create a new session with the provided details.
 nce submitted, the session will be created and become part of the system's database.
 
 #### Assign Teacher To Session Operation:
 1. Select the teacher you want to assign from a list of available teachers into the current database.
 2. Select the session you want to book for the corresponding teacher.
-3. Click on "SUMBIT" button under the second bulk of fields.
+3. Click on "SUBMIT" button under the second bulk of fields.
 
 By performing this operation, you are associating a teacher with a particular session, indicating that the teacher will be responsible for conducting that session.
 The backend receives the request, validates the data, and performs the corresponding operation.
@@ -94,7 +94,7 @@ The backend receives the request, validates the data, and performs the correspon
 #### Assign Group of Students To Session Operation:
 1. Select the group of students you want to assign from a list of available groups into the current database.
 2. Select the session you want to book for the corresponding group of students.
-3. Click on "SUMBIT" button under the third bulk of fields.
+3. Click on "SUBMIT" button under the third bulk of fields.
 
 By following these steps, the backend ensures that the selected group of students is properly assigned to the chosen session. This allows the Timetable Generator application to keep track of the student-group-session relationships, enabling efficient scheduling and management of the timetable.
 
@@ -103,7 +103,28 @@ By following these steps, the backend ensures that the selected group of student
 2. Click on "SUBMIT" button under the last bulk of fields.
 
 Once the user clicks the "SUBMIT" button, the backend validates the request, searches for the session based on the provided discipline name, and performs the necessary operations to delete the session from the database.
+### Timeslot Configuration
+
+The Timeslot Configuration section enables you to set up and configure timeslots for the timetable. You can define specific time intervals, assign days and durations, periodicity, room and sessions involved. This functionality ensures accurate scheduling of sessions and effective time management.
+#### Add Timeslot Operation:
+1. Fill in the required information: start/end date for a session, periodicity, duration of course, room.
+2. Click on "SUMMIT" button under the first bulk of fields.
+
+Upon submission, the backend of the application processes the data provided and performs validation checks. It creates a new timeslot with the specified parameters and associates it with the corresponding room and session.This functionality ensures that the timetable is accurately populated with defined time intervals, taking into account the session's duration, start and end dates, and periodicity and room availability.
+#### Delete Timeslot Operation:
+1. The user selects the corresponding timeslot for which wants to perform the deletion.
+2. Click on "SUBMIT" button under the second bulk of fields.
+
+Browse through the list of displayed timeslots and choose the one you want to delete. Each timeslot is represented by its date, duration, assigned room, and corresponding discipline.After clicking "SUBMIT," the application's backend processes your request. It identifies the selected timeslot based on the provided information and performs the necessary actions to remove it from the timetable. This involves updating the underlying database and making sure that the deleted timeslot no longer appears in the system.
+### Timetable HTML Generation
+TO DO
 
 ## Conclusion
 
 This user guide manual has provided an overview of the application, including student and teacher management, room availability, session details, timeslot configuration, and timetable generation. Use this manual as a reference to efficiently navigate and utilize the Timetable Generator to create well-organized and optimized timetables for your institution.
+
+
+
+#### Contributions:
+Nechita Roberta - Use Case Diagram and UseCase Documentation, FrontEnd part, Functional testing on frontend part (adding both pre- and post-conditions), Backend integration on frontend,
+Document the personal implementation with java doc comment in order to generate the tech report, User-Guide Manual.
