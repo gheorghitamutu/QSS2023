@@ -25,7 +25,12 @@ import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Objects;
-
+/**The TimeslotSettings class represents the settings for managing timeslots in the application.
+ * It provides methods for adding and deleting timeslots, as well as generating timetables.
+ * The class extends the BaseSettings class and implements various functionality related to timeslot management.
+ * Note: This class assumes that the necessary services and dependencies have been properly injected
+ * or made accessible through the GUI.app instance.
+ */
 public class TimeslotSettings implements BaseSettings {
     private int timeslotVersion = 0;
 
@@ -37,6 +42,15 @@ public class TimeslotSettings implements BaseSettings {
     public TimeslotSettings(){
 
     }
+    /**
+     * Creates a JPanel that combines a label and a component for a timeslot field.
+     *
+     * @param label     The JLabel representing the timeslot label.
+     *                  Cannot be null.
+     * @param component The JComponent representing the timeslot component.
+     *                  Must not be empty.
+     * @return The JPanel containing the label and component.
+     */
     private JPanel createFieldPanel(@NotEmpty(message = "Timeslot label should not be empty.")
                                     JLabel label,
                                     @NotEmpty (message = "Timeslot component should not be empty.")
@@ -50,6 +64,11 @@ public class TimeslotSettings implements BaseSettings {
         panel.setMaximumSize(new Dimension(Short.MAX_VALUE, component.getPreferredSize().height));
         return panel;
     }
+    /**
+     * Creates an option list for the delete operation, containing formatted strings representing timeslots.
+     * Format the timeslot information into a string.
+     * @return the list of options for the delete operation
+     */
     private ArrayList<String> createOptionListForDeleteOperation(){
         ArrayList<String> optionList = new ArrayList<>();
 
@@ -73,7 +92,15 @@ public class TimeslotSettings implements BaseSettings {
 
         return optionList;
     }
-
+    /**
+     * Converts a duration string in the format "hh:mm" to a Duration object.
+     *
+     * @param s the duration string to be converted
+     * @return the Duration object representing the duration
+     *
+     * @throws NumberFormatException if the duration string is not in the correct format
+     * @throws IllegalArgumentException if the duration parameter is null or empty
+     */
     private Duration durationConvertor(@NotBlank(message = "Duration parameter must not be null.")String s){
 
         String[] parts = s.split(":");
@@ -83,7 +110,19 @@ public class TimeslotSettings implements BaseSettings {
 
         return Duration.ofMinutes(totalMinutes);
     }
-
+    /**
+     * Adds a form for deleting a timeslot to the specified panel.
+     *
+     * @param currentPanel the panel to which the form will be added
+     * @return the updated panel with the added timeslot deletion form
+     *
+     * @throws ParseException           if there is an error in parsing the date or time formats
+     * @throws TimeslotDeletionFailed   if the timeslot deletion fails
+     * @throws RoomNotFoundException   if the selected room is not found in the database
+     * @throws TimeslotNotFoundException if the specified timeslot is not found in the database
+     * Call the TimeslotsService to delete the timeslot. The deletion operation is done using these parameters:
+     * date, time and duration
+     */
     public JPanel deleteRoomForm(@NotEmpty(message = "Current panel should not be empty") JPanel currentPanel){
 
         currentPanel.setBackground(Color.decode("#F6FFDE"));
@@ -170,8 +209,23 @@ public class TimeslotSettings implements BaseSettings {
         currentPanel.add(generatorPanel);
         return currentPanel;
     }
-
-    public JPanel addRoomForm(@NotEmpty(message = "Current panel should not be empty") JPanel currentPanel){
+    /**
+     * Adds a form for creating a new timeslot to the specified panel.
+     *
+     * @param currentPanel the panel to which the form will be added
+     * @return the updated panel with the added timeslot form
+     *
+     * @throws ParseException             if there is an error in parsing the date or time formats
+     * @throws RoomNotFoundException     if the selected room is not found in the database
+     * @throws DisciplineNotFoundException if the selected session's discipline is not found in the database
+     * @throws TimeslotAdditionException  if there is an error in adding the timeslot
+     * @throws SessionNotFoundException   if the selected session is not found in the database
+     * @throws ValidationException        if there is a validation error in the timeslot data
+     *
+     * All the necessary configurations regarding timslot labels and fileds are done on this side of imeplementation.
+     * Get all the rooms from the database and Call the TimeslotsService to add the timeslot.
+     */
+    public JPanel addTimeslotForm(@NotEmpty(message = "Current panel should not be empty") JPanel currentPanel){
         currentPanel.setBackground(Color.decode("#F6FFDE"));
 
         currentPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
@@ -336,6 +390,13 @@ public class TimeslotSettings implements BaseSettings {
 
         return currentPanel;
     }
+    /**
+     * Creates a JPanel with left and right panels merged into the main panel.
+     *
+     * @param main      The JPanel representing the main panel. Must not be empty.
+     * @param labelText The text for the label. Must not be blank.
+     * @return The JPanel with the left and right panels merged into the main panel.
+     */
     @Override
     public JPanel createJPanel(@NotEmpty(message = "Main panel should not be empty.")
                                    JPanel main,
@@ -354,13 +415,17 @@ public class TimeslotSettings implements BaseSettings {
 
         return main;
     }
-
+    /**
+     * Creates a left JPanel containing the addTimeslotForm and deleteTimeslotForm.
+     *
+     * @return The left JPanel containing the addTimeslotForm and deleteTimeslotForm.
+     */
     @Override
     public JPanel createLeftJPanel() {
         JPanel currentPanel = new JPanel();
         currentPanel.setLayout(new BoxLayout(currentPanel, BoxLayout.Y_AXIS));
 
-        currentPanel = addRoomForm(currentPanel);
+        currentPanel = addTimeslotForm(currentPanel);
         currentPanel = deleteRoomForm(currentPanel);
         // Set the frame size and center it on the screen
         return currentPanel;
