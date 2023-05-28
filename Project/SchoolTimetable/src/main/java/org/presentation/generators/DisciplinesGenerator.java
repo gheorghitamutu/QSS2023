@@ -11,6 +11,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+
+/**
+ * The DisciplinesGenerator class is responsible for generating discipline data for timetables.
+ * It extends the BaseGenerator class and implements the necessary logic to generate discipline-related information.
+ * This class generates discipline data including teacher information, associated student groups, and updates the disciplines data in the listsData map.
+ */
 public class DisciplinesGenerator extends BaseGenerator{
     @NotNull(message = "Disciplines list must not be null")
     private final List<@Valid Discipline> disciplines;
@@ -19,6 +25,14 @@ public class DisciplinesGenerator extends BaseGenerator{
     @NotNull(message = "Lists data map must not be null")
     private final Map<String, String> listsData;
 
+    /**
+     * Constructs a DisciplinesGenerator object with the specified generation date string, timetables days data, timetables names map, and lists data map.
+     *
+     * @param generationDateString The generation date string. Must not be blank.
+     * @param timetablesDays       The timetables days data map. Must not be null.
+     * @param timetablesNames      The timetables names map. Must not be null.
+     * @param listsData            The lists data map. Must not be null.
+     */
     public DisciplinesGenerator(
             @NotBlank(message = "Generation string must not be blank")
             String generationDateString,
@@ -35,6 +49,12 @@ public class DisciplinesGenerator extends BaseGenerator{
         this.listsData = listsData;
     }
 
+    /**
+     * Generates data for disciplines in the timetables.
+     * Overrides the abstract method 'generate' inherited from the BaseGenerator class.
+     * This method generates discipline data, including teacher information and associated student groups,
+     * and updates the disciplines data in the listsData map.
+     */
     public void generate(){
         String disciplinesData = utils.getBaseTemplateData("disciplines");
         disciplinesData = disciplinesData.replace("$generation_date", this.generationDateString);
