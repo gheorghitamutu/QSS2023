@@ -14,11 +14,26 @@ import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * This is the class for BaseRepository.
+ * @param <T> The type.
+ */
 public class BaseRepository<T> implements IRepository<T> {
 
+    /**
+     * This is the hibernate provider.
+     */
     protected final IHibernateProvider hibernateProvider;
+
+    /**
+     * This is the class.
+     */
     protected Class<T> tClass;
 
+    /**
+     * This is the constructor of BaseRepository.
+     * @param hibernateProvider The hibernate provider.
+     */
     protected BaseRepository(IHibernateProvider hibernateProvider) {
 
         try {
@@ -30,15 +45,24 @@ public class BaseRepository<T> implements IRepository<T> {
             System.out.println("Class not found!");
         }
 
-
         this.hibernateProvider = hibernateProvider;
     }
 
+    /**
+     * This is the method to get an object by id.
+     * @param id The id.
+     * @return The object.
+     */
     public T getById(int id) {
         var session = this.hibernateProvider.getEntityManager();
         return session.find(tClass, id);
     }
 
+    /**
+     * This method validates the object passed as input.
+     * @param object The object.
+     * @return True if the object is valid, false otherwise.
+     */
     public boolean validate(T object) {
         Validator validator;
         try (ValidatorFactory validatorFactory = Validation.byDefaultProvider().configure().messageInterpolator(new ParameterMessageInterpolator()).buildValidatorFactory()) {
@@ -56,6 +80,11 @@ public class BaseRepository<T> implements IRepository<T> {
         return constraintViolationsInvalidObject.size() == 0;
     }
 
+    /**
+     * This method saves the object passed as input into the database.
+     * @param object The object.
+     * @throws RepositoryOperationException The repository operation exception.
+     */
     public void save(T object) throws RepositoryOperationException {
 
         // preconditions
@@ -83,13 +112,17 @@ public class BaseRepository<T> implements IRepository<T> {
             throw new RepositoryOperationException("Save failed, check inner exception", e);
         }
 
-
-        //postconditions
+        // postconditions
         if (!validate(object)) {
             throw new RepositoryOperationException("DB left in inconsistent state after save");
         }
     }
 
+    /**
+     * This method deletes the object passed as input from the database.
+     * @param object The object.
+     * @throws RepositoryOperationException The repository operation exception.
+     */
     public void delete(T object) throws RepositoryOperationException {
 
         var session = this.hibernateProvider.getEntityManager();
@@ -109,6 +142,11 @@ public class BaseRepository<T> implements IRepository<T> {
         }
     }
 
+    /**
+     * This method deletes the list of objects passed as input from the database.
+     * @param objects The objects.
+     * @throws RepositoryOperationException The repository operation exception.
+     */
     public void deleteMany(List<T> objects) throws RepositoryOperationException {
         var session = this.hibernateProvider.getEntityManager();
 
@@ -129,6 +167,10 @@ public class BaseRepository<T> implements IRepository<T> {
         }
     }
 
+    /**
+     * This method gets all the objects from the database.
+     * @return The list of objects.
+     */
     public List<T> readAll() {
         var session = this.hibernateProvider.getEntityManager();
 

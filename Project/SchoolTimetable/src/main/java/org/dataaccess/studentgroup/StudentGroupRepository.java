@@ -10,13 +10,27 @@ import org.domain.models.StudentGroup;
 
 import java.util.Date;
 
+/**
+ * This is the class for StudentGroupRepository.
+ */
 public class StudentGroupRepository extends BaseRepository<StudentGroup> implements IStudentGroupRepository {
 
+    /**
+     * This is the constructor of StudentGroupRepository.
+     * @param hibernateProvider The hibernate provider.
+     */
     @Inject
     public StudentGroupRepository(IHibernateProvider hibernateProvider) {
         super(hibernateProvider);
     }
 
+    /**
+     * This is the method to get a student group by group name.
+     * @param groupName The group name.
+     * @return The student group.
+     * @throws RepositoryOperationException The repository operation exception.
+     * @throws ValidationException The validation exception.
+     */
     @Override
     public StudentGroup getByGroupName(String groupName) throws RepositoryOperationException, ValidationException {
 
@@ -36,6 +50,13 @@ public class StudentGroupRepository extends BaseRepository<StudentGroup> impleme
         return result.get(0);
     }
 
+    /**
+     * This is the method to create a new student group.
+     * @param groupName The group name.
+     * @return The student group.
+     * @throws RepositoryOperationException The repository operation exception.
+     * @throws ValidationException The validation exception.
+     */
     @Override
     public StudentGroup createNewGroup(String groupName) throws RepositoryOperationException, ValidationException {
 

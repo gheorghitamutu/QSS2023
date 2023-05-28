@@ -10,13 +10,28 @@ import org.domain.models.Session;
 
 import java.util.Date;
 
+/**
+ * This is the class for SessionRepository.
+ */
 public class SessionRepository extends BaseRepository<Session> implements ISessionRepository {
 
+    /**
+     * This is the constructor of SessionRepository.
+     * @param hibernateProvider The hibernate provider.
+     */
     @Inject
     public SessionRepository(IHibernateProvider hibernateProvider) {
         super(hibernateProvider);
     }
 
+    /**
+     * This is the method to get a session by type and half year.
+     * @param type The type.
+     * @param halfYear The half year.
+     * @return The session.
+     * @throws RepositoryOperationException The repository operation exception.
+     * @throws ValidationException The validation exception.
+     */
     public Session createNewSession(Session.Type type, String halfYear) throws RepositoryOperationException, ValidationException {
 
         ValidationHelpers.requireNotBlank(halfYear, IllegalArgumentException.class, "Half year cannot be blank.", null);

@@ -17,15 +17,28 @@ import org.hibernate.validator.messageinterpolation.ParameterMessageInterpolator
 import java.util.Date;
 import java.util.Objects;
 
+/**
+ * This is the class for DisciplineRepository.
+ */
 public class DisciplineRepository extends BaseRepository<Discipline> implements IDisciplineRepository {
 
-
+    /**
+     * This is the constructor of DisciplineRepository.
+     * @param hibernateProvider The hibernate provider.
+     */
     @Inject
     public DisciplineRepository(IHibernateProvider hibernateProvider) {
         super(hibernateProvider);
 
     }
 
+    /**
+     * This is the method to get a discipline by name.
+     * @param name The name.
+     * @return The discipline.
+     * @throws RepositoryOperationException The repository operation exception.
+     * @throws ValidationException The validation exception.
+     */
     @Override
     public Discipline getByName(String name) throws RepositoryOperationException, ValidationException {
 
@@ -43,6 +56,14 @@ public class DisciplineRepository extends BaseRepository<Discipline> implements 
         return result.get(0);
     }
 
+    /**
+     * This is the method to create a new discipline.
+     * @param name The name.
+     * @param credits The credits.
+     * @return The discipline.
+     * @throws RepositoryOperationException The repository operation exception.
+     * @throws ValidationException The validation exception.
+     */
     @Override
     public Discipline createNewDiscipline(String name, int credits) throws RepositoryOperationException, ValidationException {
 

@@ -1,7 +1,6 @@
 package org.dataaccess.student;
 
 import com.google.inject.Inject;
-import jakarta.validation.Valid;
 import org.application.helpers.ValidationHelpers;
 import org.dataaccess.repository.BaseRepository;
 import org.dataaccess.database.IHibernateProvider;
@@ -10,13 +9,27 @@ import org.domain.exceptions.validations.ValidationException;
 import org.domain.models.Student;
 import org.domain.models.StudentGroup;
 
+/**
+ * This is the StudentRepository class.
+ */
 public class StudentRepository extends BaseRepository<Student> implements IStudentRepository {
 
+    /**
+     * This is the constructor of StudentRepository.
+     * @param hibernateProvider The hibernate provider.
+     */
     @Inject
     public StudentRepository(IHibernateProvider hibernateProvider) {
         super(hibernateProvider);
     }
 
+    /**
+     * This method updates a student.
+     * @param student The student.
+     * @return The updated student.
+     * @throws RepositoryOperationException The repository operation exception.
+     * @throws ValidationException The validation exception.
+     */
     @Override
     public Student updateStudent(Student student) throws RepositoryOperationException, ValidationException {
 
@@ -46,6 +59,13 @@ public class StudentRepository extends BaseRepository<Student> implements IStude
         return student;
     }
 
+    /**
+     * This method deletes a student.
+     * @param student The student.
+     * @return The deleted student.
+     * @throws RepositoryOperationException The repository operation exception.
+     * @throws ValidationException The validation exception.
+     */
     @Override
     public Student deleteStudent(Student student) throws RepositoryOperationException, ValidationException {
 
@@ -78,6 +98,14 @@ public class StudentRepository extends BaseRepository<Student> implements IStude
         return student;
     }
 
+    /**
+     * This method changes a student group.
+     * @param student The student.
+     * @param newGroup The new group.
+     * @return The student.
+     * @throws RepositoryOperationException The repository operation exception.
+     * @throws ValidationException The validation exception.
+     */
     @Override
     public Student changeStudentGroup(Student student, StudentGroup newGroup) throws RepositoryOperationException, ValidationException {
 
