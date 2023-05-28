@@ -11,11 +11,20 @@
     - [Programming language (Java)](#programming-language-java)
     - [Database interaction (the choice of an ORM)](#database-interaction-the-choice-of-an-orm)
     - [Database type (Apache Derby - embedded SQL)](#database-type-apache-derby---embedded-sql)
+    - [Java Classes](#java-classes)
     - [GUI Framework (TODO: Roberta)](#gui-framework-todo-roberta)
     - [HTML Generator (TODO: Radu)](#html-generator-todo-radu)
     - [Architecture (separation of concerns \& modularization)](#architecture-separation-of-concerns--modularization)
     - [Putting all together (writing models in Java for Hibernate \& Apache Derby)](#putting-all-together-writing-models-in-java-for-hibernate--apache-derby)
   - [Unit Testing - design \& implementation (Phase 2: libraries \& validators)](#unit-testing---design--implementation-phase-2-libraries--validators)
+    - [Frameworks (Mokito)](#frameworks-mokito)
+    - [Hibernate Validartors (along with Jakarta)](#hibernate-validartors-along-with-jakarta)
+  - [Use of Assertions (Phase 3: doing things a bit different)](#use-of-assertions-phase-3-doing-things-a-bit-different)
+    - [Putting everything together (Validators \& pre/post conditions along with class/loop invariants)](#putting-everything-together-validators--prepost-conditions-along-with-classloop-invariants)
+  - [Documentation (technical \& customer side) \& Specific Contribution (Phase 4)](#documentation-technical--customer-side--specific-contribution-phase-4)
+    - [Technical documentation can be found here: TODO!](#technical-documentation-can-be-found-here-todo)
+    - [User Guide Manual](#user-guide-manual)
+    - [Contribution](#contribution)
 
 
 # QSS2023
@@ -102,6 +111,8 @@ Requirements:
 
 TODO: Roberta & Radu
 
+![Use Cases](./docs/../Project/docs/UseCase-Diagram.png)
+
 ### Programming language (Java)
 The following arguments made Java a suitable choice for developing an application to assist in creating and managing a faculty timetable:
 
@@ -132,6 +143,8 @@ Hibernate is a widely used Object-Relational Mapping (ORM) framework in the Java
 
 6. Portability and Database Independence: Hibernate abstracts the underlying database-specific details, allowing developers to write database-agnostic code. It provides a consistent API that works across different database systems, reducing the effort required to switch databases or adapt the application to different environments. This portability can be beneficial if there is a need to support multiple database platforms or if the database technology used by the faculty changes in the future.
 
+![Database Schema](./docs/../Project/docs/DatabaseSchema.png)
+
 ### Database type (Apache Derby - embedded SQL)
 
 We have chosen Apache Derby as the database system to be used in conjunction with Hibernate because of the following:
@@ -147,6 +160,10 @@ We have chosen Apache Derby as the database system to be used in conjunction wit
 5. Good Performance: Apache Derby offers decent performance for small to medium-sized datasets. As an embedded database, it operates within the same Java process as the application, resulting in reduced network latency and improved data access speed. While it may not be as performant as larger-scale database systems in certain scenarios, it can still provide satisfactory performance for a faculty timetable management application.
 
 6. Seamless Integration with Hibernate: Apache Derby has excellent compatibility with Hibernate. Hibernate provides a comprehensive set of features for mapping Java objects to Apache Derby tables, generating SQL queries, and managing transactions. By combining Apache Derby with Hibernate, developers can leverage the power of Hibernate's ORM capabilities and take advantage of its robust features, such as object-relational mapping, caching, and query optimization.
+
+### Java Classes
+
+![Classes Diagram](Project/docs/ClassesDiagram.png)
 
 ### GUI Framework (TODO: Roberta)
 
@@ -198,6 +215,83 @@ Presentation of GUI (technical) & HTML table generator (technical)
 
 ## Unit Testing - design & implementation (Phase 2: libraries & validators)
 
-WIP
+### Frameworks (Mokito)
 
-....
+Mockito is a popular and widely used testing library in the Java ecosystem making it a suitable choice because of the following:
+
+1. Simplicity and Ease of Use: Mockito provides a simple and intuitive API that makes it easy to create mock objects and define their behavior. It has a clear and concise syntax, allowing developers to write readable and maintainable test code. Mockito's focus on simplicity makes it accessible to both experienced and novice developers.
+
+2. Mocking Dependencies: In the project, there may be dependencies on external components or services that are not available or not desirable to use during testing. Mockito excels at creating mock objects that simulate the behavior of these dependencies. By mocking these dependencies, you can isolate the code under test and focus on testing specific units without worrying about the behavior of external components.
+
+3. Flexibility and Versatility: Mockito provides a wide range of features and capabilities to support different testing scenarios. It allows you to specify the behavior of mock objects, define return values, verify method invocations, and handle different types of interactions with the dependencies. Mockito also offers support for stubbing, spying on real objects, and capturing and verifying method arguments, among other advanced features.
+
+4. Integration with JUnit: Mockito integrates seamlessly with JUnit, the widely used testing framework for Java. It works well with JUnit's annotations and lifecycle, allowing you to easily incorporate Mockito into your existing test suite. The combination of Mockito and JUnit provides a powerful and comprehensive testing solution for unit testing in Java.
+
+5. Active Community and Continuous Development: Mockito has a large and active community of developers, which means you can find ample resources, documentation, and support online. The library is actively maintained and regularly updated, ensuring compatibility with the latest Java versions and continuous improvements in functionality and performance.
+
+6. Test Code Readability: Mockito promotes writing readable and expressive test code. It follows a behavior-driven development (BDD) style, encouraging developers to write tests that clearly describe the behavior being tested. Mockito's syntax, along with its Mockito annotations and matchers, helps in creating more readable and self-explanatory test cases.
+
+### Hibernate Validartors (along with Jakarta)
+
+Using Hibernate Validators, which are based on the Jakarta Bean Validation API (previously known as JSR 303), brings several benefits to the project:
+
+1. Data Validation: The project likely involves validating user input and ensuring that the data conforms to specific rules and constraints. Hibernate Validators provide a set of pre-defined validation annotations and constraints that can be easily applied to entity classes or input fields. This allows you to enforce data validation rules, such as required fields, length constraints, format checks, and custom business rules, ensuring data integrity and consistency.
+
+2. Standardized Validation API: Hibernate Validators follow the Jakarta Bean Validation API standard, making it a widely recognized and supported approach for data validation in Java applications. By using this standard API, you ensure compatibility with other Jakarta-based frameworks and tools that support validation, simplifying integration with the wider Java ecosystem.
+
+3. Declarative Validation: Hibernate Validators allow you to declare validation rules directly in the entity classes using annotations, making the validation rules more explicit and self-documenting. This declarative approach enhances code readability, as the validation constraints are closely associated with the corresponding entity fields or properties.
+
+4. Reusability and Maintainability: By applying validation annotations to the entity classes, you can reuse the validation rules across different parts of the application. This eliminates the need to duplicate validation logic in multiple places, leading to cleaner and more maintainable code. Additionally, when business rules change or new validation rules are required, modifying the annotations in the entity classes simplifies the process of updating the validation logic.
+
+5. Integration with Hibernate: Hibernate Validators seamlessly integrate with the Hibernate ORM framework. Hibernate can automatically trigger the validation process when persisting or updating entities, ensuring that only valid data is stored in the database. This integration enhances the consistency of data validation across the application and simplifies the implementation of validation logic in the persistence layer.
+
+6. Custom Validation Rules: In addition to the pre-defined validation constraints provided by Hibernate Validators, you can create custom validation rules by implementing your own validation annotations and validators. This flexibility allows you to handle complex validation scenarios and enforce specific business rules tailored to the faculty timetable management application.
+
+7. Localization Support: Hibernate Validators support localization, enabling the validation error messages to be localized based on the user's preferred language or locale. This is particularly useful if the application needs to support multiple languages or internationalization.
+
+* It's important to note that while Hibernate Validators offer a convenient and standardized approach to data validation, they primarily focus on field-level validation within the entity classes.
+
+
+## Use of Assertions (Phase 3: doing things a bit different)
+
+In the context of the project of creating and managing a faculty timetable, the scope of using assertions would primarily be to validate the preconditions, postconditions, and invariants within the application code. Assertions can help ensure that the expected conditions are met during the execution of the program, aiding in debugging, testing, and maintaining the correctness of the application. 
+
+It's worth noting that assertions should not be used as a substitute for comprehensive unit testing. While assertions help detect issues during development and testing, they are typically disabled in production environments. It is essential to perform thorough testing, including unit tests, integration tests, and system tests, to validate the overall functionality and performance of the faculty timetable management application.
+
+### Putting everything together (Validators & pre/post conditions along with class/loop invariants)
+
+In the context of the Jakarta Bean Validation API, the concept of preconditions, postconditions, class invariants, and loop invariants typically falls under the domain of design by contract, which is not directly supported by the validation annotations provided by Hibernate Validators. The primary purpose of Jakarta Bean Validation is to validate the state of objects, primarily during input validation and persistence.
+
+However, you can leverage custom validation annotations and validators to implement some aspects of design by contract, albeit in a limited manner. Here's how you can approach each of these design by contract concepts using Jakarta Bean Validation:
+
+1. Preconditions: typically represent the requirements that must be met before a method or operation is executed. In Jakarta Bean Validation, you can create custom validation annotations and validators to enforce these preconditions on method parameters. For example, you can define custom annotations like @NonNull, @Positive, or @InRange and implement corresponding validators that perform the necessary checks on the method parameters.
+
+2. Postconditions: define the expected state or behavior after a method or operation is executed. Jakarta Bean Validation does not directly address postconditions. However, you can use assertions or manual checks within your methods to validate the postconditions explicitly. These checks can ensure that the returned values or the state of the object after the method execution meets the expected conditions.
+
+3. Class Invariants: represent the constraints or rules that must hold true for an object throughout its lifetime. Jakarta Bean Validation does not have built-in support for class invariants. To enforce class invariants, you would need to rely on manual checks within the methods or lifecycle hooks of your classes. For example, you can add custom validation logic within the setter methods or constructors to ensure that the object remains in a valid state.
+
+4. Loop Invariants: define the conditions that remain true before and after each iteration of a loop. Jakarta Bean Validation does not directly support loop invariants. To enforce loop invariants, you would need to use conditional statements or assertions within your loops to verify that the required conditions hold true at each iteration.
+
+* While Jakarta Bean Validation provides a powerful mechanism for input validation and object state validation, it is important to note that design by contract concepts, including preconditions, postconditions, class invariants, and loop invariants, are typically more associated with programming languages or frameworks that explicitly support these concepts, such as Eiffel or some modern programming languages with contract-oriented programming features.
+
+* If design by contract is a critical requirement for your project, you might consider using a programming language or framework that provides built-in support for contracts or additional libraries that specifically address design by contract, such as the Java Modeling Language (JML) or third-party contract libraries for Java.
+
+* Design by contract is a broader concept than data validation, and it encompasses more aspects of software development, including specification, testing, and documentation. While Jakarta Bean Validation can assist with data validation, a comprehensive implementation of design by contract may require additional approaches and tools beyond the scope of Jakarta Bean Validation.
+
+## Documentation (technical & customer side) & Specific Contribution (Phase 4)
+
+### Technical documentation can be found here: TODO!
+
+### User Guide Manual
+
+TODO: Roberta & Radu
+
+### Contribution
+
+    Roberta: WIP
+
+    Radu: WIP
+
+    Cosmin: WIP
+
+    Gheorghita: WIP
