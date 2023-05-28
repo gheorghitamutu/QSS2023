@@ -1,5 +1,39 @@
 # User Guide Manual - Timetable Generator
 
+- [User Guide Manual - Timetable Generator](#user-guide-manual---timetable-generator)
+  - [Introduction](#introduction)
+  - [Getting Started](#getting-started)
+    - [GUI Interface](#gui-interface)
+    - [Main Menu](#main-menu)
+    - [Database Operations](#database-operations)
+  - [Using the Timetable Generator](#using-the-timetable-generator)
+    - [Student Management](#student-management)
+      - [Add Student Operation:](#add-student-operation)
+      - [Delete Student Operation:](#delete-student-operation)
+    - [Teacher Management](#teacher-management)
+      - [Add Teacher Operation:](#add-teacher-operation)
+      - [Delete Teacher Operation:](#delete-teacher-operation)
+    - [Room Availability](#room-availability)
+      - [Add Room Operation:](#add-room-operation)
+      - [Delete Room Operation:](#delete-room-operation)
+    - [Discipline Management](#discipline-management)
+      - [Add Discipline Operation:](#add-discipline-operation)
+      - [Add Teacher To Discipline Operation:](#add-teacher-to-discipline-operation)
+      - [Delete Discipline Operation:](#delete-discipline-operation)
+    - [Session Details](#session-details)
+      - [Add Session Operation:](#add-session-operation)
+      - [Assign Teacher To Session Operation:](#assign-teacher-to-session-operation)
+      - [Assign Group of Students To Session Operation:](#assign-group-of-students-to-session-operation)
+      - [Delete Session Operation:](#delete-session-operation)
+    - [Timeslot Configuration](#timeslot-configuration)
+      - [Add Timeslot Operation:](#add-timeslot-operation)
+      - [Delete Timeslot Operation:](#delete-timeslot-operation)
+    - [Timetable HTML Generation](#timetable-html-generation)
+      - [Generating Timetables:](#generating-timetables)
+      - [Customization and HTML Templates](#customization-and-html-templates)
+  - [Conclusion](#conclusion)
+
+
 ## Introduction
 
 This manual will provide you with detailed instructions on how to use the Timetable Generator GUI application effectively. The Timetable Generator allows you to manage student, teacher, room, session, discipline and timeslot information, and generate timetables based on your requirements. Whether you are a teacher, administrator, or student, this guide will help you navigate through the various features and functionalities of the application.
@@ -161,13 +195,3 @@ Although there is no direct editing functionality for visual appearance, the app
 ## Conclusion
 
 This user guide manual has provided an overview of the application, including student and teacher management, room availability, session details, timeslot configuration, and timetable generation. Use this manual as a reference to efficiently navigate and utilize the Timetable Generator to create well-organized and optimized timetables for your institution.
-
-
-
-#### Contributions:
-Nechita Roberta - Use Case Diagram and UseCase Documentation; FrontEnd part; Functional testing on frontend part (adding both pre- and post-conditions); Backend integration on frontend;
-Document the personal implementation with java doc comment in order to generate the tech report; User-Guide Manual.
-
-Rosu Radu-Andrei - Use Case Diagram and UseCase Documentation; Timetable HTML Generation part; Backend integration on generator; Generator integration to frontend; 
-Unit Tests for multiple services (Disciplines, Rooms, Sessions, StudentGroups, Teachers); Preconditions, Postconditions and Invariants for all HTML Generator classes and methods; 
-Document the personal implementation with javadoc comments; User-Guide Manual.

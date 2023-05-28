@@ -12,8 +12,8 @@
     - [Database interaction (the choice of an ORM)](#database-interaction-the-choice-of-an-orm)
     - [Database type (Apache Derby - embedded SQL)](#database-type-apache-derby---embedded-sql)
     - [Java Classes](#java-classes)
-    - [GUI Framework (TODO: Roberta)](#gui-framework-todo-roberta)
-    - [HTML Generator (TODO: Radu)](#html-generator-todo-radu)
+    - [GUI Framework (Swing)](#gui-framework-swing)
+    - [HTML Generator](#html-generator)
     - [Architecture (separation of concerns \& modularization)](#architecture-separation-of-concerns--modularization)
     - [Putting all together (writing models in Java for Hibernate \& Apache Derby)](#putting-all-together-writing-models-in-java-for-hibernate--apache-derby)
     - [Presentation of GUI (technical)](#presentation-of-gui-technical)
@@ -26,7 +26,7 @@
     - [Putting everything together (Validators \& pre/post conditions along with class/loop invariants)](#putting-everything-together-validators--prepost-conditions-along-with-classloop-invariants)
   - [Documentation (technical \& customer side) \& Specific Contribution (Phase 4)](#documentation-technical--customer-side--specific-contribution-phase-4)
     - [Technical documentation can be found here: TODO!](#technical-documentation-can-be-found-here-todo)
-    - [User Guide Manual](#user-guide-manual)
+    - [User Guide](#user-guide)
     - [Contribution](#contribution)
 
 
@@ -112,8 +112,6 @@ Requirements:
 
 ### Use Cases (based on the project requirements)
 
-TODO: Roberta & Radu
-
 ![Use Cases](./docs/../Project/docs/UseCase-Diagram.png)
 
 ### Programming language (Java)
@@ -168,9 +166,30 @@ We have chosen Apache Derby as the database system to be used in conjunction wit
 
 ![Classes Diagram](Project/docs/ClassesDiagram.png)
 
-### GUI Framework (TODO: Roberta)
+### GUI Framework (Swing)
 
-### HTML Generator (TODO: Radu)
+
+We found that Swing, a GUI (Graphical User Interface) framework for Java, as suitable choice for our type of project because of the following:
+
+1. Rich GUI Components: Swing provides a wide range of built-in GUI components, such as buttons, labels, tables, and dialog boxes, which are essential for creating an interactive and visually appealing timetable management application. These components can be easily customized to match the desired look and feel of the application.
+
+2. Cross-Platform Compatibility: Swing is built on Java's platform-independent nature, allowing the application to run on various operating systems, including Windows, macOS, and Linux. This cross-platform compatibility ensures that the timetable management application can be deployed and used by faculty members and students regardless of their operating system.
+
+3. Layout Managers: Swing offers flexible layout managers that enable you to organize and position GUI components within containers, such as frames and panels. Layout managers handle the automatic resizing and arrangement of components, adapting to different screen sizes and resolutions. This feature is valuable for designing a responsive and user-friendly interface for the timetable management application.
+
+4. Event-Driven Programming Model: Swing follows an event-driven programming model, where actions and interactions with GUI components trigger events that are handled by event listeners. This model is well-suited for capturing user input, responding to button clicks or menu selections, and updating the timetable based on user actions. Event-driven programming facilitates the interactive nature of the application.
+
+5. Extensive Documentation and Community Support: Swing has been around for a long time and has a large user community. This means that there is extensive documentation, tutorials, and resources available to guide developers in creating Swing-based applications. The community support ensures that you can easily find solutions to common issues or seek assistance when encountering challenges during the development process.
+
+6. Integration with Java Ecosystem: Swing seamlessly integrates with other Java libraries and frameworks, allowing you to leverage additional functionalities and tools to enhance the application. For example, you can integrate Hibernate for data persistence, Apache Derby for the database, or unit testing frameworks like JUnit or TestNG for testing Swing components.
+
+7. Mature and Stable Framework: Swing has been a part of Java for a long time and is a mature and stable GUI framework. It has been extensively tested and used in numerous applications, ensuring its reliability and robustness. The stability of Swing makes it a suitable choice for a project that requires a dependable GUI framework.
+
+While there are alternative frameworks available for building GUI applications in Java, Swing's rich feature set, cross-platform compatibility, extensive documentation, and integration capabilities make it a compelling choice that fits our needs.
+
+### HTML Generator
+
+We didn't use any library for HTML table generation. We created a series of templates and replaced the placeholders with data taken from our database. The table resembles the ones that are used by the faculty.
 
 ### Architecture (separation of concerns & modularization)
 
@@ -320,15 +339,18 @@ However, you can leverage custom validation annotations and validators to implem
 
 ### Technical documentation can be found here: TODO!
 
-### User Guide Manual
+### User Guide
 
-TODO: Roberta & Radu
+The entire user guid can be found [here](./Project/docs/User-Guide.md).
 
 ### Contribution
 
-    Roberta: WIP
+    Nechita Roberta - Use Case Diagram and UseCase Documentation; FrontEnd part; Functional testing on frontend part (adding both pre- and post-conditions); Backend integration on frontend;
+    Document the personal implementation with java doc comment in order to generate the tech report; User-Guide Manual.
 
-    Radu: WIP
+    Rosu Radu-Andrei - Use Case Diagram and UseCase Documentation; Timetable HTML Generation part; Backend integration on generator; Generator integration to frontend; 
+    Unit Tests for multiple services (Disciplines, Rooms, Sessions, StudentGroups, Teachers); Preconditions, Postconditions and Invariants for all HTML Generator classes and methods; 
+    Document the personal implementation with javadoc comments; User-Guide Manual.
 
     Cosmin: WIP
 
