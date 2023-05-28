@@ -16,7 +16,7 @@ The GUI (Graphical User Interface) provides an intuitive and user-friendly envir
 
 The main menu acts as the primary navigation hub of the application. It contains options for managing student records, teacher information, room availability, session details, and timeslots. 
 Each menu option leads to a specific section where you can perform related tasks.
-![Main Menu](/docs/reportImages/mainMenu.png)
+![Main Menu](./reportImages/mainMenu.png)
 ### Database Operations
 
 The Timetable Generator allows you to perform various database operations to manage the core entities of the application. These operations include inserting new records and deleting existing records for students, teachers, rooms, sessions, and timeslots.
@@ -28,7 +28,7 @@ Let's explore the key functionalities of the Timetable Generator in more detail:
 ### Student Management
 
 The Student Management section allows you to add and delete student records. You can enter details such as student names, registration ID, year of study, and other relevant information. This section helps you maintain accurate and up-to-date student data.
-![Student Section](/docs/reportImages/studentPanel.png)
+![Student Section](./reportImages/studentPanel.png)
 #### Add Student Operation:
 
 1. Complete the corresponding information: student name, registration ID (unique constraint), year of study,group of study.
@@ -45,6 +45,7 @@ During the implementation of the delete operation, the system performs necessary
 ### Teacher Management
 
 The Teacher Management section enables you to manage teacher information. You can add new teachers, remove existing one. This section is particularly useful for maintaining a comprehensive record of teachers within the institution.
+![Teacher Section](./reportImages/teacherPanel.png)
 #### Add Teacher Operation:
 1. Complete the corresponding information: teacher name, role of the teacher in the current institution.
 2. Click on "SUBMIT" button under the first bulk of fields.
@@ -59,6 +60,7 @@ To delete a teacher, the user is presented with a list of existing teachers in t
 ### Room Availability
 
 The Room Availability section provides a way to manage the creation/deletion of available rooms. This functionality ensures efficient utilization of the available space.
+![Room Section](./reportImages/roomPanel.png)
 #### Add Room Operation:
 1. Complete the corresponding information: room name, type of activities that can be sustained into the current room, capacity, floor.
 2. Click on "SUBMIT" button under the first bulk of fields.
@@ -75,6 +77,7 @@ Ensure that you have identified the correct room for deletion, as this action ca
 ### Session Details
 
 The Session Details section allows you to define and manage various sessions within the Timetable Generator. You can create sessions for different subjects, assign teachers to sessions, assing a group to  session. This feature helps in organizing and structuring the overall timetable.
+![Session Section](./reportImages/sessionPanel.png)
 #### Add Session Operation:
 1. Complete the corresponding information: the discipline you want to assign, type of the discipline and select the specific half-year.
 2. Click on "SUMBIT" button under the first bulk of fields.
@@ -106,6 +109,7 @@ Once the user clicks the "SUBMIT" button, the backend validates the request, sea
 ### Timeslot Configuration
 
 The Timeslot Configuration section enables you to set up and configure timeslots for the timetable. You can define specific time intervals, assign days and durations, periodicity, room and sessions involved. This functionality ensures accurate scheduling of sessions and effective time management.
+![Timeslot Section](./reportImages/timeslotPanel.png)
 #### Add Timeslot Operation:
 1. Fill in the required information: start/end date for a session, periodicity, duration of course, room.
 2. Click on "SUMMIT" button under the first bulk of fields.
