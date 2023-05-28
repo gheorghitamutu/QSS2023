@@ -11,25 +11,31 @@ import org.domain.models.Teacher;
 import java.util.Date;
 
 /**
- * This is the class for TeacherRepository.
+ * A repository class for managing Teacher entities.
+ * Extends the BaseRepository class with Teacher as the generic type
+ * and implements the ITeacherRepository interface.
+ * Contains methods for creating new Teacher entities or retrieving Teacher objects by their name.
  */
 public class TeacherRepository extends BaseRepository<Teacher> implements ITeacherRepository {
 
     /**
-     * This is the constructor of TeacherRepository.
-     * @param hibernateProvider The hibernate provider.
+     * Constructs a TeacherRepository object with the provided Hibernate provider.
+     *
+     * @param hibernateProvider The Hibernate provider used for data access.
      */
     @Inject
     public TeacherRepository(IHibernateProvider hibernateProvider) {
         super(hibernateProvider);
     }
 
+
     /**
-     * This is the method to get a teacher by name.
-     * @param name The name.
-     * @return The teacher.
-     * @throws RepositoryOperationException The repository operation exception.
-     * @throws ValidationException The validation exception.
+     * Retrieves a Teacher entity by its name.
+     *
+     * @param name The name of the Teacher to retrieve.
+     * @return The Teacher new entity with the specified name, or null if not found.
+     * @throws RepositoryOperationException If an error occurs during the repository operation.
+     * @throws ValidationException If the validation of the Teacher name fails.
      */
     public Teacher getByName(String name) throws RepositoryOperationException, ValidationException {
 
@@ -48,12 +54,13 @@ public class TeacherRepository extends BaseRepository<Teacher> implements ITeach
     }
 
     /**
-     * This is the method to create a new teacher.
-     * @param name The name.
-     * @param type The type.
-     * @return The teacher.
-     * @throws RepositoryOperationException The repository operation exception.
-     * @throws ValidationException The validation exception.
+     * Creates a new Teacher entity with the specified name and type.
+     *
+     * @param name The name of the new Teacher.
+     * @param type The type of the new Teacher.
+     * @return The newly created Teacher object.
+     * @throws RepositoryOperationException If an error occurs during the repository operation.
+     * @throws ValidationException If the validation of the Teacher attributes fails.
      */
     public Teacher createNewTeacher(String name, Teacher.Type type) throws RepositoryOperationException, ValidationException {
         ValidationHelpers.requireNotBlank(name, IllegalArgumentException.class, "Teacher name cannot be blank.", null);

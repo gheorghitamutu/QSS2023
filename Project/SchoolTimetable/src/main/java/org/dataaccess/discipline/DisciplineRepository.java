@@ -18,13 +18,17 @@ import java.util.Date;
 import java.util.Objects;
 
 /**
- * This is the class for DisciplineRepository.
+ * A repository class for managing Discipline entities within the database.
+ * Extends the BaseRepository class with Discipline as the generic type and implements the IDisciplineRepository interface.
+ * Contains methods for creating new Discipline entities or retrieving Discipline objects by their name.
  */
 public class DisciplineRepository extends BaseRepository<Discipline> implements IDisciplineRepository {
 
+
     /**
-     * This is the constructor of DisciplineRepository.
-     * @param hibernateProvider The hibernate provider.
+     * Creates a new instance of DisciplineRepository with the specified Hibernate provider.
+     *
+     * @param hibernateProvider The Hibernate provider to use for data access.
      */
     @Inject
     public DisciplineRepository(IHibernateProvider hibernateProvider) {
@@ -32,12 +36,14 @@ public class DisciplineRepository extends BaseRepository<Discipline> implements 
 
     }
 
+
     /**
-     * This is the method to get a discipline by name.
-     * @param name The name.
-     * @return The discipline.
-     * @throws RepositoryOperationException The repository operation exception.
-     * @throws ValidationException The validation exception.
+     * Retrieves a Discipline by its name.
+     *
+     * @param name The name of the Discipline to retrieve.
+     * @return The Discipline with the specified name, or null if not found.
+     * @throws RepositoryOperationException If an error occurs during the repository operation.
+     * @throws ValidationException          If the provided name is blank.
      */
     @Override
     public Discipline getByName(String name) throws RepositoryOperationException, ValidationException {
@@ -56,13 +62,15 @@ public class DisciplineRepository extends BaseRepository<Discipline> implements 
         return result.get(0);
     }
 
+
     /**
-     * This is the method to create a new discipline.
-     * @param name The name.
-     * @param credits The credits.
-     * @return The discipline.
-     * @throws RepositoryOperationException The repository operation exception.
-     * @throws ValidationException The validation exception.
+     * Creates a new Discipline with the given name and credits.
+     *
+     * @param name    The name of the new Discipline.
+     * @param credits The number of credits associated with the new Discipline.
+     * @return The newly created Discipline.
+     * @throws RepositoryOperationException If an error occurs during the repository operation.
+     * @throws ValidationException          If the provided name is blank or the credits are negative.
      */
     @Override
     public Discipline createNewDiscipline(String name, int credits) throws RepositoryOperationException, ValidationException {

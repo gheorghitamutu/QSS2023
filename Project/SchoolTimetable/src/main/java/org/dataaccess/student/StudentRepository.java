@@ -10,13 +10,16 @@ import org.domain.models.Student;
 import org.domain.models.StudentGroup;
 
 /**
- * This is the StudentRepository class.
+ * A repository class for managing Student entities.
+ * Extends the BaseRepository class with Student as the generic type and implements the IStudentRepository interface.
+ * Contains methods for updating and deleting Student entities.
  */
 public class StudentRepository extends BaseRepository<Student> implements IStudentRepository {
 
     /**
-     * This is the constructor of StudentRepository.
-     * @param hibernateProvider The hibernate provider.
+     * Constructs a new StudentRepository with the specified Hibernate provider.
+     *
+     * @param hibernateProvider The Hibernate provider for database access.
      */
     @Inject
     public StudentRepository(IHibernateProvider hibernateProvider) {
@@ -24,11 +27,12 @@ public class StudentRepository extends BaseRepository<Student> implements IStude
     }
 
     /**
-     * This method updates a student.
-     * @param student The student.
-     * @return The updated student.
-     * @throws RepositoryOperationException The repository operation exception.
-     * @throws ValidationException The validation exception.
+     * Updates the information of a Student entity.
+     *
+     * @param student The Student entity to update.
+     * @return The updated Student entity.
+     * @throws RepositoryOperationException If an error occurs during the repository operation.
+     * @throws ValidationException If the validation of the Student attributes fails.
      */
     @Override
     public Student updateStudent(Student student) throws RepositoryOperationException, ValidationException {
@@ -59,12 +63,14 @@ public class StudentRepository extends BaseRepository<Student> implements IStude
         return student;
     }
 
+
     /**
-     * This method deletes a student.
-     * @param student The student.
-     * @return The deleted student.
-     * @throws RepositoryOperationException The repository operation exception.
-     * @throws ValidationException The validation exception.
+     * Deletes a Student entity from the repository.
+     *
+     * @param student The Student entity to delete.
+     * @return The deleted Student entity.
+     * @throws RepositoryOperationException If an error occurs during the repository operation.
+     * @throws ValidationException If the validation of the Student attributes fails.
      */
     @Override
     public Student deleteStudent(Student student) throws RepositoryOperationException, ValidationException {
@@ -99,12 +105,13 @@ public class StudentRepository extends BaseRepository<Student> implements IStude
     }
 
     /**
-     * This method changes a student group.
-     * @param student The student.
-     * @param newGroup The new group.
-     * @return The student.
-     * @throws RepositoryOperationException The repository operation exception.
-     * @throws ValidationException The validation exception.
+     * Changes the StudentGroup of a Student entity.
+     *
+     * @param student   The Student entity for which to change the group.
+     * @param newGroup  The new StudentGroup for the Student entity.
+     * @return The updated Student entity with the new group.
+     * @throws RepositoryOperationException If an error occurs during the repository operation.
+     * @throws ValidationException If the validation of the Student attributes fails.
      */
     @Override
     public Student changeStudentGroup(Student student, StudentGroup newGroup) throws RepositoryOperationException, ValidationException {

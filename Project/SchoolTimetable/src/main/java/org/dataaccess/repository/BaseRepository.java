@@ -15,8 +15,9 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * This is the class for BaseRepository.
- * @param <T> The type.
+ * A generic base repository class that provides common functionality for managing entitiies of type T.
+ *
+ * @param <T> The type of entitiy managed by the repository.
  */
 public class BaseRepository<T> implements IRepository<T> {
 
@@ -31,8 +32,9 @@ public class BaseRepository<T> implements IRepository<T> {
     protected Class<T> tClass;
 
     /**
-     * This is the constructor of BaseRepository.
-     * @param hibernateProvider The hibernate provider.
+     * Creates a new instance of BaseRepository with the specified Hibernate provider.
+     *
+     * @param hibernateProvider The Hibernate provider to use for data access.
      */
     protected BaseRepository(IHibernateProvider hibernateProvider) {
 
@@ -49,9 +51,10 @@ public class BaseRepository<T> implements IRepository<T> {
     }
 
     /**
-     * This is the method to get an object by id.
-     * @param id The id.
-     * @return The object.
+     * Retrieves an entity by its ID.
+     *
+     * @param id The ID of the entity to retrieve.
+     * @return The entity with the specified ID, or null if not found.
      */
     public T getById(int id) {
         var session = this.hibernateProvider.getEntityManager();
@@ -59,9 +62,10 @@ public class BaseRepository<T> implements IRepository<T> {
     }
 
     /**
-     * This method validates the object passed as input.
-     * @param object The object.
-     * @return True if the object is valid, false otherwise.
+     * Validates an entity using the configured validator.
+     *
+     * @param object The entity to validate.
+     * @return True if the entity passes validation, false otherwise.
      */
     public boolean validate(T object) {
         Validator validator;
@@ -81,9 +85,10 @@ public class BaseRepository<T> implements IRepository<T> {
     }
 
     /**
-     * This method saves the object passed as input into the database.
-     * @param object The object.
-     * @throws RepositoryOperationException The repository operation exception.
+     * Saves an entity in the repository.
+     *
+     * @param object The entity to save.
+     * @throws RepositoryOperationException If an error occurs during the repository operation.
      */
     public void save(T object) throws RepositoryOperationException {
 
@@ -119,9 +124,10 @@ public class BaseRepository<T> implements IRepository<T> {
     }
 
     /**
-     * This method deletes the object passed as input from the database.
-     * @param object The object.
-     * @throws RepositoryOperationException The repository operation exception.
+     * Deletes an entity from the repository.
+     *
+     * @param object The entity to delete.
+     * @throws RepositoryOperationException If an error occurs during the repository operation.
      */
     public void delete(T object) throws RepositoryOperationException {
 
@@ -142,10 +148,12 @@ public class BaseRepository<T> implements IRepository<T> {
         }
     }
 
+
     /**
-     * This method deletes the list of objects passed as input from the database.
-     * @param objects The objects.
-     * @throws RepositoryOperationException The repository operation exception.
+     * Deletes multiple entities from the repository.
+     *
+     * @param objects The entities to delete.
+     * @throws RepositoryOperationException If an error occurs during the repository operation.
      */
     public void deleteMany(List<T> objects) throws RepositoryOperationException {
         var session = this.hibernateProvider.getEntityManager();
@@ -167,9 +175,11 @@ public class BaseRepository<T> implements IRepository<T> {
         }
     }
 
+
     /**
-     * This method gets all the objects from the database.
-     * @return The list of objects.
+     * Retrieves all entities of type T from the repository.
+     *
+     * @return A list of all entities in the repository.
      */
     public List<T> readAll() {
         var session = this.hibernateProvider.getEntityManager();

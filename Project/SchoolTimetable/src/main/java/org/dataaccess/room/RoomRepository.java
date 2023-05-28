@@ -10,14 +10,18 @@ import org.domain.models.Room;
 
 import java.util.Date;
 
+
 /**
- * This is the class for RoomRepository.
+ * A repository class for managing Room entities within the database.
+ * Extends the BaseRepository of type Room and implements the IRoomRepository interface.
+ * Contains methods for creating new Room entity or retrieving Room objects by their name.
  */
 public class RoomRepository extends BaseRepository<Room> implements IRoomRepository {
 
     /**
-     * This is the constructor of RoomRepository.
-     * @param hibernateProvider The hibernate provider.
+     * Constructs a new RoomRepository instance with the specified Hibernate provider.
+     *
+     * @param hibernateProvider The Hibernate provider to be used for data access.
      */
     @Inject
     public RoomRepository(IHibernateProvider hibernateProvider) {
@@ -25,11 +29,12 @@ public class RoomRepository extends BaseRepository<Room> implements IRoomReposit
     }
 
     /**
-     * This is the method to get a room by name.
-     * @param name The name.
-     * @return The room.
-     * @throws RepositoryOperationException The repository operation exception.
-     * @throws ValidationException The validation exception.
+     * Retrieves a Room object by its name.
+     *
+     * @param name The name of the Room to retrieve.
+     * @return The Room entity with the specified name, or null if not found.
+     * @throws RepositoryOperationException If an error occurs during the repository operation.
+     * @throws ValidationException If the validation of the Room name fails.
      */
     public Room getByName(String name) throws RepositoryOperationException, ValidationException {
 
@@ -48,14 +53,15 @@ public class RoomRepository extends BaseRepository<Room> implements IRoomReposit
     }
 
     /**
-     * This is the method to create a new room.
-     * @param name The name.
-     * @param capacity The capacity.
-     * @param floor The floor.
-     * @param type The type.
-     * @return The room.
-     * @throws RepositoryOperationException The repository operation exception.
-     * @throws ValidationException The validation exception.
+     * Creates a new Room entity with the specified name, capacity, floor, and type.
+     *
+     * @param name     The name of the new Room.
+     * @param capacity The capacity of the new Room.
+     * @param floor    The floor of the new Room.
+     * @param type     The type of the new Room.
+     * @return The newly created Room entity.
+     * @throws RepositoryOperationException If an error occurs during the repository operation.
+     * @throws ValidationException If the validation of the Room attributes fails.
      */
     public Room createNewRoom(String name, int capacity, int floor, Room.Type type) throws RepositoryOperationException, ValidationException {
 

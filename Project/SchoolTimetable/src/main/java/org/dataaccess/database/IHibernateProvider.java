@@ -2,14 +2,12 @@ package org.dataaccess.database;
 
 import jakarta.persistence.EntityManager;
 
+
 /**
- * This is the interface for IHibernateProvider.
+ * The IHibernateProvider interface provides a contract for classes that serve as providers of the Hibernate EntityManager.
+ * It declares a single method getEntityManager() for obtaining the EntityManager instance that is used for database operations
+ * on a specific database.
  */
 public interface IHibernateProvider {
-
-    /**
-     * This is the method to get the entity manager.
-     * @return The entity manager.
-     */
     EntityManager getEntityManager();
 }

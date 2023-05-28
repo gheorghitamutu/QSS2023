@@ -4,50 +4,59 @@ import org.domain.exceptions.RepositoryOperationException;
 
 import java.util.List;
 
+
 /**
- * This is the interface for Repository.
- * @param <T> The type.
+ * An interface representing a generic repository for managing entity of type T.
+ *
+ * @param <T> The type of entity managed by the repository.
  */
 public interface IRepository<T> {
 
     /**
-     * This is the method to get an object by id.
-     * @param id The id.
-     * @return The object.
+     * Retrieves an entity by its ID.
+     *
+     * @param id The ID of the entity to retrieve.
+     * @return The entity with the specified ID, or null if not found.
      */
     public T getById(int id);
 
     /**
-     * This is the method to save an object.
-     * @param object The object.
-     * @throws RepositoryOperationException The repository operation exception.
+     * Saves an entity in the repository.
+     *
+     * @param object The entity to save.
+     * @throws RepositoryOperationException If an error occurs during the repository operation.
      */
     void save(T object) throws RepositoryOperationException;
 
     /**
-     * This is the method to update an object.
-     * @param object The object.
-     * @throws RepositoryOperationException The repository operation exception.
+     * Deletes an entity from the repository.
+     *
+     * @param object The entity to delete.
+     * @throws RepositoryOperationException If an error occurs during the repository operation.
      */
     void delete(T object) throws RepositoryOperationException;
 
+
     /**
-     * This is the method to delete many objects.
-     * @param objects The objects.
-     * @throws RepositoryOperationException The repository operation exception.
+     * Deletes multiple entities from the repository.
+     *
+     * @param objects The entities list to delete.
+     * @throws RepositoryOperationException If an error occurs during the repository operation.
      */
     void deleteMany(List<T> objects) throws RepositoryOperationException;
 
     /**
-     * This is the method to read all objects.
-     * @return The objects.
+     * Retrieves all entity of type T from the repository.
+     *
+     * @return A list of all entity in the repository.
      */
     List<T> readAll();
 
     /**
-     * This is the method to validate an object.
-     * @param object The object.
-     * @return The boolean.
+     * Validates an entity.
+     *
+     * @param object The entity to validate.
+     * @return True if the entity passes validation, false otherwise.
      */
     boolean validate(T object);
 }

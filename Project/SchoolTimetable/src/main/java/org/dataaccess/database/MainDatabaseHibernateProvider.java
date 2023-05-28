@@ -5,7 +5,9 @@ import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 
 /**
- * This is the class for MainDatabaseHibernateProvider.
+ * Provides implementation of the IHibernateProvider interface.
+ * It is used for obtaining the EntityManager instance that is used for database operations on the main database.
+ * Points to the main database (production).
  */
 public class MainDatabaseHibernateProvider implements IHibernateProvider {
 
@@ -20,9 +22,11 @@ public class MainDatabaseHibernateProvider implements IHibernateProvider {
     public EntityManager entityManager = entityManagerFactory.createEntityManager();
 
     /**
-     * This is the method to get the entity manager.
-     * @return The entity manager.
+     * Retrieves the EntityManager instance. Creates before returning if it is not created yet.
+     *
+     * @return The current EntityManager instance.
      */
+
     @Override
     public EntityManager getEntityManager() {
 
