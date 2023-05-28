@@ -16,8 +16,11 @@
     - [HTML Generator (TODO: Radu)](#html-generator-todo-radu)
     - [Architecture (separation of concerns \& modularization)](#architecture-separation-of-concerns--modularization)
     - [Putting all together (writing models in Java for Hibernate \& Apache Derby)](#putting-all-together-writing-models-in-java-for-hibernate--apache-derby)
+    - [Presentation of GUI (technical)](#presentation-of-gui-technical)
+    - [HTML table generator (technical)](#html-table-generator-technical)
+    - [CI/CD](#cicd)
   - [Unit Testing - design \& implementation (Phase 2: libraries \& validators)](#unit-testing---design--implementation-phase-2-libraries--validators)
-    - [Frameworks (Mokito)](#frameworks-mokito)
+    - [Frameworks (Mokito \& JaCoCo)](#frameworks-mokito--jacoco)
     - [Hibernate Validartors (along with Jakarta)](#hibernate-validartors-along-with-jakarta)
   - [Use of Assertions (Phase 3: doing things a bit different)](#use-of-assertions-phase-3-doing-things-a-bit-different)
     - [Putting everything together (Validators \& pre/post conditions along with class/loop invariants)](#putting-everything-together-validators--prepost-conditions-along-with-classloop-invariants)
@@ -211,13 +214,32 @@ Writing classes for Hibernate and Apache Derby using Java is relatively straight
     
 TODO: Roberta & Radu
 
-Presentation of GUI (technical) & HTML table generator (technical)
+### Presentation of GUI (technical)
+### HTML table generator (technical)
+
+### CI/CD
+
+We used GitHub CI/CD (Continuous Integration/Continuous Deployment) workflows and this helped us in the following ways:
+
+1. Automation and Efficiency: GitHub CI/CD workflows automate the build, test, and deployment processes, reducing manual effort and increasing overall efficiency. With CI/CD, you can set up automated workflows that automatically trigger when changes are pushed to the repository. This ensures that builds are consistently performed, tests are executed, and deployments are initiated without requiring manual intervention.
+
+2. Code Quality and Reliability: CI/CD workflows integrate various stages of the development process, including building, testing, and static code analysis. By incorporating these stages into the CI/CD pipeline, you can enforce code quality standards, identify potential issues, and catch bugs early in the development cycle. This helps maintain the reliability and stability of the faculty timetable management application.
+
+3. Continuous Testing: CI/CD workflows facilitate continuous testing by automatically triggering test suites whenever changes are made to the codebase. This ensures that tests are executed regularly, helping detect regressions, integration issues, and other potential problems as soon as they arise. Continuous testing helps maintain the correctness of the application and enables faster feedback loops for developers.
+
+4. Collaboration and Version Control: GitHub provides a collaborative platform that enables multiple team members to work on the same codebase and manage version control effectively. By utilizing CI/CD workflows within GitHub, you can ensure that every change to the repository is properly built, tested, and integrated. This reduces conflicts, improves collaboration, and helps maintain a clean and stable codebase.
+
+5. Deployment Automation: CI/CD workflows can automate the deployment process, allowing for quick and reliable deployments of the faculty timetable management application. By defining deployment stages and incorporating deployment scripts or configuration files into the workflow, you can ensure that the application is deployed consistently across different environments. This streamlines the release process and minimizes the risk of deployment errors.
+
+6. Visibility and Traceability: GitHub CI/CD workflows provide clear visibility into the status and progress of the build, test, and deployment processes. You can view detailed logs, artifacts, and reports generated during each workflow run. This visibility helps track the history of changes, diagnose issues, and trace back to specific commits or changesets, facilitating troubleshooting and debugging.
+
+7. Integration with Other Tools and Services: GitHub CI/CD workflows can be integrated with various tools and services, such as code coverage tools, static code analysis tools, and deployment services. This allows you to incorporate additional checks, generate reports, and deploy the application to different environments seamlessly.
 
 ## Unit Testing - design & implementation (Phase 2: libraries & validators)
 
-### Frameworks (Mokito)
+### Frameworks (Mokito & JaCoCo)
 
-Mockito is a popular and widely used testing library in the Java ecosystem making it a suitable choice because of the following:
+**Mockito** is a popular and widely used testing library in the Java ecosystem making it a suitable choice because of the following:
 
 1. Simplicity and Ease of Use: Mockito provides a simple and intuitive API that makes it easy to create mock objects and define their behavior. It has a clear and concise syntax, allowing developers to write readable and maintainable test code. Mockito's focus on simplicity makes it accessible to both experienced and novice developers.
 
@@ -230,6 +252,22 @@ Mockito is a popular and widely used testing library in the Java ecosystem makin
 5. Active Community and Continuous Development: Mockito has a large and active community of developers, which means you can find ample resources, documentation, and support online. The library is actively maintained and regularly updated, ensuring compatibility with the latest Java versions and continuous improvements in functionality and performance.
 
 6. Test Code Readability: Mockito promotes writing readable and expressive test code. It follows a behavior-driven development (BDD) style, encouraging developers to write tests that clearly describe the behavior being tested. Mockito's syntax, along with its Mockito annotations and matchers, helps in creating more readable and self-explanatory test cases.
+
+**JaCoCo** (Java Code Coverage) is a popular code coverage tool for Java applications. We chose it for the following reasons:
+
+1. Test Coverage Analysis: JaCoCo allows you to analyze the extent to which your tests exercise the codebase. It provides detailed insights into which parts of your code are covered by your tests and which parts are not. By using JaCoCo, you can identify areas of the code that lack test coverage, enabling you to improve your testing strategy and ensure that critical components of the application, such as the timetable management functionality, are thoroughly tested.
+
+2. Quality Assurance: Code coverage is a metric commonly used in software quality assurance to assess the reliability and completeness of testing efforts. By using JaCoCo, you can measure the code coverage percentage, which indicates the proportion of code that is executed during your tests. Higher code coverage generally suggests better test coverage and reduces the likelihood of undiscovered bugs or untested scenarios. It helps you gauge the overall quality of your testing process and identify areas where additional test cases may be needed.
+
+3. Identification of Dead or Unreachable Code: JaCoCo can help identify dead or unreachable code segments within your application. Dead code refers to code that is not executed during normal program flow, either due to conditional statements, redundant logic, or unused methods or classes. Identifying and removing dead code can improve code maintainability, performance, and overall codebase cleanliness.
+
+4. Integration with Build Tools and CI/CD Pipelines: JaCoCo seamlessly integrates with popular build tools such as Maven and Gradle, making it easy to incorporate code coverage analysis as part of your build process. This allows you to automatically generate code coverage reports and track code coverage trends over time. By integrating JaCoCo with your Continuous Integration and Continuous Deployment (CI/CD) pipelines, you can ensure that code coverage metrics are monitored and enforced as part of your development workflow.
+
+5. Code Optimization and Refactoring: JaCoCo's coverage reports provide valuable insights into code execution paths and hotspots. By analyzing the coverage data, you can identify sections of code that are executed frequently or are performance bottlenecks. This information can guide optimization efforts and help prioritize code refactoring tasks to improve the overall performance and maintainability of the faculty timetable management application.
+
+6. Compliance and Audit Requirements: In some cases, projects may have compliance or audit requirements that mandate certain levels of code coverage. By utilizing JaCoCo, you can generate code coverage reports that demonstrate compliance with these requirements, providing evidence of the thoroughness of your testing efforts.
+
+Overall, JaCoCo offers a comprehensive set of tools and reports for measuring and improving code coverage in Java applications. By using JaCoCo in the project, you can enhance the reliability, quality, and maintainability of the faculty timetable management application through more thorough testing and code optimization.
 
 ### Hibernate Validartors (along with Jakarta)
 
