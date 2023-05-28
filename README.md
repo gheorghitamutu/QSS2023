@@ -11,14 +11,14 @@
     - [Programming language (Java)](#programming-language-java)
     - [Database interaction (the choice of an ORM)](#database-interaction-the-choice-of-an-orm)
     - [Database type (Apache Derby - embedded SQL)](#database-type-apache-derby---embedded-sql)
-    - [Java Classes](#java-classes)
+    - [Java Classes (diagram of all classes)](#java-classes-diagram-of-all-classes)
     - [GUI Framework (Swing)](#gui-framework-swing)
-    - [HTML Generator](#html-generator)
+    - [HTML Generator (Templates \& Vanilla)](#html-generator-templates--vanilla)
     - [Architecture (separation of concerns \& modularization)](#architecture-separation-of-concerns--modularization)
     - [Putting all together (writing models in Java for Hibernate \& Apache Derby)](#putting-all-together-writing-models-in-java-for-hibernate--apache-derby)
     - [Presentation of GUI (technical)](#presentation-of-gui-technical)
     - [HTML table generator (technical)](#html-table-generator-technical)
-    - [CI/CD](#cicd)
+    - [CI/CD (Github Workflows)](#cicd-github-workflows)
   - [Unit Testing - design \& implementation (Phase 2: libraries \& validators)](#unit-testing---design--implementation-phase-2-libraries--validators)
     - [Frameworks (Mokito \& JaCoCo)](#frameworks-mokito--jacoco)
     - [Hibernate Validartors (along with Jakarta)](#hibernate-validartors-along-with-jakarta)
@@ -162,12 +162,11 @@ We have chosen Apache Derby as the database system to be used in conjunction wit
 
 6. Seamless Integration with Hibernate: Apache Derby has excellent compatibility with Hibernate. Hibernate provides a comprehensive set of features for mapping Java objects to Apache Derby tables, generating SQL queries, and managing transactions. By combining Apache Derby with Hibernate, developers can leverage the power of Hibernate's ORM capabilities and take advantage of its robust features, such as object-relational mapping, caching, and query optimization.
 
-### Java Classes
+### Java Classes (diagram of all classes)
 
 ![Classes Diagram](Project/docs/ClassesDiagram.png)
 
 ### GUI Framework (Swing)
-
 
 We found that Swing, a GUI (Graphical User Interface) framework for Java, as suitable choice for our type of project because of the following:
 
@@ -187,7 +186,7 @@ We found that Swing, a GUI (Graphical User Interface) framework for Java, as sui
 
 While there are alternative frameworks available for building GUI applications in Java, Swing's rich feature set, cross-platform compatibility, extensive documentation, and integration capabilities make it a compelling choice that fits our needs.
 
-### HTML Generator
+### HTML Generator (Templates & Vanilla)
 
 We didn't use any library for HTML table generation. We created a series of templates and replaced the placeholders with data taken from our database. The table resembles the ones that are used by the faculty.
 
@@ -236,7 +235,7 @@ TODO: Roberta & Radu
 ### Presentation of GUI (technical)
 ### HTML table generator (technical)
 
-### CI/CD
+### CI/CD (Github Workflows)
 
 We used GitHub CI/CD (Continuous Integration/Continuous Deployment) workflows and this helped us in the following ways:
 
