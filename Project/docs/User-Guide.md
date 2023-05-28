@@ -165,5 +165,9 @@ This user guide manual has provided an overview of the application, including st
 
 
 #### Contributions:
-Nechita Roberta - Use Case Diagram and UseCase Documentation, FrontEnd part, Functional testing on frontend part (adding both pre- and post-conditions), Backend integration on frontend,
-Document the personal implementation with java doc comment in order to generate the tech report, User-Guide Manual.
+Nechita Roberta - Use Case Diagram and UseCase Documentation; FrontEnd part; Functional testing on frontend part (adding both pre- and post-conditions); Backend integration on frontend;
+Document the personal implementation with java doc comment in order to generate the tech report; User-Guide Manual.
+
+Rosu Radu-Andrei - Use Case Diagram and UseCase Documentation; Timetable HTML Generation part; Backend integration on generator; Generator integration to frontend; 
+Unit Tests for multiple services (Disciplines, Rooms, Sessions, StudentGroups, Teachers); Preconditions, Postconditions and Invariants for all HTML Generator classes and methods; 
+Document the personal implementation with javadoc comments; User-Guide Manual.
