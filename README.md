@@ -23,8 +23,8 @@
     - [Hibernate Validators (along with Jakarta)](#hibernate-validators-along-with-jakarta)
   - [Use of Assertions (Phase 3: doing things a bit different)](#use-of-assertions-phase-3-doing-things-a-bit-different)
     - [Putting everything together (Validators \& pre/post conditions along with class/loop invariants)](#putting-everything-together-validators--prepost-conditions-along-with-classloop-invariants)
-  - [Documentation (technical \& customer side) \& Specific Contribution (Phase 4)](#documentation-technical--customer-side--specific-contribution-phase-4)
-    - [Technical documentation can be found here: TODO!](#technical-documentation-can-be-found-here-todo)
+  - [Documentation \& Contribution (Phase 4)](#documentation--contribution-phase-4)
+    - [Technical (developer point of view) documentation](#technical-developer-point-of-view-documentation)
     - [User Guide](#user-guide)
     - [Contribution](#contribution)
 
@@ -340,13 +340,15 @@ However, you can leverage custom validation annotations and validators to implem
 
 * Design by contract is a broader concept than data validation, and it encompasses more aspects of software development, including specification, testing, and documentation. While Jakarta Bean Validation can assist with data validation, a comprehensive implementation of design by contract may require additional approaches and tools beyond the scope of Jakarta Bean Validation.
 
-## Documentation (technical & customer side) & Specific Contribution (Phase 4)
+## Documentation & Contribution (Phase 4)
 
-### Technical documentation can be found here: TODO!
+### Technical (developer point of view) documentation 
+
+As described above, it can be found [here](./Project/docs/site/apidocs/).
 
 ### User Guide
 
-The entire user guid can be found [here](./Project/docs/User-Guide.md).
+The entire user guide can be found [here](./Project/docs/User-Guide.md).
 
 ### Contribution
 
