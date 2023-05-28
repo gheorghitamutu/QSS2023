@@ -11,6 +11,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+
+/**
+ * The TeachersGenerator class is responsible for generating teacher-related information and timetables.
+ * It extends the BaseGenerator class and implements the necessary logic to generate teachers-related data and templates.
+ * It generates teacher lists and their corresponding timetables based on the provided data,
+ * and updates the teachers data in the listsData map.
+ */
 public class TeachersGenerator extends BaseGenerator{
     @NotNull(message = "Teachers list must not be null")
     private final List<@Valid Teacher> teachers;
@@ -19,6 +26,14 @@ public class TeachersGenerator extends BaseGenerator{
     @NotNull(message = "Lists data map must not be null")
     private final Map<String, String> listsData;
 
+    /**
+     * Constructs a TeachersGenerator object with the specified generation date string, timetables days data, timetables names map, and lists data map.
+     *
+     * @param generationDateString The generation date string to be displayed on the page. Must not be blank.
+     * @param timetablesDays       The map containing the timetable data organized by table names and days. Must not be null.
+     * @param timetablesNames      The map containing the timetable title organized by table names. Must not be null.
+     * @param listsData            The map containing the generated data for various lists used on the page. Must not be null.
+     */
     public TeachersGenerator(
             @NotBlank(message = "Generation string must not be blank")
             String generationDateString,
@@ -35,6 +50,12 @@ public class TeachersGenerator extends BaseGenerator{
         this.listsData = listsData;
     }
 
+    /**
+     * Generates the teacher-related information and timetables.
+     * Overrides the abstract method 'generate' inherited from the BaseGenerator class.
+     * It populates the listsData map with the generated data.
+     * The generated data includes teacher names and their corresponding timetables.
+     */
     public void generate(){
         String teachersData = utils.getBaseTemplateData("teachers");
         teachersData = teachersData.replace("$generation_date", this.generationDateString);
