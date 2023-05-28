@@ -74,6 +74,28 @@ Upon clicking the "SUBMIT" button, the system will validate the entered data to 
 
 From the available list of rooms, select the room name that you wish to delete.
 Ensure that you have identified the correct room for deletion, as this action cannot be undone.Upon successful deletion, the selected room will be removed from the database, and its details will no longer be accessible in the system.
+### Discipline Management
+
+The Discipline Management section enables you to manage discipline information. You can add new disciplines, remove existing one, and add associate teachers to the existing ones. This section is particularly useful for maintaining a comprehensive record of disciplines and their corresponding teachers.
+![Teacher Section](./reportImages/disciplinePanel.png)
+#### Add Discipline Operation:
+1. Complete the corresponding information: discipline name, number of credits associated with disciplines.
+2. Click on "SUBMIT" button under the first bulk of fields.
+
+To add a discipline, the user enters the discipline's name and selects their credits.The system utilizes the provided data from the user interface and invokes the appropriate service responsible for handling discipline insertion. The service performs necessary validations to ensure the accuracy and completeness of the entered information.
+
+#### Add Teacher To Discipline Operation:
+1. The user selects the corresponding discipline name for which wants to add a teacher.
+2. The user selects the corresponding teacher name for which wants to add a discipline.
+3. Click on "SUBMIT" button under the second bulk of fields.
+
+To add a teacher to a discipline, the user is presented with a list of existing disciplines and a list of existing teachers in the user interface. The lists typically displays the names of the disciplines and teachers.
+
+#### Delete Discipline Operation:
+1. The user selects the corresponding discipline name for which wants to perform the deletion.
+2. Click on "SUBMIT" button under the third bulk of fields.
+
+To delete a discipline, the user is presented with a list of existing disciplines in the user interface. They can navigate through the list and select the specific discipline they wish to delete. The list typically displays the names of the disciplines, providing an intuitive way for users to identify the discipline they want to remove.
 ### Session Details
 
 The Session Details section allows you to define and manage various sessions within the Timetable Generator. You can create sessions for different subjects, assign teachers to sessions, assing a group to  session. This feature helps in organizing and structuring the overall timetable.
@@ -120,8 +142,21 @@ Upon submission, the backend of the application processes the data provided and 
 2. Click on "SUBMIT" button under the second bulk of fields.
 
 Browse through the list of displayed timeslots and choose the one you want to delete. Each timeslot is represented by its date, duration, assigned room, and corresponding discipline.After clicking "SUBMIT," the application's backend processes your request. It identifies the selected timeslot based on the provided information and performs the necessary actions to remove it from the timetable. This involves updating the underlying database and making sure that the deleted timeslot no longer appears in the system.
+
 ### Timetable HTML Generation
-TO DO
+The Timetable Generation feature allows you to generate timetables based on the defined students, teachers, disciplines, sessions, timeslots, and rooms availability. By specifying filters and preferences, you can generate timetables that meet specific requirements. The generated timetables can be exported in HTML format for easy sharing and printing.
+
+#### Generating Timetables:
+The process of generating timetables in the application involves the utilization of user-defined data and a comprehensive validation system to ensure the accuracy and feasibility of associations between entities. It is about the following steps:
+1. Input Data: You provide all the necessary information, such as student groups, teachers, classrooms, disciplines, and also all the associations between these entities. This data serves as the foundation for the timetables.
+2. Data Validation and Processing: The application performs thorough validation checks on the manually entered data to ensure the correctness of associations between entities. It verifies that the specified associations, such as assigning teachers to sessions or allocating classrooms to specific time slots, are valid and feasible. If any invalid associations are detected, the application provides warning messages, preventing them from being stored in the database. This validation step guarantees that only accurate and appropriate data is used for generating the timetables.
+3. Individual Timetables: The generator creates separate timetables for each entity in the database. For example, it generates specific timetables for student groups, teachers, and classrooms. These individual timetables reflect the schedule for each entity, taking into account their availability and assigned sessions.
+4. Complete Timetable: In addition to individual timetables, the generator also generates a complete timetable. This comprehensive timetable combines all the sessions and resources, providing a holistic view of the schedule across different entities.
+5. Room Availability: The application includes a dedicated page that displays the schedule of all the rooms according to days and time slots. This page shows which time slots are occupied and which ones are available, allowing you to easily identify free time slots for scheduling new sessions.
+6. Instant Saving: The generated timetables are instantly saved in HTML format. You can access and share these timetables with others, or print them for reference. The saved timetables reflect the finalized schedule based on the input data and the generator's processing.
+
+#### Customization and HTML Templates
+Although there is no direct editing functionality for visual appearance, the application uses HTML templates to define the layout, styling, and content of the timetables. This allows you to modify the templates to suit your preferences and adapt the visual presentation of the timetables.
 
 ## Conclusion
 
