@@ -21,6 +21,16 @@ public class DisciplineSettings implements BaseSettings {
     public DisciplineSettings(){
 
     }
+    /**
+     * Creates a JPanel that combines a label and a component for a discipline field.
+     *
+     * @param label     The JLabel representing the discipline label.
+     *                  Cannot be null.
+     * @param component The JComponent representing the discipline component.
+     *                  Must not be empty.
+     * @return The JPanel containing the label and component.
+     */
+
     private JPanel createFieldPanel(
             @NotNull(message = "Discipline label should not be null")
             JLabel label,
@@ -35,6 +45,15 @@ public class DisciplineSettings implements BaseSettings {
         panel.setMaximumSize(new Dimension(Short.MAX_VALUE, component.getPreferredSize().height));
         return panel;
     }
+    /**
+     * Adds a teacher to a discipline form.
+     *
+     * @param currentPanel The JPanel representing the current panel where the form will be added.
+     *                     Must not be empty.
+     * This method adds a teacher to a discipline form by creating and configuring the necessary UI components such as
+     *                     labels, dropdown menus, and a submit button, and adds them to the provided JPanel.
+     * Error handling is implemented to display an error message if any exceptions occur during the process.
+     */
     private void addTeacherToDisciplineForm(
             @NotEmpty(message = "Teacher to discipline label form must not be empty")
             JPanel currentPanel){
@@ -106,7 +125,16 @@ public class DisciplineSettings implements BaseSettings {
         teacherButtonPanel.add(teacherBtn);
         currentPanel.add(teacherButtonPanel);
     }
-
+    /**
+     * Creates a form for deleting a discipline from the database on GUI side.
+     *
+     * @param currentPanel The JPanel representing the current panel where the form will be added.
+     *                     Must not be empty.
+     * @return The JPanel with the delete discipline form.
+     * Create a dropdown menu (JComboBox) to select the discipline name
+     * Create a field panel that combines the discipline name label and the dropdown menu.
+     * Call the relevant service method to delete the discipline.
+     */
     public JPanel deleteDisciplineForm(
             @NotEmpty(message = "Delete discipline panel should not be empty")
             JPanel currentPanel){
@@ -167,7 +195,16 @@ public class DisciplineSettings implements BaseSettings {
 
         return currentPanel;
     }
-
+    /**
+     * Creates a form for adding a discipline.
+     *
+     * @param currentPanel The JPanel representing the current panel where the form will be added.
+     *                     Must not be empty.
+     * @return The JPanel with the add discipline form.
+     * Get the discipline name and credits value from a ComboBox Selector.
+     * Call the relevant service method to add the discipline.
+     * Display an error message if the addition fails
+     */
     public JPanel addDisciplineForm(
             @NotEmpty(message = "Add Disicipline panel must not be empty.")
             JPanel currentPanel){
@@ -238,6 +275,13 @@ public class DisciplineSettings implements BaseSettings {
 
         return currentPanel;
     }
+    /**
+     * Creates a JPanel with left and right panels merged into the main panel.
+     *
+     * @param main      The JPanel representing the main panel. Must not be empty.
+     * @param labelText The text for the label. Must not be blank.
+     * @return The JPanel with the left and right panels merged into the main panel.
+     */
     @Override
     public JPanel createJPanel(
             @NotEmpty(message = "Main panel should not be empty")
@@ -257,7 +301,11 @@ public class DisciplineSettings implements BaseSettings {
 
         return main;
     }
-
+    /**
+     * Creates a left JPanel containing the addDisciplineForm and deleteDisciplineForm.
+     *
+     * @return The left JPanel containing the addDisciplineForm and deleteDisciplineForm.
+     */
     @Override
     public JPanel createLeftJPanel() {
         JPanel currentPanel = new JPanel();
@@ -269,6 +317,11 @@ public class DisciplineSettings implements BaseSettings {
         return currentPanel;
     }
 
+    /**
+     * Creates a right JPanel with an image displayed at the center.
+     *
+     * @return The right JPanel with the image displayed at the center.
+     */
     @Override
     public JPanel createRightJPanel() {
         JPanel currentPanel = new JPanel();

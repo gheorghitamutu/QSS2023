@@ -13,7 +13,11 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Objects;
-
+/**
+ * Provides settings and functionality for managing teachers.
+ * This class implements the {@link BaseSettings} interface.
+ * It allows adding and deleting teachers through user interfaces.
+ */
 public class TeacherSettings implements BaseSettings {
     public TeacherSettings(){
 
@@ -31,6 +35,14 @@ public class TeacherSettings implements BaseSettings {
         panel.setMaximumSize(new Dimension(Short.MAX_VALUE, component.getPreferredSize().height));
         return panel;
     }
+    /**
+     * Displays a form for deleting a teacher.
+     *
+     * @param currentPanel The JPanel on which the form will be displayed. Must not be empty.
+     * @return The modified currentPanel with the teacher deletion form added.
+     * @throws RuntimeException if an exception occurs during the teacher deletion process.
+     * Call the teachersService component in order to perform the operation on database side.
+     */
     public JPanel deleteTeacherForm(@NotEmpty(message = "Current panel must not be empty.") JPanel currentPanel){
 
         currentPanel.setBackground(Color.decode("#F6FFDE"));
@@ -88,7 +100,13 @@ public class TeacherSettings implements BaseSettings {
 
         return currentPanel;
     }
-
+    /**
+     * Displays a form for adding a new teacher.
+     *
+     * @param currentPanel The JPanel on which the form will be displayed. Must not be empty.
+     * @return The modified currentPanel with the teacher form added.
+     * @throws RuntimeException if an exception occurs during the teacher addition process.
+     */
     public JPanel addTeacherForm(@NotEmpty(message = "Current panel must not be empty.") JPanel currentPanel){
         currentPanel.setBackground(Color.decode("#F6FFDE"));
 
@@ -150,6 +168,13 @@ public class TeacherSettings implements BaseSettings {
 
         return currentPanel;
     }
+    /**
+     * Creates a JPanel with left and right panels merged into the main panel.
+     *
+     * @param main      The JPanel representing the main panel. Must not be empty.
+     * @param labelText The text for the label. Must not be blank.
+     * @return The JPanel with the left and right panels merged into the main panel.
+     */
     @Override
     public JPanel createJPanel(@NotEmpty(message = "Main panel should not be empty.")
                                    JPanel main,
@@ -168,7 +193,11 @@ public class TeacherSettings implements BaseSettings {
 
         return main;
     }
-
+    /**
+     * Creates a left JPanel containing the addTeacherForm and deleteTeacherForm.
+     *
+     * @return The left JPanel containing the addTeacherForm and deleteTeacherForm.
+     */
     @Override
     public JPanel createLeftJPanel() {
         JPanel currentPanel = new JPanel();
@@ -179,7 +208,11 @@ public class TeacherSettings implements BaseSettings {
         // Set the frame size and center it on the screen
         return currentPanel;
     }
-
+    /**
+     * Creates a right JPanel with an image displayed at the center.
+     *
+     * @return The right JPanel with the image displayed at the center.
+     */
     @Override
     public JPanel createRightJPanel() {
         JPanel currentPanel = new JPanel();

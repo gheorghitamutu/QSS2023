@@ -18,12 +18,21 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Objects;
-
+/**
+ * SessionSettings provides methods to get and set the values of these settings,
+ *  allowing for easy manipulation and management of session configurations.
+ *  */
 public class SessionSettings implements BaseSettings{
     public SessionSettings(){
 
     }
-
+    /**
+     * Generates a form for adding a group to a session and adds it to the specified panel.
+     *
+     * @param currentPanel the panel in which the form components will be displayed
+     * Configure all the labels and combo selectors in order to get all the information needed
+     * on addGroupToSession service side
+     */
     private void addGroupToSessionForm(
             @NotEmpty(message = "Group to Session label should not be empty.")
             JPanel currentPanel){
@@ -109,7 +118,13 @@ public class SessionSettings implements BaseSettings{
         panel.setMaximumSize(new Dimension(Short.MAX_VALUE, component.getPreferredSize().height));
         return panel;
     }
-
+    /**
+     * Generates a panel containing a form for deleting a session.
+     *
+     * @param currentPanel the panel in which the form components will be displayed
+     * @return the panel with the form for deleting a session
+     * Call the deleteSession service in order to delete the session with a specific name from the database.
+     */
     public JPanel deleteRoomForm(
             @NotEmpty(message = "Current panel should not be empty.")
             JPanel currentPanel){
@@ -167,7 +182,15 @@ public class SessionSettings implements BaseSettings{
 
         return currentPanel;
     }
-
+    /**
+     * Constructs a panel that contains a form for creating a new session.
+     *
+     * @param currentPanel the panel to which the form components will be added
+     * @return the panel with the session creation form
+     * Create and configure labels and combo selectors for the session creation section.
+     * Add the submit button for adding a teacher to a session
+     * Insert a session into database given the informations from the GUI side.
+     */
     public JPanel addSessionForm(
             @NotEmpty(message = "Current panel should not be empty.")
             JPanel currentPanel){
@@ -315,6 +338,13 @@ public class SessionSettings implements BaseSettings{
 
         return currentPanel;
     }
+    /**
+     * Creates a JPanel with left and right panels merged into the main panel.
+     *
+     * @param main      The JPanel representing the main panel. Must not be empty.
+     * @param labelText The text for the label. Must not be blank.
+     * @return The JPanel with the left and right panels merged into the main panel.
+     */
     @Override
     public JPanel createJPanel(
             @NotEmpty(message = "Main panel should not be empty.")
@@ -334,7 +364,11 @@ public class SessionSettings implements BaseSettings{
 
         return main;
     }
-
+    /**
+     * Creates a right JPanel with an image displayed at the center.
+     *
+     * @return The right JPanel with the image displayed at the center.
+     */
     @Override
     public JPanel createLeftJPanel() {
         JPanel currentPanel = new JPanel();
