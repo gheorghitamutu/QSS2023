@@ -11,7 +11,14 @@ import jakarta.persistence.Persistence;
  */
 public class TestsDatabaseHibernateProvider implements IHibernateProvider {
 
+    /**
+     * This is the entity manager factory.
+     */
     public static EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("persistence-unit-test");
+
+    /**
+     * This is the entity manager.
+     */
     public EntityManager entityManager = entityManagerFactory.createEntityManager();
 
     /**

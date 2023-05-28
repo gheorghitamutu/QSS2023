@@ -11,7 +11,14 @@ import jakarta.persistence.Persistence;
  */
 public class MainDatabaseHibernateProvider implements IHibernateProvider {
 
+    /**
+     * This is the entity manager factory.
+     */
     public static EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("persistence-unit");
+
+    /**
+     * This is the entity manager.
+     */
     public EntityManager entityManager = entityManagerFactory.createEntityManager();
 
     /**
@@ -19,7 +26,6 @@ public class MainDatabaseHibernateProvider implements IHibernateProvider {
      *
      * @return The current EntityManager instance.
      */
-
     @Override
     public EntityManager getEntityManager() {
 

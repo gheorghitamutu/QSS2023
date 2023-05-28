@@ -9,5 +9,10 @@ import jakarta.persistence.EntityManager;
  * on a specific database.
  */
 public interface IHibernateProvider {
+
+    /**
+     * Returns the EntityManager instance that is used for database operations on a specific database.
+     * @return The EntityManager instance that is used for database operations on a specific database.
+     */
     EntityManager getEntityManager();
 }

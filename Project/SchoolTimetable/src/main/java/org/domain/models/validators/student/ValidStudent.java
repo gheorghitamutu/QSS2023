@@ -10,14 +10,30 @@ import java.lang.annotation.Target;
 import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
+/**
+ * This is the interface for StudentValidator annotation.
+ */
 @Constraint(validatedBy = {StudentValidator.class})
 @Documented
 @Target(TYPE)
 @Retention(RUNTIME)
 public @interface ValidStudent {
+
+    /**
+     * This method returns the message.
+     * @return The message.
+     */
     String message() default "This student does not meet our requirements!";
 
+    /**
+     * This method returns the groups.
+     * @return The groups.
+     */
     Class<?>[] groups() default {};
 
+    /**
+     * This method returns the payload.
+     * @return The payload.
+     */
     Class<? extends Payload>[] payload() default {};
 }

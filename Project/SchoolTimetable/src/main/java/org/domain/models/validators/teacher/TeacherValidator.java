@@ -15,21 +15,41 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * This class is the validator for the ValidTeacher annotation.
+ */
 public class TeacherValidator implements ConstraintValidator<ValidTeacher, Teacher> {
 
+    /**
+     * The session repository.
+     */
     ISessionRepository sessionRepository;
+
+    /**
+     * The discipline repository.
+     */
     IDisciplineRepository disciplineRepository;
 
+    /**
+     * This method initializes the session repository and the discipline repository.
+     * @param constraintAnnotation The annotation.
+     */
     @Override
     public void initialize(ValidTeacher constraintAnnotation) {
 
         Injector injector = GuiceInjectorSingleton.INSTANCE.getInjector();
-        if(null != injector) {
+        if (null != injector) {
             sessionRepository = injector.getInstance(ISessionRepository.class);
             disciplineRepository = injector.getInstance(IDisciplineRepository.class);
         }
     }
 
+    /**
+     * This method checks if the teacher is valid.
+     * @param value The teacher.
+     * @param context The context.
+     * @return True if the teacher is valid, false otherwise.
+     */
     @Override
     public boolean isValid(Teacher value, ConstraintValidatorContext context) {
 

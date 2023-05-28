@@ -39,8 +39,20 @@ import org.dataaccess.timeslot.TimeslotRepository;
 import org.domain.exceptions.RepositoryOperationException;
 import org.domain.exceptions.validations.ValidationException;
 
+/**
+ * This class is the entry point of the application.
+ * It is responsible for setting up the dependency injection container and running the application.
+ */
 public class Main {
 
+    /**
+     * This method is the entry point of the application.
+     * It is responsible for setting up the dependency injection container and running the application.
+     *
+     * @param args The command line arguments.
+     * @throws RepositoryOperationException If the repository operation fails.
+     * @throws ValidationException If the validation fails.
+     */
     public static void main(String[] args) throws RepositoryOperationException, ValidationException {
 
         var appInjector = setupDependenciesInjector(false);
@@ -50,6 +62,13 @@ public class Main {
         app.run();
     }
 
+    /**
+     * This method is the entry point of the application.
+     * It is responsible for setting up the dependency injection container and running the application.
+     *
+     * @param testMode Whether the application is running in test mode.
+     * @return The Guice injector.
+     */
     public static Injector setupDependenciesInjector(boolean testMode) {
 
         return Guice.createInjector(new MessageModule(), new AbstractModule() {
@@ -81,12 +100,23 @@ public class Main {
         });
     }
 
+    /**
+     * This class represents a Guice module that provides a message.
+     */
     public static class MessageModule extends AbstractModule {
+
+        /**
+         * This method provides a message.
+         * @return The message.
+         */
         @Provides
         String provideMessage() {
             return "Hello, Guice!";
         }
 
+        /**
+         * This method configures the module.
+         */
         @Override
         protected void configure() {
         }

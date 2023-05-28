@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MainGenerator.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">SchoolTimetable</a> &gt; <a href="index.source.html" class="el_package">org.presentation</a> &gt; <span class="el_source">MainGenerator.java</span></div><h1>MainGenerator.java</h1><pre class="source lang-java linenums">package org.presentation;
+
+import org.presentation.generators.*;
+import org.domain.models.Room;
+import org.domain.models.Timeslot;
+import org.presentation.generators.*;
+
+import java.text.SimpleDateFormat;
+import java.util.*;
+
+public class MainGenerator {
+    private final int version;
+    private final String generationDateString;
+
+    private final TemplateUtils utils;
+    private final String separator;
+    private final Map&lt;String, String&gt; listsData;
+    private final Map&lt;String, String&gt; timetablesData;
+    private final Map&lt;String, Map&lt;Timeslot.Day, StringBuilder&gt;&gt; timetablesDays;
+    private final Map&lt;String, String&gt; timetablesNames;
+    private final Map&lt;Room, Map&lt;Integer, Map&lt;Timeslot.Day, Boolean&gt;&gt;&gt; freeRooms;
+
+    private boolean listsGenerated;
+    private boolean timetablesGenerated;
+
+<span class="fc" id="L26">    public MainGenerator(int version) {</span>
+<span class="fc" id="L27">        this.version = version;</span>
+
+<span class="fc" id="L29">        Date generationDate = new Date();</span>
+<span class="fc" id="L30">        SimpleDateFormat formatter = new SimpleDateFormat(&quot;dd.MM.yyyy, HH:mm&quot;);</span>
+<span class="fc" id="L31">        this.generationDateString = formatter.format(generationDate);</span>
+
+<span class="fc" id="L33">        this.utils = new TemplateUtils();</span>
+
+<span class="fc" id="L35">        this.listsData = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L36">        this.timetablesData = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L37">        this.timetablesDays = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L38">        this.timetablesNames = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L39">        this.freeRooms = new HashMap&lt;&gt;();</span>
+
+<span class="fc" id="L41">        this.listsGenerated = false;</span>
+<span class="fc" id="L42">        this.timetablesGenerated = false;</span>
+<span class="fc" id="L43">        this.separator = System.getProperty(&quot;file.separator&quot;);</span>
+<span class="fc" id="L44">    }</span>
+
+    public void generateLists(){
+<span class="fc" id="L47">        List&lt;BaseGenerator&gt; generators = new ArrayList&lt;&gt;();</span>
+
+<span class="fc" id="L49">        generators.add(new HomeGenerator(generationDateString, timetablesDays, version, listsData));</span>
+<span class="fc" id="L50">        generators.add(new DisciplinesGenerator(generationDateString, timetablesDays, timetablesNames, listsData));</span>
+<span class="fc" id="L51">        generators.add(new RoomsGenerator(generationDateString, timetablesDays, timetablesNames, listsData));</span>
+<span class="fc" id="L52">        generators.add(new StudentsGenerator(generationDateString, timetablesDays, timetablesNames, listsData));</span>
+<span class="fc" id="L53">        generators.add(new TeachersGenerator(generationDateString, timetablesDays, timetablesNames, listsData));</span>
+
+<span class="fc bfc" id="L55" title="All 2 branches covered.">        for (BaseGenerator generator : generators){</span>
+<span class="fc" id="L56">            generator.generate();</span>
+<span class="fc" id="L57">        }</span>
+
+<span class="fc" id="L59">        this.listsGenerated = true;</span>
+<span class="fc" id="L60">    }</span>
+
+    public void generateTimetables(){
+<span class="fc" id="L63">        BaseGenerator timetablesGenerator = new TimetablesGenerator(generationDateString, timetablesDays, timetablesNames, timetablesData, freeRooms);</span>
+<span class="fc" id="L64">        timetablesGenerator.generate();</span>
+
+<span class="fc" id="L66">        BaseGenerator freeRoomsGenerator = new FreeRoomsGenerator(generationDateString, timetablesDays, freeRooms, listsData);</span>
+<span class="fc" id="L67">        freeRoomsGenerator.generate();</span>
+
+<span class="fc" id="L69">        this.timetablesGenerated = true;</span>
+<span class="fc" id="L70">    }</span>
+
+    private void saveMap(Map&lt;String, String&gt; dataMap, String savePath){
+<span class="fc bfc" id="L73" title="All 2 branches covered.">        for (Map.Entry&lt;String, String&gt; mapEntry : dataMap.entrySet()){</span>
+<span class="fc" id="L74">            String name = mapEntry.getKey();</span>
+<span class="fc" id="L75">            String data = mapEntry.getValue();</span>
+<span class="fc" id="L76">            String newSavePath = savePath + this.separator + name + &quot;.html&quot;;</span>
+
+<span class="fc" id="L78">            this.utils.saveTemplateDataToFile(data, newSavePath);</span>
+<span class="fc" id="L79">        }</span>
+<span class="fc" id="L80">    }</span>
+
+    public void saveAllData(String savePath){
+<span class="pc bpc" id="L83" title="1 of 2 branches missed.">        if (this.listsGenerated){</span>
+<span class="fc" id="L84">            this.saveMap(listsData, savePath);</span>
+        }
+
+<span class="pc bpc" id="L87" title="1 of 2 branches missed.">        if (this.timetablesGenerated){</span>
+<span class="fc" id="L88">            this.saveMap(timetablesData, savePath);</span>
+        }
+
+<span class="fc" id="L91">        this.utils.copyStyle(savePath);</span>
+<span class="fc" id="L92">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TimeslotsService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">SchoolTimetable</a> &gt; <a href="index.source.html" class="el_package">org.application.application.timeslots</a> &gt; <span class="el_source">TimeslotsService.java</span></div><h1>TimeslotsService.java</h1><pre class="source lang-java linenums">package org.application.application.timeslots;
+
+import com.google.inject.Inject;
+import org.application.dataaccess.discipline.IDisciplineRepository;
+import org.application.dataaccess.room.IRoomRepository;
+import org.application.dataaccess.session.ISessionRepository;
+import org.application.dataaccess.timeslot.ITimeslotRepository;
+import org.application.domain.exceptions.RepositoryOperationException;
+import org.application.domain.exceptions.Timeslot.TimeslotAdditionException;
+import org.application.domain.exceptions.Timeslot.TimeslotDeletionFailed;
+import org.application.domain.exceptions.Timeslot.TimeslotNotFoundException;
+import org.application.domain.exceptions.discipline.DisciplineNotFoundException;
+import org.application.domain.exceptions.room.RoomNotFoundException;
+import org.application.domain.exceptions.session.SessionNotFoundException;
+import org.application.domain.models.Room;
+import org.application.domain.models.Session;
+import org.application.domain.models.Timeslot;
+
+import java.sql.Time;
+import java.text.MessageFormat;
+import java.time.Duration;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.List;
+import java.util.stream.Stream;
+
+public class TimeslotsService implements ITimeslotsService {
+
+    private final ITimeslotRepository timeslotRepository;
+    private final IRoomRepository roomRepository;
+    private final IDisciplineRepository disciplineRepository;
+
+    @Inject
+<span class="fc" id="L35">    public TimeslotsService(ITimeslotRepository timeslotRepository, IRoomRepository roomRepository, IDisciplineRepository disciplineRepository) {</span>
+<span class="fc" id="L36">        this.timeslotRepository = timeslotRepository;</span>
+<span class="fc" id="L37">        this.roomRepository = roomRepository;</span>
+<span class="fc" id="L38">        this.disciplineRepository = disciplineRepository;</span>
+<span class="fc" id="L39">    }</span>
+
+    @Override
+    public Timeslot addTimeslot(Date startDate, Date endDate, Date time, Duration duration, Timeslot.Day day, Timeslot.Periodicity periodicity, Room room, Session session) throws TimeslotAdditionException {
+        Timeslot timeslot;
+
+        try {
+<span class="fc" id="L46">            timeslot = timeslotRepository.createNewTimeslot(startDate, endDate, time, duration, day, periodicity, room, session);</span>
+<span class="nc" id="L47">        } catch (RepositoryOperationException e) {</span>
+<span class="nc" id="L48">            throw new RuntimeException(e);</span>
+<span class="fc" id="L49">        }</span>
+
+
+        try {
+<span class="fc" id="L53">            timeslotRepository.save(timeslot);</span>
+<span class="nc" id="L54">        } catch (Exception e) {</span>
+<span class="nc" id="L55">            throw new TimeslotAdditionException(&quot;[TimeslotService] Failed adding timeslot!&quot;, e);</span>
+<span class="fc" id="L56">        }</span>
+
+<span class="fc" id="L58">        return timeslot;</span>
+    }
+
+    @Override
+    public Timeslot addTimeslot(Date startDate, Date endDate, Date time, Duration duration, Timeslot.Day day, Timeslot.Periodicity periodicity, String roomName, String disciplineName) throws TimeslotAdditionException, SessionNotFoundException, DisciplineNotFoundException, RoomNotFoundException {
+<span class="nc" id="L63">        var rooms = roomRepository.readAll().stream().filter(room -&gt; room.getName().equals(roomName)).toList();</span>
+<span class="nc bnc" id="L64" title="All 2 branches missed.">        if (rooms.isEmpty()) {</span>
+<span class="nc" id="L65">            throw new RoomNotFoundException(MessageFormat.format(&quot;[TimeslotService] Room with name {0} not found.&quot;, roomName));</span>
+        }
+<span class="nc" id="L67">        var room = rooms.get(0);</span>
+
+<span class="nc" id="L69">        var disciplines = disciplineRepository.readAll().stream().filter(d -&gt; d.getName().equals(disciplineName)).toList();</span>
+<span class="nc bnc" id="L70" title="All 2 branches missed.">        if (disciplines.isEmpty()) {</span>
+<span class="nc" id="L71">            throw new DisciplineNotFoundException(&quot;[TimeslotService] Discipline not found!&quot;);</span>
+        }
+<span class="nc" id="L73">        var discipline = disciplines.get(0);</span>
+<span class="nc" id="L74">        var sessions = discipline.getSessions().stream().toList();</span>
+<span class="nc bnc" id="L75" title="All 2 branches missed.">        if (sessions.isEmpty()) {</span>
+<span class="nc" id="L76">            throw new SessionNotFoundException(&quot;[TimeslotService] Session not found!&quot;);</span>
+        }
+<span class="nc" id="L78">        var session = sessions.get(0);</span>
+
+<span class="nc" id="L80">        return addTimeslot(startDate, endDate, time, duration, day, periodicity, room, session);</span>
+    }
+
+    @Override
+    public boolean deleteTimeslot(int timeslotId) throws TimeslotNotFoundException, TimeslotDeletionFailed {
+<span class="nc" id="L85">        var timeslot = timeslotRepository.getById(timeslotId);</span>
+<span class="nc bnc" id="L86" title="All 2 branches missed.">        if (timeslot == null) {</span>
+<span class="nc" id="L87">            throw new TimeslotNotFoundException(MessageFormat.format(&quot;[TimeslotService] Timeslot with id {0} not found.&quot;, timeslotId));</span>
+        }
+
+        try {
+<span class="nc" id="L91">            timeslotRepository.delete(timeslot);</span>
+<span class="nc" id="L92">        } catch (Exception e) {</span>
+<span class="nc" id="L93">            throw new TimeslotDeletionFailed(&quot; [TimeslotService] Failed to delete timeslot.&quot;, e);</span>
+<span class="nc" id="L94">        }</span>
+
+<span class="nc" id="L96">        return true;</span>
+    }
+
+    @Override
+    public boolean deleteTimeslot(Date startDate, Date time, Duration duration, String roomName) throws TimeslotNotFoundException, TimeslotDeletionFailed, RoomNotFoundException {
+<span class="fc" id="L101">        var rooms = roomRepository.readAll().stream().filter(room -&gt; room.getName().equals(roomName)).toList();</span>
+<span class="pc bpc" id="L102" title="1 of 2 branches missed.">        if (rooms.isEmpty()) {</span>
+<span class="nc" id="L103">            throw new RoomNotFoundException(MessageFormat.format(&quot;[TimeslotService] Room with name {0} not found.&quot;, roomName));</span>
+        }
+<span class="fc" id="L105">        var room = rooms.get(0);</span>
+<span class="fc" id="L106">        var timeslots = timeslotRepository.readAll().stream()</span>
+<span class="fc" id="L107">                .filter(t -&gt; t.getRoom().equals(room))</span>
+<span class="fc" id="L108">                .filter(t -&gt; t.getStartDate().equals(startDate))</span>
+<span class="fc" id="L109">                .filter(t -&gt; t.getTime().equals(time))</span>
+<span class="fc" id="L110">                .filter(t -&gt; t.getTimespan().equals(duration)).toList();</span>
+<span class="pc bpc" id="L111" title="1 of 2 branches missed.">        if (timeslots.isEmpty()) {</span>
+<span class="nc" id="L112">            throw new TimeslotNotFoundException(MessageFormat.format(&quot;[TimeslotService] Timeslot with not found for room name {0}.&quot;, roomName));</span>
+        }
+
+<span class="fc" id="L115">        var timeslot = timeslots.get(0);</span>
+        try {
+<span class="fc" id="L117">            timeslotRepository.delete(timeslot);</span>
+<span class="nc" id="L118">        } catch (Exception e) {</span>
+<span class="nc" id="L119">            throw new TimeslotDeletionFailed(&quot; [TimeslotService] Failed to delete timeslot.&quot;, e);</span>
+<span class="fc" id="L120">        }</span>
+
+<span class="fc" id="L122">        return true;</span>
+    }
+
+    @Override
+    public boolean deleteAll() throws TimeslotDeletionFailed {
+        try {
+<span class="fc" id="L128">            timeslotRepository.deleteMany(timeslotRepository.readAll());</span>
+<span class="nc" id="L129">        } catch (Exception e) {</span>
+<span class="nc" id="L130">            throw new TimeslotDeletionFailed(&quot; [TimeslotService] Failed to delete timeslots.&quot;, e);</span>
+<span class="fc" id="L131">        }</span>
+
+<span class="fc" id="L133">        return true;</span>
+    }
+
+    @Override
+    public Timeslot getTimeslotById(int timeslotId) throws TimeslotNotFoundException {
+<span class="nc" id="L138">        var timeslot = timeslotRepository.getById(timeslotId);</span>
+<span class="nc bnc" id="L139" title="All 2 branches missed.">        if (timeslot == null) {</span>
+<span class="nc" id="L140">            throw new TimeslotNotFoundException(MessageFormat.format(&quot;[TimeslotService] Timeslot with id {0} not found.&quot;, timeslotId));</span>
+        }
+<span class="nc" id="L142">        return timeslot;</span>
+    }
+
+    @Override
+    public List&lt;Timeslot&gt; getTimeslots() {
+<span class="fc" id="L147">        return timeslotRepository.readAll();</span>
+    }
+
+    @Override
+    public List&lt;Timeslot&gt; getSortedTimeslotsByStartDateAndTime() {
+<span class="fc" id="L152">        return getTimeslots()</span>
+<span class="fc" id="L153">                .stream()</span>
+<span class="fc" id="L154">                .sorted(</span>
+                        Comparator
+<span class="fc" id="L156">                                .comparing(Timeslot::getStartDate)</span>
+<span class="fc" id="L157">                                .thenComparing(Timeslot::getTime))</span>
+<span class="fc" id="L158">                .toList();</span>
+    }
+
+    @Override
+    public List&lt;Timeslot&gt; getSortedTimeslotsByStartTime() {
+<span class="fc" id="L163">        return getTimeslots()</span>
+<span class="fc" id="L164">                .stream()</span>
+<span class="fc" id="L165">                .sorted(</span>
+                        Comparator
+<span class="fc" id="L167">                                .comparing(Timeslot::getTime))</span>
+<span class="fc" id="L168">                .toList();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

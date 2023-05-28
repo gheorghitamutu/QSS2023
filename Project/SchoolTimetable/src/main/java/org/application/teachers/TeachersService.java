@@ -13,15 +13,33 @@ import org.domain.models.Teacher;
 import java.text.MessageFormat;
 import java.util.List;
 
+/**
+ * This class is the implementation of the ITeachersService interface.
+ */
 public class TeachersService implements ITeachersService {
 
+    /**
+     * The teacher repository.
+     */
     private final ITeacherRepository teacherRepository;
 
+    /**
+     * This method initializes the teacher repository.
+     * @param teacherRepository The teacher repository.
+     */
     @Inject
     public TeachersService(ITeacherRepository teacherRepository) {
         this.teacherRepository = teacherRepository;
     }
 
+    /**
+     * This method adds a teacher.
+     * @param name The name of the teacher.
+     * @param type The type of the teacher.
+     * @return The added teacher.
+     * @throws TeacherAdditionException Thrown if the teacher could not be added.
+     * @throws ValidationException Thrown if the parameters are invalid.
+     */
     @Override
     public Teacher addTeacher(String name, Teacher.Type type) throws TeacherAdditionException, ValidationException {
 
@@ -53,6 +71,13 @@ public class TeachersService implements ITeachersService {
         return teacher;
     }
 
+    /**
+     * This method gets a teacher by id.
+     * @param teacherId The id of the teacher.
+     * @return The teacher.
+     * @throws TeacherNotFoundException Thrown if the teacher could not be found.
+     * @throws ValidationException Thrown if the parameters are invalid.
+     */
     @Override
     public boolean deleteTeacher(int teacherId) throws TeacherNotFoundException, TeacherDeletionFailed, ValidationException {
 
@@ -72,6 +97,13 @@ public class TeachersService implements ITeachersService {
         return true;
     }
 
+    /**
+     * Deletes all teachers with the given name.
+     * @param name The name of the Teachers to delete.
+     * @return True if the teachers were deleted, false otherwise.
+     * @throws TeacherDeletionFailed Thrown if the teachers could not be deleted.
+     * @throws ValidationException Thrown if the parameters are invalid.
+     */
     @Override
     public boolean deleteTeachers(String name) throws TeacherDeletionFailed, ValidationException {
 
@@ -88,6 +120,11 @@ public class TeachersService implements ITeachersService {
         return true;
     }
 
+    /**
+     * Deletes all teachers.
+     * @return True if the teachers were deleted, false otherwise.
+     * @throws TeacherDeletionFailed Thrown if the teachers could not be deleted.
+     */
     @Override
     public boolean deleteAll() throws TeacherDeletionFailed {
         try {
@@ -99,6 +136,13 @@ public class TeachersService implements ITeachersService {
         return true;
     }
 
+    /**
+     * This method gets a teacher by id.
+     * @param teacherId The id of the teacher.
+     * @return The teacher.
+     * @throws TeacherNotFoundException Thrown if the teacher could not be found.
+     * @throws ValidationException Thrown if the parameters are invalid.
+     */
     @Override
     public Teacher getTeacherById(int teacherId) throws TeacherNotFoundException, ValidationException {
 
@@ -111,6 +155,10 @@ public class TeachersService implements ITeachersService {
         return teacher;
     }
 
+    /**
+     * Retrieves all teachers.
+     * @return The list of teachers.
+     */
     @Override
     public List<Teacher> getTeachers() {
         return teacherRepository.readAll();

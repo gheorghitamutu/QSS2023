@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SessionsService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">SchoolTimetable</a> &gt; <a href="index.source.html" class="el_package">org.application.application.sessions</a> &gt; <span class="el_source">SessionsService.java</span></div><h1>SessionsService.java</h1><pre class="source lang-java linenums">package org.application.application.sessions;
+
+import com.google.inject.Inject;
+import org.application.dataaccess.discipline.IDisciplineRepository;
+import org.application.dataaccess.session.ISessionRepository;
+import org.application.dataaccess.studentgroup.IStudentGroupRepository;
+import org.application.dataaccess.teacher.ITeacherRepository;
+import org.application.domain.exceptions.RepositoryOperationException;
+import org.application.domain.exceptions.discipline.DisciplineNotFoundException;
+import org.application.domain.exceptions.session.SessionAdditionException;
+import org.application.domain.exceptions.session.SessionDeletionFailed;
+import org.application.domain.exceptions.session.SessionNotFoundException;
+import org.application.domain.exceptions.studentgroup.StudentGroupNotFoundException;
+import org.application.domain.exceptions.teacher.TeacherNotFoundException;
+import org.application.domain.models.Session;
+
+import java.text.MessageFormat;
+import java.util.List;
+import java.util.Objects;
+
+public class SessionsService implements ISessionsService {
+
+    private final ISessionRepository sessionRepository;
+    private final IDisciplineRepository disciplineRepository;
+    private final ITeacherRepository teacherRepository;
+    private final IStudentGroupRepository studentGroupRepository;
+
+    @Inject
+<span class="fc" id="L29">    public SessionsService(ISessionRepository sessionRepository, IDisciplineRepository disciplineRepository, ITeacherRepository teacherRepository, IStudentGroupRepository studentGroupRepository) {</span>
+<span class="fc" id="L30">        this.sessionRepository = sessionRepository;</span>
+<span class="fc" id="L31">        this.disciplineRepository = disciplineRepository;</span>
+<span class="fc" id="L32">        this.teacherRepository = teacherRepository;</span>
+<span class="fc" id="L33">        this.studentGroupRepository = studentGroupRepository;</span>
+<span class="fc" id="L34">    }</span>
+
+    @Override
+    public Session addSession(Session.Type type, String halfYear, String disciplineName) throws SessionAdditionException, DisciplineNotFoundException {
+<span class="fc" id="L38">        var disciplines = disciplineRepository.readAll().stream().filter(d -&gt; d.getName().equals(disciplineName)).toList();</span>
+<span class="pc bpc" id="L39" title="1 of 2 branches missed.">        if (disciplines.isEmpty()) {</span>
+<span class="nc" id="L40">            throw new DisciplineNotFoundException(&quot;[SessionService] Discipline not found!&quot;);</span>
+        }
+<span class="fc" id="L42">        var discipline = disciplines.get(0);</span>
+
+        Session session;
+        try {
+<span class="fc" id="L46">            session = sessionRepository.createNewSession(type, halfYear);</span>
+<span class="fc" id="L47">            session.setDiscipline(discipline);</span>
+<span class="fc" id="L48">            sessionRepository.save(session);</span>
+
+<span class="fc" id="L50">            var disciplineSessions = discipline.getSessions();</span>
+<span class="fc" id="L51">            disciplineSessions.add(session);</span>
+<span class="fc" id="L52">            discipline.setSessions(disciplineSessions);</span>
+<span class="fc" id="L53">            disciplineRepository.save(discipline);</span>
+<span class="nc" id="L54">        } catch (RepositoryOperationException e) {</span>
+<span class="nc" id="L55">            throw new SessionAdditionException(&quot;[SessionService] Failed adding session!&quot;, e);</span>
+<span class="fc" id="L56">        }</span>
+
+<span class="fc" id="L58">        return session;</span>
+    }
+
+    @Override
+    public boolean deleteSession(int sessionId) throws SessionNotFoundException, SessionDeletionFailed {
+<span class="nc" id="L63">        var session = sessionRepository.getById(sessionId);</span>
+<span class="nc bnc" id="L64" title="All 2 branches missed.">        if (session == null) {</span>
+<span class="nc" id="L65">            throw new SessionNotFoundException(MessageFormat.format(&quot;[SessionService] Session with id {0} not found.&quot;, sessionId));</span>
+        }
+
+        try {
+<span class="nc" id="L69">            sessionRepository.delete(session);</span>
+<span class="nc" id="L70">        } catch (Exception e) {</span>
+<span class="nc" id="L71">            throw new SessionDeletionFailed(&quot; [SessionService] Failed to delete session.&quot;, e);</span>
+<span class="nc" id="L72">        }</span>
+
+<span class="nc" id="L74">        return true;</span>
+    }
+
+    @Override
+    public boolean deleteSession(String disciplineName) throws DisciplineNotFoundException, SessionNotFoundException, SessionDeletionFailed {
+<span class="nc" id="L79">        var disciplines = disciplineRepository.readAll().stream().filter(d -&gt; d.getName().equals(disciplineName)).toList();</span>
+<span class="nc bnc" id="L80" title="All 2 branches missed.">        if (disciplines.isEmpty()) {</span>
+<span class="nc" id="L81">            throw new DisciplineNotFoundException(&quot;[SessionService] Discipline not found!&quot;);</span>
+        }
+<span class="nc" id="L83">        var discipline = disciplines.get(0);</span>
+<span class="nc" id="L84">        var sessions = discipline.getSessions();</span>
+<span class="nc bnc" id="L85" title="All 2 branches missed.">        if (sessions.isEmpty()) {</span>
+<span class="nc" id="L86">            throw new SessionNotFoundException(&quot;[SessionService] Session not found!&quot;);</span>
+        }
+<span class="nc" id="L88">        var session = sessions.stream().toList().get(0);</span>
+        try {
+<span class="nc" id="L90">            sessionRepository.delete(session);</span>
+<span class="nc" id="L91">        } catch (Exception e) {</span>
+<span class="nc" id="L92">            throw new SessionDeletionFailed(&quot; [SessionService] Failed to delete session.&quot;, e);</span>
+<span class="nc" id="L93">        }</span>
+
+<span class="nc" id="L95">        return true;</span>
+    }
+
+    public boolean deleteAll() throws SessionDeletionFailed {
+        try {
+<span class="fc" id="L100">            sessionRepository.deleteMany(sessionRepository.readAll());</span>
+<span class="nc" id="L101">        } catch (Exception e) {</span>
+<span class="nc" id="L102">            throw new SessionDeletionFailed(&quot; [SessionService] Failed to delete sessions.&quot;, e);</span>
+<span class="fc" id="L103">        }</span>
+
+<span class="fc" id="L105">        return true;</span>
+    }
+
+    @Override
+    public Session getSessionById(int sessionId) throws SessionNotFoundException {
+<span class="nc" id="L110">        var session = sessionRepository.getById(sessionId);</span>
+<span class="nc bnc" id="L111" title="All 2 branches missed.">        if (session == null) {</span>
+<span class="nc" id="L112">            throw new SessionNotFoundException(MessageFormat.format(&quot;[SessionService] Session with id {0} not found.&quot;, sessionId));</span>
+        }
+<span class="nc" id="L114">        return session;</span>
+    }
+
+    @Override
+    public List&lt;Session&gt; getSessions() {
+<span class="nc" id="L119">        return sessionRepository.readAll();</span>
+    }
+
+    @Override
+    public List&lt;Session&gt; getSessionsByHalfYear(String hf) {
+<span class="nc" id="L124">        return sessionRepository.readAll().stream().filter(session -&gt; session.getHalfYear().equals(hf)).toList();</span>
+    }
+
+    @Override
+    public Session addTeacherToSession(String disciplineName, String teacherName) throws DisciplineNotFoundException, SessionNotFoundException, TeacherNotFoundException {
+<span class="nc" id="L129">        var disciplines = disciplineRepository.readAll().stream().filter(d -&gt; d.getName().equals(disciplineName)).toList();</span>
+<span class="nc bnc" id="L130" title="All 2 branches missed.">        if (disciplines.isEmpty()) {</span>
+<span class="nc" id="L131">            throw new DisciplineNotFoundException(&quot;[SessionService] Discipline not found!&quot;);</span>
+        }
+<span class="nc" id="L133">        var discipline = disciplines.get(0);</span>
+
+<span class="nc" id="L135">        var teachers = teacherRepository.readAll().stream().filter(d -&gt; d.getName().equals(teacherName)).toList();</span>
+<span class="nc bnc" id="L136" title="All 2 branches missed.">        if (teachers.isEmpty()) {</span>
+<span class="nc" id="L137">            throw new TeacherNotFoundException(&quot;[SessionService] Teacher not found!&quot;);</span>
+        }
+<span class="nc" id="L139">        var teacher = teachers.get(0);</span>
+
+<span class="nc" id="L141">        var sessions = discipline.getSessions();</span>
+<span class="nc bnc" id="L142" title="All 2 branches missed.">        if (sessions.isEmpty()) {</span>
+<span class="nc" id="L143">            throw new SessionNotFoundException(&quot;[SessionService] Session not found!&quot;);</span>
+        }
+
+<span class="nc" id="L146">        var session = sessions.stream().toList().get(0);</span>
+<span class="nc" id="L147">        var sessionTeachers = session.getTeachers();</span>
+<span class="nc" id="L148">        sessionTeachers.add(teacher);</span>
+<span class="nc" id="L149">        session.setTeachers(sessionTeachers);</span>
+
+        try {
+<span class="nc" id="L152">            sessionRepository.save(session);</span>
+        }
+<span class="nc" id="L154">        catch (RepositoryOperationException e) {</span>
+<span class="nc" id="L155">            System.out.println(e.getMessage());</span>
+<span class="nc" id="L156">        }</span>
+
+<span class="nc" id="L158">        return session;</span>
+    }
+
+    @Override
+    public Session addTeacherToSession(int sessionId, String teacherName) throws SessionNotFoundException, TeacherNotFoundException {
+<span class="fc" id="L163">        var session = this.sessionRepository.getById(sessionId);</span>
+<span class="pc bpc" id="L164" title="1 of 2 branches missed.">        if (session == null) {</span>
+<span class="nc" id="L165">            throw new SessionNotFoundException(&quot;[SessionService] Session not found!&quot;);</span>
+        }
+
+<span class="fc" id="L168">        var teachers = this.teacherRepository.readAll().stream().filter(d -&gt; d.getName().equals(teacherName)).toList();</span>
+<span class="pc bpc" id="L169" title="1 of 2 branches missed.">        if (teachers.isEmpty()) {</span>
+<span class="nc" id="L170">            throw new TeacherNotFoundException(&quot;[SessionService] Teacher not found!&quot;);</span>
+        }
+
+<span class="fc" id="L173">        var teacher = teachers.get(0);</span>
+<span class="fc" id="L174">        var sessionTeachers = session.getTeachers();</span>
+<span class="fc" id="L175">        sessionTeachers.add(teacher);</span>
+<span class="fc" id="L176">        session.setTeachers(sessionTeachers);</span>
+
+        try {
+<span class="fc" id="L179">            sessionRepository.save(session);</span>
+        }
+<span class="nc" id="L181">        catch (RepositoryOperationException e) {</span>
+<span class="nc" id="L182">            System.out.println(e.getMessage());</span>
+<span class="fc" id="L183">        }</span>
+
+<span class="fc" id="L185">        return session;</span>
+    }
+
+    @Override
+    public Session addGroupToSession(String disciplineName, String groupName) throws StudentGroupNotFoundException, DisciplineNotFoundException, SessionNotFoundException {
+<span class="nc" id="L190">        var groups = studentGroupRepository.readAll().stream().filter(d -&gt; d.getName().equals(groupName)).toList();</span>
+<span class="nc bnc" id="L191" title="All 2 branches missed.">        if (groups.isEmpty()) {</span>
+<span class="nc" id="L192">            throw new StudentGroupNotFoundException(&quot;[SessionService] Student group not found!&quot;);</span>
+        }
+<span class="nc" id="L194">        var group = groups.get(0);</span>
+
+<span class="nc" id="L196">        var disciplines = disciplineRepository.readAll().stream().filter(d -&gt; d.getName().equals(disciplineName)).toList();</span>
+<span class="nc bnc" id="L197" title="All 2 branches missed.">        if (disciplines.isEmpty()) {</span>
+<span class="nc" id="L198">            throw new DisciplineNotFoundException(&quot;[SessionService] Discipline not found!&quot;);</span>
+        }
+<span class="nc" id="L200">        var discipline = disciplines.get(0);</span>
+
+<span class="nc bnc" id="L202" title="All 2 branches missed.">        if (discipline.getSessions().isEmpty()) {</span>
+<span class="nc" id="L203">            throw new DisciplineNotFoundException(&quot;[SessionService] Session not found!&quot;);</span>
+        }
+<span class="nc" id="L205">        var session = discipline.getSessions().stream().toList().get(0);</span>
+<span class="nc" id="L206">        var sessionGroups = session.getGroups();</span>
+<span class="nc" id="L207">        sessionGroups.add(group);</span>
+<span class="nc" id="L208">        session.setGroups(sessionGroups);</span>
+
+        try {
+<span class="nc" id="L211">            sessionRepository.save(session);</span>
+        }
+<span class="nc" id="L213">        catch (RepositoryOperationException e) {</span>
+<span class="nc" id="L214">            System.out.println(e.getMessage());</span>
+<span class="nc" id="L215">        }</span>
+
+<span class="nc" id="L217">        return session;</span>
+    }
+
+    @Override
+    public Session addGroupToSession(int sessionId, String groupName) throws SessionNotFoundException, StudentGroupNotFoundException {
+<span class="fc" id="L222">        var session = this.sessionRepository.getById(sessionId);</span>
+<span class="pc bpc" id="L223" title="1 of 2 branches missed.">        if (session == null) {</span>
+<span class="nc" id="L224">            throw new SessionNotFoundException(&quot;[SessionService] Session not found!&quot;);</span>
+        }
+
+<span class="fc" id="L227">        var groups = this.studentGroupRepository.readAll().stream().filter(d -&gt; d.getName().equals(groupName)).toList();</span>
+<span class="pc bpc" id="L228" title="1 of 2 branches missed.">        if (groups.isEmpty()) {</span>
+<span class="nc" id="L229">            throw new StudentGroupNotFoundException(&quot;[SessionService] Student group not found!&quot;);</span>
+        }
+
+<span class="fc" id="L232">        var group = groups.get(0);</span>
+<span class="fc" id="L233">        var sessionGroups = session.getGroups();</span>
+<span class="fc" id="L234">        sessionGroups.add(group);</span>
+<span class="fc" id="L235">        session.setGroups(sessionGroups);</span>
+
+        try {
+<span class="fc" id="L238">            sessionRepository.save(session);</span>
+        }
+<span class="nc" id="L240">        catch (RepositoryOperationException e) {</span>
+<span class="nc" id="L241">            System.out.println(e.getMessage());</span>
+<span class="fc" id="L242">        }</span>
+
+<span class="fc" id="L244">        return session;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

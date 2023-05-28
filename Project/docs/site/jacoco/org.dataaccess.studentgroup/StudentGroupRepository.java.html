@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>StudentGroupRepository.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">SchoolTimetable</a> &gt; <a href="index.source.html" class="el_package">org.dataaccess.studentgroup</a> &gt; <span class="el_source">StudentGroupRepository.java</span></div><h1>StudentGroupRepository.java</h1><pre class="source lang-java linenums">package org.dataaccess.studentgroup;
+
+import com.google.inject.Inject;
+import org.dataaccess.database.IHibernateProvider;
+import org.dataaccess.repository.BaseRepository;
+import org.domain.exceptions.RepositoryOperationException;
+import org.domain.models.StudentGroup;
+
+import java.util.Date;
+
+public class StudentGroupRepository extends BaseRepository&lt;StudentGroup&gt; implements IStudentGroupRepository {
+
+    @Inject
+    public StudentGroupRepository(IHibernateProvider hibernateProvider) {
+<span class="fc" id="L15">        super(hibernateProvider);</span>
+<span class="fc" id="L16">    }</span>
+
+    @Override
+    public StudentGroup getByGroupName(String groupName) {
+
+<span class="fc" id="L21">        var session = hibernateProvider.getEntityManager();</span>
+<span class="fc" id="L22">        var query = session.createNamedQuery(&quot;StudentGroup.getByGroupName&quot;, StudentGroup.class);</span>
+<span class="fc" id="L23">        query.setParameter(&quot;name&quot;, groupName);</span>
+
+<span class="fc" id="L25">        var result = query.getResultList();</span>
+<span class="fc bfc" id="L26" title="All 2 branches covered.">        if (result.size() == 0) {</span>
+<span class="fc" id="L27">            return null;</span>
+        }
+
+<span class="fc" id="L30">        return result.get(0);</span>
+    }
+
+    @Override
+    public StudentGroup createNewGroup(String groupName) throws RepositoryOperationException {
+
+<span class="fc" id="L36">        StudentGroup studentGroup = new StudentGroup();</span>
+
+<span class="fc" id="L38">        studentGroup.setName(groupName);</span>
+<span class="fc" id="L39">        studentGroup.setYear(1);</span>
+<span class="fc" id="L40">        studentGroup.setType(StudentGroup.Type.BACHELOR);</span>
+<span class="fc" id="L41">        studentGroup.setInsertTime(new Date());</span>
+
+        try {
+<span class="fc" id="L44">            save(studentGroup);</span>
+<span class="fc" id="L45">            return studentGroup;</span>
+<span class="fc" id="L46">        } catch (Exception e) {</span>
+<span class="fc" id="L47">            e.printStackTrace();</span>
+
+<span class="fc" id="L49">            throw new RepositoryOperationException(&quot;[Student Group Repository] Couldn't create new group.&quot;, e);</span>
+        }
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

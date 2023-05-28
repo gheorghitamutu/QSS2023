@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TeacherValidator.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">SchoolTimetable</a> &gt; <a href="index.source.html" class="el_package">org.domain.models.validators.teacher</a> &gt; <span class="el_source">TeacherValidator.java</span></div><h1>TeacherValidator.java</h1><pre class="source lang-java linenums">package org.domain.models.validators.teacher;
+
+import com.google.inject.Injector;
+import jakarta.validation.ConstraintValidator;
+import jakarta.validation.ConstraintValidatorContext;
+import org.GuiceInjectorSingleton;
+import org.dataaccess.discipline.IDisciplineRepository;
+import org.dataaccess.session.ISessionRepository;
+import org.domain.models.Discipline;
+import org.domain.models.Session;
+import org.domain.models.Timeslot;
+import org.domain.models.Teacher;
+
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
+
+<span class="fc" id="L18">public class TeacherValidator implements ConstraintValidator&lt;ValidTeacher, Teacher&gt; {</span>
+
+    ISessionRepository sessionRepository;
+    IDisciplineRepository disciplineRepository;
+
+    @Override
+    public void initialize(ValidTeacher constraintAnnotation) {
+
+<span class="fc" id="L26">        Injector injector = GuiceInjectorSingleton.INSTANCE.getInjector();</span>
+<span class="pc bpc" id="L27" title="1 of 2 branches missed.">        if(null != injector) {</span>
+<span class="fc" id="L28">            sessionRepository = injector.getInstance(ISessionRepository.class);</span>
+<span class="fc" id="L29">            disciplineRepository = injector.getInstance(IDisciplineRepository.class);</span>
+        }
+<span class="fc" id="L31">    }</span>
+
+    @Override
+    public boolean isValid(Teacher value, ConstraintValidatorContext context) {
+
+<span class="fc" id="L36">        Set&lt;Session&gt; sessions = value.getSessions();</span>
+<span class="pc bpc" id="L37" title="1 of 2 branches missed.">        for (Session session : sessions) {</span>
+<span class="nc bnc" id="L38" title="All 2 branches missed.">            if (!sessionRepository.validate(session)) {</span>
+<span class="nc" id="L39">                return false;</span>
+            }
+<span class="nc" id="L41">        }</span>
+
+<span class="fc" id="L43">        Teacher.Type teacherType = value.getType();</span>
+<span class="pc bpc" id="L44" title="1 of 2 branches missed.">        for (Session session : sessions) {</span>
+<span class="nc bnc" id="L45" title="All 4 branches missed.">            if (session.getType() == Session.Type.COURSE &amp;&amp; teacherType != Teacher.Type.TEACHER) {</span>
+<span class="nc" id="L46">                return false;</span>
+            }
+<span class="nc" id="L48">        }</span>
+
+<span class="fc" id="L50">        Set&lt;Discipline&gt; disciplines = value.getDisciplines();</span>
+<span class="pc bpc" id="L51" title="1 of 2 branches missed.">        for (Discipline discipline : disciplines) {</span>
+<span class="nc bnc" id="L52" title="All 2 branches missed.">            if (!disciplineRepository.validate(discipline)) {</span>
+<span class="nc" id="L53">                return false;</span>
+            }
+
+<span class="nc bnc" id="L56" title="All 2 branches missed.">            if (!discipline.getTeachers().contains(value)) {</span>
+<span class="nc" id="L57">                return false;</span>
+            }
+<span class="nc" id="L59">        }</span>
+
+<span class="fc" id="L61">        Set&lt;Timeslot&gt; timeslots = new HashSet&lt;&gt;();</span>
+<span class="pc bpc" id="L62" title="1 of 2 branches missed.">        for (Session session : sessions) {</span>
+<span class="nc" id="L63">            timeslots.addAll(session.getTimeslots());</span>
+<span class="nc" id="L64">        }</span>
+
+<span class="pc bpc" id="L66" title="1 of 2 branches missed.">        for (Timeslot t1 : timeslots) {</span>
+<span class="nc" id="L67">            var vsd = t1.getStartDate();</span>
+<span class="nc" id="L68">            var vt = t1.getTime();</span>
+
+<span class="nc bnc" id="L70" title="All 2 branches missed.">            for (Timeslot t2 : timeslots) {</span>
+<span class="nc bnc" id="L71" title="All 2 branches missed.">                if (t1.equals(t2)) {</span>
+<span class="nc" id="L72">                    continue;</span>
+                }
+
+<span class="nc" id="L75">                var tsd = t2.getStartDate();</span>
+<span class="nc" id="L76">                var ted = t2.getEndDate();</span>
+<span class="nc" id="L77">                var tt = t2.getTime();</span>
+<span class="nc" id="L78">                var tet = Date.from(tt.toInstant().plus(t2.getTimespan()));</span>
+
+<span class="nc bnc" id="L80" title="All 2 branches missed.">                if (t1.getWeekday() == t2.getWeekday()) {</span>
+<span class="nc bnc" id="L81" title="All 4 branches missed.">                    if (vsd.after(tsd) &amp;&amp; vsd.before(ted)) {</span>
+<span class="nc bnc" id="L82" title="All 4 branches missed.">                        if (vt.after(tt) &amp;&amp; vt.before(tet)) {</span>
+<span class="nc" id="L83">                            return false;</span>
+                        }
+                    }
+                }
+<span class="nc" id="L87">            }</span>
+<span class="nc" id="L88">        }</span>
+
+<span class="fc" id="L90">        return true;</span>
+    }
+}
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

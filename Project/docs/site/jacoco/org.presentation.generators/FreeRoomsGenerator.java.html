@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>FreeRoomsGenerator.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">SchoolTimetable</a> &gt; <a href="index.source.html" class="el_package">org.presentation.generators</a> &gt; <span class="el_source">FreeRoomsGenerator.java</span></div><h1>FreeRoomsGenerator.java</h1><pre class="source lang-java linenums">package org.presentation.generators;
+
+import org.domain.models.Room;
+import org.domain.models.Timeslot;
+
+import java.util.HashMap;
+import java.util.Map;
+
+public class FreeRoomsGenerator extends BaseGenerator{
+    private final Map&lt;Room, Map&lt;Integer, Map&lt;Timeslot.Day, Boolean&gt;&gt;&gt; freeRooms;
+    private final Map&lt;Timeslot.Day, Integer&gt; dayDecoder;
+    private final Map&lt;String, String&gt; listsData;
+
+    public FreeRoomsGenerator(String generationDateString, Map&lt;String, Map&lt;Timeslot.Day, StringBuilder&gt;&gt; timetablesDays, Map&lt;Room, Map&lt;Integer, Map&lt;Timeslot.Day, Boolean&gt;&gt;&gt; freeRooms, Map&lt;String, String&gt; listsData){
+<span class="fc" id="L15">        super(generationDateString, timetablesDays);</span>
+<span class="fc" id="L16">        this.freeRooms = freeRooms;</span>
+<span class="fc" id="L17">        this.dayDecoder = generateDayDecoder();</span>
+<span class="fc" id="L18">        this.listsData = listsData;</span>
+<span class="fc" id="L19">    }</span>
+
+    private Map&lt;Timeslot.Day, Integer&gt; generateDayDecoder(){
+<span class="fc" id="L22">        Map&lt;Timeslot.Day, Integer&gt; decoder = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L23">        Timeslot.Day[] daysArray = Timeslot.Day.class.getEnumConstants();</span>
+<span class="fc" id="L24">        int index = 0;</span>
+
+<span class="fc bfc" id="L26" title="All 2 branches covered.">        for (Timeslot.Day day : daysArray){</span>
+<span class="fc" id="L27">            decoder.put(day, index);</span>
+<span class="fc" id="L28">            index += 1;</span>
+        }
+
+<span class="fc" id="L31">        return decoder;</span>
+    }
+
+    public void generate(){
+<span class="fc" id="L35">        String freeRoomsData = utils.getBaseTemplateData(&quot;free_rooms&quot;);</span>
+<span class="fc" id="L36">        freeRoomsData = freeRoomsData.replace(&quot;$generation_date&quot;, this.generationDateString);</span>
+<span class="fc" id="L37">        int roomNumber = -1;</span>
+
+<span class="fc" id="L39">        StringBuilder tableEntries = new StringBuilder();</span>
+
+<span class="fc bfc" id="L41" title="All 2 branches covered.">        for (Map.Entry&lt;Room, Map&lt;Integer, Map&lt;Timeslot.Day, Boolean&gt;&gt;&gt; mapEntry1 : freeRooms.entrySet()){</span>
+<span class="fc" id="L42">            roomNumber += 1;</span>
+<span class="fc" id="L43">            Room room = mapEntry1.getKey();</span>
+<span class="fc" id="L44">            String roomData = utils.getBaseTemplateData(&quot;atomics&quot; + this.separator + &quot;room_entry&quot;);</span>
+
+<span class="fc bfc" id="L46" title="All 2 branches covered.">            if (roomNumber % 3 == 0){</span>
+<span class="fc" id="L47">                tableEntries.append(&quot;&lt;/tr&gt;&lt;tr&gt;&quot;);</span>
+            }
+
+<span class="fc" id="L50">            roomData = roomData.replace(&quot;$room_name&quot;, room.getName());</span>
+
+<span class="fc" id="L52">            Map&lt;Integer, Map&lt;Timeslot.Day, Boolean&gt;&gt; hoursMap = mapEntry1.getValue();</span>
+
+<span class="fc bfc" id="L54" title="All 2 branches covered.">            for (Map.Entry&lt;Integer, Map&lt;Timeslot.Day, Boolean&gt;&gt; mapEntry2 : hoursMap.entrySet())</span>
+            {
+<span class="fc" id="L56">                int hour = mapEntry2.getKey();</span>
+<span class="fc" id="L57">                Map&lt;Timeslot.Day, Boolean&gt; daysMap = mapEntry2.getValue();</span>
+
+<span class="fc bfc" id="L59" title="All 2 branches covered.">                for (Map.Entry&lt;Timeslot.Day, Boolean&gt; mapEntry3 : daysMap.entrySet()){</span>
+<span class="fc" id="L60">                    Timeslot.Day day = mapEntry3.getKey();</span>
+<span class="fc" id="L61">                    Boolean isFree = mapEntry3.getValue();</span>
+
+<span class="fc" id="L63">                    int hourIndex = hour - 8;</span>
+<span class="fc" id="L64">                    int dayIndex = dayDecoder.get(day);</span>
+<span class="fc" id="L65">                    String colorIndex = &quot;$&quot; + hourIndex + dayIndex + &quot;c&quot;;</span>
+
+<span class="fc bfc" id="L67" title="All 2 branches covered.">                    if (isFree){</span>
+<span class="fc" id="L68">                        roomData = roomData.replace(colorIndex, &quot;#66FF66&quot;);</span>
+                    }
+                    else {
+<span class="fc" id="L71">                        roomData = roomData.replace(colorIndex, &quot;#FF0000&quot;);</span>
+                    }
+<span class="fc" id="L73">                }</span>
+<span class="fc" id="L74">            }</span>
+
+<span class="fc" id="L76">            tableEntries.append(roomData);</span>
+<span class="fc" id="L77">        }</span>
+
+<span class="fc" id="L79">        freeRoomsData = freeRoomsData.replace(&quot;$table_entries&quot;, tableEntries.toString());</span>
+<span class="fc" id="L80">        this.listsData.put(&quot;free_rooms&quot;, freeRoomsData);</span>
+<span class="fc" id="L81">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

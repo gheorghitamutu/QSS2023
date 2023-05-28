@@ -1,10 +1,7 @@
 package org.domain.models.validators.studentgroup;
 
-import com.google.inject.Injector;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
-import org.GuiceInjectorSingleton;
-import org.dataaccess.session.ISessionRepository;
 import org.domain.models.StudentGroup;
 import org.domain.models.Timeslot;
 import org.domain.models.Session;
@@ -13,24 +10,30 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * This class is the validator for the ValidStudentGroup annotation.
+ */
 public class StudentGroupValidator implements ConstraintValidator<ValidStudentGroup, StudentGroup> {
 
-    private ISessionRepository sessionRepository;
-
+    /**
+     * This method initializes the annotation.
+     * @param constraintAnnotation The annotation.
+     */
     @Override
     public void initialize(ValidStudentGroup constraintAnnotation) {
-        Injector injector = GuiceInjectorSingleton.INSTANCE.getInjector();
-        if(null != injector) {
-            sessionRepository = injector.getInstance(ISessionRepository.class);
-        }
     }
 
+    /**
+     * This method checks if the student group is valid.
+     * @param value The student group.
+     * @param context The context.
+     * @return True if the student group is valid, false otherwise.
+     */
     @Override
     public boolean isValid(StudentGroup value, ConstraintValidatorContext context) {
 
-        Set<Session> sessions = value.getSessions();
         Set<Timeslot> timeslots = new HashSet<>();
-        for (Session session : sessions) {
+        for (Session session : value.getSessions()) {
             timeslots.addAll(session.getTimeslots());
         }
 

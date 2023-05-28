@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Main.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">SchoolTimetable</a> &gt; <a href="index.source.html" class="el_package">org.application</a> &gt; <span class="el_source">Main.java</span></div><h1>Main.java</h1><pre class="source lang-java linenums">package org.application;
+
+
+import com.google.inject.AbstractModule;
+import com.google.inject.Guice;
+import com.google.inject.Injector;
+import com.google.inject.Provides;
+import org.application.application.disciplines.DisciplinesService;
+import org.application.application.disciplines.IDisciplinesService;
+import org.application.application.rooms.IRoomsService;
+import org.application.application.rooms.RoomsService;
+import org.application.application.sessions.ISessionsService;
+import org.application.application.sessions.SessionsService;
+import org.application.application.studentgroups.IStudentGroupsService;
+import org.application.application.studentgroups.StudentGroupsService;
+import org.application.application.students.IStudentsService;
+import org.application.application.students.StudentsService;
+import org.application.application.teachers.ITeachersService;
+import org.application.application.teachers.TeachersService;
+import org.application.application.timeslots.ITimeslotsService;
+import org.application.application.timeslots.TimeslotsService;
+import org.application.dataaccess.database.IHibernateProvider;
+import org.application.dataaccess.database.MainDatabaseHibernateProvider;
+import org.application.dataaccess.database.TestsDatabaseHibernateProvider;
+import org.application.dataaccess.discipline.DisciplineRepository;
+import org.application.dataaccess.discipline.IDisciplineRepository;
+import org.application.dataaccess.room.IRoomRepository;
+import org.application.dataaccess.room.RoomRepository;
+import org.application.dataaccess.session.ISessionRepository;
+import org.application.dataaccess.session.SessionRepository;
+import org.application.dataaccess.student.IStudentRepository;
+import org.application.dataaccess.student.StudentRepository;
+import org.application.dataaccess.studentgroup.IStudentGroupRepository;
+import org.application.dataaccess.studentgroup.StudentGroupRepository;
+import org.application.dataaccess.teacher.ITeacherRepository;
+import org.application.dataaccess.teacher.TeacherRepository;
+import org.application.dataaccess.timeslot.ITimeslotRepository;
+import org.application.dataaccess.timeslot.TimeslotRepository;
+
+<span class="nc" id="L40">public class Main {</span>
+
+    public static void main(String[] args) {
+
+<span class="nc" id="L44">        var appInjector = setupDependenciesInjector(false);</span>
+<span class="nc" id="L45">        var app = appInjector.getInstance(Application.class);</span>
+<span class="nc" id="L46">        GuiceInjectorSingleton.INSTANCE.setInjector(appInjector);</span>
+
+<span class="nc" id="L48">        app.run();</span>
+<span class="nc" id="L49">    }</span>
+
+    public static Injector setupDependenciesInjector(boolean testMode) {
+
+<span class="fc" id="L53">        return Guice.createInjector(new MessageModule(), new AbstractModule() {</span>
+            @Override
+            protected void configure() {
+
+<span class="pc bpc" id="L57" title="1 of 2 branches missed.">                if (testMode) {</span>
+<span class="fc" id="L58">                    bind(IHibernateProvider.class).toInstance(new TestsDatabaseHibernateProvider());</span>
+                } else {
+<span class="nc" id="L60">                    bind(IHibernateProvider.class).toInstance(new MainDatabaseHibernateProvider());</span>
+                }
+
+<span class="fc" id="L63">                bind(IDisciplineRepository.class).to(DisciplineRepository.class);</span>
+<span class="fc" id="L64">                bind(IRoomRepository.class).to(RoomRepository.class);</span>
+<span class="fc" id="L65">                bind(ISessionRepository.class).to(SessionRepository.class);</span>
+<span class="fc" id="L66">                bind(IStudentGroupRepository.class).to(StudentGroupRepository.class);</span>
+<span class="fc" id="L67">                bind(IStudentRepository.class).to(StudentRepository.class);</span>
+<span class="fc" id="L68">                bind(ITeacherRepository.class).to(TeacherRepository.class);</span>
+<span class="fc" id="L69">                bind(ITimeslotRepository.class).to(TimeslotRepository.class);</span>
+
+<span class="fc" id="L71">                bind(IDisciplinesService.class).to(DisciplinesService.class);</span>
+<span class="fc" id="L72">                bind(IRoomsService.class).to(RoomsService.class);</span>
+<span class="fc" id="L73">                bind(ISessionsService.class).to(SessionsService.class);</span>
+<span class="fc" id="L74">                bind(IStudentGroupsService.class).to(StudentGroupsService.class);</span>
+<span class="fc" id="L75">                bind(IStudentsService.class).to(StudentsService.class);</span>
+<span class="fc" id="L76">                bind(ITeachersService.class).to(TeachersService.class);</span>
+<span class="fc" id="L77">                bind(ITimeslotsService.class).to(TimeslotsService.class);</span>
+<span class="fc" id="L78">            }</span>
+        });
+    }
+
+<span class="fc" id="L82">    public static class MessageModule extends AbstractModule {</span>
+        @Provides
+        String provideMessage() {
+<span class="nc" id="L85">            return &quot;Hello, Guice!&quot;;</span>
+        }
+
+        @Override
+        protected void configure() {
+<span class="fc" id="L90">        }</span>
+    }
+}
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

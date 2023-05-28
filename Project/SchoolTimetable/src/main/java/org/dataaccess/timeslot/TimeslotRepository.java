@@ -14,13 +14,34 @@ import org.domain.models.Timeslot;
 import java.time.Duration;
 import java.util.Date;
 
+/**
+ * This is the class for TimeslotRepository.
+ */
 public class TimeslotRepository extends BaseRepository<Timeslot> implements ITimeslotRepository {
 
+    /**
+     * This is the constructor of TimeslotRepository.
+     * @param hibernateProvider The hibernate provider.
+     */
     @Inject
     public TimeslotRepository(IHibernateProvider hibernateProvider) {
         super(hibernateProvider);
     }
 
+    /**
+     * This is the method to create a new timeslot.
+     * @param startDate The start date.
+     * @param endDate The end date.
+     * @param time The time.
+     * @param duration The duration.
+     * @param day The day.
+     * @param periodicity The periodicity.
+     * @param room The room.
+     * @param session The session.
+     * @return The timeslot.
+     * @throws RepositoryOperationException The repository operation exception.
+     * @throws ValidationException The validation exception.
+     */
     @Override
     public Timeslot createNewTimeslot(Date startDate, Date endDate, Date time, Duration duration, Timeslot.Day day, Timeslot.Periodicity periodicity, Room room, Session session) throws RepositoryOperationException, ValidationException {
 
@@ -49,6 +70,19 @@ public class TimeslotRepository extends BaseRepository<Timeslot> implements ITim
         return timeslot;
     }
 
+    /**
+     * This is the method to validate timeslot related parameters.
+     * @param startDate The start date.
+     * @param endDate The end date.
+     * @param time The time.
+     * @param duration The duration.
+     * @param day The day.
+     * @param periodicity The periodicity.
+     * @param room The room.
+     * @param session The session.
+     * @throws RepositoryOperationException The repository operation exception.
+     * @throws ValidationException The validation exception.
+     */
     private void validateTimeslotRelatedParams(Date startDate, Date endDate, Date time, Duration duration, Timeslot.Day day, Timeslot.Periodicity periodicity,
                                                @Valid Room room, @Valid Session session) throws RepositoryOperationException, ValidationException {
         ValidationHelpers.requireNotNull(startDate, IllegalArgumentException.class, "Start date cannot be null.", null);

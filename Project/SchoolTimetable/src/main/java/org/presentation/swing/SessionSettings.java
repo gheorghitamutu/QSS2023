@@ -22,10 +22,14 @@ import java.util.Objects;
  * SessionSettings provides methods to get and set the values of these settings,
  *  allowing for easy manipulation and management of session configurations.
  *  */
-public class SessionSettings implements BaseSettings{
-    public SessionSettings(){
+public class SessionSettings implements BaseSettings {
 
+    /**
+     * Default constructor for SessionSettings.
+     */
+    public SessionSettings() {
     }
+
     /**
      * Generates a form for adding a group to a session and adds it to the specified panel.
      *

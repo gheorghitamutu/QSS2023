@@ -17,13 +17,45 @@ import java.util.Objects;
  * The GUI displays various panels based on user interaction and provides navigation functionality.
  */
 public class GUI extends JFrame implements ActionListener {
-    // Define variables
+
+    /**
+     * The Application instance used for accessing the application's services.
+     */
     public static Application app;
-    private JPanel mainPanel, navPanel;
+
+    /**
+     * The main panel of the GUI.
+     */
+    private JPanel mainPanel;
+
+    /**
+     * The left panel of the GUI.
+     */
+    private JPanel navPanel;
+
+    /**
+     * The right panel of the GUI.
+     */
     private JButton exitButton;
+
+    /**
+     * The category buttons of the GUI.
+     */
     private JButton[] categoryButtons;
+
+    /**
+     * The background color of the GUI (1).
+     */
     private Color bgColor1 = Color.decode("#AAC8A7");
+
+    /**
+     * The background color of the GUI (2).
+     */
     private Color bgColor2 = Color.decode("#F6FFDE");
+
+    /**
+     * The background color of the GUI (3).
+     */
     private Color bgColor3 = Color.decode("#C9DBB2");
 
     /**
@@ -39,6 +71,7 @@ public class GUI extends JFrame implements ActionListener {
         app = appInjector.getInstance(Application.class);
         GuiceInjectorSingleton.INSTANCE.setInjector(appInjector);
     }
+
     /**
      * Creates a GUI for the Timetable Generator application.
      * Initializes the main frame, main panel, navigation panel, category buttons, and exit button.
@@ -106,6 +139,7 @@ public class GUI extends JFrame implements ActionListener {
         setResizable(false);
         setVisible(true);
     }
+
     /**
      * Creates the main panel of the GUI.
      * Removes previous components from the right panel and adds a result label.
@@ -128,6 +162,7 @@ public class GUI extends JFrame implements ActionListener {
         main.add(imageLabel, BorderLayout.CENTER);
         return main;
     }
+
     /**
      * Handles the actionPerformed event for buttons in the GUI.
      * Determines the source of the event and performs specific actions based on the button's text.
@@ -169,6 +204,11 @@ public class GUI extends JFrame implements ActionListener {
 
     }
 
+    /**
+     * Main method for the Timetable Generator application.
+     * Creates a GUI for the application.
+     * @param args the command line arguments
+     */
     public static void main(String[] args) {
         setUpAll(false);
         GUI gui = new GUI();

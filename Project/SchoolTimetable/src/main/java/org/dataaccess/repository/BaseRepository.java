@@ -21,7 +21,14 @@ import java.util.Set;
  */
 public class BaseRepository<T> implements IRepository<T> {
 
+    /**
+     * This is the hibernate provider.
+     */
     protected final IHibernateProvider hibernateProvider;
+
+    /**
+     * This is the class.
+     */
     protected Class<T> tClass;
 
     /**
@@ -39,7 +46,6 @@ public class BaseRepository<T> implements IRepository<T> {
         } catch (Exception ex) {
             System.out.println("Class not found!");
         }
-
 
         this.hibernateProvider = hibernateProvider;
     }
@@ -111,8 +117,7 @@ public class BaseRepository<T> implements IRepository<T> {
             throw new RepositoryOperationException("Save failed, check inner exception", e);
         }
 
-
-        //postconditions
+        // postconditions
         if (!validate(object)) {
             throw new RepositoryOperationException("DB left in inconsistent state after save");
         }

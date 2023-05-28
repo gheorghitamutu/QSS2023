@@ -38,7 +38,6 @@ public class RoomRepository extends BaseRepository<Room> implements IRoomReposit
      */
     public Room getByName(String name) throws RepositoryOperationException, ValidationException {
 
-
         ValidationHelpers.requireNotBlank(name, IllegalArgumentException.class, "Room name cannot be blank.", null);
 
         var session = hibernateProvider.getEntityManager();
@@ -65,7 +64,6 @@ public class RoomRepository extends BaseRepository<Room> implements IRoomReposit
      * @throws ValidationException If the validation of the Room attributes fails.
      */
     public Room createNewRoom(String name, int capacity, int floor, Room.Type type) throws RepositoryOperationException, ValidationException {
-
 
         ValidationHelpers.requireNotBlank(name, IllegalArgumentException.class, "Room name cannot be blank.", null);
         ValidationHelpers.requirePositiveOrZero(capacity, IllegalArgumentException.class, "Room capacity cannot be negative.", null);

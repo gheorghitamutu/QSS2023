@@ -15,17 +15,41 @@ import org.domain.models.Discipline;
 import java.text.MessageFormat;
 import java.util.List;
 
+/**
+ * Represents a service class for managing Discipline entities.
+ * This class defines the service operations that can be performed, specific to discipline service.
+ */
 public class DisciplinesService implements IDisciplinesService {
 
+    /**
+     * The repository used for accessing Discipline entities.
+     */
     private final IDisciplineRepository disciplineRepository;
+
+    /**
+     * The repository used for accessing Teacher entities.
+     */
     private final ITeacherRepository teacherRepository;
 
+    /**
+     * Creates a new instance of the {@link DisciplinesService} class.
+     * @param disciplineRepository The repository used for accessing Discipline entities.
+     * @param teacherRepository The repository used for accessing Teacher entities.
+     */
     @Inject
     public DisciplinesService(IDisciplineRepository disciplineRepository, ITeacherRepository teacherRepository) {
         this.disciplineRepository = disciplineRepository;
         this.teacherRepository = teacherRepository;
     }
 
+    /**
+     * Adds a new Discipline with the given name and credits.
+     * @param name The name of the new Discipline.
+     * @param credits The number of credits associated with the new Discipline.
+     * @return The newly created Discipline.
+     * @throws DisciplineAdditionException If the Discipline could not be added.
+     * @throws ValidationException If the provided name or credits are invalid.
+     */
     @Override
     public Discipline addDiscipline(String name, int credits) throws DisciplineAdditionException, ValidationException {
         Discipline discipline = null;
@@ -56,6 +80,14 @@ public class DisciplinesService implements IDisciplinesService {
         return discipline;
     }
 
+    /**
+     * Deletes a Discipline with the specified id.
+     * @param disciplineId The id of the Discipline to delete.
+     * @return The Discipline with the specified id.
+     * @throws DisciplineNotFoundException If the Discipline could not be found.
+     * @throws DisciplineDeletionFailed If the Discipline could not be deleted.
+     * @throws ValidationException If the provided id is invalid.
+     */
     @Override
     public boolean deleteDiscipline(int disciplineId) throws DisciplineNotFoundException, DisciplineDeletionFailed, ValidationException {
 
@@ -75,6 +107,12 @@ public class DisciplinesService implements IDisciplinesService {
         return true;
     }
 
+    /**
+     * Deletes a Discipline with the specified name.
+     * @param name The name of the Discipline to delete.
+     * @return The Discipline with the specified name.
+     * @throws DisciplineDeletionFailed If the Discipline could not be deleted.
+     */
     @Override
     public boolean deleteDisciplines(String name) throws DisciplineDeletionFailed {
 
@@ -93,6 +131,11 @@ public class DisciplinesService implements IDisciplinesService {
         return true;
     }
 
+    /**
+     * Deletes all Discipline entities.
+     * @return True if the operation was successful, false otherwise.
+     * @throws DisciplineDeletionFailed If the Discipline could not be deleted.
+     */
     @Override
     public boolean deleteAll() throws DisciplineDeletionFailed {
         try {
@@ -104,6 +147,12 @@ public class DisciplinesService implements IDisciplinesService {
         return true;
     }
 
+    /**
+     * Gets a Discipline with the specified id.
+     * @param disciplineId The id of the Discipline to get.
+     * @return The Discipline with the specified id.
+     * @throws DisciplineNotFoundException If the Discipline could not be found.
+     */
     @Override
     public Discipline getDisciplineById(int disciplineId) throws DisciplineNotFoundException {
 
@@ -118,11 +167,23 @@ public class DisciplinesService implements IDisciplinesService {
         return discipline;
     }
 
+    /**
+     * Retrieves all Discipline entities.
+     * @return A list of all Discipline entities.
+     */
     @Override
     public List<Discipline> getDisciplines() {
         return disciplineRepository.readAll();
     }
 
+    /**
+     * Adds a new Teacher to a Discipline.
+     * @param teacherName The name of the Teacher to add.
+     * @param disciplineName The name of the Discipline to add the Teacher to.
+     * @return The Discipline with the newly added Teacher.
+     * @throws TeacherNotFoundException If the Teacher could not be found.
+     * @throws DisciplineNotFoundException If the Discipline could not be found.
+     */
     @Override
     public Discipline addTeacherToDiscipline(String teacherName, String disciplineName) throws TeacherNotFoundException, DisciplineNotFoundException {
 

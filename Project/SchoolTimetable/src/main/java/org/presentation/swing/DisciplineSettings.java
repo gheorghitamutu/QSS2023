@@ -17,7 +17,16 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Objects;
 
+/**
+ * Represents a class that contains the UI components and logic for the discipline settings.
+ * This class extends the BaseSettings class and implements the BaseSettings interface.
+ * This class is used to display the discipline settings form and handle the user input.
+ */
 public class DisciplineSettings implements BaseSettings {
+
+    /**
+     * The main panel of the discipline settings.
+     */
     public DisciplineSettings(){
 
     }

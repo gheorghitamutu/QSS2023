@@ -17,6 +17,10 @@ import java.util.Objects;
  * This class provides various methods for retrieving, saving, and copying template data.
  */
 public class TemplateUtils {
+
+    /**
+     * Constructs a new TemplateUtils object.
+     */
     public TemplateUtils() {
     }
 

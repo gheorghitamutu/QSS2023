@@ -13,16 +13,57 @@ import org.dataaccess.discipline.DisciplineRepository;
 import org.domain.exceptions.RepositoryOperationException;
 import org.domain.exceptions.validations.ValidationException;
 
+/**
+ * Represents the main application class.
+ * This class is responsible for initializing the application and running it.
+ */
 public class Application {
 
+    /**
+     * The service used for accessing Discipline entities.
+     */
     public final IDisciplinesService disciplinesService;
+
+    /**
+     * The service used for accessing Room entities.
+     */
     public final IRoomsService roomsService;
+
+    /**
+     * The service used for accessing Session entities.
+     */
     public final ISessionsService sessionsService;
+
+    /**
+     * The service used for accessing StudentGroup entities.
+     */
     public final IStudentGroupsService studentGroupsService;
+
+    /**
+     * The service used for accessing Student entities.
+     */
     public final IStudentsService studentsService;
+
+    /**
+     * The service used for accessing Teacher entities.
+     */
     public final ITeachersService teachersService;
+
+    /**
+     * The service used for accessing Timeslot entities.
+     */
     public final ITimeslotsService timeslotsService;
 
+    /**
+     * Creates a new instance of the {@link Application} class.
+     * @param disciplinesService The service used for accessing Discipline entities.
+     * @param roomsService The service used for accessing Room entities.
+     * @param sessionsService The service used for accessing Session entities.
+     * @param studentGroupsService The service used for accessing StudentGroup entities.
+     * @param studentsService The service used for accessing Student entities.
+     * @param teachersService The service used for accessing Teacher entities.
+     * @param timeslotsService The service used for accessing Timeslot entities.
+     */
     @Inject
     public Application(IDisciplinesService disciplinesService,
                        IRoomsService roomsService,
@@ -39,6 +80,11 @@ public class Application {
         this.timeslotsService = timeslotsService;
     }
 
+    /**
+     * Runs the application.
+     * @throws RepositoryOperationException If an error occurs during the repository operation.
+     * @throws ValidationException If the provided name or credits are invalid.
+     */
     public void run() throws RepositoryOperationException, ValidationException {
 
         var dr = new DisciplineRepository(new MainDatabaseHibernateProvider());
