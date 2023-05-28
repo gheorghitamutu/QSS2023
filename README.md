@@ -27,6 +27,10 @@
     - [Technical (developer point of view) documentation](#technical-developer-point-of-view-documentation)
     - [User Guide](#user-guide)
     - [Contribution](#contribution)
+      - [Nechita Roberta](#nechita-roberta)
+      - [Rosu Radu-Andrei](#rosu-radu-andrei)
+      - [Cosmin Modoranu](#cosmin-modoranu)
+      - [Gheorghita Mutu](#gheorghita-mutu)
 
 
 # QSS2023
@@ -352,13 +356,70 @@ The entire user guide can be found [here](./Project/docs/User-Guide.md).
 
 ### Contribution
 
-    Nechita Roberta - Use Case Diagram and UseCase Documentation; FrontEnd part; Functional testing on frontend part (adding both pre- and post-conditions); Backend integration on frontend;
-    Document the personal implementation with java doc comment in order to generate the tech report; User-Guide Manual.
+We were all involved in reviews and decisional aspects of the projects but ultimately everyone had some area of the project were they worked the most.
 
-    Rosu Radu-Andrei - Use Case Diagram and UseCase Documentation; Timetable HTML Generation part; Backend integration on generator; Generator integration to frontend; 
-    Unit Tests for multiple services (Disciplines, Rooms, Sessions, StudentGroups, Teachers); Preconditions, Postconditions and Invariants for all HTML Generator classes and methods; 
-    Document the personal implementation with javadoc comments; User-Guide Manual.
+#### Nechita Roberta
+    Use Case Diagram and Use Case Documentation.
+    FrontEnd part.
+    Functional testing on frontend part (adding both pre- and post-conditions).
+    Backend integration on frontend.
+    Document the personal implementation with java doc comment in order to generate the tech report.
+    User-Guide Manual.
 
-    Cosmin: WIP
+#### Rosu Radu-Andrei
+    Use Case Diagram and Use Case Documentation.
+    Timetable HTML Generation part.
+    Backend integration on generator.
+    Generator integration to frontend.
+    Unit Tests for multiple services (Disciplines, Rooms, Sessions, StudentGroups, Teachers).
+    Preconditions, Postconditions and Invariants for all HTML Generator classes and methods.
+    Document the personal implementation with javadoc comments.
+    User-Guide Manual.
 
-    Gheorghita: WIP
+#### Cosmin Modoranu
+    Implementare:
+      - Configurare JPA (partial)
+      - Generic repository pattern
+      - Clean architecture pentru usurinta testare / maintainability
+      - Environmenturi ce folosesc diferite baze de date (production vs test)
+      - Services (partial - students service??) Repositories(partial - students repository??) + application layer exceptions
+      - Dependency injection kernel folosind guice DI framework + preluare instanta injector de oriunde pentru a injecta manual
+      - State initial pentru generatorul de rapoarte html (test) 
+
+    Unit teste (phase 2):
+      - Data acess tests (repositories, no validators)
+      - students service 
+
+    Assertions (phase 3):
+      - Adaugat conditii data access (repositories)
+      - Adaugat conditii application layer (services)
+      - Support pentru validation exceptions in caz de sunt incalcate asertiuni (sau validatori)
+
+    Documentation (phase 4):
+      - documented the repositories using javadoc comments
+      - documented architecture
+
+    
+#### Gheorghita Mutu
+
+    Phase 1:
+        - Hibernate configuration (simple model) - superseeded by Cosmin later on with several improvements
+        - Database exploration (SQLite and then Apache Derby)
+        - Database Models (built on top of use cases presented by Roberta & Radu)
+        - Database Validators (partially, along with Cosmin)
+        - Database Models Exceptions (partially, along with Cosmin)
+        - Database Models Repositories (partially, along with Cosmin)
+        - Quick Validations Tests (unrelated to Phase 2)
+        - Continuous Integration/Continuous Development (GitHub workflows)
+    Phase 2:
+        - Integration of JaCoCo
+        - Unit tests for domain (models) layer
+        - CI/CD integration (Automated Testing & GitHub Pages for test coverage report)
+    Phase 3:
+        - Jakarta Annotations vs Assertions (proposal & guidance (with feedback regarding framework limitations brought by Cosmin))
+        - Database Models Validation (functions preconditions and postconditions, invariants on class memebers)
+    Phase 4:
+        - Documentation Integration (gathered all the available material)
+        - Javadoc generation (emcompassing the comments added by the entire team on the features they worked on)
+        - Javadoc comments on models and completion of several other unrelated classes
+        - PRs repository coordination
