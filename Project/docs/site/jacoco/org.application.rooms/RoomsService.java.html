@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>RoomsService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">SchoolTimetable</a> &gt; <a href="index.source.html" class="el_package">org.application.rooms</a> &gt; <span class="el_source">RoomsService.java</span></div><h1>RoomsService.java</h1><pre class="source lang-java linenums">package org.application.rooms;
+
+import com.google.inject.Inject;
+import org.dataaccess.room.IRoomRepository;
+import org.domain.exceptions.RepositoryOperationException;
+import org.domain.exceptions.room.RoomAdditionException;
+import org.domain.exceptions.room.RoomDeletionFailed;
+import org.domain.exceptions.room.RoomNotFoundException;
+import org.domain.models.Room;
+
+import java.text.MessageFormat;
+import java.util.List;
+
+public class RoomsService implements IRoomsService {
+
+    private final IRoomRepository roomRepository;
+
+    @Inject
+<span class="fc" id="L19">    public RoomsService(IRoomRepository roomRepository) {</span>
+<span class="fc" id="L20">        this.roomRepository = roomRepository;</span>
+<span class="fc" id="L21">    }</span>
+
+    @Override
+    public Room addRoom(String name, int capacity, int floor, Room.Type type) throws RoomAdditionException {
+<span class="fc" id="L25">        Room room = null;</span>
+
+        try {
+<span class="fc" id="L28">            room = roomRepository.getByName(name);</span>
+<span class="nc" id="L29">        } catch (Exception e) {</span>
+<span class="nc" id="L30">            System.out.println(e.getMessage());</span>
+<span class="fc" id="L31">        }</span>
+
+<span class="fc bfc" id="L33" title="All 2 branches covered.">        if (room == null) {</span>
+            try {
+<span class="fc" id="L35">                room = roomRepository.createNewRoom(name, capacity, floor, type);</span>
+<span class="nc" id="L36">            } catch (RepositoryOperationException e) {</span>
+<span class="nc" id="L37">                throw new RuntimeException(e);</span>
+<span class="fc" id="L38">            }</span>
+        }
+
+        try {
+<span class="fc" id="L42">            roomRepository.save(room);</span>
+<span class="fc" id="L43">        } catch (Exception e) {</span>
+<span class="fc" id="L44">            throw new RoomAdditionException(&quot;[RoomService] Failed adding room!&quot;, e);</span>
+<span class="fc" id="L45">        }</span>
+
+<span class="fc" id="L47">        return room;</span>
+    }
+
+    @Override
+    public boolean deleteRoom(int roomId) throws RoomNotFoundException, RoomDeletionFailed {
+<span class="fc" id="L52">        var room = roomRepository.getById(roomId);</span>
+<span class="pc bpc" id="L53" title="1 of 2 branches missed.">        if (room == null) {</span>
+<span class="fc" id="L54">            throw new RoomNotFoundException(MessageFormat.format(&quot;[RoomService] Room with id {0} not found.&quot;, roomId));</span>
+        }
+
+        try {
+<span class="nc" id="L58">            roomRepository.delete(room);</span>
+<span class="nc" id="L59">        } catch (Exception e) {</span>
+<span class="nc" id="L60">            throw new RoomDeletionFailed(&quot; [RoomService] Failed to delete room.&quot;, e);</span>
+<span class="nc" id="L61">        }</span>
+
+<span class="nc" id="L63">        return true;</span>
+    }
+
+    @Override
+    public boolean deleteRooms(String name) throws RoomDeletionFailed {
+<span class="fc" id="L68">        var rooms = roomRepository.readAll().stream().filter(r -&gt; r.getName().equals(name)).toList();</span>
+
+        try {
+<span class="nc" id="L71">            roomRepository.deleteMany(rooms);</span>
+<span class="fc" id="L72">        } catch (Exception e) {</span>
+<span class="fc" id="L73">            throw new RoomDeletionFailed(&quot; [RoomService] Failed to delete rooms.&quot;, e);</span>
+<span class="nc" id="L74">        }</span>
+
+<span class="nc" id="L76">        return true;</span>
+    }
+
+    @Override
+    public boolean deleteAll() throws RoomDeletionFailed {
+        try {
+<span class="fc" id="L82">            roomRepository.deleteMany(roomRepository.readAll());</span>
+<span class="fc" id="L83">        } catch (Exception e) {</span>
+<span class="fc" id="L84">            throw new RoomDeletionFailed(&quot; [RoomService] Failed to delete rooms.&quot;, e);</span>
+<span class="fc" id="L85">        }</span>
+
+<span class="fc" id="L87">        return true;</span>
+    }
+
+    @Override
+    public Room getRoomById(int roomId) throws RoomNotFoundException {
+<span class="fc" id="L92">        var room = roomRepository.getById(roomId);</span>
+<span class="pc bpc" id="L93" title="1 of 2 branches missed.">        if (room == null) {</span>
+<span class="fc" id="L94">            throw new RoomNotFoundException(MessageFormat.format(&quot;[RoomService] Room with id {0} not found.&quot;, roomId));</span>
+        }
+<span class="nc" id="L96">        return room;</span>
+    }
+
+    @Override
+    public List&lt;Room&gt; getRooms() {
+<span class="fc" id="L101">        return roomRepository.readAll();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

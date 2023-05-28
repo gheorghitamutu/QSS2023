@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>RoomsGenerator.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">SchoolTimetable</a> &gt; <a href="index.source.html" class="el_package">org.application.presentation.generators</a> &gt; <span class="el_source">RoomsGenerator.java</span></div><h1>RoomsGenerator.java</h1><pre class="source lang-java linenums">package org.application.presentation.generators;
+
+import org.application.domain.models.Room;
+import org.application.domain.models.Timeslot;
+import org.application.presentation.GUI;
+
+import java.util.List;
+import java.util.Map;
+
+public class RoomsGenerator extends BaseGenerator{
+    private final List&lt;Room&gt; rooms;
+    private final Map&lt;String, String&gt; timetablesNames;
+    private final Map&lt;String, String&gt; listsData;
+
+    public RoomsGenerator(String generationDateString, Map&lt;String, Map&lt;Timeslot.Day, StringBuilder&gt;&gt; timetablesDays, Map&lt;String, String&gt; timetablesNames, Map&lt;String, String&gt; listsData){
+<span class="fc" id="L16">        super(generationDateString, timetablesDays);</span>
+
+<span class="fc" id="L18">        this.rooms = GUI.app.roomsService.getRooms();</span>
+<span class="fc" id="L19">        this.timetablesNames = timetablesNames;</span>
+<span class="fc" id="L20">        this.listsData = listsData;</span>
+<span class="fc" id="L21">    }</span>
+
+    public void generate(){
+<span class="fc" id="L24">        String roomsData = utils.getBaseTemplateData(&quot;rooms&quot;);</span>
+<span class="fc" id="L25">        roomsData = roomsData.replace(&quot;$generation_date&quot;, this.generationDateString);</span>
+<span class="fc" id="L26">        StringBuilder labElementsData = new StringBuilder();</span>
+<span class="fc" id="L27">        StringBuilder courseElementsData = new StringBuilder();</span>
+
+<span class="fc bfc" id="L29" title="All 2 branches covered.">        for (Room room : this.rooms){</span>
+<span class="fc" id="L30">            String roomEntry = utils.getBaseTemplateData(&quot;atomics&quot; + this.separator + &quot;list_entry&quot;);</span>
+
+<span class="fc" id="L32">            String name = room.getName();</span>
+<span class="fc" id="L33">            int floor = room.getFloor();</span>
+<span class="fc" id="L34">            int capacity = room.getCapacity();</span>
+<span class="fc" id="L35">            String timetableName = &quot;timetable_r_&quot; + name.toLowerCase().replace(&quot; &quot;, &quot;_&quot;);</span>
+
+<span class="fc" id="L37">            roomEntry = roomEntry.replace(&quot;$entry_name&quot;, name);</span>
+<span class="fc" id="L38">            roomEntry = roomEntry.replace(&quot;$entry_ref&quot;, &quot;./&quot; + timetableName + &quot;.html&quot;);</span>
+
+<span class="pc bpc" id="L40" title="1 of 2 branches missed.">            if (room.getType() == Room.Type.COURSE){</span>
+<span class="fc" id="L41">                courseElementsData.append(roomEntry);</span>
+            }
+<span class="nc bnc" id="L43" title="All 2 branches missed.">            else if (room.getType() == Room.Type.LABORATORY){</span>
+<span class="nc" id="L44">                labElementsData.append(roomEntry);</span>
+            }
+
+<span class="fc" id="L47">            this.addToDaysMap(timetableName);</span>
+<span class="fc" id="L48">            this.timetablesNames.put(timetableName, &quot;Timetable of Room &quot; + name + &quot;, Floor &quot; + floor + &quot;, Capacity of &quot; + capacity + &quot; seats&quot;);</span>
+<span class="fc" id="L49">        }</span>
+
+<span class="fc" id="L51">        roomsData = roomsData.replace(&quot;$lab_elements&quot;, labElementsData.toString());</span>
+<span class="fc" id="L52">        roomsData = roomsData.replace(&quot;$course_elements&quot;, courseElementsData.toString());</span>
+<span class="fc" id="L53">        this.listsData.put(&quot;rooms&quot;, roomsData);</span>
+<span class="fc" id="L54">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

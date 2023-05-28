@@ -1,0 +1,340 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SessionSettings.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">SchoolTimetable</a> &gt; <a href="index.source.html" class="el_package">org.application.presentation.swing</a> &gt; <span class="el_source">SessionSettings.java</span></div><h1>SessionSettings.java</h1><pre class="source lang-java linenums">package org.application.presentation.swing;
+
+import org.application.domain.exceptions.discipline.DisciplineNotFoundException;
+import org.application.domain.exceptions.session.SessionAdditionException;
+import org.application.domain.exceptions.session.SessionDeletionFailed;
+import org.application.domain.exceptions.session.SessionNotFoundException;
+import org.application.domain.exceptions.studentgroup.StudentGroupNotFoundException;
+import org.application.domain.exceptions.teacher.TeacherNotFoundException;
+import org.application.domain.models.Session;
+import org.application.presentation.GUI;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Objects;
+
+public class SessionSettings implements BaseSettings{
+<span class="nc" id="L19">    public SessionSettings(){</span>
+
+<span class="nc" id="L21">    }</span>
+
+    private void addGroupToSessionForm(JPanel currentPanel){
+
+<span class="nc" id="L25">        JLabel titleLabel1 = new JLabel(&quot;ADD GROUP TO SESSION&quot;);</span>
+<span class="nc" id="L26">        titleLabel1.setFont(new Font(&quot;serif&quot;, Font.BOLD, 25));</span>
+<span class="nc" id="L27">        titleLabel1.setForeground(Color.decode(&quot;#617A55&quot;));</span>
+<span class="nc" id="L28">        titleLabel1.setAlignmentX(Component.CENTER_ALIGNMENT);</span>
+        // titleLabel.setBounds(50,30,300,25);
+<span class="nc" id="L30">        currentPanel.add(titleLabel1);</span>
+
+        //add techer to session
+<span class="nc" id="L33">        currentPanel.add(Box.createRigidArea(new Dimension(0, 10)));</span>
+<span class="nc" id="L34">        JLabel sessionLabel = new JLabel(&quot;Discipline Session:&quot;);</span>
+<span class="nc" id="L35">        sessionLabel.setFont(new Font(&quot;Arial&quot;, Font.PLAIN, 14));</span>
+<span class="nc" id="L36">        sessionLabel.setBackground(Color.decode(&quot;#617A55&quot;));</span>
+<span class="nc" id="L37">        JComboBox&lt;String&gt; sessionSelector = new JComboBox&lt;&gt;();</span>
+
+
+<span class="nc" id="L40">        var allSession = GUI.app.sessionsService.getSessions();</span>
+<span class="nc bnc" id="L41" title="All 2 branches missed.">        for (var s : allSession) {</span>
+<span class="nc" id="L42">            sessionSelector.addItem(s.getDiscipline().getName());</span>
+<span class="nc" id="L43">        }</span>
+<span class="nc" id="L44">        JPanel sessionPanel = createFieldPanel(sessionLabel, sessionSelector);</span>
+<span class="nc" id="L45">        currentPanel.add(sessionPanel);</span>
+
+
+
+<span class="nc" id="L49">        currentPanel.add(Box.createRigidArea(new Dimension(0, 10)));</span>
+<span class="nc" id="L50">        JLabel groupLabel = new JLabel(&quot;Group:&quot;);</span>
+<span class="nc" id="L51">        groupLabel.setFont(new Font(&quot;Arial&quot;, Font.PLAIN, 14));</span>
+<span class="nc" id="L52">        groupLabel.setBackground(Color.decode(&quot;#617A55&quot;));</span>
+<span class="nc" id="L53">        JComboBox&lt;String&gt; groupSelector = new JComboBox&lt;&gt;();</span>
+
+        // get all the disciplines from db
+<span class="nc" id="L56">        var allGroupsName = GUI.app.studentGroupsService.getStudentGroups();</span>
+<span class="nc bnc" id="L57" title="All 2 branches missed.">        for (var group : allGroupsName) {</span>
+<span class="nc" id="L58">            groupSelector.addItem(group.getName());</span>
+<span class="nc" id="L59">        }</span>
+<span class="nc" id="L60">        JPanel teacherPanel = createFieldPanel(groupLabel, groupSelector);</span>
+<span class="nc" id="L61">        currentPanel.add(teacherPanel);</span>
+
+        // Add the submit button
+<span class="nc" id="L64">        currentPanel.add(Box.createRigidArea(new Dimension(0, 10)));</span>
+<span class="nc" id="L65">        JButton groupBtn = new JButton(&quot;Submit&quot;);</span>
+<span class="nc" id="L66">        JPanel groupButtonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));</span>
+<span class="nc" id="L67">        groupButtonPanel.setBackground(Color.decode(&quot;#F6FFDE&quot;));</span>
+<span class="nc" id="L68">        groupBtn.addActionListener(new ActionListener() {</span>
+            public void actionPerformed(ActionEvent e) {
+<span class="nc" id="L70">                System.out.println(&quot;ADD GROUP TO A SESSION CLICKED&quot;);</span>
+                try {
+<span class="nc" id="L72">                    GUI.app.sessionsService.addGroupToSession((String) sessionSelector.getSelectedItem(), (String) groupSelector.getSelectedItem() );</span>
+<span class="nc" id="L73">                } catch (DisciplineNotFoundException | StudentGroupNotFoundException | SessionNotFoundException ex) {</span>
+<span class="nc" id="L74">                    JOptionPane.showMessageDialog(</span>
+                            null,
+<span class="nc" id="L76">                            &quot;An exception occurred: &quot; + ex.getMessage(),</span>
+                            &quot;Error&quot;,
+                            JOptionPane.ERROR_MESSAGE);
+<span class="nc" id="L79">                    throw new RuntimeException(ex);</span>
+<span class="nc" id="L80">                }</span>
+
+<span class="nc" id="L82">            }</span>
+        });
+<span class="nc" id="L84">        groupButtonPanel.add(groupBtn);</span>
+<span class="nc" id="L85">        currentPanel.add(groupButtonPanel);</span>
+
+<span class="nc" id="L87">    }</span>
+    private JPanel createFieldPanel(JLabel label, JComponent component) {
+<span class="nc" id="L89">        JPanel panel = new JPanel();</span>
+<span class="nc" id="L90">        panel.setBackground(Color.decode(&quot;#F6FFDE&quot;));</span>
+<span class="nc" id="L91">        panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));</span>
+<span class="nc" id="L92">        panel.add(label);</span>
+<span class="nc" id="L93">        panel.add(Box.createRigidArea(new Dimension(10, 0)));</span>
+<span class="nc" id="L94">        panel.add(component);</span>
+<span class="nc" id="L95">        panel.setMaximumSize(new Dimension(Short.MAX_VALUE, component.getPreferredSize().height));</span>
+<span class="nc" id="L96">        return panel;</span>
+    }
+
+    public JPanel deleteRoomForm(JPanel currentPanel){
+
+<span class="nc" id="L101">        currentPanel.setBackground(Color.decode(&quot;#F6FFDE&quot;));</span>
+
+<span class="nc" id="L103">        currentPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));</span>
+<span class="nc" id="L104">        currentPanel.add(Box.createRigidArea(new Dimension(0, 30)));</span>
+
+<span class="nc" id="L106">        JLabel titleLabel = new JLabel(&quot;DELETE SESSION&quot;);</span>
+<span class="nc" id="L107">        titleLabel.setFont(new Font(&quot;serif&quot;, Font.BOLD, 25));</span>
+<span class="nc" id="L108">        titleLabel.setForeground(Color.decode(&quot;#617A55&quot;));</span>
+        //titleLabel.setBounds(0,30,300,25);
+<span class="nc" id="L110">        titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);</span>
+<span class="nc" id="L111">        currentPanel.add(titleLabel);</span>
+
+<span class="nc" id="L113">        currentPanel.add(Box.createRigidArea(new Dimension(0, 10)));</span>
+<span class="nc" id="L114">        JLabel regLabel = new JLabel(&quot;Data:&quot;);</span>
+<span class="nc" id="L115">        regLabel.setFont(new Font(&quot;Arial&quot;, Font.PLAIN, 14));</span>
+<span class="nc" id="L116">        regLabel.setBackground(Color.decode(&quot;#617A55&quot;));</span>
+<span class="nc" id="L117">        JComboBox&lt;String&gt; model = new JComboBox&lt;&gt;();</span>
+
+        // get all the disciplines from db
+<span class="nc" id="L120">        var allSessions = GUI.app.sessionsService.getSessions();</span>
+<span class="nc bnc" id="L121" title="All 2 branches missed.">        for (var session : allSessions) {</span>
+<span class="nc" id="L122">            model.addItem(session.getDiscipline().getName());</span>
+<span class="nc" id="L123">        }</span>
+<span class="nc" id="L124">        JPanel dataPanel = createFieldPanel(regLabel, model);</span>
+<span class="nc" id="L125">        currentPanel.add(dataPanel);</span>
+
+        // Add the submit button
+<span class="nc" id="L128">        currentPanel.add(Box.createRigidArea(new Dimension(0, 10)));</span>
+<span class="nc" id="L129">        JButton submitButtonDelete = new JButton(&quot;Submit&quot;);</span>
+<span class="nc" id="L130">        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));</span>
+<span class="nc" id="L131">        buttonPanel.setBackground(Color.decode(&quot;#F6FFDE&quot;));</span>
+<span class="nc" id="L132">        submitButtonDelete.addActionListener(new ActionListener() {</span>
+            public void actionPerformed(ActionEvent e) {
+<span class="nc" id="L134">                System.out.println(&quot;Delete session btn clicked&quot;);</span>
+                try {
+<span class="nc" id="L136">                    GUI.app.sessionsService.deleteSession((String) model.getSelectedItem());</span>
+<span class="nc" id="L137">                } catch (DisciplineNotFoundException | SessionDeletionFailed | SessionNotFoundException ex) {</span>
+<span class="nc" id="L138">                    JOptionPane.showMessageDialog(</span>
+                            null,
+<span class="nc" id="L140">                            &quot;An exception occurred: &quot; + ex.getMessage(),</span>
+                            &quot;Error&quot;,
+                            JOptionPane.ERROR_MESSAGE);
+<span class="nc" id="L143">                    throw new RuntimeException(ex);</span>
+<span class="nc" id="L144">                }</span>
+<span class="nc" id="L145">            }</span>
+        });
+
+
+<span class="nc" id="L149">        buttonPanel.add(submitButtonDelete);</span>
+<span class="nc" id="L150">        currentPanel.add(buttonPanel);</span>
+
+<span class="nc" id="L152">        return currentPanel;</span>
+    }
+
+    public JPanel addSessionForm(JPanel currentPanel){
+<span class="nc" id="L156">        currentPanel.setBackground(Color.decode(&quot;#F6FFDE&quot;));</span>
+
+<span class="nc" id="L158">        currentPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));</span>
+<span class="nc" id="L159">        currentPanel.add(Box.createRigidArea(new Dimension(0, 10)));</span>
+
+<span class="nc" id="L161">        JLabel titleLabel = new JLabel(&quot;CREATE SESSION&quot;);</span>
+<span class="nc" id="L162">        titleLabel.setFont(new Font(&quot;serif&quot;, Font.BOLD, 25));</span>
+<span class="nc" id="L163">        titleLabel.setForeground(Color.decode(&quot;#617A55&quot;));</span>
+<span class="nc" id="L164">        titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);</span>
+        // titleLabel.setBounds(50,30,300,25);
+<span class="nc" id="L166">        currentPanel.add(titleLabel);</span>
+
+        //add discipline selector
+<span class="nc" id="L169">        currentPanel.add(Box.createRigidArea(new Dimension(0, 10)));</span>
+<span class="nc" id="L170">        JLabel disciplineLabel = new JLabel(&quot;Discipline:&quot;);</span>
+<span class="nc" id="L171">        disciplineLabel.setFont(new Font(&quot;Arial&quot;, Font.PLAIN, 14));</span>
+<span class="nc" id="L172">        disciplineLabel.setBackground(Color.decode(&quot;#617A55&quot;));</span>
+<span class="nc" id="L173">        JComboBox&lt;String&gt; model = new JComboBox&lt;&gt;();</span>
+
+        // get all the disciplines from db
+<span class="nc" id="L176">        var allDisciplines = GUI.app.disciplinesService.getDisciplines();</span>
+<span class="nc bnc" id="L177" title="All 2 branches missed.">        for (var discipline : allDisciplines) {</span>
+<span class="nc" id="L178">            model.addItem(discipline.getName());</span>
+<span class="nc" id="L179">        }</span>
+<span class="nc" id="L180">        JPanel dataPanel = createFieldPanel(disciplineLabel, model);</span>
+<span class="nc" id="L181">        currentPanel.add(dataPanel);</span>
+
+<span class="nc" id="L183">        currentPanel.add(Box.createRigidArea(new Dimension(0, 10)));</span>
+<span class="nc" id="L184">        JLabel typeLabel = new JLabel(&quot;Type:&quot;);</span>
+<span class="nc" id="L185">        typeLabel.setFont(new Font(&quot;Arial&quot;, Font.PLAIN, 14));</span>
+<span class="nc" id="L186">        typeLabel.setBackground(Color.decode(&quot;#617A55&quot;));</span>
+<span class="nc" id="L187">        String[] yearValues = {&quot;COURSE&quot;, &quot;LABORATORY&quot;, &quot;SEMINARY&quot;};</span>
+<span class="nc" id="L188">        JComboBox&lt;String&gt; typeComboBox = new JComboBox&lt;&gt;(yearValues);</span>
+<span class="nc" id="L189">        JPanel typePanel = createFieldPanel(typeLabel, typeComboBox);</span>
+<span class="nc" id="L190">        currentPanel.add(typePanel);</span>
+
+
+        //Add half year values
+<span class="nc" id="L194">        currentPanel.add(Box.createRigidArea(new Dimension(0, 10)));</span>
+<span class="nc" id="L195">        JLabel halfyearLabel = new JLabel(&quot;Half Year:&quot;);</span>
+<span class="nc" id="L196">        halfyearLabel.setFont(new Font(&quot;Arial&quot;, Font.PLAIN, 14));</span>
+<span class="nc" id="L197">        halfyearLabel.setBackground(Color.decode(&quot;#617A55&quot;));</span>
+<span class="nc" id="L198">        String[] halfyearValues = {&quot;A&quot;, &quot;B&quot;};</span>
+<span class="nc" id="L199">        JComboBox&lt;String&gt; halfyearComboBox = new JComboBox&lt;&gt;(halfyearValues);</span>
+<span class="nc" id="L200">        JPanel halfyearPanel = createFieldPanel(halfyearLabel, halfyearComboBox);</span>
+<span class="nc" id="L201">        currentPanel.add(halfyearPanel);</span>
+
+        // Add the submit button
+<span class="nc" id="L204">        currentPanel.add(Box.createRigidArea(new Dimension(0, 10)));</span>
+<span class="nc" id="L205">        JButton submitButtonAdd = new JButton(&quot;Submit&quot;);</span>
+<span class="nc" id="L206">        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));</span>
+<span class="nc" id="L207">        buttonPanel.setBackground(Color.decode(&quot;#F6FFDE&quot;));</span>
+<span class="nc" id="L208">        submitButtonAdd.addActionListener(new ActionListener() {</span>
+            public void actionPerformed(ActionEvent e) {
+                // TODO
+<span class="nc" id="L211">                System.out.println(&quot;Insert session btn clicked&quot;);</span>
+                try {
+<span class="nc" id="L213">                    GUI.app.sessionsService.addSession(Session.Type.valueOf((String) typeComboBox.getSelectedItem()),</span>
+<span class="nc" id="L214">                            (String) halfyearComboBox.getSelectedItem(),</span>
+<span class="nc" id="L215">                            (String) model.getSelectedItem());</span>
+<span class="nc" id="L216">                } catch (SessionAdditionException | DisciplineNotFoundException ex) {</span>
+<span class="nc" id="L217">                    JOptionPane.showMessageDialog(</span>
+                            null,
+<span class="nc" id="L219">                            &quot;An exception occurred: &quot; + ex.getMessage(),</span>
+                            &quot;Error&quot;,
+                            JOptionPane.ERROR_MESSAGE);
+<span class="nc" id="L222">                    throw new RuntimeException(ex);</span>
+<span class="nc" id="L223">                }</span>
+<span class="nc" id="L224">            }</span>
+        });
+<span class="nc" id="L226">        buttonPanel.add(submitButtonAdd);</span>
+<span class="nc" id="L227">        currentPanel.add(buttonPanel);</span>
+
+<span class="nc" id="L229">        currentPanel.add(Box.createRigidArea(new Dimension(0, 10)));</span>
+<span class="nc" id="L230">        JLabel titleLabel1 = new JLabel(&quot;ADD TEACHER TO SESSION&quot;);</span>
+<span class="nc" id="L231">        titleLabel1.setFont(new Font(&quot;serif&quot;, Font.BOLD, 25));</span>
+<span class="nc" id="L232">        titleLabel1.setForeground(Color.decode(&quot;#617A55&quot;));</span>
+<span class="nc" id="L233">        titleLabel1.setAlignmentX(Component.CENTER_ALIGNMENT);</span>
+        // titleLabel.setBounds(50,30,300,25);
+<span class="nc" id="L235">        currentPanel.add(titleLabel1);</span>
+
+        //add techer to session
+<span class="nc" id="L238">        currentPanel.add(Box.createRigidArea(new Dimension(0, 10)));</span>
+<span class="nc" id="L239">        JLabel sessionLabel = new JLabel(&quot;Discipline Session:&quot;);</span>
+<span class="nc" id="L240">        sessionLabel.setFont(new Font(&quot;Arial&quot;, Font.PLAIN, 14));</span>
+<span class="nc" id="L241">        sessionLabel.setBackground(Color.decode(&quot;#617A55&quot;));</span>
+<span class="nc" id="L242">        JComboBox&lt;String&gt; sessionSelector = new JComboBox&lt;&gt;();</span>
+
+
+<span class="nc" id="L245">        var allSession = GUI.app.sessionsService.getSessions();</span>
+<span class="nc bnc" id="L246" title="All 2 branches missed.">        for (var s : allSession) {</span>
+<span class="nc" id="L247">            sessionSelector.addItem(s.getDiscipline().getName());</span>
+<span class="nc" id="L248">        }</span>
+<span class="nc" id="L249">        JPanel sessionPanel = createFieldPanel(sessionLabel, sessionSelector);</span>
+<span class="nc" id="L250">        currentPanel.add(sessionPanel);</span>
+
+
+
+<span class="nc" id="L254">        currentPanel.add(Box.createRigidArea(new Dimension(0, 10)));</span>
+<span class="nc" id="L255">        JLabel teacherLabel = new JLabel(&quot;Teacher:&quot;);</span>
+<span class="nc" id="L256">        teacherLabel.setFont(new Font(&quot;Arial&quot;, Font.PLAIN, 14));</span>
+<span class="nc" id="L257">        teacherLabel.setBackground(Color.decode(&quot;#617A55&quot;));</span>
+<span class="nc" id="L258">        JComboBox&lt;String&gt; teacherSelector = new JComboBox&lt;&gt;();</span>
+
+
+<span class="nc" id="L261">        var allTeacher = GUI.app.teachersService.getTeachers();</span>
+<span class="nc bnc" id="L262" title="All 2 branches missed.">        for (var t : allTeacher) {</span>
+<span class="nc" id="L263">            teacherSelector.addItem(t.getName());</span>
+<span class="nc" id="L264">        }</span>
+<span class="nc" id="L265">        JPanel teacherPanel = createFieldPanel(teacherLabel, teacherSelector);</span>
+<span class="nc" id="L266">        currentPanel.add(teacherPanel);</span>
+
+        // Add the submit button
+<span class="nc" id="L269">        currentPanel.add(Box.createRigidArea(new Dimension(0, 10)));</span>
+<span class="nc" id="L270">        JButton teacherBtn = new JButton(&quot;Submit&quot;);</span>
+<span class="nc" id="L271">        JPanel teacherButtonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));</span>
+<span class="nc" id="L272">        teacherButtonPanel.setBackground(Color.decode(&quot;#F6FFDE&quot;));</span>
+<span class="nc" id="L273">        teacherBtn.addActionListener(new ActionListener() {</span>
+            public void actionPerformed(ActionEvent e) {
+<span class="nc" id="L275">                System.out.println(&quot;ADD TEACHER TO A SESSION CLICKED&quot;);</span>
+                try {
+<span class="nc" id="L277">                    GUI.app.sessionsService.addTeacherToSession((String) sessionSelector.getSelectedItem(), (String) teacherSelector.getSelectedItem());</span>
+<span class="nc" id="L278">                } catch (DisciplineNotFoundException | SessionNotFoundException | TeacherNotFoundException ex) {</span>
+<span class="nc" id="L279">                    JOptionPane.showMessageDialog(</span>
+                            null,
+<span class="nc" id="L281">                            &quot;An exception occurred: &quot; + ex.getMessage(),</span>
+                            &quot;Error&quot;,
+                            JOptionPane.ERROR_MESSAGE);
+<span class="nc" id="L284">                    throw new RuntimeException(ex);</span>
+<span class="nc" id="L285">                }</span>
+
+<span class="nc" id="L287">            }</span>
+        });
+<span class="nc" id="L289">        teacherButtonPanel.add(teacherBtn);</span>
+<span class="nc" id="L290">        currentPanel.add(teacherButtonPanel);</span>
+
+        // ADD GROUP TO SESSION
+<span class="nc" id="L293">        currentPanel.add(Box.createRigidArea(new Dimension(0, 10)));</span>
+<span class="nc" id="L294">        addGroupToSessionForm(currentPanel);</span>
+
+<span class="nc" id="L296">        return currentPanel;</span>
+    }
+    @Override
+    public JPanel createJPanel(JPanel main, String labelText) {
+        // Remove previous components from right panel and add result label
+<span class="nc" id="L301">        main.removeAll();</span>
+        // create insertPanel
+<span class="nc" id="L303">        JPanel leftPanel = createLeftJPanel();</span>
+        // create deletePanel
+<span class="nc" id="L305">        JPanel rightPanel = createRightJPanel();</span>
+
+        //merge the 2 panelS into mainPanel
+<span class="nc" id="L308">        main.add(leftPanel, BorderLayout.WEST);</span>
+<span class="nc" id="L309">        main.add(rightPanel, BorderLayout.EAST);</span>
+
+<span class="nc" id="L311">        return main;</span>
+    }
+
+    @Override
+    public JPanel createLeftJPanel() {
+<span class="nc" id="L316">        JPanel currentPanel = new JPanel();</span>
+<span class="nc" id="L317">        currentPanel.setLayout(new BoxLayout(currentPanel, BoxLayout.Y_AXIS));</span>
+
+<span class="nc" id="L319">        currentPanel = addSessionForm(currentPanel);</span>
+<span class="nc" id="L320">        currentPanel = deleteRoomForm(currentPanel);</span>
+        // Set the frame size and center it on the screen
+<span class="nc" id="L322">        return currentPanel;</span>
+    }
+
+    @Override
+    public JPanel createRightJPanel() {
+<span class="nc" id="L327">        JPanel currentPanel = new JPanel();</span>
+<span class="nc" id="L328">        currentPanel.setLayout(null);</span>
+<span class="nc" id="L329">        currentPanel.setBackground(Color.decode(&quot;#F6FFDE&quot;));</span>
+
+<span class="nc" id="L331">        ImageIcon image = new ImageIcon(Objects.requireNonNull(SessionSettings.class.getResource(&quot;/icons/generator.png&quot;)));</span>
+<span class="nc" id="L332">        Image rescaledImage = image.getImage().getScaledInstance(250,250, Image.SCALE_DEFAULT);</span>
+<span class="nc" id="L333">        ImageIcon finalImage = new ImageIcon(rescaledImage);</span>
+<span class="nc" id="L334">        JLabel imageLabel = new JLabel(finalImage);</span>
+<span class="nc" id="L335">        imageLabel.setBounds(20,200,300,300);</span>
+<span class="nc" id="L336">        currentPanel.add(imageLabel, BorderLayout.CENTER);</span>
+<span class="nc" id="L337">        return currentPanel;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

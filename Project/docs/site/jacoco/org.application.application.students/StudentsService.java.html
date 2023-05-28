@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>StudentsService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">SchoolTimetable</a> &gt; <a href="index.source.html" class="el_package">org.application.application.students</a> &gt; <span class="el_source">StudentsService.java</span></div><h1>StudentsService.java</h1><pre class="source lang-java linenums">package org.application.application.students;
+
+import com.google.inject.Inject;
+import org.application.dataaccess.student.IStudentRepository;
+import org.application.dataaccess.studentgroup.IStudentGroupRepository;
+import org.application.domain.exceptions.*;
+import org.application.domain.exceptions.student.StudentAdditionException;
+import org.application.domain.exceptions.student.StudentDeletionFailed;
+import org.application.domain.exceptions.student.StudentNotFoundException;
+import org.application.domain.exceptions.student.StudentUpdateException;
+import org.application.domain.exceptions.studentgroup.StudentGroupReassignException;
+import org.application.domain.models.Student;
+import org.application.domain.models.StudentGroup;
+
+import java.text.MessageFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+public class StudentsService implements IStudentsService {
+
+    private final IStudentRepository studentRepository;
+    private final IStudentGroupRepository studentGroupRepository;
+
+    @Inject
+
+<span class="fc" id="L27">    public StudentsService(IStudentRepository studentRepository, IStudentGroupRepository studentGroupRepository) {</span>
+<span class="fc" id="L28">        this.studentRepository = studentRepository;</span>
+<span class="fc" id="L29">        this.studentGroupRepository = studentGroupRepository;</span>
+<span class="fc" id="L30">    }</span>
+
+    @Override
+    public Student addStudent(String name, String registrationNumber, int year, String groupName) throws StudentAdditionException {
+<span class="fc" id="L34">        var student = new Student();</span>
+
+<span class="fc" id="L36">        student.setName(name);</span>
+<span class="fc" id="L37">        student.setYear(year);</span>
+<span class="fc" id="L38">        student.setRegistrationNumber(registrationNumber);</span>
+<span class="fc" id="L39">        student.setInsertTime(new Date());</span>
+
+<span class="fc" id="L41">        var group = studentGroupRepository.getByGroupName(groupName);</span>
+<span class="fc bfc" id="L42" title="All 2 branches covered.">        if (group == null) {</span>
+            try {
+<span class="fc" id="L44">                System.out.println(MessageFormat.format(&quot;[StudentsService] Creating new group with name {0}.&quot;, groupName));</span>
+
+<span class="fc" id="L46">                group = studentGroupRepository.createNewGroup(groupName);</span>
+
+<span class="fc" id="L48">                System.out.println(MessageFormat.format(&quot;[StudentsService] Created new group with name {0}.&quot;, groupName));</span>
+
+<span class="fc" id="L50">            } catch (RepositoryOperationException e) {</span>
+<span class="fc" id="L51">                throw new StudentAdditionException(&quot;[StudentsService] Couldn't create new group for adding the student (group doesnt exist yet).&quot;, e);</span>
+<span class="fc" id="L52">            }</span>
+        }
+<span class="fc" id="L54">        student.setGroup(group);</span>
+
+        try {
+<span class="fc" id="L57">            studentRepository.save(student);</span>
+<span class="fc" id="L58">        } catch (Exception e) {</span>
+<span class="fc" id="L59">            throw new StudentAdditionException(&quot;[StudentsService] Couldn't add student.&quot;, e);</span>
+<span class="fc" id="L60">        }</span>
+
+<span class="fc" id="L62">        return student;</span>
+    }
+
+    @Override
+    public Student updateStudent(int studentId, String name, int year) throws StudentUpdateException {
+<span class="fc" id="L67">        var student = studentRepository.getById(studentId);</span>
+
+<span class="fc bfc" id="L69" title="All 2 branches covered.">        if (student == null) {</span>
+<span class="fc" id="L70">            throw new StudentUpdateException(MessageFormat.format(&quot;[StudentsService] Couldn't update student with id {0}. Student not found.&quot;, studentId));</span>
+        }
+
+<span class="fc" id="L73">        student.setName(name);</span>
+<span class="fc" id="L74">        student.setYear(year);</span>
+
+        try {
+<span class="fc" id="L77">            studentRepository.updateStudent(student);</span>
+<span class="fc" id="L78">        } catch (Exception e) {</span>
+<span class="fc" id="L79">            throw new StudentUpdateException(&quot;[StudentsService] Couldn't update student.&quot;, e);</span>
+<span class="fc" id="L80">        }</span>
+
+<span class="fc" id="L82">        return student;</span>
+    }
+
+    @Override
+    public Student reassignStudent(int studentId, String newGroupName) throws StudentGroupReassignException, RepositoryOperationException {
+<span class="fc" id="L87">        var student = studentRepository.getById(studentId);</span>
+
+<span class="fc" id="L89">        StudentGroup group = studentGroupRepository.getByGroupName(newGroupName);</span>
+
+<span class="fc bfc" id="L91" title="All 2 branches covered.">        if (group == null) {</span>
+            try {
+<span class="fc" id="L93">                group = studentGroupRepository.createNewGroup(newGroupName);</span>
+<span class="nc" id="L94">            } catch (RepositoryOperationException e) {</span>
+<span class="nc" id="L95">                throw new StudentGroupReassignException(MessageFormat.format(&quot;[StudentsService] Couldn't reassign student to group {0}.&quot;, newGroupName), e);</span>
+<span class="fc" id="L96">            }</span>
+        }
+
+<span class="fc" id="L99">        student.setGroup(group);</span>
+
+<span class="fc" id="L101">        studentGroupRepository.save(group);</span>
+
+<span class="fc" id="L103">        return student;</span>
+    }
+
+    @Override
+    public Student getStudentById(int studentId) throws StudentNotFoundException {
+<span class="fc" id="L108">        var student = studentRepository.getById(studentId);</span>
+<span class="fc bfc" id="L109" title="All 2 branches covered.">        if (student == null) {</span>
+<span class="fc" id="L110">            throw new StudentNotFoundException(MessageFormat.format(&quot;[StudentsService DELETE student] Student with id {0} not found.&quot;, studentId));</span>
+        }
+
+<span class="fc" id="L113">        return studentRepository.getById(studentId);</span>
+    }
+
+    public Student getStudentByRegistrationNumber(String registrationNumber) throws StudentNotFoundException {
+<span class="fc" id="L117">        var students = studentRepository.readAll().stream().filter(s -&gt; s.getRegistrationNumber().equals(registrationNumber)).toList();</span>
+<span class="fc bfc" id="L118" title="All 2 branches covered.">        if (students.size() != 1) {</span>
+<span class="fc" id="L119">            throw new StudentNotFoundException(MessageFormat.format(&quot;[StudentsService DELETE student] Student with id {0} not found.&quot;, registrationNumber));</span>
+        }
+<span class="fc" id="L121">        return students.get(0);</span>
+    }
+
+    @Override
+    public boolean deleteStudent(int studentId) throws StudentNotFoundException, StudentDeletionFailed {
+<span class="nc" id="L126">        var student = studentRepository.getById(studentId);</span>
+
+<span class="nc bnc" id="L128" title="All 2 branches missed.">        if (student == null) {</span>
+<span class="nc" id="L129">            throw new StudentNotFoundException(MessageFormat.format(&quot;[StudentsService DELETE student] Student with id {0} not found.&quot;, studentId));</span>
+        }
+
+        try {
+<span class="nc" id="L133">            studentRepository.deleteStudent(student);</span>
+<span class="nc" id="L134">        } catch (Exception e) {</span>
+<span class="nc" id="L135">            throw new StudentDeletionFailed(&quot; [StudentsService] Couldn't delete student.&quot;, e);</span>
+<span class="nc" id="L136">        }</span>
+
+<span class="nc" id="L138">        return true;</span>
+    }
+
+    @Override
+    public boolean deleteStudents(String registrationNumber) throws StudentNotFoundException, StudentDeletionFailed {
+<span class="nc" id="L143">        var students = studentRepository.readAll().stream().filter(s -&gt; s.getRegistrationNumber().equals(registrationNumber)).toList();</span>
+
+        try {
+<span class="nc" id="L146">            studentRepository.deleteMany(students);</span>
+<span class="nc" id="L147">        } catch (Exception e) {</span>
+<span class="nc" id="L148">            throw new StudentDeletionFailed(&quot; [StudentsService] Couldn't delete students.&quot;, e);</span>
+<span class="nc" id="L149">        }</span>
+
+<span class="nc" id="L151">        return true;</span>
+    }
+
+    @Override
+    public boolean deleteAll() throws StudentDeletionFailed {
+        try {
+<span class="fc" id="L157">            studentRepository.deleteMany(studentRepository.readAll());</span>
+<span class="fc" id="L158">        } catch (Exception e) {</span>
+<span class="fc" id="L159">            throw new StudentDeletionFailed(&quot; [StudentsService] Couldn't delete students.&quot;, e);</span>
+<span class="fc" id="L160">        }</span>
+
+<span class="fc" id="L162">        return true;</span>
+    }
+
+    @Override
+    public boolean deleteStudent(String registrationNumber) throws StudentNotFoundException, StudentDeletionFailed {
+<span class="fc" id="L167">        var students = studentRepository.readAll().stream().filter(s -&gt; s.getRegistrationNumber().equals(registrationNumber)).toList();</span>
+<span class="pc bpc" id="L168" title="1 of 2 branches missed.">        if (students.size() != 1) {</span>
+<span class="fc" id="L169">            throw new StudentNotFoundException(MessageFormat.format(&quot;[StudentsService DELETE student] Student with id {0} not found.&quot;, registrationNumber));</span>
+        }
+
+<span class="nc" id="L172">        var student = students.get(0);</span>
+        try {
+<span class="nc" id="L174">            studentRepository.deleteStudent(student);</span>
+<span class="nc" id="L175">        } catch (Exception e) {</span>
+<span class="nc" id="L176">            throw new StudentDeletionFailed(&quot; [StudentsService] Couldn't delete student.&quot;, e);</span>
+<span class="nc" id="L177">        }</span>
+
+<span class="nc" id="L179">        return true;</span>
+    }
+
+    @Override
+    public List&lt;Student&gt; getStudents() {
+<span class="fc" id="L184">        return studentRepository.readAll();</span>
+    }
+
+    @Override
+    public List&lt;Student&gt; getStudentsByGroupNameAndYear(String groupName, int year) {
+
+<span class="fc" id="L190">        var allGroups = studentGroupRepository.readAll();</span>
+
+<span class="pc bpc" id="L192" title="2 of 4 branches missed.">        var groupsFiltered = allGroups.stream().filter(group -&gt; group.getName().equals(groupName) &amp;&amp; group.getYear() == year).toList();</span>
+
+<span class="fc" id="L194">        List&lt;Student&gt; foundStudents = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L195" title="All 2 branches covered.">        for (var group : groupsFiltered) {</span>
+<span class="fc" id="L196">            foundStudents.addAll(group.getStudents());</span>
+<span class="fc" id="L197">        }</span>
+
+<span class="fc" id="L199">        return foundStudents;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

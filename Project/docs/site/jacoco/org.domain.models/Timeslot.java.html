@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Timeslot.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">SchoolTimetable</a> &gt; <a href="index.source.html" class="el_package">org.domain.models</a> &gt; <span class="el_source">Timeslot.java</span></div><h1>Timeslot.java</h1><pre class="source lang-java linenums">package org.domain.models;
+
+import jakarta.persistence.*;
+
+import jakarta.validation.Valid;
+
+import jakarta.validation.constraints.NotNull;
+import org.domain.models.validators.timeslot.ValidTimeslot;
+import org.hibernate.validator.constraints.time.DurationMax;
+import org.hibernate.validator.constraints.time.DurationMin;
+
+import java.io.Serializable;
+import java.time.Duration;
+import java.util.Date;
+
+@ValidTimeslot
+@Entity(name = &quot;Timeslot&quot;)
+@Table(name = &quot;timeslot&quot;, uniqueConstraints = {@UniqueConstraint(columnNames = {&quot;Id&quot;})})
+<span class="fc" id="L19">public class Timeslot implements Serializable {</span>
+    @NotNull
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = &quot;session_id&quot;, referencedColumnName = &quot;Id&quot;)
+    private Session session;
+    @NotNull
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = &quot;room_id&quot;, referencedColumnName = &quot;Id&quot;)
+    private Room room;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = &quot;Id&quot;, nullable = false, unique = true)
+    private int id;
+    @Basic
+    @Temporal(TemporalType.TIME)
+    @Column(name = &quot;Time&quot;, nullable = false)
+    private Date time;
+    @Enumerated(EnumType.STRING)
+    @Column(name = &quot;Weekday&quot;, nullable = false)
+    private Day weekday;
+    @DurationMin(minutes = 30, message = &quot;[ERROR] You can reserve a minimum of 30 minutes.&quot;)
+    @DurationMax(minutes = 240, message = &quot;[ERROR] You can reserve a maximum of 240 minutes.&quot;)
+    @Column(name = &quot;Timespan&quot;, nullable = false)
+    private java.time.Duration timespan;
+    @Enumerated(EnumType.STRING)
+    @Column(name = &quot;Periodicity&quot;, nullable = false)
+    private Periodicity periodicity;
+    @Column(name = &quot;StartDate&quot;, nullable = false)
+    private Date startDate;
+    @Column(name = &quot;EndDate&quot;, nullable = false)
+    private Date endDate;
+    @Column(name = &quot;insert_time&quot;, nullable = false)
+    private Date insertTime;
+
+    public Room getRoom() {
+<span class="fc" id="L54">        return room;</span>
+    }
+
+    public void setRoom(Room room) {
+<span class="fc" id="L58">        this.room = room;</span>
+<span class="fc" id="L59">    }</span>
+
+    public int getId() {
+<span class="nc" id="L62">        return id;</span>
+    }
+
+    public void setId(int id) {
+<span class="nc" id="L66">        this.id = id;</span>
+<span class="nc" id="L67">    }</span>
+
+    public Date getTime() {
+<span class="fc" id="L70">        return time;</span>
+    }
+
+    public void setTime(Date time) {
+<span class="fc" id="L74">        this.time = time;</span>
+<span class="fc" id="L75">    }</span>
+
+    public Day getWeekday() {
+<span class="fc" id="L78">        return weekday;</span>
+    }
+
+    public void setWeekday(Day weekday) {
+<span class="fc" id="L82">        this.weekday = weekday;</span>
+<span class="fc" id="L83">    }</span>
+
+    public Periodicity getPeriodicity() {
+<span class="fc" id="L86">        return periodicity;</span>
+    }
+
+    public void setPeriodicity(Periodicity periodicity) {
+<span class="fc" id="L90">        this.periodicity = periodicity;</span>
+<span class="fc" id="L91">    }</span>
+
+    public Date getInsertTime() {
+<span class="nc" id="L94">        return insertTime;</span>
+    }
+
+    public void setInsertTime(Date insertTime) {
+<span class="fc" id="L98">        this.insertTime = insertTime;</span>
+<span class="fc" id="L99">    }</span>
+
+    public Session getSession() {
+<span class="fc" id="L102">        return session;</span>
+    }
+
+    public void setSession(@Valid Session session) {
+<span class="fc" id="L106">        this.session = session;</span>
+<span class="fc" id="L107">    }</span>
+
+    public Duration getTimespan() {
+<span class="fc" id="L110">        return timespan;</span>
+    }
+
+    public void setTimespan(Duration timespan) {
+<span class="fc" id="L114">        this.timespan = timespan;</span>
+<span class="fc" id="L115">    }</span>
+
+    public Date getStartDate() {
+<span class="fc" id="L118">        return startDate;</span>
+    }
+
+    public void setStartDate(Date startDate) {
+<span class="fc" id="L122">        this.startDate = startDate;</span>
+<span class="fc" id="L123">    }</span>
+
+    public Date getEndDate() {
+<span class="fc" id="L126">        return endDate;</span>
+    }
+
+    public void setEndDate(Date endDate) {
+<span class="fc" id="L130">        this.endDate = endDate;</span>
+<span class="fc" id="L131">    }</span>
+
+<span class="fc" id="L133">    public enum Periodicity {</span>
+<span class="fc" id="L134">        WEEKLY, BIWEEKLY, MONTHLY</span>
+    }
+
+<span class="fc" id="L137">    public enum Day {</span>
+<span class="fc" id="L138">        MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, SUNDAY</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>DisciplinesService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">SchoolTimetable</a> &gt; <a href="index.source.html" class="el_package">org.application.application.disciplines</a> &gt; <span class="el_source">DisciplinesService.java</span></div><h1>DisciplinesService.java</h1><pre class="source lang-java linenums">package org.application.application.disciplines;
+
+import com.google.inject.Inject;
+import org.application.dataaccess.discipline.IDisciplineRepository;
+import org.application.dataaccess.teacher.ITeacherRepository;
+import org.application.domain.exceptions.discipline.DisciplineAdditionException;
+import org.application.domain.exceptions.discipline.DisciplineDeletionFailed;
+import org.application.domain.exceptions.discipline.DisciplineNotFoundException;
+import org.application.domain.exceptions.RepositoryOperationException;
+import org.application.domain.exceptions.teacher.TeacherNotFoundException;
+import org.application.domain.models.Discipline;
+
+import java.text.MessageFormat;
+import java.util.List;
+
+public class DisciplinesService implements IDisciplinesService {
+
+    private final IDisciplineRepository disciplineRepository;
+    private final ITeacherRepository teacherRepository;
+
+    @Inject
+<span class="fc" id="L22">    public DisciplinesService(IDisciplineRepository disciplineRepository, ITeacherRepository teacherRepository) {</span>
+<span class="fc" id="L23">        this.disciplineRepository = disciplineRepository;</span>
+<span class="fc" id="L24">        this.teacherRepository = teacherRepository;</span>
+<span class="fc" id="L25">    }</span>
+
+    @Override
+    public Discipline addDiscipline(String name, int credits) throws DisciplineAdditionException {
+<span class="fc" id="L29">        Discipline discipline = null;</span>
+
+        try {
+<span class="fc" id="L32">            discipline = disciplineRepository.getByName(name);</span>
+<span class="nc" id="L33">        } catch (Exception e) {</span>
+<span class="nc" id="L34">            System.out.println(e.getMessage());</span>
+<span class="fc" id="L35">        }</span>
+
+<span class="pc bpc" id="L37" title="1 of 2 branches missed.">        if (discipline == null) {</span>
+            try {
+<span class="fc" id="L39">                discipline = disciplineRepository.createNewDiscipline(name, credits);</span>
+<span class="nc" id="L40">            } catch (RepositoryOperationException e) {</span>
+<span class="nc" id="L41">                throw new RuntimeException(e);</span>
+<span class="fc" id="L42">            }</span>
+        }
+
+        try {
+<span class="fc" id="L46">            disciplineRepository.save(discipline);</span>
+<span class="nc" id="L47">        } catch (Exception e) {</span>
+<span class="nc" id="L48">            throw new DisciplineAdditionException(&quot;[DisciplineService] Failed adding group!&quot;, e);</span>
+<span class="fc" id="L49">        }</span>
+
+<span class="fc" id="L51">        return discipline;</span>
+    }
+
+    @Override
+    public boolean deleteDiscipline(int disciplineId) throws DisciplineNotFoundException, DisciplineDeletionFailed {
+<span class="nc" id="L56">        var discipline = disciplineRepository.getById(disciplineId);</span>
+<span class="nc bnc" id="L57" title="All 2 branches missed.">        if (discipline == null) {</span>
+<span class="nc" id="L58">            throw new DisciplineNotFoundException(MessageFormat.format(&quot;[DisciplineService] Discipline with id {0} not found.&quot;, disciplineId));</span>
+        }
+
+        try {
+<span class="nc" id="L62">            disciplineRepository.delete(discipline);</span>
+<span class="nc" id="L63">        } catch (Exception e) {</span>
+<span class="nc" id="L64">            throw new DisciplineDeletionFailed(&quot; [DisciplineService] Failed to delete discipline.&quot;, e);</span>
+<span class="nc" id="L65">        }</span>
+
+<span class="nc" id="L67">        return true;</span>
+    }
+
+    @Override
+    public boolean deleteDisciplines(String name) throws DisciplineDeletionFailed {
+<span class="nc" id="L72">        var disciplines = disciplineRepository.readAll().stream().filter(d -&gt; d.getName().equals(name)).toList();</span>
+
+        try {
+<span class="nc" id="L75">            disciplineRepository.deleteMany(disciplines);</span>
+<span class="nc" id="L76">        } catch (Exception e) {</span>
+<span class="nc" id="L77">            throw new DisciplineDeletionFailed(&quot; [DisciplineService] Failed to delete disciplines.&quot;, e);</span>
+<span class="nc" id="L78">        }</span>
+
+<span class="nc" id="L80">        return true;</span>
+    }
+
+    @Override
+    public boolean deleteAll() throws DisciplineDeletionFailed {
+        try {
+<span class="fc" id="L86">            disciplineRepository.deleteMany(disciplineRepository.readAll());</span>
+<span class="nc" id="L87">        } catch (Exception e) {</span>
+<span class="nc" id="L88">            throw new DisciplineDeletionFailed(&quot; [DisciplineService] Failed to delete disciplines.&quot;, e);</span>
+<span class="fc" id="L89">        }</span>
+
+<span class="fc" id="L91">        return true;</span>
+    }
+
+    @Override
+    public Discipline getDisciplineById(int disciplineId) throws DisciplineNotFoundException {
+<span class="nc" id="L96">        var discipline = disciplineRepository.getById(disciplineId);</span>
+<span class="nc bnc" id="L97" title="All 2 branches missed.">        if (discipline == null) {</span>
+<span class="nc" id="L98">            throw new DisciplineNotFoundException(MessageFormat.format(&quot;[DisciplineService] Student Group with id {0} not found.&quot;, disciplineId));</span>
+        }
+<span class="nc" id="L100">        return discipline;</span>
+    }
+
+    @Override
+    public List&lt;Discipline&gt; getDisciplines() {
+<span class="fc" id="L105">        return disciplineRepository.readAll();</span>
+    }
+
+    @Override
+    public Discipline addTeacherToDiscipline(String teacherName, String disciplineName) throws TeacherNotFoundException, DisciplineNotFoundException {
+<span class="fc" id="L110">        var teachers = this.teacherRepository.readAll().stream().filter(t -&gt; t.getName().equals(teacherName)).toList();</span>
+
+<span class="pc bpc" id="L112" title="1 of 2 branches missed.">        if (teachers.isEmpty()) {</span>
+<span class="nc" id="L113">            throw new TeacherNotFoundException(&quot;[DisciplineService] Teacher not found!&quot;);</span>
+        }
+<span class="fc" id="L115">        var teacher = teachers.get(0);</span>
+
+<span class="fc" id="L117">        var disciplines = this.disciplineRepository.readAll().stream().filter(d -&gt; d.getName().equals(disciplineName)).toList();</span>
+<span class="pc bpc" id="L118" title="1 of 2 branches missed.">        if (disciplines.isEmpty()) {</span>
+<span class="nc" id="L119">            throw new DisciplineNotFoundException(&quot;[DisciplineService] Discipline not found!&quot;);</span>
+        }
+<span class="fc" id="L121">        var discipline = disciplines.get(0);</span>
+
+<span class="fc" id="L123">        var disciplineTeachers = discipline.getTeachers();</span>
+<span class="fc" id="L124">        disciplineTeachers.add(teacher);</span>
+<span class="fc" id="L125">        discipline.setTeachers(disciplineTeachers);</span>
+
+        try {
+<span class="fc" id="L128">            disciplineRepository.save(discipline);</span>
+<span class="fc" id="L129">            teacherRepository.save(teacher);</span>
+        }
+<span class="nc" id="L131">        catch (RepositoryOperationException e) {</span>
+<span class="nc" id="L132">            System.out.println(e.getMessage());</span>
+<span class="fc" id="L133">        }</span>
+
+<span class="fc" id="L135">        return discipline;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

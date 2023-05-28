@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>RoomSettings.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">SchoolTimetable</a> &gt; <a href="index.source.html" class="el_package">org.application.presentation.swing</a> &gt; <span class="el_source">RoomSettings.java</span></div><h1>RoomSettings.java</h1><pre class="source lang-java linenums">package org.application.presentation.swing;
+
+import org.application.domain.exceptions.room.RoomAdditionException;
+import org.application.domain.exceptions.room.RoomDeletionFailed;
+import org.application.domain.exceptions.teacher.TeacherDeletionFailed;
+import org.application.domain.models.Room;
+import org.application.presentation.GUI;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Objects;
+
+public class RoomSettings implements BaseSettings {
+<span class="nc" id="L16">    public RoomSettings(){</span>
+
+<span class="nc" id="L18">    }</span>
+    private JPanel createFieldPanel(JLabel label, JComponent component) {
+<span class="nc" id="L20">        JPanel panel = new JPanel();</span>
+<span class="nc" id="L21">        panel.setBackground(Color.decode(&quot;#F6FFDE&quot;));</span>
+<span class="nc" id="L22">        panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));</span>
+<span class="nc" id="L23">        panel.add(label);</span>
+<span class="nc" id="L24">        panel.add(Box.createRigidArea(new Dimension(10, 0)));</span>
+<span class="nc" id="L25">        panel.add(component);</span>
+<span class="nc" id="L26">        panel.setMaximumSize(new Dimension(Short.MAX_VALUE, component.getPreferredSize().height));</span>
+<span class="nc" id="L27">        return panel;</span>
+    }
+
+    public JPanel deleteRoomForm(JPanel currentPanel){
+
+<span class="nc" id="L32">        currentPanel.setBackground(Color.decode(&quot;#F6FFDE&quot;));</span>
+
+<span class="nc" id="L34">        currentPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));</span>
+<span class="nc" id="L35">        currentPanel.add(Box.createRigidArea(new Dimension(0, 30)));</span>
+
+<span class="nc" id="L37">        JLabel titleLabel = new JLabel(&quot;DELETE ROOM&quot;);</span>
+<span class="nc" id="L38">        titleLabel.setFont(new Font(&quot;serif&quot;, Font.BOLD, 25));</span>
+<span class="nc" id="L39">        titleLabel.setForeground(Color.decode(&quot;#617A55&quot;));</span>
+        //titleLabel.setBounds(0,30,300,25);
+<span class="nc" id="L41">        titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);</span>
+<span class="nc" id="L42">        currentPanel.add(titleLabel);</span>
+
+<span class="nc" id="L44">        currentPanel.add(Box.createRigidArea(new Dimension(0, 10)));</span>
+<span class="nc" id="L45">        JLabel regLabel = new JLabel(&quot;Name:&quot;);</span>
+<span class="nc" id="L46">        regLabel.setFont(new Font(&quot;Arial&quot;, Font.PLAIN, 14));</span>
+<span class="nc" id="L47">        regLabel.setBackground(Color.decode(&quot;#617A55&quot;));</span>
+
+<span class="nc" id="L49">        JComboBox&lt;String&gt; model = new JComboBox&lt;&gt;();</span>
+        // get all the disciplines from db
+<span class="nc" id="L51">        var allRooms = GUI.app.roomsService.getRooms();</span>
+<span class="nc bnc" id="L52" title="All 2 branches missed.">        for (var room : allRooms) {</span>
+<span class="nc" id="L53">            model.addItem(room.getName());</span>
+<span class="nc" id="L54">        }</span>
+<span class="nc" id="L55">        JPanel dataPanel = createFieldPanel(regLabel, model);</span>
+<span class="nc" id="L56">        currentPanel.add(dataPanel);</span>
+
+        // Add the submit button
+<span class="nc" id="L59">        currentPanel.add(Box.createRigidArea(new Dimension(0, 10)));</span>
+<span class="nc" id="L60">        JButton submitButtonDelete = new JButton(&quot;Submit&quot;);</span>
+<span class="nc" id="L61">        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));</span>
+<span class="nc" id="L62">        buttonPanel.setBackground(Color.decode(&quot;#F6FFDE&quot;));</span>
+<span class="nc" id="L63">        submitButtonDelete.addActionListener(new ActionListener() {</span>
+            public void actionPerformed(ActionEvent e) {
+<span class="nc" id="L65">                System.out.println(&quot;Delete room btn clicked&quot;);</span>
+                try {
+<span class="nc" id="L67">                    GUI.app.roomsService.deleteRooms((String) model.getSelectedItem());</span>
+<span class="nc" id="L68">                } catch (RoomDeletionFailed ex) {</span>
+<span class="nc" id="L69">                    JOptionPane.showMessageDialog(</span>
+                            null,
+<span class="nc" id="L71">                            &quot;An exception occurred: &quot; + ex.getMessage(),</span>
+                            &quot;Error&quot;,
+                            JOptionPane.ERROR_MESSAGE
+                    );
+<span class="nc" id="L75">                    throw new RuntimeException(ex);</span>
+<span class="nc" id="L76">                }</span>
+<span class="nc" id="L77">            }</span>
+        });
+
+
+<span class="nc" id="L81">        buttonPanel.add(submitButtonDelete);</span>
+<span class="nc" id="L82">        currentPanel.add(buttonPanel);</span>
+
+<span class="nc" id="L84">        return currentPanel;</span>
+    }
+
+    public JPanel addRoomForm(JPanel currentPanel){
+<span class="nc" id="L88">        currentPanel.setBackground(Color.decode(&quot;#F6FFDE&quot;));</span>
+
+<span class="nc" id="L90">        currentPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));</span>
+<span class="nc" id="L91">        currentPanel.add(Box.createRigidArea(new Dimension(0, 10)));</span>
+
+<span class="nc" id="L93">        JLabel titleLabel = new JLabel(&quot;ADD ROOM&quot;);</span>
+<span class="nc" id="L94">        titleLabel.setFont(new Font(&quot;serif&quot;, Font.BOLD, 25));</span>
+<span class="nc" id="L95">        titleLabel.setForeground(Color.decode(&quot;#617A55&quot;));</span>
+<span class="nc" id="L96">        titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);</span>
+        // titleLabel.setBounds(50,30,300,25);
+<span class="nc" id="L98">        currentPanel.add(titleLabel);</span>
+        // Add the name field
+<span class="nc" id="L100">        JLabel nameLabel = new JLabel(&quot;Name:&quot;);</span>
+<span class="nc" id="L101">        nameLabel.setFont(new Font(&quot;Arial&quot;, Font.PLAIN, 14));</span>
+<span class="nc" id="L102">        nameLabel.setBackground(Color.decode(&quot;#617A55&quot;));</span>
+<span class="nc" id="L103">        JTextField nameField = new JTextField(20);</span>
+<span class="nc" id="L104">        JPanel namePanel = createFieldPanel(nameLabel, nameField);</span>
+<span class="nc" id="L105">        currentPanel.add(namePanel);</span>
+
+        // Add the type
+<span class="nc" id="L108">        currentPanel.add(Box.createRigidArea(new Dimension(0, 10)));</span>
+<span class="nc" id="L109">        JLabel typeLabel = new JLabel(&quot;Type:&quot;);</span>
+<span class="nc" id="L110">        typeLabel.setFont(new Font(&quot;Arial&quot;, Font.PLAIN, 14));</span>
+<span class="nc" id="L111">        typeLabel.setBackground(Color.decode(&quot;#617A55&quot;));</span>
+<span class="nc" id="L112">        String[] yearValues = {&quot;COURSE&quot;, &quot;LABORATORY&quot;};</span>
+<span class="nc" id="L113">        JComboBox&lt;String&gt; typeComboBox = new JComboBox&lt;&gt;(yearValues);</span>
+<span class="nc" id="L114">        JPanel typePanel = createFieldPanel(typeLabel, typeComboBox);</span>
+<span class="nc" id="L115">        currentPanel.add(typePanel);</span>
+
+
+        //Add floor number
+<span class="nc" id="L119">        currentPanel.add(Box.createRigidArea(new Dimension(0, 10)));</span>
+<span class="nc" id="L120">        JLabel floorLabel = new JLabel(&quot;Floor no:&quot;);</span>
+<span class="nc" id="L121">        floorLabel.setFont(new Font(&quot;Arial&quot;, Font.PLAIN, 14));</span>
+<span class="nc" id="L122">        floorLabel.setBackground(Color.decode(&quot;#617A55&quot;));</span>
+<span class="nc" id="L123">        String[] floorValues = {&quot;1&quot;, &quot;2&quot;, &quot;3&quot;, &quot;4&quot;};</span>
+<span class="nc" id="L124">        JComboBox&lt;String&gt; floorComboBox = new JComboBox&lt;&gt;(floorValues);</span>
+<span class="nc" id="L125">        JPanel floorPanel = createFieldPanel(floorLabel, floorComboBox);</span>
+<span class="nc" id="L126">        currentPanel.add(floorPanel);</span>
+
+        // Add the type
+<span class="nc" id="L129">        currentPanel.add(Box.createRigidArea(new Dimension(0, 10)));</span>
+<span class="nc" id="L130">        JLabel capacityLabel = new JLabel(&quot;Capacity:&quot;);</span>
+<span class="nc" id="L131">        capacityLabel.setFont(new Font(&quot;Arial&quot;, Font.PLAIN, 14));</span>
+<span class="nc" id="L132">        capacityLabel.setBackground(Color.decode(&quot;#617A55&quot;));</span>
+<span class="nc" id="L133">        String[] capacityValues = {&quot;30&quot;, &quot;50&quot;, &quot;100&quot;, &quot;200&quot;};</span>
+<span class="nc" id="L134">        JComboBox&lt;String&gt; capacityComboBox = new JComboBox&lt;&gt;(capacityValues);</span>
+<span class="nc" id="L135">        JPanel capacityPanel = createFieldPanel(capacityLabel, capacityComboBox);</span>
+<span class="nc" id="L136">        currentPanel.add(capacityPanel);</span>
+
+
+        // Add the submit button
+<span class="nc" id="L140">        currentPanel.add(Box.createRigidArea(new Dimension(0, 10)));</span>
+<span class="nc" id="L141">        JButton submitButtonAdd = new JButton(&quot;Submit&quot;);</span>
+<span class="nc" id="L142">        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));</span>
+<span class="nc" id="L143">        buttonPanel.setBackground(Color.decode(&quot;#F6FFDE&quot;));</span>
+<span class="nc" id="L144">        submitButtonAdd.addActionListener(new ActionListener() {</span>
+            public void actionPerformed(ActionEvent e) {
+<span class="nc" id="L146">                System.out.println(&quot;Insert room btn clicked&quot;);</span>
+                try {
+<span class="nc bnc" id="L148" title="All 2 branches missed.">                    assert nameField.getText() != null;</span>
+<span class="nc" id="L149">                    GUI.app.roomsService.addRoom(nameField.getText(),</span>
+<span class="nc" id="L150">                                                Integer.parseInt((String) Objects.requireNonNull(capacityComboBox.getSelectedItem())),</span>
+<span class="nc" id="L151">                                                Integer.parseInt((String) Objects.requireNonNull(floorComboBox.getSelectedItem())),</span>
+<span class="nc" id="L152">                                                Room.Type.valueOf((String) typeComboBox.getSelectedItem()));</span>
+<span class="nc" id="L153">                } catch (RoomAdditionException ex) {</span>
+<span class="nc" id="L154">                    JOptionPane.showMessageDialog(</span>
+                            null,
+<span class="nc" id="L156">                            &quot;An exception occurred: &quot; + ex.getMessage(),</span>
+                            &quot;Error&quot;,
+                            JOptionPane.ERROR_MESSAGE
+                    );
+<span class="nc" id="L160">                    throw new RuntimeException(ex);</span>
+<span class="nc" id="L161">                }</span>
+<span class="nc" id="L162">            }</span>
+        });
+<span class="nc" id="L164">        buttonPanel.add(submitButtonAdd);</span>
+<span class="nc" id="L165">        currentPanel.add(buttonPanel);</span>
+
+<span class="nc" id="L167">        return currentPanel;</span>
+    }
+    @Override
+    public JPanel createJPanel(JPanel main, String labelText) {
+        // Remove previous components from right panel and add result label
+<span class="nc" id="L172">        main.removeAll();</span>
+        // create insertPanel
+<span class="nc" id="L174">        JPanel leftPanel = createLeftJPanel();</span>
+        // create deletePanel
+<span class="nc" id="L176">        JPanel rightPanel = createRightJPanel();</span>
+
+        //merge the 2 panelS into mainPanel
+<span class="nc" id="L179">        main.add(leftPanel, BorderLayout.WEST);</span>
+<span class="nc" id="L180">        main.add(rightPanel, BorderLayout.EAST);</span>
+
+<span class="nc" id="L182">        return main;</span>
+    }
+
+    @Override
+    public JPanel createLeftJPanel() {
+<span class="nc" id="L187">        JPanel currentPanel = new JPanel();</span>
+<span class="nc" id="L188">        currentPanel.setLayout(new BoxLayout(currentPanel, BoxLayout.Y_AXIS));</span>
+
+<span class="nc" id="L190">        currentPanel = addRoomForm(currentPanel);</span>
+<span class="nc" id="L191">        currentPanel = deleteRoomForm(currentPanel);</span>
+        // Set the frame size and center it on the screen
+<span class="nc" id="L193">        return currentPanel;</span>
+    }
+
+    @Override
+    public JPanel createRightJPanel() {
+<span class="nc" id="L198">        JPanel currentPanel = new JPanel();</span>
+<span class="nc" id="L199">        currentPanel.setLayout(null);</span>
+<span class="nc" id="L200">        currentPanel.setBackground(Color.decode(&quot;#F6FFDE&quot;));</span>
+
+<span class="nc" id="L202">        ImageIcon image = new ImageIcon(Objects.requireNonNull(RoomSettings.class.getResource(&quot;/icons/room.png&quot;)));</span>
+<span class="nc" id="L203">        Image rescaledImage = image.getImage().getScaledInstance(300,300, Image.SCALE_DEFAULT);</span>
+<span class="nc" id="L204">        ImageIcon finalImage = new ImageIcon(rescaledImage);</span>
+<span class="nc" id="L205">        JLabel imageLabel = new JLabel(finalImage);</span>
+<span class="nc" id="L206">        imageLabel.setBounds(0,30,300,300);</span>
+<span class="nc" id="L207">        currentPanel.add(imageLabel, BorderLayout.CENTER);</span>
+<span class="nc" id="L208">        return currentPanel;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

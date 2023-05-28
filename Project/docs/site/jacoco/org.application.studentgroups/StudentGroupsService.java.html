@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>StudentGroupsService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">SchoolTimetable</a> &gt; <a href="index.source.html" class="el_package">org.application.studentgroups</a> &gt; <span class="el_source">StudentGroupsService.java</span></div><h1>StudentGroupsService.java</h1><pre class="source lang-java linenums">package org.application.studentgroups;
+
+import com.google.inject.Inject;
+import org.dataaccess.studentgroup.IStudentGroupRepository;
+import org.domain.exceptions.RepositoryOperationException;
+import org.domain.exceptions.studentgroup.StudentGroupAdditionException;
+import org.domain.exceptions.studentgroup.StudentGroupDeletionFailed;
+import org.domain.exceptions.studentgroup.StudentGroupNotFoundException;
+import org.domain.models.StudentGroup;
+
+import java.text.MessageFormat;
+import java.util.Date;
+import java.util.List;
+
+public class StudentGroupsService implements IStudentGroupsService {
+
+    private final IStudentGroupRepository studentGroupRepository;
+
+    @Inject
+<span class="fc" id="L20">    public StudentGroupsService(IStudentGroupRepository studentGroupRepository) {</span>
+<span class="fc" id="L21">        this.studentGroupRepository = studentGroupRepository;</span>
+<span class="fc" id="L22">    }</span>
+
+    @Override
+    public StudentGroup addStudentGroup(String name, int year, StudentGroup.Type type) throws StudentGroupAdditionException {
+<span class="fc" id="L26">        StudentGroup group = studentGroupRepository.getByGroupName(name);</span>
+<span class="fc bfc" id="L27" title="All 2 branches covered.">        if (group == null) {</span>
+<span class="fc" id="L28">            group = new StudentGroup();</span>
+<span class="fc" id="L29">            group.setName(name);</span>
+<span class="fc" id="L30">            group.setYear(1);</span>
+<span class="fc" id="L31">            group.setType(StudentGroup.Type.BACHELOR);</span>
+<span class="fc" id="L32">            group.setInsertTime(new Date());</span>
+
+            try {
+<span class="fc" id="L35">                group = studentGroupRepository.createNewGroup(name);</span>
+<span class="nc" id="L36">            } catch (RepositoryOperationException e) {</span>
+<span class="nc" id="L37">                throw new RuntimeException(e);</span>
+<span class="fc" id="L38">            }</span>
+        }
+
+        try {
+<span class="fc" id="L42">            studentGroupRepository.save(group);</span>
+<span class="fc" id="L43">        } catch (Exception e) {</span>
+<span class="fc" id="L44">            throw new StudentGroupAdditionException(&quot;[StudentGroupsService] Failed adding group!&quot;, e);</span>
+<span class="fc" id="L45">        }</span>
+
+<span class="fc" id="L47">        return group;</span>
+    }
+
+    @Override
+    public boolean deleteStudentGroup(int studentGroupId) throws StudentGroupNotFoundException, StudentGroupDeletionFailed {
+<span class="fc" id="L52">        var group = studentGroupRepository.getById(studentGroupId);</span>
+<span class="pc bpc" id="L53" title="1 of 2 branches missed.">        if (group == null) {</span>
+<span class="fc" id="L54">            throw new StudentGroupNotFoundException(MessageFormat.format(&quot;[StudentGroupsService] Student Group with id {0} not found.&quot;, studentGroupId));</span>
+        }
+
+        try {
+<span class="nc" id="L58">            studentGroupRepository.delete(group);</span>
+<span class="nc" id="L59">        } catch (Exception e) {</span>
+<span class="nc" id="L60">            throw new StudentGroupDeletionFailed(&quot; [StudentGroupsService] Failed to delete student group.&quot;, e);</span>
+<span class="nc" id="L61">        }</span>
+
+<span class="nc" id="L63">        return true;</span>
+    }
+
+    @Override
+    public boolean deleteStudentGroup(String name) throws StudentGroupDeletionFailed {
+<span class="fc" id="L68">        var groups = studentGroupRepository.readAll().stream().filter(sg -&gt; sg.getName().equals(name)).toList();</span>
+
+        try {
+<span class="nc" id="L71">            studentGroupRepository.deleteMany(groups);</span>
+<span class="fc" id="L72">        } catch (Exception e) {</span>
+<span class="fc" id="L73">            throw new StudentGroupDeletionFailed(&quot; [StudentGroupsService] Failed to delete student groups.&quot;, e);</span>
+<span class="nc" id="L74">        }</span>
+
+<span class="nc" id="L76">        return true;</span>
+    }
+
+    @Override
+    public boolean deleteAll() throws StudentGroupDeletionFailed {
+
+        try {
+<span class="fc" id="L83">            studentGroupRepository.deleteMany(studentGroupRepository.readAll());</span>
+<span class="fc" id="L84">        } catch (Exception e) {</span>
+<span class="fc" id="L85">            throw new StudentGroupDeletionFailed(&quot; [StudentGroupsService] Failed to delete student groups.&quot;, e);</span>
+<span class="fc" id="L86">        }</span>
+
+<span class="fc" id="L88">        return true;</span>
+    }
+
+    @Override
+    public StudentGroup getStudentGroupById(int studentGroupId) throws StudentGroupNotFoundException {
+<span class="fc" id="L93">        var group = studentGroupRepository.getById(studentGroupId);</span>
+<span class="pc bpc" id="L94" title="1 of 2 branches missed.">        if (group == null) {</span>
+<span class="fc" id="L95">            throw new StudentGroupNotFoundException(MessageFormat.format(&quot;[StudentGroupsService] Student Group with id {0} not found.&quot;, studentGroupId));</span>
+        }
+<span class="nc" id="L97">        return group;</span>
+    }
+
+    @Override
+    public List&lt;StudentGroup&gt; getStudentGroups() {
+<span class="fc" id="L102">        return studentGroupRepository.readAll();</span>
+    }
+
+    @Override
+    public List&lt;StudentGroup&gt; getStudentGroupsByYear(int year) {
+<span class="fc bfc" id="L107" title="All 2 branches covered.">        return studentGroupRepository.readAll().stream().filter(group -&gt; group.getYear() == year).toList();</span>
+    }
+
+    @Override
+    public List&lt;StudentGroup&gt; getStudentGroupsByType(StudentGroup.Type type) {
+<span class="fc bfc" id="L112" title="All 2 branches covered.">        return studentGroupRepository.readAll().stream().filter(group -&gt; group.getType() == type).toList();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

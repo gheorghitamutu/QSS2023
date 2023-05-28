@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>DisciplineRepository.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">SchoolTimetable</a> &gt; <a href="index.source.html" class="el_package">org.application.dataaccess.discipline</a> &gt; <span class="el_source">DisciplineRepository.java</span></div><h1>DisciplineRepository.java</h1><pre class="source lang-java linenums">package org.application.dataaccess.discipline;
+
+import com.google.inject.Inject;
+import org.application.dataaccess.database.IHibernateProvider;
+import org.application.dataaccess.repository.BaseRepository;
+import org.application.domain.exceptions.RepositoryOperationException;
+import org.application.domain.models.Discipline;
+
+import java.util.Date;
+
+public class DisciplineRepository extends BaseRepository&lt;Discipline&gt; implements IDisciplineRepository {
+
+    @Inject
+    public DisciplineRepository(IHibernateProvider hibernateProvider) {
+<span class="fc" id="L15">        super(hibernateProvider);</span>
+<span class="fc" id="L16">    }</span>
+
+    @Override
+    public Discipline getByName(String name) throws RepositoryOperationException {
+<span class="fc" id="L20">        var session = hibernateProvider.getEntityManager();</span>
+<span class="fc" id="L21">        var query = session.createNamedQuery(&quot;Discipline.getByName&quot;, Discipline.class);</span>
+<span class="fc" id="L22">        query.setParameter(&quot;name&quot;, name);</span>
+
+<span class="fc" id="L24">        var result = query.getResultList();</span>
+<span class="fc bfc" id="L25" title="All 2 branches covered.">        if (result.size() == 0) {</span>
+<span class="fc" id="L26">            return null;</span>
+        }
+
+<span class="fc" id="L29">        return result.get(0);</span>
+    }
+
+    @Override
+    public Discipline createNewDiscipline(String name, int credits) throws RepositoryOperationException {
+
+<span class="fc" id="L35">        var discipline = new Discipline();</span>
+<span class="fc" id="L36">        discipline.setName(name);</span>
+<span class="fc" id="L37">        discipline.setCredits(credits);</span>
+<span class="fc" id="L38">        discipline.setInsertTime(new Date());</span>
+
+        try {
+<span class="fc" id="L41">            save(discipline);</span>
+<span class="nc" id="L42">        } catch (Exception e) {</span>
+<span class="nc" id="L43">            e.printStackTrace();</span>
+<span class="nc" id="L44">            throw new RepositoryOperationException(&quot;[DisciplineRepository] Couldn't create new discipline.&quot;, e);</span>
+<span class="fc" id="L45">        }</span>
+
+<span class="fc" id="L47">        return discipline;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

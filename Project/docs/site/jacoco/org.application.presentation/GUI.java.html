@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GUI.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">SchoolTimetable</a> &gt; <a href="index.source.html" class="el_package">org.application.presentation</a> &gt; <span class="el_source">GUI.java</span></div><h1>GUI.java</h1><pre class="source lang-java linenums">package org.application.presentation;
+
+import com.google.inject.Inject;
+import com.google.inject.Injector;
+import org.application.Application;
+import org.application.GuiceInjectorSingleton;
+import org.application.Main;
+import org.application.application.disciplines.IDisciplinesService;
+import org.application.application.rooms.IRoomsService;
+import org.application.application.sessions.ISessionsService;
+import org.application.application.studentgroups.IStudentGroupsService;
+import org.application.application.students.IStudentsService;
+import org.application.application.teachers.ITeachersService;
+import org.application.application.timeslots.ITimeslotsService;
+import org.application.dataaccess.student.IStudentRepository;
+import org.application.presentation.swing.*;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+import java.util.Objects;
+
+public class GUI extends JFrame implements ActionListener {
+    // Define variables
+    public static Application app;
+    private JPanel mainPanel, navPanel;
+    private JButton exitButton;
+    private JButton[] categoryButtons;
+<span class="nc" id="L29">    private Color bgColor1 = Color.decode(&quot;#AAC8A7&quot;);</span>
+<span class="nc" id="L30">    private Color bgColor2 = Color.decode(&quot;#F6FFDE&quot;);</span>
+<span class="nc" id="L31">    private Color bgColor3 = Color.decode(&quot;#C9DBB2&quot;);</span>
+
+    public static void setUpAll(boolean isTest){
+<span class="nc" id="L34">        var appInjector = Main.setupDependenciesInjector(isTest);</span>
+<span class="nc" id="L35">        app = appInjector.getInstance(Application.class);</span>
+<span class="nc" id="L36">        GuiceInjectorSingleton.INSTANCE.setInjector(appInjector);</span>
+<span class="nc" id="L37">    }</span>
+    public GUI() {
+<span class="nc" id="L39">        super(&quot;Timetable Generator&quot;);</span>
+<span class="nc" id="L40">        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);</span>
+<span class="nc" id="L41">        setSize(800, 600);</span>
+
+        // Create main panel
+<span class="nc" id="L44">        mainPanel = new JPanel(new GridLayout(1, 2));</span>
+<span class="nc" id="L45">        mainPanel = createMain(mainPanel);</span>
+<span class="nc" id="L46">        add(mainPanel, BorderLayout.CENTER);</span>
+
+
+        // Create category buttons for the navigation
+<span class="nc" id="L50">        String[] categories = {&quot;Home&quot;,&quot;Students&quot;, &quot;Teachers&quot;, &quot;Disciplines&quot;, &quot;Sessions&quot;, &quot;Rooms&quot;, &quot;Timeslots&quot;};</span>
+<span class="nc" id="L51">        navPanel = new JPanel();</span>
+        // Create navigation panel
+<span class="nc" id="L53">        navPanel.setLayout(new GridLayout(categories.length + 1, 1));</span>
+<span class="nc" id="L54">        navPanel.setBackground(bgColor1);</span>
+<span class="nc" id="L55">        add(navPanel, BorderLayout.WEST);</span>
+
+<span class="nc" id="L57">        categoryButtons = new JButton[categories.length];</span>
+<span class="nc bnc" id="L58" title="All 2 branches missed.">        for (int i = 0; i &lt; categories.length; i++) {</span>
+<span class="nc" id="L59">            categoryButtons[i] = new JButton(categories[i]);</span>
+<span class="nc" id="L60">            categoryButtons[i].setBorderPainted(false);</span>
+<span class="nc" id="L61">            categoryButtons[i].setFocusPainted(false);</span>
+<span class="nc" id="L62">            categoryButtons[i].setBackground(bgColor1);</span>
+<span class="nc" id="L63">            categoryButtons[i].setForeground(Color.decode(&quot;#617A55&quot;));</span>
+<span class="nc" id="L64">            categoryButtons[i].setFont(new Font(&quot;Arial&quot;, Font.BOLD, 19));</span>
+<span class="nc" id="L65">            categoryButtons[i].setPreferredSize(new Dimension(250, 50));</span>
+<span class="nc" id="L66">            categoryButtons[i].setAlignmentX(Component.LEFT_ALIGNMENT);</span>
+<span class="nc" id="L67">            categoryButtons[i].addActionListener(this);</span>
+<span class="nc" id="L68">            categoryButtons[i].addMouseListener(new java.awt.event.MouseAdapter() {</span>
+                public void mouseEntered(java.awt.event.MouseEvent evt) {
+<span class="nc" id="L70">                    ((JButton)evt.getSource()).setBackground(bgColor2);</span>
+<span class="nc" id="L71">                }</span>
+                public void mouseExited(java.awt.event.MouseEvent evt) {
+<span class="nc" id="L73">                    ((JButton)evt.getSource()).setBackground(bgColor1);</span>
+<span class="nc" id="L74">                }</span>
+            });
+<span class="nc" id="L76">            navPanel.add(categoryButtons[i]);</span>
+        }
+
+        // Create exit button
+<span class="nc" id="L80">        exitButton = new JButton(&quot;Exit&quot;);</span>
+<span class="nc" id="L81">        exitButton.setBorderPainted(false);</span>
+<span class="nc" id="L82">        exitButton.setFocusPainted(false);</span>
+<span class="nc" id="L83">        exitButton.setBackground(bgColor1);</span>
+<span class="nc" id="L84">        exitButton.setForeground(bgColor3);</span>
+<span class="nc" id="L85">        exitButton.setFont(new Font(&quot;Arial&quot;, Font.BOLD, 23));</span>
+<span class="nc" id="L86">        exitButton.setPreferredSize(new Dimension(200, 50));</span>
+<span class="nc" id="L87">        exitButton.setAlignmentX(Component.LEFT_ALIGNMENT);</span>
+<span class="nc" id="L88">        exitButton.addActionListener(new ActionListener() {</span>
+            public void actionPerformed(ActionEvent e) {
+<span class="nc" id="L90">                dispose();</span>
+<span class="nc" id="L91">            }</span>
+        });
+<span class="nc" id="L93">        navPanel.add(exitButton);</span>
+
+        // Set main panel visible
+<span class="nc" id="L96">        setResizable(false);</span>
+<span class="nc" id="L97">        setVisible(true);</span>
+<span class="nc" id="L98">    }</span>
+
+    public JPanel createMain(JPanel main){
+        // Remove previous components from right panel and add result label
+<span class="nc" id="L102">        main.removeAll();</span>
+<span class="nc" id="L103">        setSize(800, 600);</span>
+<span class="nc" id="L104">        main.setBackground(new Color(0x252F23));</span>
+<span class="nc" id="L105">        ImageIcon image = new ImageIcon(Objects.requireNonNull(GUI.class.getResource(&quot;/icons/logo.png&quot;)));</span>
+<span class="nc" id="L106">        Image rescaledImage = image.getImage().getScaledInstance(450,450, Image.SCALE_DEFAULT);</span>
+<span class="nc" id="L107">        ImageIcon finalImage = new ImageIcon(rescaledImage);</span>
+<span class="nc" id="L108">        JLabel imageLabel = new JLabel(finalImage);</span>
+<span class="nc" id="L109">        imageLabel.setBounds(30,20,350,350);</span>
+<span class="nc" id="L110">        main.add(imageLabel, BorderLayout.CENTER);</span>
+<span class="nc" id="L111">        return main;</span>
+    }
+
+    public void actionPerformed(ActionEvent e) {
+<span class="nc" id="L115">        JButton source = (JButton) e.getSource();</span>
+
+<span class="nc bnc" id="L117" title="All 2 branches missed.">        if(source.getText().equals(&quot;Students&quot;)){</span>
+<span class="nc" id="L118">            StudentSettings studentSettings = new StudentSettings();</span>
+<span class="nc" id="L119">            mainPanel = studentSettings.createJPanel(mainPanel, source.getText());</span>
+
+<span class="nc bnc" id="L121" title="All 2 branches missed.">        } else  if (source.getText().equals(&quot;Home&quot;)){</span>
+<span class="nc" id="L122">            mainPanel = createMain(mainPanel);</span>
+<span class="nc bnc" id="L123" title="All 2 branches missed.">        } else if (source.getText().equals(&quot;Teachers&quot;)){</span>
+<span class="nc" id="L124">            TeacherSettings teacherSettings = new TeacherSettings();</span>
+<span class="nc" id="L125">            mainPanel = teacherSettings.createJPanel(mainPanel, source.getText());</span>
+<span class="nc bnc" id="L126" title="All 2 branches missed.">        } else if (source.getText().equals(&quot;Sessions&quot;)){</span>
+<span class="nc" id="L127">            SessionSettings sessionSettings = new SessionSettings();</span>
+<span class="nc" id="L128">            mainPanel = sessionSettings.createJPanel(mainPanel, source.getText());</span>
+<span class="nc bnc" id="L129" title="All 2 branches missed.">        } else if(source.getText().equals(&quot;Disciplines&quot;)){</span>
+<span class="nc" id="L130">            DisciplineSettings disciplineSettings = new DisciplineSettings();</span>
+<span class="nc" id="L131">            mainPanel =disciplineSettings.createJPanel(mainPanel, source.getText());</span>
+<span class="nc bnc" id="L132" title="All 2 branches missed.">        }else if(source.getText().equals(&quot;Rooms&quot;)){</span>
+<span class="nc" id="L133">            RoomSettings roomSettings = new RoomSettings();</span>
+<span class="nc" id="L134">            mainPanel = roomSettings.createJPanel(mainPanel, source.getText());</span>
+<span class="nc bnc" id="L135" title="All 2 branches missed.">        }else if(source.getText().equals(&quot;Timeslots&quot;)) {</span>
+<span class="nc" id="L136">            TimeslotSettings timeslotSettings = new TimeslotSettings();</span>
+<span class="nc" id="L137">            mainPanel =timeslotSettings.createJPanel(mainPanel, source.getText());</span>
+        }
+
+<span class="nc" id="L140">        pack();</span>
+        // Refresh panel
+<span class="nc" id="L142">        mainPanel.revalidate();</span>
+<span class="nc" id="L143">        mainPanel.repaint();</span>
+
+<span class="nc" id="L145">    }</span>
+
+    public static void main(String[] args) {
+<span class="nc" id="L148">        setUpAll(false);</span>
+<span class="nc" id="L149">        GUI gui = new GUI();</span>
+<span class="nc" id="L150">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

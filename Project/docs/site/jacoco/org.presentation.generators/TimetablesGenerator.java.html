@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TimetablesGenerator.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">SchoolTimetable</a> &gt; <a href="index.source.html" class="el_package">org.presentation.generators</a> &gt; <span class="el_source">TimetablesGenerator.java</span></div><h1>TimetablesGenerator.java</h1><pre class="source lang-java linenums">package org.presentation.generators;
+
+import org.domain.models.*;
+import org.presentation.GUI;
+
+import java.text.SimpleDateFormat;
+import java.util.*;
+
+public class TimetablesGenerator extends BaseGenerator{
+    private final List&lt;Timeslot&gt; timeslots;
+    private final List&lt;Room&gt; rooms;
+    private final Map&lt;String, String&gt; timetablesNames;
+    private final Map&lt;String, String&gt; timetablesData;
+    private final Map&lt;Room, Map&lt;Integer, Map&lt;Timeslot.Day, Boolean&gt;&gt;&gt; freeRooms;
+
+    public TimetablesGenerator(String generationDateString, Map&lt;String, Map&lt;Timeslot.Day, StringBuilder&gt;&gt; timetablesDays, Map&lt;String, String&gt; timetablesNames, Map&lt;String, String&gt; timetablesData, Map&lt;Room, Map&lt;Integer, Map&lt;Timeslot.Day, Boolean&gt;&gt;&gt; freeRooms){
+<span class="fc" id="L17">        super(generationDateString, timetablesDays);</span>
+
+<span class="fc" id="L19">        this.timeslots = GUI.app.timeslotsService.getSortedTimeslotsByStartTime();</span>
+<span class="fc" id="L20">        this.rooms = GUI.app.roomsService.getRooms();</span>
+<span class="fc" id="L21">        this.timetablesNames = timetablesNames;</span>
+<span class="fc" id="L22">        this.timetablesData = timetablesData;</span>
+<span class="fc" id="L23">        this.freeRooms = freeRooms;</span>
+<span class="fc" id="L24">    }</span>
+
+    private void initializeFreeRooms(){
+<span class="fc" id="L27">        Timeslot.Day[] daysArray = Timeslot.Day.class.getEnumConstants();</span>
+
+<span class="fc bfc" id="L29" title="All 2 branches covered.">        for (Room room : rooms){</span>
+<span class="fc" id="L30">            Map&lt;Integer, Map&lt;Timeslot.Day, Boolean&gt;&gt; hoursMap = new HashMap&lt;&gt;();</span>
+<span class="fc bfc" id="L31" title="All 2 branches covered.">            for (int i = 8; i &lt; 20; i++) {</span>
+<span class="fc" id="L32">                Map&lt;Timeslot.Day, Boolean&gt; dayMap = new HashMap&lt;&gt;();</span>
+<span class="fc bfc" id="L33" title="All 2 branches covered.">                for (Timeslot.Day day : daysArray){</span>
+<span class="fc" id="L34">                    dayMap.put(day, true);</span>
+                }
+<span class="fc" id="L36">                hoursMap.put(i, dayMap);</span>
+            }
+<span class="fc" id="L38">            freeRooms.put(room, hoursMap);</span>
+<span class="fc" id="L39">        }</span>
+<span class="fc" id="L40">    }</span>
+
+    private void createTimetableDataFromDays(){
+<span class="fc bfc" id="L43" title="All 2 branches covered.">        for (Map.Entry&lt;String, Map&lt;Timeslot.Day, StringBuilder&gt;&gt; mapEntry : this.timetablesDays.entrySet()){</span>
+<span class="fc" id="L44">            String tableName = mapEntry.getKey();</span>
+<span class="fc" id="L45">            Map&lt;Timeslot.Day, StringBuilder&gt; daysData = mapEntry.getValue();</span>
+
+<span class="fc" id="L47">            String timetableEntry = utils.getBaseTemplateData(&quot;timetable&quot;);</span>
+<span class="fc" id="L48">            timetableEntry = timetableEntry.replace(&quot;$generation_date&quot;, this.generationDateString);</span>
+<span class="fc" id="L49">            timetableEntry = timetableEntry.replace(&quot;$title&quot;, this.timetablesNames.get(tableName));</span>
+
+<span class="fc bfc" id="L51" title="All 2 branches covered.">            for (Map.Entry&lt;Timeslot.Day, StringBuilder&gt; dayEntry : daysData.entrySet()){</span>
+<span class="fc" id="L52">                String dayName = dayEntry.getKey().name().toLowerCase();</span>
+<span class="fc" id="L53">                String dayData = dayEntry.getValue().toString();</span>
+
+<span class="fc" id="L55">                timetableEntry = timetableEntry.replace(&quot;$&quot; + dayName + &quot;_elements&quot;, dayData);</span>
+<span class="fc" id="L56">            }</span>
+
+<span class="fc" id="L58">            this.timetablesData.put(tableName, timetableEntry);</span>
+<span class="fc" id="L59">        }</span>
+<span class="fc" id="L60">    }</span>
+
+    private void extractTeachersForTimetable(Set&lt;Teacher&gt; teachers, List&lt;String&gt; tableNames, Map&lt;String, String&gt; teacherNamesTables){
+<span class="fc bfc" id="L63" title="All 2 branches covered.">        for (Teacher teacher : teachers){</span>
+<span class="fc" id="L64">            String timetableName = &quot;timetable_t_&quot; + teacher.getName().toLowerCase().replace(&quot; &quot;, &quot;_&quot;);</span>
+<span class="fc" id="L65">            String teacherName = teacher.getName();</span>
+<span class="fc" id="L66">            tableNames.add(timetableName);</span>
+
+<span class="pc bpc" id="L68" title="1 of 2 branches missed.">            if (teacher.getType() == Teacher.Type.TEACHER) teacherName = &quot;Prof. &quot; + teacherName;</span>
+<span class="nc bnc" id="L69" title="All 2 branches missed.">            else if (teacher.getType() == Teacher.Type.COLLABORATOR) teacherName = &quot;Collab. &quot; + teacherName;</span>
+<span class="fc" id="L70">            teacherNamesTables.put(teacherName, timetableName);</span>
+<span class="fc" id="L71">        }</span>
+<span class="fc" id="L72">    }</span>
+
+    private void extractGroupsForTimetable(Set&lt;StudentGroup&gt; studentGroups, List&lt;String&gt; tableNames, Map&lt;String, String&gt; groupsNamesTables){
+<span class="fc bfc" id="L75" title="All 2 branches covered.">        for (StudentGroup studentGroup : studentGroups){</span>
+<span class="fc" id="L76">            String groupName = studentGroup.getName();</span>
+<span class="fc" id="L77">            int year = studentGroup.getYear();</span>
+<span class="fc" id="L78">            String timetableName = &quot;timetable_g_&quot; + year + groupName.toLowerCase().replace(&quot; &quot;, &quot;_&quot;);</span>
+<span class="fc" id="L79">            tableNames.add(timetableName);</span>
+
+<span class="fc" id="L81">            groupsNamesTables.put(year + groupName, timetableName);</span>
+<span class="fc" id="L82">        }</span>
+<span class="fc" id="L83">    }</span>
+
+    private String addElementsToTimetableEntry(String name, String timetableEntry, Map&lt;String, String&gt; elementsNamesTables, String endLine){
+<span class="fc" id="L86">        StringBuilder allElements = new StringBuilder();</span>
+
+<span class="fc bfc" id="L88" title="All 2 branches covered.">        for (Map.Entry&lt;String, String&gt; mapEntry : elementsNamesTables.entrySet()){</span>
+<span class="fc" id="L89">            String elementEntry = utils.getBaseTemplateData(&quot;atomics&quot; + this.separator + &quot;a_entry&quot;);</span>
+<span class="fc" id="L90">            String elementName = mapEntry.getKey();</span>
+<span class="fc" id="L91">            String elementTable = mapEntry.getValue();</span>
+
+<span class="fc" id="L93">            elementEntry = elementEntry.replace(&quot;$entry_ref&quot;, &quot;./&quot; + elementTable + &quot;.html&quot;);</span>
+<span class="fc" id="L94">            elementEntry = elementEntry.replace(&quot;$entry_name&quot;, elementName);</span>
+
+<span class="fc" id="L96">            allElements.append(elementEntry).append(endLine);</span>
+<span class="fc" id="L97">        }</span>
+
+<span class="pc bpc" id="L99" title="1 of 2 branches missed.">        if (allElements.length() &gt;= endLine.length()) allElements.setLength(allElements.length() - endLine.length());</span>
+<span class="fc" id="L100">        timetableEntry = timetableEntry.replace(&quot;$entry_&quot; + name, allElements.toString());</span>
+<span class="fc" id="L101">        return timetableEntry;</span>
+    }
+
+    private void addEntryToTables(String timetableEntry, List&lt;String&gt; tableNames, Timeslot.Day day){
+<span class="fc bfc" id="L105" title="All 2 branches covered.">        for (String tableName : tableNames){</span>
+<span class="fc" id="L106">            this.timetablesDays.get(tableName).get(day).append(timetableEntry);</span>
+<span class="fc" id="L107">        }</span>
+<span class="fc" id="L108">    }</span>
+
+    private void addToFreeRoomsTable(Timeslot.Day day, Room room, int startHour, int endHour){
+<span class="fc bfc" id="L111" title="All 2 branches covered.">        for (int i = startHour; i &lt; endHour; i++) {</span>
+<span class="fc" id="L112">            freeRooms.get(room).get(i).replace(day, false);</span>
+        }
+<span class="fc" id="L114">    }</span>
+
+    private void generateTimetablesFromTimeslots(){
+<span class="fc bfc" id="L117" title="All 2 branches covered.">        for (Timeslot timeslot : this.timeslots) {</span>
+<span class="fc" id="L118">            Date startTime = new Date(timeslot.getTime().getTime());</span>
+<span class="fc" id="L119">            Date endTime = Date.from(startTime.toInstant().plus(timeslot.getTimespan()));</span>
+<span class="fc" id="L120">            Room room = timeslot.getRoom();</span>
+<span class="fc" id="L121">            Discipline discipline = timeslot.getSession().getDiscipline();</span>
+<span class="fc" id="L122">            Set&lt;Teacher&gt; teachers = timeslot.getSession().getTeachers();</span>
+<span class="fc" id="L123">            Set&lt;StudentGroup&gt; studentGroups = timeslot.getSession().getGroups();</span>
+
+<span class="fc" id="L125">            SimpleDateFormat formatter = new SimpleDateFormat(&quot;HH:mm&quot;);</span>
+<span class="fc" id="L126">            String startTimeString = formatter.format(startTime);</span>
+<span class="fc" id="L127">            String endTimeString = formatter.format(endTime);</span>
+
+<span class="fc" id="L129">            int startHour = 0;</span>
+<span class="fc" id="L130">            int endHour = 0;</span>
+<span class="fc" id="L131">            int endMinutes = 0;</span>
+
+            try{
+<span class="fc" id="L134">                startHour = Integer.parseInt(startTimeString.substring(0, 2));</span>
+<span class="fc" id="L135">                endHour = Integer.parseInt(endTimeString.substring(0, 2));</span>
+<span class="fc" id="L136">                endMinutes = Integer.parseInt(endTimeString.substring(3, 5));</span>
+            }
+<span class="nc" id="L138">            catch (NumberFormatException ex){</span>
+<span class="nc" id="L139">                ex.printStackTrace();</span>
+<span class="fc" id="L140">            }</span>
+
+<span class="pc bpc" id="L142" title="1 of 2 branches missed.">            if (endMinutes &gt; 0){</span>
+<span class="nc" id="L143">                endHour += 1;</span>
+            }
+
+<span class="fc" id="L146">            this.addToFreeRoomsTable(timeslot.getWeekday(), room, startHour, endHour);</span>
+
+<span class="fc" id="L148">            SimpleDateFormat formatter2 = new SimpleDateFormat(&quot;dd.MM.yyyy&quot;);</span>
+<span class="fc" id="L149">            String startDateString = formatter2.format(timeslot.getStartDate());</span>
+<span class="fc" id="L150">            String endDateString = formatter2.format(timeslot.getEndDate());</span>
+
+<span class="fc" id="L152">            List&lt;String&gt; tableNames = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L153">            Map&lt;String, String&gt; groupsNamesTables = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L154">            Map&lt;String, String&gt; teacherNamesTables = new HashMap&lt;&gt;();</span>
+
+<span class="fc" id="L156">            String disciplineTable = &quot;timetable_d_&quot; + discipline.getName().toLowerCase().replace(&quot; &quot;, &quot;_&quot;);</span>
+<span class="fc" id="L157">            String roomTable = &quot;timetable_r_&quot; + room.getName().toLowerCase().replace(&quot; &quot;, &quot;_&quot;);</span>
+<span class="fc" id="L158">            tableNames.add(&quot;timetable&quot;);</span>
+<span class="fc" id="L159">            tableNames.add(disciplineTable);</span>
+<span class="fc" id="L160">            tableNames.add(roomTable);</span>
+
+<span class="fc" id="L162">            extractTeachersForTimetable(teachers, tableNames, teacherNamesTables);</span>
+<span class="fc" id="L163">            extractGroupsForTimetable(studentGroups, tableNames, groupsNamesTables);</span>
+
+<span class="fc" id="L165">            String timetableEntry = utils.getBaseTemplateData(&quot;atomics&quot; + this.separator + &quot;timetable_entry&quot;);</span>
+
+<span class="fc" id="L167">            timetableEntry = timetableEntry.replace(&quot;$entry_start&quot;, startTimeString);</span>
+<span class="fc" id="L168">            timetableEntry = timetableEntry.replace(&quot;$entry_end&quot;, endTimeString);</span>
+<span class="fc" id="L169">            timetableEntry = timetableEntry.replace(&quot;$discipline_name&quot;, discipline.getName());</span>
+<span class="fc" id="L170">            timetableEntry = timetableEntry.replace(&quot;$discipline_ref&quot;, &quot;./&quot; + disciplineTable + &quot;.html&quot;);</span>
+<span class="fc" id="L171">            timetableEntry = timetableEntry.replace(&quot;$entry_type&quot;, timeslot.getSession().getType().toString());</span>
+<span class="fc" id="L172">            timetableEntry = timetableEntry.replace(&quot;$room_name&quot;, room.getName());</span>
+<span class="fc" id="L173">            timetableEntry = timetableEntry.replace(&quot;$room_ref&quot;, &quot;./&quot; + roomTable + &quot;.html&quot;);</span>
+<span class="fc" id="L174">            timetableEntry = timetableEntry.replace(&quot;$entry_frequency&quot;, timeslot.getPeriodicity().toString());</span>
+<span class="fc" id="L175">            timetableEntry = timetableEntry.replace(&quot;$entry_period&quot;, startDateString + &quot; - &quot; + endDateString);</span>
+
+<span class="fc" id="L177">            timetableEntry = addElementsToTimetableEntry(&quot;students&quot;, timetableEntry, groupsNamesTables, &quot;, &quot;);</span>
+<span class="fc" id="L178">            timetableEntry = addElementsToTimetableEntry(&quot;teachers&quot;, timetableEntry, teacherNamesTables, &quot;&lt;br&gt;&quot;);</span>
+
+<span class="fc" id="L180">            addEntryToTables(timetableEntry, tableNames, timeslot.getWeekday());</span>
+<span class="fc" id="L181">        }</span>
+<span class="fc" id="L182">    }</span>
+    public void generate(){
+<span class="fc" id="L184">        this.addToDaysMap(&quot;timetable&quot;);</span>
+<span class="fc" id="L185">        this.timetablesNames.put(&quot;timetable&quot;, &quot;Complete Timetable&quot;);</span>
+
+<span class="fc" id="L187">        this.initializeFreeRooms();</span>
+<span class="fc" id="L188">        this.generateTimetablesFromTimeslots();</span>
+<span class="fc" id="L189">        this.createTimetableDataFromDays();</span>
+<span class="fc" id="L190">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

@@ -1,0 +1,368 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TimeslotSettings.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">SchoolTimetable</a> &gt; <a href="index.source.html" class="el_package">org.presentation.swing</a> &gt; <span class="el_source">TimeslotSettings.java</span></div><h1>TimeslotSettings.java</h1><pre class="source lang-java linenums">package org.presentation.swing;
+
+import org.domain.exceptions.Timeslot.TimeslotAdditionException;
+import org.domain.exceptions.Timeslot.TimeslotDeletionFailed;
+import org.domain.exceptions.Timeslot.TimeslotNotFoundException;
+import org.domain.exceptions.discipline.DisciplineNotFoundException;
+import org.domain.exceptions.room.RoomNotFoundException;
+import org.domain.exceptions.session.SessionNotFoundException;
+import org.domain.models.Timeslot;
+import org.presentation.GUI;
+import org.presentation.MainGenerator;
+
+import javax.swing.*;
+import javax.swing.text.MaskFormatter;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.Duration;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Objects;
+
+public class TimeslotSettings implements BaseSettings {
+<span class="nc" id="L26">    private int timeslotVersion = 0;</span>
+<span class="nc" id="L27">    private final SimpleDateFormat dateFormat = new SimpleDateFormat(&quot;dd/MM/yyyy&quot;);</span>
+
+<span class="nc" id="L29">    private final SimpleDateFormat timeFormat = new SimpleDateFormat(&quot;HH:mm&quot;);</span>
+<span class="nc" id="L30">    public TimeslotSettings(){</span>
+
+<span class="nc" id="L32">    }</span>
+    private JPanel createFieldPanel(JLabel label, JComponent component) {
+<span class="nc" id="L34">        JPanel panel = new JPanel();</span>
+<span class="nc" id="L35">        panel.setBackground(Color.decode(&quot;#F6FFDE&quot;));</span>
+<span class="nc" id="L36">        panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));</span>
+<span class="nc" id="L37">        panel.add(label);</span>
+<span class="nc" id="L38">        panel.add(Box.createRigidArea(new Dimension(10, 0)));</span>
+<span class="nc" id="L39">        panel.add(component);</span>
+<span class="nc" id="L40">        panel.setMaximumSize(new Dimension(Short.MAX_VALUE, component.getPreferredSize().height));</span>
+<span class="nc" id="L41">        return panel;</span>
+    }
+    private ArrayList&lt;String&gt; createOptionListForDeleteOperation(){
+<span class="nc" id="L44">        ArrayList&lt;String&gt; optionList = new ArrayList&lt;&gt;();</span>
+
+        //take the timeslots
+<span class="nc" id="L47">        var allTimeslot = GUI.app.timeslotsService.getTimeslots();</span>
+
+<span class="nc bnc" id="L49" title="All 2 branches missed.">        for (var timeslot : allTimeslot){</span>
+<span class="nc" id="L50">            Date startDate = timeslot.getStartDate();</span>
+<span class="nc" id="L51">            long totalMinutes = timeslot.getTimespan().toMinutes();</span>
+<span class="nc" id="L52">            long hours = totalMinutes / 60;</span>
+<span class="nc" id="L53">            long min = totalMinutes % 60;</span>
+
+<span class="nc" id="L55">            Date timeDate = timeslot.getTime();</span>
+
+<span class="nc" id="L57">            optionList.add(timeslot.getSession().getDiscipline().getName()  + &quot;,&quot; +</span>
+<span class="nc" id="L58">                           dateFormat.format(startDate)+ &quot;,&quot; +</span>
+<span class="nc" id="L59">                           timeFormat.format(timeDate) + &quot;,&quot; +</span>
+<span class="nc" id="L60">                           String.format(&quot;%02d:%02d&quot;, hours, min) + &quot;,&quot; +</span>
+<span class="nc" id="L61">                           timeslot.getRoom().getName());</span>
+<span class="nc" id="L62">        }</span>
+
+<span class="nc" id="L64">        return optionList;</span>
+    }
+
+    private Duration durationConvertor(String s){
+
+<span class="nc" id="L69">        String[] parts = s.split(&quot;:&quot;);</span>
+<span class="nc" id="L70">        long hours = Long.parseLong(parts[0].trim());</span>
+<span class="nc" id="L71">        long minutes = Long.parseLong(parts[1]);</span>
+<span class="nc" id="L72">        long totalMinutes = hours * 60 + minutes;</span>
+
+<span class="nc" id="L74">        return Duration.ofMinutes(totalMinutes);</span>
+    }
+
+    public JPanel deleteRoomForm(JPanel currentPanel){
+
+<span class="nc" id="L79">        currentPanel.setBackground(Color.decode(&quot;#F6FFDE&quot;));</span>
+
+<span class="nc" id="L81">        currentPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));</span>
+<span class="nc" id="L82">        currentPanel.add(Box.createRigidArea(new Dimension(0, 30)));</span>
+
+<span class="nc" id="L84">        JLabel titleLabel = new JLabel(&quot;DELETE TIMESLOT&quot;);</span>
+<span class="nc" id="L85">        titleLabel.setFont(new Font(&quot;serif&quot;, Font.BOLD, 25));</span>
+<span class="nc" id="L86">        titleLabel.setForeground(Color.decode(&quot;#617A55&quot;));</span>
+        //titleLabel.setBounds(0,30,300,25);
+<span class="nc" id="L88">        titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);</span>
+<span class="nc" id="L89">        currentPanel.add(titleLabel);</span>
+
+<span class="nc" id="L91">        currentPanel.add(Box.createRigidArea(new Dimension(0, 10)));</span>
+<span class="nc" id="L92">        JLabel dataLabel = new JLabel(&quot;Data:&quot;);</span>
+<span class="nc" id="L93">        dataLabel.setFont(new Font(&quot;Arial&quot;, Font.PLAIN, 14));</span>
+<span class="nc" id="L94">        dataLabel.setBackground(Color.decode(&quot;#617A55&quot;));</span>
+
+<span class="nc" id="L96">        ArrayList&lt;String&gt;  optionsForDelete = createOptionListForDeleteOperation();</span>
+<span class="nc" id="L97">        JComboBox&lt;String&gt; model = new JComboBox&lt;&gt;();</span>
+<span class="nc bnc" id="L98" title="All 2 branches missed.">        for (String opt : optionsForDelete){</span>
+<span class="nc" id="L99">            model.addItem(opt);</span>
+<span class="nc" id="L100">        }</span>
+<span class="nc" id="L101">        JPanel dataPanel = createFieldPanel(dataLabel, model);</span>
+<span class="nc" id="L102">        currentPanel.add(dataPanel);</span>
+
+        // Add the submit button
+<span class="nc" id="L105">        currentPanel.add(Box.createRigidArea(new Dimension(0, 10)));</span>
+<span class="nc" id="L106">        JButton submitButtonDelete = new JButton(&quot;Submit&quot;);</span>
+<span class="nc" id="L107">        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));</span>
+<span class="nc" id="L108">        buttonPanel.setBackground(Color.decode(&quot;#F6FFDE&quot;));</span>
+<span class="nc" id="L109">        submitButtonDelete.addActionListener(new ActionListener() {</span>
+            public void actionPerformed(ActionEvent e) {
+                // TODO
+<span class="nc" id="L112">                System.out.println(&quot;Delete timeslot btn clicked&quot;);</span>
+
+<span class="nc" id="L114">                String[] options =((String) model.getSelectedItem()).split(&quot;,&quot;);</span>
+                try {
+<span class="nc" id="L116">                    GUI.app.timeslotsService.deleteTimeslot(dateFormat.parse(options[1]),</span>
+<span class="nc" id="L117">                            timeFormat.parse(options[2]),durationConvertor(options[3]),options[4]);</span>
+<span class="nc" id="L118">                } catch (ParseException | TimeslotDeletionFailed | RoomNotFoundException | TimeslotNotFoundException ex) {</span>
+<span class="nc" id="L119">                    JOptionPane.showMessageDialog(</span>
+                            null,
+<span class="nc" id="L121">                            &quot;An exception occurred: &quot; + ex.getMessage(),</span>
+                            &quot;Error&quot;,
+                            JOptionPane.ERROR_MESSAGE
+                    );
+<span class="nc" id="L125">                    throw new RuntimeException(ex);</span>
+<span class="nc" id="L126">                }</span>
+
+
+<span class="nc" id="L129">            }</span>
+        });
+<span class="nc" id="L131">        buttonPanel.add(submitButtonDelete);</span>
+<span class="nc" id="L132">        currentPanel.add(buttonPanel);</span>
+
+<span class="nc" id="L134">        currentPanel.add(Box.createRigidArea(new Dimension(0, 10)));</span>
+<span class="nc" id="L135">        JButton generateTimetableButton = new JButton(&quot;Generate Timetable&quot;);</span>
+
+<span class="nc" id="L137">        JPanel generatorPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));</span>
+<span class="nc" id="L138">        generatorPanel.setBackground(Color.decode(&quot;#F6FFDE&quot;));</span>
+
+<span class="nc" id="L140">        generateTimetableButton.addActionListener(new ActionListener() {</span>
+            public void actionPerformed(ActionEvent e){
+<span class="nc" id="L142">                JFileChooser f = new JFileChooser();</span>
+<span class="nc" id="L143">                f.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);</span>
+<span class="nc" id="L144">                int result = f.showSaveDialog(null);</span>
+
+<span class="nc bnc" id="L146" title="All 2 branches missed.">                if (result == JFileChooser.APPROVE_OPTION) {</span>
+<span class="nc" id="L147">                    System.out.println(f.getSelectedFile().getAbsolutePath());</span>
+<span class="nc" id="L148">                    timeslotVersion = timeslotVersion + 1;</span>
+<span class="nc" id="L149">                    MainGenerator mainGenerator = new MainGenerator(timeslotVersion);</span>
+<span class="nc" id="L150">                    mainGenerator.generateLists();</span>
+<span class="nc" id="L151">                    mainGenerator.generateTimetables();</span>
+<span class="nc" id="L152">                    mainGenerator.saveAllData(f.getSelectedFile().getAbsolutePath());</span>
+                }
+<span class="nc" id="L154">            }</span>
+        });
+<span class="nc" id="L156">        generatorPanel.add(generateTimetableButton);</span>
+<span class="nc" id="L157">        currentPanel.add(generatorPanel);</span>
+<span class="nc" id="L158">        return currentPanel;</span>
+    }
+
+    public JPanel addRoomForm(JPanel currentPanel){
+<span class="nc" id="L162">        currentPanel.setBackground(Color.decode(&quot;#F6FFDE&quot;));</span>
+
+<span class="nc" id="L164">        currentPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));</span>
+<span class="nc" id="L165">        currentPanel.add(Box.createRigidArea(new Dimension(0, 10)));</span>
+
+<span class="nc" id="L167">        JLabel titleLabel = new JLabel(&quot;ADD TIMESLOT&quot;);</span>
+<span class="nc" id="L168">        titleLabel.setFont(new Font(&quot;serif&quot;, Font.BOLD, 25));</span>
+<span class="nc" id="L169">        titleLabel.setForeground(Color.decode(&quot;#617A55&quot;));</span>
+<span class="nc" id="L170">        titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);</span>
+        // titleLabel.setBounds(50,30,300,25);
+<span class="nc" id="L172">        currentPanel.add(titleLabel);</span>
+        // Add the start date field
+<span class="nc" id="L174">        JLabel startDateLabel = new JLabel(&quot;Start Date:&quot;);</span>
+<span class="nc" id="L175">        startDateLabel.setFont(new Font(&quot;Arial&quot;, Font.PLAIN, 14));</span>
+<span class="nc" id="L176">        startDateLabel.setBackground(Color.decode(&quot;#617A55&quot;));</span>
+
+<span class="nc" id="L178">        MaskFormatter formatter = null;</span>
+        try {
+<span class="nc" id="L180">            formatter = new MaskFormatter(&quot;##/##/####&quot;);</span>
+<span class="nc" id="L181">            formatter.setPlaceholderCharacter('_');</span>
+<span class="nc" id="L182">        } catch (ParseException e) {</span>
+<span class="nc" id="L183">            e.printStackTrace();</span>
+<span class="nc" id="L184">        }</span>
+
+<span class="nc" id="L186">        JFormattedTextField startDateField = new JFormattedTextField(formatter);</span>
+<span class="nc" id="L187">        startDateField.setColumns(10);</span>
+
+<span class="nc" id="L189">        JPanel namePanel = createFieldPanel(startDateLabel, startDateField);</span>
+<span class="nc" id="L190">        currentPanel.add(namePanel);</span>
+
+<span class="nc" id="L192">        currentPanel.add(Box.createRigidArea(new Dimension(0, 10)));</span>
+
+        // Add the end date field
+<span class="nc" id="L195">        JLabel endDateLabel = new JLabel(&quot;End Date:&quot;);</span>
+<span class="nc" id="L196">        startDateLabel.setFont(new Font(&quot;Arial&quot;, Font.PLAIN, 14));</span>
+<span class="nc" id="L197">        startDateLabel.setBackground(Color.decode(&quot;#617A55&quot;));</span>
+<span class="nc" id="L198">        MaskFormatter endformatter = null;</span>
+        try {
+<span class="nc" id="L200">            endformatter = new MaskFormatter(&quot;##/##/####&quot;);</span>
+<span class="nc" id="L201">            endformatter.setPlaceholderCharacter('_');</span>
+<span class="nc" id="L202">        } catch (ParseException e) {</span>
+<span class="nc" id="L203">            e.printStackTrace();</span>
+<span class="nc" id="L204">        }</span>
+
+<span class="nc" id="L206">        JFormattedTextField endDateField = new JFormattedTextField(endformatter);</span>
+<span class="nc" id="L207">        endDateField.setColumns(10);</span>
+
+<span class="nc" id="L209">        JPanel endDatePanel = createFieldPanel(endDateLabel, endDateField);</span>
+<span class="nc" id="L210">        currentPanel.add(endDatePanel);</span>
+<span class="nc" id="L211">        currentPanel.add(Box.createRigidArea(new Dimension(0, 10)));</span>
+
+        // add time
+<span class="nc" id="L214">        JLabel timeLabel = new JLabel(&quot;Time:&quot;);</span>
+<span class="nc" id="L215">        timeLabel.setFont(new Font(&quot;Arial&quot;, Font.PLAIN, 14));</span>
+<span class="nc" id="L216">        timeLabel.setBackground(Color.decode(&quot;#617A55&quot;));</span>
+
+<span class="nc" id="L218">        SimpleDateFormat format = new SimpleDateFormat(&quot;HH:mm&quot;);</span>
+<span class="nc" id="L219">        JFormattedTextField  timeField = new JFormattedTextField(format);</span>
+        try {
+<span class="nc" id="L221">            MaskFormatter mf = new MaskFormatter(&quot;##:##&quot;);</span>
+<span class="nc" id="L222">            mf.install(timeField);</span>
+<span class="nc" id="L223">        } catch (ParseException e) {</span>
+<span class="nc" id="L224">            e.printStackTrace();</span>
+<span class="nc" id="L225">        }</span>
+<span class="nc" id="L226">        JPanel timePanel = createFieldPanel(timeLabel, timeField);</span>
+<span class="nc" id="L227">        currentPanel.add(timePanel);</span>
+<span class="nc" id="L228">        currentPanel.add(Box.createRigidArea(new Dimension(0, 10)));</span>
+
+
+        //Add timespan field
+<span class="nc" id="L232">        JLabel timespanLabel = new JLabel(&quot;Timespan:&quot;);</span>
+<span class="nc" id="L233">        timespanLabel.setFont(new Font(&quot;Arial&quot;, Font.PLAIN, 14));</span>
+<span class="nc" id="L234">        timespanLabel.setBackground(Color.decode(&quot;#617A55&quot;));</span>
+<span class="nc" id="L235">        JTextField timespanField = new JTextField(20);</span>
+<span class="nc" id="L236">        JPanel regPanel = createFieldPanel(timespanLabel, timespanField);</span>
+<span class="nc" id="L237">        currentPanel.add(regPanel);</span>
+
+        //Add day field
+<span class="nc" id="L240">        currentPanel.add(Box.createRigidArea(new Dimension(0, 10)));</span>
+<span class="nc" id="L241">        JLabel dayLabel = new JLabel(&quot;Day:&quot;);</span>
+<span class="nc" id="L242">        dayLabel.setFont(new Font(&quot;Arial&quot;, Font.PLAIN, 14));</span>
+<span class="nc" id="L243">        dayLabel.setBackground(Color.decode(&quot;#617A55&quot;));</span>
+<span class="nc" id="L244">        String[] dayValues = { &quot;MONDAY&quot;, &quot;TUESDAY&quot;, &quot;WEDNESDAY&quot;, &quot;THURSDAY&quot;, &quot;FRIDAY&quot;, &quot;SATURDAY&quot;, &quot;SUNDAY&quot;};</span>
+
+<span class="nc" id="L246">        JComboBox&lt;String&gt; dayComboBox = new JComboBox&lt;&gt;(dayValues);</span>
+<span class="nc" id="L247">        JPanel dayPanel = createFieldPanel(dayLabel, dayComboBox);</span>
+<span class="nc" id="L248">        currentPanel.add(dayPanel);</span>
+
+        //Add periodicity field
+<span class="nc" id="L251">        currentPanel.add(Box.createRigidArea(new Dimension(0, 10)));</span>
+<span class="nc" id="L252">        JLabel periodicityLabel = new JLabel(&quot;Periodicity:&quot;);</span>
+<span class="nc" id="L253">        periodicityLabel.setFont(new Font(&quot;Arial&quot;, Font.PLAIN, 14));</span>
+<span class="nc" id="L254">        periodicityLabel.setBackground(Color.decode(&quot;#617A55&quot;));</span>
+<span class="nc" id="L255">        String[] periodicityValues = { &quot;WEEKLY&quot;, &quot;BIWEEKLY&quot;, &quot;MONTHLY&quot;};</span>
+
+<span class="nc" id="L257">        JComboBox&lt;String&gt; periodicityComboBox = new JComboBox&lt;&gt;(periodicityValues);</span>
+<span class="nc" id="L258">        JPanel periodicityPanel = createFieldPanel(periodicityLabel, periodicityComboBox);</span>
+<span class="nc" id="L259">        currentPanel.add(periodicityPanel);</span>
+
+         //Add room field
+<span class="nc" id="L262">        currentPanel.add(Box.createRigidArea(new Dimension(0, 10)));</span>
+<span class="nc" id="L263">        JComboBox&lt;String&gt; model = new JComboBox&lt;&gt;();</span>
+<span class="nc" id="L264">        JLabel roomLabel = new JLabel(&quot;Room:&quot;);</span>
+<span class="nc" id="L265">        roomLabel.setFont(new Font(&quot;Arial&quot;, Font.PLAIN, 14));</span>
+<span class="nc" id="L266">        roomLabel.setBackground(Color.decode(&quot;#617A55&quot;));</span>
+        // get all the disciplines from db
+<span class="nc" id="L268">        var allRooms = GUI.app.roomsService.getRooms();</span>
+<span class="nc bnc" id="L269" title="All 2 branches missed.">        for (var room : allRooms) {</span>
+<span class="nc" id="L270">            model.addItem(room.getName());</span>
+<span class="nc" id="L271">        }</span>
+<span class="nc" id="L272">        JPanel roomPanel = createFieldPanel(roomLabel, model);</span>
+<span class="nc" id="L273">        currentPanel.add(roomPanel);</span>
+
+        //Add session field
+<span class="nc" id="L276">        currentPanel.add(Box.createRigidArea(new Dimension(0, 10)));</span>
+<span class="nc" id="L277">        JComboBox&lt;String&gt; sessionModel = new JComboBox&lt;&gt;();</span>
+<span class="nc" id="L278">        JLabel sessionLabel = new JLabel(&quot;Session:&quot;);</span>
+<span class="nc" id="L279">        sessionLabel.setFont(new Font(&quot;Arial&quot;, Font.PLAIN, 14));</span>
+<span class="nc" id="L280">        sessionLabel.setBackground(Color.decode(&quot;#617A55&quot;));</span>
+        // get all the disciplines from db
+<span class="nc" id="L282">        var allSession = GUI.app.sessionsService.getSessions();</span>
+<span class="nc bnc" id="L283" title="All 2 branches missed.">        for (var session : allSession) {</span>
+<span class="nc" id="L284">            sessionModel.addItem(session.getDiscipline().getName());</span>
+<span class="nc" id="L285">        }</span>
+<span class="nc" id="L286">        JPanel sessionPanel = createFieldPanel(sessionLabel, sessionModel);</span>
+<span class="nc" id="L287">        currentPanel.add(sessionPanel);</span>
+
+        // Add the submit button
+<span class="nc" id="L290">        currentPanel.add(Box.createRigidArea(new Dimension(0, 10)));</span>
+<span class="nc" id="L291">        JButton submitButtonAdd = new JButton(&quot;Submit&quot;);</span>
+<span class="nc" id="L292">        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));</span>
+<span class="nc" id="L293">        buttonPanel.setBackground(Color.decode(&quot;#F6FFDE&quot;));</span>
+<span class="nc" id="L294">        submitButtonAdd.addActionListener(new ActionListener() {</span>
+            public void actionPerformed(ActionEvent e) {
+<span class="nc" id="L296">                System.out.println(&quot;Insert timeslot btn clicked&quot;);</span>
+                try {
+<span class="nc bnc" id="L298" title="All 2 branches missed.">                    assert startDateField != null;</span>
+<span class="nc" id="L299">                    GUI.app.timeslotsService.addTimeslot(dateFormat.parse(startDateField.getText()),</span>
+<span class="nc" id="L300">                            dateFormat.parse(endDateField.getText()),</span>
+<span class="nc" id="L301">                            timeFormat.parse(timeField.getText()),</span>
+<span class="nc" id="L302">                            Duration.ofMinutes(Integer.parseInt(timespanField.getText())),</span>
+<span class="nc" id="L303">                            Timeslot.Day.valueOf((String) dayComboBox.getSelectedItem()),</span>
+<span class="nc" id="L304">                            Timeslot.Periodicity.valueOf((String) periodicityComboBox.getSelectedItem()),</span>
+<span class="nc" id="L305">                            (String) model.getSelectedItem(),</span>
+<span class="nc" id="L306">                            (String) sessionModel.getSelectedItem());</span>
+<span class="nc" id="L307">                } catch (ParseException | RoomNotFoundException | DisciplineNotFoundException |</span>
+                         TimeslotAdditionException | SessionNotFoundException ex) {
+<span class="nc" id="L309">                    JOptionPane.showMessageDialog(</span>
+                            null,
+<span class="nc" id="L311">                            &quot;An exception occurred: &quot; + ex.getMessage(),</span>
+                            &quot;Error&quot;,
+                            JOptionPane.ERROR_MESSAGE
+                    );
+<span class="nc" id="L315">                    throw new RuntimeException(ex);</span>
+<span class="nc" id="L316">                }</span>
+
+<span class="nc" id="L318">            }</span>
+        });
+<span class="nc" id="L320">        buttonPanel.add(submitButtonAdd);</span>
+<span class="nc" id="L321">        currentPanel.add(buttonPanel);</span>
+
+<span class="nc" id="L323">        return currentPanel;</span>
+    }
+    @Override
+    public JPanel createJPanel(JPanel main, String labelText) {
+        // Remove previous components from right panel and add result label
+<span class="nc" id="L328">        main.removeAll();</span>
+        // create insertPanel
+<span class="nc" id="L330">        JPanel leftPanel = createLeftJPanel();</span>
+        // create deletePanel
+<span class="nc" id="L332">        JPanel rightPanel = createRightJPanel();</span>
+
+        //merge the 2 panelS into mainPanel
+<span class="nc" id="L335">        main.add(leftPanel, BorderLayout.WEST);</span>
+<span class="nc" id="L336">        main.add(rightPanel, BorderLayout.EAST);</span>
+
+<span class="nc" id="L338">        return main;</span>
+    }
+
+    @Override
+    public JPanel createLeftJPanel() {
+<span class="nc" id="L343">        JPanel currentPanel = new JPanel();</span>
+<span class="nc" id="L344">        currentPanel.setLayout(new BoxLayout(currentPanel, BoxLayout.Y_AXIS));</span>
+
+<span class="nc" id="L346">        currentPanel = addRoomForm(currentPanel);</span>
+<span class="nc" id="L347">        currentPanel = deleteRoomForm(currentPanel);</span>
+        // Set the frame size and center it on the screen
+<span class="nc" id="L349">        return currentPanel;</span>
+    }
+
+    @Override
+    public JPanel createRightJPanel() {
+<span class="nc" id="L354">        JPanel currentPanel = new JPanel();</span>
+<span class="nc" id="L355">        currentPanel.setLayout(null);</span>
+<span class="nc" id="L356">        currentPanel.setBackground(Color.decode(&quot;#F6FFDE&quot;));</span>
+
+<span class="nc" id="L358">        ImageIcon image = new ImageIcon(Objects.requireNonNull(TimeslotSettings.class.getResource(&quot;/icons/timeslot.png&quot;)));</span>
+<span class="nc" id="L359">        Image rescaledImage = image.getImage().getScaledInstance(300,300, Image.SCALE_DEFAULT);</span>
+<span class="nc" id="L360">        ImageIcon finalImage = new ImageIcon(rescaledImage);</span>
+<span class="nc" id="L361">        JLabel imageLabel = new JLabel(finalImage);</span>
+<span class="nc" id="L362">        imageLabel.setBounds(30,130,300,300);</span>
+<span class="nc" id="L363">        currentPanel.add(imageLabel, BorderLayout.CENTER);</span>
+
+<span class="nc" id="L365">        return currentPanel;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Session.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">SchoolTimetable</a> &gt; <a href="index.source.html" class="el_package">org.application.domain.models</a> &gt; <span class="el_source">Session.java</span></div><h1>Session.java</h1><pre class="source lang-java linenums">package org.application.domain.models;
+
+import jakarta.persistence.*;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Pattern;
+import org.hibernate.validator.constraints.Length;
+
+import java.io.Serializable;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
+
+@Entity(name = &quot;Session&quot;)
+@Table(name = &quot;session&quot;, uniqueConstraints = {@UniqueConstraint(columnNames = {&quot;Id&quot;})})
+<span class="fc" id="L15">public class Session implements Serializable {</span>
+
+    @ManyToOne(cascade=CascadeType.ALL)
+    @JoinColumn(name = &quot;discipline_id&quot;, referencedColumnName = &quot;Id&quot;)
+    private Discipline discipline;
+
+<span class="fc" id="L21">    @ManyToMany(mappedBy = &quot;sessions&quot;, cascade=CascadeType.ALL)</span>
+    private Set&lt;StudentGroup&gt; studentGroups = new HashSet&lt;&gt;();
+
+<span class="fc" id="L24">    @ManyToMany(mappedBy = &quot;sessions&quot;, cascade=CascadeType.ALL)</span>
+    private Set&lt;Teacher&gt; teachers = new HashSet&lt;&gt;();
+
+<span class="fc" id="L27">    @OneToMany(mappedBy = &quot;session&quot;, cascade=CascadeType.ALL, orphanRemoval = true)</span>
+    private Set&lt;Timeslot&gt; timeslots = new HashSet&lt;&gt;();
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = &quot;Id&quot;, nullable = false, unique = true)
+    private int id;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = &quot;Type&quot;, nullable = false)
+    private Type type;
+
+    @Length(min = 1, max = 1)
+    @Pattern(regexp = &quot;[A-Z]{1}&quot;)
+    @Column(name = &quot;HalfYear&quot;)
+    private String halfYear;
+
+    @Column(name = &quot;insert_time&quot;, nullable = false)
+    private Date insertTime;
+
+    public int getId() {
+<span class="fc" id="L48">        return id;</span>
+    }
+
+    public void setId(int id) {
+<span class="nc" id="L52">        this.id = id;</span>
+<span class="nc" id="L53">    }</span>
+
+    public Type getType() {
+<span class="fc" id="L56">        return type;</span>
+    }
+
+    public void setType(Type type) {
+<span class="fc" id="L60">        this.type = type;</span>
+<span class="fc" id="L61">    }</span>
+
+    public Date getInsertTime() {
+<span class="nc" id="L64">        return insertTime;</span>
+    }
+
+    public void setInsertTime(Date insertTime) {
+<span class="fc" id="L68">        this.insertTime = insertTime;</span>
+<span class="fc" id="L69">    }</span>
+
+    public Discipline getDiscipline() {
+<span class="fc" id="L72">        return discipline;</span>
+    }
+
+    public void setDiscipline(Discipline discipline) {
+<span class="fc" id="L76">        this.discipline = discipline;</span>
+<span class="fc" id="L77">    }</span>
+
+    public Set&lt;Timeslot&gt; getTimeslots() {
+<span class="nc" id="L80">        return timeslots;</span>
+    }
+
+    public void setTimeslots(Set&lt;@Valid Timeslot&gt; timeslots) {
+<span class="nc" id="L84">        this.timeslots = timeslots;</span>
+<span class="nc" id="L85">    }</span>
+
+    public Set&lt;Teacher&gt; getTeachers() {
+<span class="fc" id="L88">        return teachers;</span>
+    }
+
+    public void setTeachers(Set&lt;@Valid Teacher&gt; teachers) {
+<span class="fc" id="L92">        this.teachers = teachers;</span>
+<span class="fc" id="L93">    }</span>
+
+    public Set&lt;StudentGroup&gt; getGroups() {
+<span class="fc" id="L96">        return studentGroups;</span>
+    }
+
+    public void setGroups(Set&lt;@Valid StudentGroup&gt; studentGroups) {
+<span class="fc" id="L100">        this.studentGroups = studentGroups;</span>
+<span class="fc" id="L101">    }</span>
+
+    public String getHalfYear() {
+<span class="nc" id="L104">        return halfYear;</span>
+    }
+
+    public void setHalfYear(String halfYear) {
+<span class="fc" id="L108">        this.halfYear = halfYear;</span>
+<span class="fc" id="L109">    }</span>
+
+<span class="fc" id="L111">    public enum Type {</span>
+<span class="fc" id="L112">        COURSE, LABORATORY, SEMINARY</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

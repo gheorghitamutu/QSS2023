@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TeacherSettings.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">SchoolTimetable</a> &gt; <a href="index.source.html" class="el_package">org.presentation.swing</a> &gt; <span class="el_source">TeacherSettings.java</span></div><h1>TeacherSettings.java</h1><pre class="source lang-java linenums">package org.presentation.swing;
+
+import org.domain.exceptions.teacher.TeacherAdditionException;
+import org.domain.exceptions.teacher.TeacherDeletionFailed;
+import org.domain.models.Teacher;
+import org.presentation.GUI;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Objects;
+
+public class TeacherSettings implements BaseSettings {
+<span class="nc" id="L15">    public TeacherSettings(){</span>
+
+<span class="nc" id="L17">    }</span>
+    private JPanel createFieldPanel(JLabel label, JComponent component) {
+<span class="nc" id="L19">        JPanel panel = new JPanel();</span>
+<span class="nc" id="L20">        panel.setBackground(Color.decode(&quot;#F6FFDE&quot;));</span>
+<span class="nc" id="L21">        panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));</span>
+<span class="nc" id="L22">        panel.add(label);</span>
+<span class="nc" id="L23">        panel.add(Box.createRigidArea(new Dimension(10, 0)));</span>
+<span class="nc" id="L24">        panel.add(component);</span>
+<span class="nc" id="L25">        panel.setMaximumSize(new Dimension(Short.MAX_VALUE, component.getPreferredSize().height));</span>
+<span class="nc" id="L26">        return panel;</span>
+    }
+    public JPanel deleteTeacherForm(JPanel currentPanel){
+
+<span class="nc" id="L30">        currentPanel.setBackground(Color.decode(&quot;#F6FFDE&quot;));</span>
+
+<span class="nc" id="L32">        currentPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));</span>
+<span class="nc" id="L33">        currentPanel.add(Box.createRigidArea(new Dimension(0, 30)));</span>
+
+<span class="nc" id="L35">        JLabel titleLabel = new JLabel(&quot;DELETE TEACHER&quot;);</span>
+<span class="nc" id="L36">        titleLabel.setFont(new Font(&quot;serif&quot;, Font.BOLD, 25));</span>
+<span class="nc" id="L37">        titleLabel.setForeground(Color.decode(&quot;#617A55&quot;));</span>
+        //titleLabel.setBounds(20,30,300,25);
+<span class="nc" id="L39">        titleLabel.setAlignmentX(Component.LEFT_ALIGNMENT);</span>
+<span class="nc" id="L40">        currentPanel.add(titleLabel);</span>
+
+<span class="nc" id="L42">        currentPanel.add(Box.createRigidArea(new Dimension(0, 10)));</span>
+<span class="nc" id="L43">        JLabel regLabel = new JLabel(&quot;Data:&quot;);</span>
+<span class="nc" id="L44">        regLabel.setFont(new Font(&quot;Arial&quot;, Font.PLAIN, 14));</span>
+<span class="nc" id="L45">        regLabel.setBackground(Color.decode(&quot;#617A55&quot;));</span>
+<span class="nc" id="L46">        JComboBox&lt;String&gt; model = new JComboBox&lt;&gt;();</span>
+
+        // get all the teachers from db
+<span class="nc" id="L49">        var allTeachers = GUI.app.teachersService.getTeachers();</span>
+<span class="nc bnc" id="L50" title="All 2 branches missed.">        for (var teacher : allTeachers) {</span>
+<span class="nc" id="L51">           model.addItem(teacher.getName());</span>
+<span class="nc" id="L52">        }</span>
+<span class="nc" id="L53">        JPanel typePanel = createFieldPanel(regLabel, model);</span>
+<span class="nc" id="L54">        currentPanel.add(typePanel);</span>
+
+        // Add the submit button
+<span class="nc" id="L57">        currentPanel.add(Box.createRigidArea(new Dimension(0, 10)));</span>
+<span class="nc" id="L58">        JButton submitButtonDelete = new JButton(&quot;Submit&quot;);</span>
+<span class="nc" id="L59">        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));</span>
+<span class="nc" id="L60">        buttonPanel.setBackground(Color.decode(&quot;#F6FFDE&quot;));</span>
+<span class="nc" id="L61">        submitButtonDelete.addActionListener(new ActionListener() {</span>
+            public void actionPerformed(ActionEvent e) {
+<span class="nc" id="L63">                System.out.println(&quot;Delete teacher btn clicked&quot;);</span>
+                try {
+<span class="nc" id="L65">                    GUI.app.teachersService.deleteTeachers((String) model.getSelectedItem());</span>
+<span class="nc" id="L66">                } catch (TeacherDeletionFailed ex) {</span>
+<span class="nc" id="L67">                    JOptionPane.showMessageDialog(</span>
+                            null,
+<span class="nc" id="L69">                            &quot;An exception occurred: &quot; + ex.getMessage(),</span>
+                            &quot;Error&quot;,
+                            JOptionPane.ERROR_MESSAGE
+                    );
+<span class="nc" id="L73">                    throw new RuntimeException(ex);</span>
+<span class="nc" id="L74">                }</span>
+<span class="nc" id="L75">            }</span>
+
+        });
+
+
+<span class="nc" id="L80">        buttonPanel.add(submitButtonDelete);</span>
+<span class="nc" id="L81">        currentPanel.add(buttonPanel);</span>
+
+<span class="nc" id="L83">        return currentPanel;</span>
+    }
+
+    public JPanel addTeacherForm(JPanel currentPanel){
+<span class="nc" id="L87">        currentPanel.setBackground(Color.decode(&quot;#F6FFDE&quot;));</span>
+
+<span class="nc" id="L89">        currentPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));</span>
+<span class="nc" id="L90">        currentPanel.add(Box.createRigidArea(new Dimension(0, 10)));</span>
+
+<span class="nc" id="L92">        JLabel titleLabel = new JLabel(&quot;ADD TEACHER&quot;);</span>
+<span class="nc" id="L93">        titleLabel.setFont(new Font(&quot;serif&quot;, Font.BOLD, 25));</span>
+<span class="nc" id="L94">        titleLabel.setForeground(Color.decode(&quot;#617A55&quot;));</span>
+<span class="nc" id="L95">        titleLabel.setAlignmentX(Component.LEFT_ALIGNMENT);</span>
+        // titleLabel.setBounds(50,30,300,25);
+<span class="nc" id="L97">        currentPanel.add(titleLabel);</span>
+        // Add the name field
+<span class="nc" id="L99">        JLabel nameLabel = new JLabel(&quot;Name:&quot;);</span>
+<span class="nc" id="L100">        nameLabel.setFont(new Font(&quot;Arial&quot;, Font.PLAIN, 14));</span>
+<span class="nc" id="L101">        nameLabel.setBackground(Color.decode(&quot;#617A55&quot;));</span>
+<span class="nc" id="L102">        JTextField nameField = new JTextField(20);</span>
+<span class="nc" id="L103">        JPanel namePanel = createFieldPanel(nameLabel, nameField);</span>
+<span class="nc" id="L104">        currentPanel.add(namePanel);</span>
+
+        // Add the type of teacher
+<span class="nc" id="L107">        currentPanel.add(Box.createRigidArea(new Dimension(0, 10)));</span>
+<span class="nc" id="L108">        JLabel typeLabel = new JLabel(&quot;Type:&quot;);</span>
+<span class="nc" id="L109">        typeLabel.setFont(new Font(&quot;Arial&quot;, Font.PLAIN, 14));</span>
+<span class="nc" id="L110">        typeLabel.setBackground(Color.decode(&quot;#617A55&quot;));</span>
+<span class="nc" id="L111">        String[] yearValues = {&quot;TEACHER&quot;, &quot;COLLABORATOR&quot;};</span>
+<span class="nc" id="L112">        JComboBox&lt;String&gt; typeComboBox = new JComboBox&lt;&gt;(yearValues);</span>
+<span class="nc" id="L113">        JPanel typePanel = createFieldPanel(typeLabel, typeComboBox);</span>
+<span class="nc" id="L114">        currentPanel.add(typePanel);</span>
+
+
+        // Add the submit button
+<span class="nc" id="L118">        currentPanel.add(Box.createRigidArea(new Dimension(0, 10)));</span>
+<span class="nc" id="L119">        JButton submitButtonAdd = new JButton(&quot;Submit&quot;);</span>
+<span class="nc" id="L120">        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));</span>
+<span class="nc" id="L121">        buttonPanel.setBackground(Color.decode(&quot;#F6FFDE&quot;));</span>
+<span class="nc" id="L122">        submitButtonAdd.addActionListener(new ActionListener() {</span>
+            public void actionPerformed(ActionEvent e) {
+<span class="nc" id="L124">                System.out.println(&quot;Insert - teacher - btn - clicked&quot;);</span>
+<span class="nc" id="L125">                Teacher.Type type = Teacher.Type.valueOf((String) typeComboBox.getSelectedItem());</span>
+
+                try {
+<span class="nc" id="L128">                    GUI.app.teachersService.addTeacher(nameField.getText(), type);</span>
+<span class="nc" id="L129">                } catch (TeacherAdditionException ex) {</span>
+<span class="nc" id="L130">                    JOptionPane.showMessageDialog(</span>
+                            null,
+<span class="nc" id="L132">                            &quot;An exception occurred: &quot; + ex.getMessage(),</span>
+                            &quot;Error&quot;,
+                            JOptionPane.ERROR_MESSAGE
+                    );
+<span class="nc" id="L136">                    throw new RuntimeException(ex);</span>
+<span class="nc" id="L137">                }</span>
+<span class="nc" id="L138">            }</span>
+        });
+<span class="nc" id="L140">        buttonPanel.add(submitButtonAdd);</span>
+<span class="nc" id="L141">        currentPanel.add(buttonPanel);</span>
+
+<span class="nc" id="L143">        return currentPanel;</span>
+    }
+    @Override
+    public JPanel createJPanel(JPanel main, String labelText) {
+        // Remove previous components from right panel and add result label
+<span class="nc" id="L148">        main.removeAll();</span>
+        // create insertPanel
+<span class="nc" id="L150">        JPanel leftPanel = createLeftJPanel();</span>
+        // create deletePanel
+<span class="nc" id="L152">        JPanel rightPanel = createRightJPanel();</span>
+
+        //merge the 2 panelS into mainPanel
+<span class="nc" id="L155">        main.add(leftPanel, BorderLayout.WEST);</span>
+<span class="nc" id="L156">        main.add(rightPanel, BorderLayout.EAST);</span>
+
+<span class="nc" id="L158">        return main;</span>
+    }
+
+    @Override
+    public JPanel createLeftJPanel() {
+<span class="nc" id="L163">        JPanel currentPanel = new JPanel();</span>
+<span class="nc" id="L164">        currentPanel.setLayout(new BoxLayout(currentPanel, BoxLayout.Y_AXIS));</span>
+
+<span class="nc" id="L166">        currentPanel = addTeacherForm(currentPanel);</span>
+<span class="nc" id="L167">        currentPanel = deleteTeacherForm(currentPanel);</span>
+        // Set the frame size and center it on the screen
+<span class="nc" id="L169">        return currentPanel;</span>
+    }
+
+    @Override
+    public JPanel createRightJPanel() {
+<span class="nc" id="L174">        JPanel currentPanel = new JPanel();</span>
+<span class="nc" id="L175">        currentPanel.setLayout(null);</span>
+<span class="nc" id="L176">        currentPanel.setBackground(Color.decode(&quot;#F6FFDE&quot;));</span>
+
+<span class="nc" id="L178">        ImageIcon image = new ImageIcon(Objects.requireNonNull(TeacherSettings.class.getResource(&quot;/icons/teacher.png&quot;)));</span>
+<span class="nc" id="L179">        Image rescaledImage = image.getImage().getScaledInstance(350,350, Image.SCALE_DEFAULT);</span>
+<span class="nc" id="L180">        ImageIcon finalImage = new ImageIcon(rescaledImage);</span>
+<span class="nc" id="L181">        JLabel imageLabel = new JLabel(finalImage);</span>
+<span class="nc" id="L182">        imageLabel.setBounds(30,20,350,350);</span>
+<span class="nc" id="L183">        currentPanel.add(imageLabel, BorderLayout.CENTER);</span>
+<span class="nc" id="L184">        return currentPanel;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
