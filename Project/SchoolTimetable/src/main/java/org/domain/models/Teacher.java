@@ -12,6 +12,9 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * This class represents a teacher.
+ */
 @ValidTeacher
 @Entity(name = "Teacher")
 @Table(name = "teacher", uniqueConstraints = {@UniqueConstraint(columnNames = {"Id"})})
