@@ -11,6 +11,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+
+/**
+ * The RoomGenerator class is responsible for generating information about rooms and their associated timetables.
+ * It extends the BaseGenerator class and inherits its functionality for generating and managing timetable data.
+ * The generated information includes room names, types, floors, capacities, and their associated timetable names.
+ * It updates the lists data map with the generated information.
+ */
 public class RoomsGenerator extends BaseGenerator{
     @NotNull(message = "Rooms list must not be null")
     private final List<@Valid Room> rooms;
@@ -19,6 +26,14 @@ public class RoomsGenerator extends BaseGenerator{
     @NotNull(message = "Lists data map must not be null")
     private final Map<String, String> listsData;
 
+    /**
+     * Constructs a RoomsGenerator object with the specified generation date string, timetables days data, timetables names map, and lists data map.
+     *
+     * @param generationDateString The generation date string to be displayed on the page. Must not be blank.
+     * @param timetablesDays       The map containing the timetable data organized by table names and days. Must not be null.
+     * @param timetablesNames      The map containing the timetable title organized by table names. Must not be null.
+     * @param listsData            The map containing the generated data for various lists used on the page. Must not be null.
+     */
     public RoomsGenerator(
             @NotBlank(message = "Generation string must not be blank")
             String generationDateString,
@@ -35,6 +50,13 @@ public class RoomsGenerator extends BaseGenerator{
         this.listsData = listsData;
     }
 
+    /**
+     * Generates the information about the rooms and adds it to the lists data map.
+     * Overrides the abstract method 'generate' inherited from the BaseGenerator class.
+     * The generated data includes room names, types, floors, capacities, and their associated timetable names.
+     * It iterates over each room and creates an entry for the room in the corresponding category (lab or course).
+     * It adds the generated rooms data to the lists data map under the "rooms" key.
+     */
     public void generate(){
         String roomsData = utils.getBaseTemplateData("rooms");
         roomsData = roomsData.replace("$generation_date", this.generationDateString);

@@ -27,8 +27,8 @@ public abstract class BaseGenerator {
     /**
      * Constructs a BaseGenerator object with the specified generation date string and timetables days data.
      *
-     * @param generationDateString The generation date string. Must not be blank.
-     * @param timetablesDays       The timetables days data map. Must not be null.
+     * @param generationDateString The generation date string to be displayed on the page. Must not be blank.
+     * @param timetablesDays       The map containing the timetable data organized by table names and days. Must not be null.
      */
     public BaseGenerator(
             @NotBlank(message = "Generation string must not be blank")

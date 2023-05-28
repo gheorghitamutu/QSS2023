@@ -28,10 +28,10 @@ public class DisciplinesGenerator extends BaseGenerator{
     /**
      * Constructs a DisciplinesGenerator object with the specified generation date string, timetables days data, timetables names map, and lists data map.
      *
-     * @param generationDateString The generation date string. Must not be blank.
-     * @param timetablesDays       The timetables days data map. Must not be null.
-     * @param timetablesNames      The timetables names map. Must not be null.
-     * @param listsData            The lists data map. Must not be null.
+     * @param generationDateString The generation date string to be displayed on the page. Must not be blank.
+     * @param timetablesDays       The map containing the timetable data organized by table names and days. Must not be null.
+     * @param timetablesNames      The map containing the timetable title organized by table names. Must not be null.
+     * @param listsData            The map containing the generated data for various lists used on the page. Must not be null.
      */
     public DisciplinesGenerator(
             @NotBlank(message = "Generation string must not be blank")

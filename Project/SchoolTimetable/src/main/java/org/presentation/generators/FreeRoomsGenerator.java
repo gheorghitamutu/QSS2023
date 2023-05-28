@@ -27,10 +27,10 @@ public class FreeRoomsGenerator extends BaseGenerator{
     /**
      * Constructs a FreeRoomsGenerator object with the specified generation date string, timetables days data, free rooms map, and lists data map.
      *
-     * @param generationDateString The generation date string. Must not be blank.
-     * @param timetablesDays       The timetables days data map. Must not be null.
-     * @param freeRooms            The free rooms map. Must not be null.
-     * @param listsData            The lists data map. Must not be null.
+     * @param generationDateString The generation date string to be displayed on the page. Must not be blank.
+     * @param timetablesDays       The map containing the timetable data organized by table names and days. Must not be null.
+     * @param freeRooms            The map containing the free rooms organized by days and hours. Must not be null.
+     * @param listsData            The map containing the generated data for various lists used on the page. Must not be null.
      */
     public FreeRoomsGenerator(
             @NotBlank(message = "Generation string must not be blank")
