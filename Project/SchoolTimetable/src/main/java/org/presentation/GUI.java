@@ -1,5 +1,6 @@
 package org.presentation;
 
+import com.google.inject.ConfigurationException;
 import org.GuiceInjectorSingleton;
 import org.Application;
 import org.Main;
@@ -10,7 +11,11 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.Objects;
-
+/**
+ * The GUI class represents the main graphical user interface for the Timetable Generator application.
+ * It extends JFrame and implements the ActionListener interface to handle button click events.
+ * The GUI displays various panels based on user interaction and provides navigation functionality.
+ */
 public class GUI extends JFrame implements ActionListener {
     // Define variables
     public static Application app;
@@ -21,11 +26,25 @@ public class GUI extends JFrame implements ActionListener {
     private Color bgColor2 = Color.decode("#F6FFDE");
     private Color bgColor3 = Color.decode("#C9DBB2");
 
+    /**
+     * Sets up the application by initializing the dependency injection framework and creating an instance of the Application class.
+     * This method should be called at the beginning of the application to configure the necessary dependencies and obtain the Application instance.
+     *
+     * @param isTest a boolean value indicating whether the application is running in a test environment
+     *
+     * @throws ConfigurationException if there is an error in the dependency configuration
+     */
     public static void setUpAll(boolean isTest){
         var appInjector = Main.setupDependenciesInjector(isTest);
         app = appInjector.getInstance(Application.class);
         GuiceInjectorSingleton.INSTANCE.setInjector(appInjector);
     }
+    /**
+     * Creates a GUI for the Timetable Generator application.
+     * Initializes the main frame, main panel, navigation panel, category buttons, and exit button.
+     * Sets the layout, size, and appearance of the GUI components.
+     * Registers event listeners and handles user interactions.
+     */
     public GUI() {
         super("Timetable Generator");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -87,7 +106,15 @@ public class GUI extends JFrame implements ActionListener {
         setResizable(false);
         setVisible(true);
     }
-
+    /**
+     * Creates the main panel of the GUI.
+     * Removes previous components from the right panel and adds a result label.
+     * Sets the size and background color of the main panel.
+     * Adds an image to the panel using an ImageIcon.
+     *
+     * @param main the existing main panel to be modified
+     * @return the modified main panel with the added image
+     */
     public JPanel createMain(JPanel main){
         // Remove previous components from right panel and add result label
         main.removeAll();
@@ -101,7 +128,14 @@ public class GUI extends JFrame implements ActionListener {
         main.add(imageLabel, BorderLayout.CENTER);
         return main;
     }
-
+    /**
+     * Handles the actionPerformed event for buttons in the GUI.
+     * Determines the source of the event and performs specific actions based on the button's text.
+     * Creates and updates the main panel of the GUI based on the selected button.
+     * Refreshes and repaints the main panel.
+     *
+     * @param e the ActionEvent representing the button click event
+     */
     public void actionPerformed(ActionEvent e) {
         JButton source = (JButton) e.getSource();
 

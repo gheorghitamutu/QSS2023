@@ -18,6 +18,16 @@ import java.util.Objects;
 public class StudentSettings extends JFrame implements BaseSettings {
     public StudentSettings(){
     }
+
+    /**
+     * Creates a form panel for adding a student.
+     *
+     * @param currentPanel the panel to contain the form components
+     * @return the panel with the add student form
+     * Create and configure the labels and combo box selectors such as title, registration ID, name, year of study.
+     * Add rigid area for spacing.
+     * Add the student into database with the provided information.
+     */
     public JPanel addStudentForm(
             @NotEmpty(message = "Current panel shoul not be empty.")
             JPanel currentPanel){
@@ -107,7 +117,15 @@ public class StudentSettings extends JFrame implements BaseSettings {
 
         return currentPanel;
     }
-
+    /**
+     * Creates a form panel for deleting a student.
+     *
+     * @param currentPanel the panel to contain the form components
+     * @return the panel with the delete student form
+     * Create and configure the registration label and field.
+     * Delete the student based on the registration ID entered.
+     * Display an error message if an exception occurs during deletion
+     */
     public JPanel deleteStudentForm(
             @NotEmpty(message = "Current value should not be empty")
             JPanel currentPanel){
@@ -168,6 +186,13 @@ public class StudentSettings extends JFrame implements BaseSettings {
 
         return currentPanel;
     }
+    /**
+     * Creates a panel for displaying a labeled field component.
+     *
+     * @param label     the label for the field
+     * @param component the field component
+     * @return the panel containing the labeled field component
+     */
     private JPanel createFieldPanel(JLabel label, JComponent component) {
         JPanel panel = new JPanel();
         panel.setBackground(Color.decode("#F6FFDE"));
@@ -178,6 +203,11 @@ public class StudentSettings extends JFrame implements BaseSettings {
         panel.setMaximumSize(new Dimension(Short.MAX_VALUE, component.getPreferredSize().height));
         return panel;
     }
+    /**
+     * Creates a left JPanel containing the addStudentForm and deleteStudentForm.
+     *
+     * @return The left JPanel containing the addStudentForm and deleteStudentForm.
+     */
     @Override
     public JPanel createLeftJPanel(){
         JPanel currentPanel = new JPanel();
@@ -189,6 +219,11 @@ public class StudentSettings extends JFrame implements BaseSettings {
         return currentPanel;
     }
 
+    /**
+     * Creates a right JPanel with an image displayed at the center.
+     *
+     * @return The right JPanel with the image displayed at the center.
+     */
     @Override
     public JPanel createRightJPanel() {
         JPanel currentPanel = new JPanel();
@@ -203,7 +238,13 @@ public class StudentSettings extends JFrame implements BaseSettings {
         currentPanel.add(imageLabel, BorderLayout.CENTER);
         return currentPanel;
     }
-
+    /**
+     * Creates a JPanel with left and right panels merged into the main panel.
+     *
+     * @param main      The JPanel representing the main panel. Must not be empty.
+     * @param labelText The text for the label. Must not be blank.
+     * @return The JPanel with the left and right panels merged into the main panel.
+     */
     @Override
     public JPanel createJPanel( @NotEmpty(message = "Main panel should not be empty.")
                                     JPanel main,

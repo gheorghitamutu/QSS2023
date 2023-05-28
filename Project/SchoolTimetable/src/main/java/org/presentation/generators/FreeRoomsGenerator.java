@@ -10,6 +10,12 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
+
+/**
+ * The FreeRoomsGenerator class is responsible for generating data and templates related to free rooms,
+ * including their availability and scheduling information.
+ * It extends the BaseGenerator class and inherits common functionality for generating data and templates.
+ */
 public class FreeRoomsGenerator extends BaseGenerator{
     @NotNull(message = "Free rooms map must not be null")
     private final Map<Room, Map<Integer, Map<Timeslot.Day, Boolean>>> freeRooms;
@@ -18,6 +24,14 @@ public class FreeRoomsGenerator extends BaseGenerator{
     @NotNull(message = "Lists data map must not be null")
     private final Map<String, String> listsData;
 
+    /**
+     * Constructs a FreeRoomsGenerator object with the specified generation date string, timetables days data, free rooms map, and lists data map.
+     *
+     * @param generationDateString The generation date string to be displayed on the page. Must not be blank.
+     * @param timetablesDays       The map containing the timetable data organized by table names and days. Must not be null.
+     * @param freeRooms            The map containing the free rooms organized by days and hours. Must not be null.
+     * @param listsData            The map containing the generated data for various lists used on the page. Must not be null.
+     */
     public FreeRoomsGenerator(
             @NotBlank(message = "Generation string must not be blank")
             String generationDateString,
@@ -33,6 +47,11 @@ public class FreeRoomsGenerator extends BaseGenerator{
         this.listsData = listsData;
     }
 
+    /**
+     * Generates a day decoder map that maps each day of the week to its corresponding index.
+     *
+     * @return The day decoder map containing the mapping of days to their indices.
+     */
     @NotEmpty(message = "Day decoder map must not be empty")
     private Map<Timeslot.Day, Integer> generateDayDecoder(){
         Map<Timeslot.Day, Integer> decoder = new HashMap<>();
@@ -47,6 +66,12 @@ public class FreeRoomsGenerator extends BaseGenerator{
         return decoder;
     }
 
+    /**
+     * Generates data for free rooms in the timetables.
+     * Overrides the abstract method 'generate' inherited from the BaseGenerator class.
+     * The generated data includes information about available rooms and their occupancy status for each hour of the day.
+     * The HTML templates are populated with the generated data and stored in the lists data map.
+     */
     public void generate(){
         String freeRoomsData = utils.getBaseTemplateData("free_rooms");
         freeRoomsData = freeRoomsData.replace("$generation_date", this.generationDateString);

@@ -9,6 +9,15 @@ import org.presentation.GUI;
 
 import java.util.*;
 
+
+/**
+ * The StudentsGenerator class is responsible for generating student-related data and
+ * organizing it into individual timetables for each student group.
+ * It extends the BaseGenerator class and inherits its core functionality for generating timetables based on the provided data.
+ * The generated timetables are organized by group type (bachelor or master) and year.
+ * Each group type contains a list of years, and each year contains a list of student groups.
+ * It populates the 'students' section of the lists data map with the generated data.
+ */
 public class StudentsGenerator extends BaseGenerator{
     @NotNull(message = "Groups list must not be null")
     private final List<@Valid StudentGroup> groups;
@@ -17,6 +26,14 @@ public class StudentsGenerator extends BaseGenerator{
     @NotNull(message = "Lists data map must not be null")
     private final Map<String, String> listsData;
 
+    /**
+     * Constructs a StudentsGenerator object with the specified generation date string, timetables days data, timetables names map, and lists data map.
+     *
+     * @param generationDateString The generation date string to be displayed on the page. Must not be blank.
+     * @param timetablesDays       The map containing the timetable data organized by table names and days. Must not be null.
+     * @param timetablesNames      The map containing the timetable title organized by table names. Must not be null.
+     * @param listsData            The map containing the generated data for various lists used on the page. Must not be null.
+     */
     public StudentsGenerator(
             @NotBlank(message = "Generation string must not be blank")
             String generationDateString,
@@ -33,6 +50,14 @@ public class StudentsGenerator extends BaseGenerator{
         this.listsData = listsData;
     }
 
+    /**
+     * Generates student-related information and timetables for student groups.
+     * Overrides the abstract method 'generate' inherited from the BaseGenerator class.
+     * The generation process involves organizing student groups by type and year, and generating individual timetables for each group.
+     * The generated data includes information about the student groups, such as their names and respective timetables.
+     * The generated timetables are organized by group type (bachelor or master) and year.
+     * It populates the 'students' section of the lists data map with the generated data.
+     */
     public void generate(){
         String studentsData = utils.getBaseTemplateData("students");
         studentsData = studentsData.replace("$generation_date", this.generationDateString);

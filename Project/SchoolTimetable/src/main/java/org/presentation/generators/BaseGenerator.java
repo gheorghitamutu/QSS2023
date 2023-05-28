@@ -10,6 +10,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+
+/**
+ * The abstract BaseGenerator class provides a foundation for specific generators used to generate the HTML pages of the timetable.
+ */
 public abstract class BaseGenerator {
     @NotNull(message = "Template utils must not be null")
     protected final TemplateUtils utils;
@@ -20,6 +24,12 @@ public abstract class BaseGenerator {
     @NotNull(message = "Days data map must not be null")
     protected final Map<String, Map<Timeslot.Day, StringBuilder>> timetablesDays;
 
+    /**
+     * Constructs a BaseGenerator object with the specified generation date string and timetables days data.
+     *
+     * @param generationDateString The generation date string to be displayed on the page. Must not be blank.
+     * @param timetablesDays       The map containing the timetable data organized by table names and days. Must not be null.
+     */
     public BaseGenerator(
             @NotBlank(message = "Generation string must not be blank")
             String generationDateString,
@@ -31,6 +41,12 @@ public abstract class BaseGenerator {
         this.timetablesDays = timetablesDays;
     }
 
+    /**
+     * Adds a table name to the timetablesDays map, with empty data for all days of the week.
+     * This method initializes a new HashMap with empty data for all days of the week, for the specified table name in the timetablesDays map.
+     *
+     * @param tableName The name of the table. Must not be blank.
+     */
     protected void addToDaysMap(
             @NotBlank(message = "Table name must not be blank")
             String tableName){
@@ -45,5 +61,10 @@ public abstract class BaseGenerator {
         this.timetablesDays.put(tableName, daysData);
     }
 
+    /**
+     * Generates specific data or performs tasks for the generator.
+     * This method is abstract and must be implemented by subclasses. It is responsible for generating specific data or performing tasks related to the generator's functionality.
+     * Each subclass of BaseGenerator provides its own implementation of this method.
+     */
     public abstract void generate();
 }
