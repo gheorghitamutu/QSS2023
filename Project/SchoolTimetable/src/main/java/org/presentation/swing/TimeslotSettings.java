@@ -25,23 +25,39 @@ import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Objects;
-/**The TimeslotSettings class represents the settings for managing timeslots in the application.
+
+/**
+ * The TimeslotSettings class represents the settings for managing timeslots in the application.
  * It provides methods for adding and deleting timeslots, as well as generating timetables.
  * The class extends the BaseSettings class and implements various functionality related to timeslot management.
  * Note: This class assumes that the necessary services and dependencies have been properly injected
  * or made accessible through the GUI.app instance.
  */
 public class TimeslotSettings implements BaseSettings {
+
+    /**
+     * The timeslot version.
+     */
     private int timeslotVersion = 0;
 
+    /**
+     * The date format for the timeslot.
+     */
     @NotEmpty(message = "Date format must not be empty.")
     private final SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
+    /**
+     * The time format for the timeslot.
+     */
     @NotEmpty(message = "Time format must not be empty.")
     private final SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
-    public TimeslotSettings(){
 
+    /**
+     * Default constructor for the TimeslotSettings class.
+     */
+    public TimeslotSettings(){
     }
+
     /**
      * Creates a JPanel that combines a label and a component for a timeslot field.
      *
@@ -64,6 +80,7 @@ public class TimeslotSettings implements BaseSettings {
         panel.setMaximumSize(new Dimension(Short.MAX_VALUE, component.getPreferredSize().height));
         return panel;
     }
+
     /**
      * Creates an option list for the delete operation, containing formatted strings representing timeslots.
      * Format the timeslot information into a string.
@@ -92,6 +109,7 @@ public class TimeslotSettings implements BaseSettings {
 
         return optionList;
     }
+
     /**
      * Converts a duration string in the format "hh:mm" to a Duration object.
      *
@@ -110,16 +128,12 @@ public class TimeslotSettings implements BaseSettings {
 
         return Duration.ofMinutes(totalMinutes);
     }
+
     /**
      * Adds a form for deleting a timeslot to the specified panel.
      *
      * @param currentPanel the panel to which the form will be added
      * @return the updated panel with the added timeslot deletion form
-     *
-     * @throws ParseException           if there is an error in parsing the date or time formats
-     * @throws TimeslotDeletionFailed   if the timeslot deletion fails
-     * @throws RoomNotFoundException   if the selected room is not found in the database
-     * @throws TimeslotNotFoundException if the specified timeslot is not found in the database
      * Call the TimeslotsService to delete the timeslot. The deletion operation is done using these parameters:
      * date, time and duration
      */
@@ -209,19 +223,12 @@ public class TimeslotSettings implements BaseSettings {
         currentPanel.add(generatorPanel);
         return currentPanel;
     }
+
     /**
      * Adds a form for creating a new timeslot to the specified panel.
      *
      * @param currentPanel the panel to which the form will be added
      * @return the updated panel with the added timeslot form
-     *
-     * @throws ParseException             if there is an error in parsing the date or time formats
-     * @throws RoomNotFoundException     if the selected room is not found in the database
-     * @throws DisciplineNotFoundException if the selected session's discipline is not found in the database
-     * @throws TimeslotAdditionException  if there is an error in adding the timeslot
-     * @throws SessionNotFoundException   if the selected session is not found in the database
-     * @throws ValidationException        if there is a validation error in the timeslot data
-     *
      * All the necessary configurations regarding timslot labels and fileds are done on this side of imeplementation.
      * Get all the rooms from the database and Call the TimeslotsService to add the timeslot.
      */
@@ -390,6 +397,7 @@ public class TimeslotSettings implements BaseSettings {
 
         return currentPanel;
     }
+
     /**
      * Creates a JPanel with left and right panels merged into the main panel.
      *
@@ -415,6 +423,7 @@ public class TimeslotSettings implements BaseSettings {
 
         return main;
     }
+
     /**
      * Creates a left JPanel containing the addTimeslotForm and deleteTimeslotForm.
      *
@@ -431,6 +440,11 @@ public class TimeslotSettings implements BaseSettings {
         return currentPanel;
     }
 
+    /**
+     * Creates a right JPanel containing the image.
+     *
+     * @return The right JPanel containing the image.
+     */
     @Override
     public JPanel createRightJPanel() {
         JPanel currentPanel = new JPanel();

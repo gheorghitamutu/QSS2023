@@ -26,7 +26,6 @@ public class MainDatabaseHibernateProvider implements IHibernateProvider {
      *
      * @return The current EntityManager instance.
      */
-
     @Override
     public EntityManager getEntityManager() {
 

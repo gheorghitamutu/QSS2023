@@ -14,13 +14,18 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Objects;
+
 /**
  * Represents the settings for managing rooms in the GUI.
  */
 public class RoomSettings implements BaseSettings {
-    public RoomSettings(){
 
+    /**
+     * Default constructor.
+     */
+    public RoomSettings() {
     }
+
     /**
      * Creates a panel with a label and a component.
      *
@@ -45,6 +50,7 @@ public class RoomSettings implements BaseSettings {
         panel.setMaximumSize(new Dimension(Short.MAX_VALUE, component.getPreferredSize().height));
         return panel;
     }
+
     /**
      * Creates a panel for deleting a room.
      *
@@ -115,6 +121,7 @@ public class RoomSettings implements BaseSettings {
 
         return currentPanel;
     }
+
     /**
      * Creates a panel for adding a new room.
      *
@@ -207,6 +214,7 @@ public class RoomSettings implements BaseSettings {
 
         return currentPanel;
     }
+
     /**
      * Creates a JPanel with left and right panels merged into the main panel.
      *
@@ -233,6 +241,7 @@ public class RoomSettings implements BaseSettings {
 
         return main;
     }
+
     /**
      * Creates a left JPanel containing the addDisciplineForm and deleteDisciplineForm.
      *
@@ -248,6 +257,7 @@ public class RoomSettings implements BaseSettings {
         // Set the frame size and center it on the screen
         return currentPanel;
     }
+    
     /**
      * Creates a right JPanel with an image displayed at the center.
      *

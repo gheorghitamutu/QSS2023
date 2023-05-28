@@ -19,9 +19,19 @@ import java.util.Objects;
  * It allows adding and deleting teachers through user interfaces.
  */
 public class TeacherSettings implements BaseSettings {
-    public TeacherSettings(){
 
+    /**
+     * Default constructor for the TeacherSettings class.
+     */
+    public TeacherSettings() {
     }
+
+    /**
+     * Creates a JPanel containing a form for adding a teacher.
+     * @param label The label of the form. Must not be empty.
+     * @param component The component to be added to the form. Must not be empty.
+     * @return The JPanel containing the form.
+     */
     private JPanel createFieldPanel( @NotEmpty(message = "Teacher label should not be empty.")
                                      JLabel label,
                                      @NotEmpty (message = "Teacher component should not be empty.")
@@ -35,6 +45,7 @@ public class TeacherSettings implements BaseSettings {
         panel.setMaximumSize(new Dimension(Short.MAX_VALUE, component.getPreferredSize().height));
         return panel;
     }
+
     /**
      * Displays a form for deleting a teacher.
      *
@@ -100,6 +111,7 @@ public class TeacherSettings implements BaseSettings {
 
         return currentPanel;
     }
+
     /**
      * Displays a form for adding a new teacher.
      *
@@ -168,6 +180,7 @@ public class TeacherSettings implements BaseSettings {
 
         return currentPanel;
     }
+
     /**
      * Creates a JPanel with left and right panels merged into the main panel.
      *
@@ -193,6 +206,7 @@ public class TeacherSettings implements BaseSettings {
 
         return main;
     }
+
     /**
      * Creates a left JPanel containing the addTeacherForm and deleteTeacherForm.
      *
@@ -208,6 +222,7 @@ public class TeacherSettings implements BaseSettings {
         // Set the frame size and center it on the screen
         return currentPanel;
     }
+
     /**
      * Creates a right JPanel with an image displayed at the center.
      *

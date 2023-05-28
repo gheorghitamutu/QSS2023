@@ -13,15 +13,36 @@ import org.domain.models.Room;
 import java.text.MessageFormat;
 import java.util.List;
 
+/**
+ * Represents a service class for managing Room entities.
+ * This class defines the service operations that can be performed, specific to room service.
+ */
 public class RoomsService implements IRoomsService {
 
+    /**
+     * The room repository.
+     */
     private final IRoomRepository roomRepository;
 
+    /**
+     * Initializes a new instance of the {@link RoomsService} class.
+     * @param roomRepository The room repository.
+     */
     @Inject
     public RoomsService(IRoomRepository roomRepository) {
         this.roomRepository = roomRepository;
     }
 
+    /**
+     * Adds a new Room with the given name, capacity, floor and type.
+     * @param name The name of the new Room.
+     * @param capacity The capacity of the new Room.
+     * @param floor The floor of the new Room.
+     * @param type The type of the new Room.
+     * @return The newly created Room.
+     * @throws RoomAdditionException If the Room could not be added.
+     * @throws ValidationException If the provided name, capacity, floor or type are invalid.
+     */
     @Override
     public Room addRoom(String name, int capacity, int floor, Room.Type type) throws RoomAdditionException, ValidationException {
         Room room = null;
@@ -29,8 +50,6 @@ public class RoomsService implements IRoomsService {
         ValidationHelpers.requireNotBlank(name, IllegalArgumentException.class, "[RoomService] Room name is invalid", null);
         ValidationHelpers.requirePositive(capacity, IllegalArgumentException.class, "[RoomService] Room capacity is invalid", null);
         ValidationHelpers.requireNotNull(type, IllegalArgumentException.class, "[RoomService] Room type is invalid", null);
-
-
 
         try {
             room = roomRepository.getByName(name);
@@ -55,6 +74,14 @@ public class RoomsService implements IRoomsService {
         return room;
     }
 
+    /**
+     * Deletes the Room with the given id.
+     * @param roomId The id of the Room to delete.
+     * @return True if the Room was deleted, false otherwise.
+     * @throws RoomNotFoundException If the Room with the given id was not found.
+     * @throws RoomDeletionFailed If the Room could not be deleted.
+     * @throws ValidationException If the provided id is invalid.
+     */
     @Override
     public boolean deleteRoom(int roomId) throws RoomNotFoundException, RoomDeletionFailed, ValidationException {
         ValidationHelpers.requirePositiveOrZero(roomId, IllegalArgumentException.class, "[RoomService] Room id is invalid", null);
@@ -73,6 +100,13 @@ public class RoomsService implements IRoomsService {
         return true;
     }
 
+    /**
+     * Deletes the Room with the given name.
+     * @param name The name of the Room to delete.
+     * @return True if the Room was deleted, false otherwise.
+     * @throws RoomDeletionFailed If the Room could not be deleted.
+     * @throws ValidationException If the provided name is invalid.
+     */
     @Override
     public boolean deleteRooms(String name) throws RoomDeletionFailed, ValidationException {
 
@@ -90,6 +124,11 @@ public class RoomsService implements IRoomsService {
         return true;
     }
 
+    /**
+     * Deletes all the Rooms.
+     * @return True if the Rooms were deleted, false otherwise.
+     * @throws RoomDeletionFailed If the Rooms could not be deleted.
+     */
     @Override
     public boolean deleteAll() throws RoomDeletionFailed {
         try {
@@ -101,6 +140,13 @@ public class RoomsService implements IRoomsService {
         return true;
     }
 
+    /**
+     * Gets the Room with the given id.
+     * @param roomId The id of the Room to get.
+     * @return The Room with the given id.
+     * @throws RoomNotFoundException If the Room with the given id was not found.
+     * @throws ValidationException If the provided id is invalid.
+     */
     @Override
     public Room getRoomById(int roomId) throws RoomNotFoundException, ValidationException {
 
@@ -113,6 +159,10 @@ public class RoomsService implements IRoomsService {
         return room;
     }
 
+    /**
+     * Retrieves all the Rooms.
+     * @return A list of all the Rooms.
+     */
     @Override
     public List<Room> getRooms() {
         return roomRepository.readAll();

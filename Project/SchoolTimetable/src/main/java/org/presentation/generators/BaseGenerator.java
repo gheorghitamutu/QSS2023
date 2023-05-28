@@ -15,12 +15,28 @@ import java.util.Map;
  * The abstract BaseGenerator class provides a foundation for specific generators used to generate the HTML pages of the timetable.
  */
 public abstract class BaseGenerator {
+
+    /**
+     * The TemplateUtils object used to read the HTML template files.
+     */
     @NotNull(message = "Template utils must not be null")
     protected final TemplateUtils utils;
+
+    /**
+     * The separator string used to separate the timetable tables.
+     */
     @NotEmpty(message = "Separator must not be empty.")
     protected final String separator;
+
+    /**
+     * The generation date string to be displayed on the page.
+     */
     @NotBlank(message = "Generation string must not be blank")
     protected final String generationDateString;
+
+    /**
+     * The map containing the timetable data organized by table names and days.
+     */
     @NotNull(message = "Days data map must not be null")
     protected final Map<String, Map<Timeslot.Day, StringBuilder>> timetablesDays;
 

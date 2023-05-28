@@ -19,18 +19,42 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * Represents a service class for managing Student entities.
+ */
 public class StudentsService implements IStudentsService {
 
+    /**
+     * The student repository.
+     */
     private final IStudentRepository studentRepository;
+
+    /**
+     * The student group repository.
+     */
     private final IStudentGroupRepository studentGroupRepository;
 
+    /**
+     * Initializes a new instance of the {@link StudentsService} class.
+     * @param studentRepository The student repository.
+     * @param studentGroupRepository The student group repository.
+     */
     @Inject
-
     public StudentsService(IStudentRepository studentRepository, IStudentGroupRepository studentGroupRepository) {
         this.studentRepository = studentRepository;
         this.studentGroupRepository = studentGroupRepository;
     }
 
+    /**
+     * Adds a new Student with the given name, registration number, year and group name.
+     * @param name The name of the new Student.
+     * @param registrationNumber The registration number of the new Student.
+     * @param year The year of the new Student.
+     * @param groupName The group name of the new Student.
+     * @return The newly created Student.
+     * @throws StudentAdditionException If the Student could not be added.
+     * @throws ValidationException If the provided name, registration number, year or group name are invalid.
+     */
     @Override
     public Student addStudent(String name, String registrationNumber, int year, String groupName) throws StudentAdditionException, ValidationException {
 
@@ -75,6 +99,15 @@ public class StudentsService implements IStudentsService {
         return student;
     }
 
+    /**
+     * Updates the Student with the given id with the given name and year.
+     * @param studentId The id of the Student to update.
+     * @param name The new name of the Student.
+     * @param year The new year of the Student.
+     * @return The updated Student.
+     * @throws StudentUpdateException If the Student could not be updated.
+     * @throws ValidationException If the provided name or year are invalid.
+     */
     @Override
     public Student updateStudent(int studentId, String name, int year) throws StudentUpdateException, ValidationException {
 
@@ -100,6 +133,15 @@ public class StudentsService implements IStudentsService {
         return student;
     }
 
+    /**
+     * Reassigns the Student with the given id to the group with the given name.
+     * @param studentId The id of the Student to reassign.
+     * @param newGroupName The new group name of the Student.
+     * @return The reassigned Student.
+     * @throws StudentGroupReassignException If the Student could not be reassigned.
+     * @throws RepositoryOperationException If the Student could not be reassigned.
+     * @throws ValidationException If the provided group name is invalid.
+     */
     @Override
     public Student reassignStudent(int studentId, String newGroupName) throws StudentGroupReassignException, RepositoryOperationException, ValidationException {
         var student = studentRepository.getById(studentId);
@@ -121,6 +163,12 @@ public class StudentsService implements IStudentsService {
         return student;
     }
 
+    /**
+     * Retrieves student by id.
+     * @param studentId The id of the Student to get.
+     * @return The Student with the given id.
+     * @throws StudentNotFoundException If the Student could not be found.
+     */
     @Override
     public Student getStudentById(int studentId) throws StudentNotFoundException {
         var student = studentRepository.getById(studentId);
@@ -131,6 +179,12 @@ public class StudentsService implements IStudentsService {
         return studentRepository.getById(studentId);
     }
 
+    /**
+     * Retrieves student by registration number.
+     * @param registrationNumber The registration number of the Student to get.
+     * @return The Student with the given registration number.
+     * @throws StudentNotFoundException If the Student could not be found.
+     */
     public Student getStudentByRegistrationNumber(String registrationNumber) throws StudentNotFoundException {
         var students = studentRepository.readAll().stream().filter(s -> s.getRegistrationNumber().equals(registrationNumber)).toList();
         if (students.size() != 1) {
@@ -139,6 +193,13 @@ public class StudentsService implements IStudentsService {
         return students.get(0);
     }
 
+    /**
+     * Deletes the Student with the given id.
+     * @param studentId The id of the Student to delete.
+     * @return True if the Student was deleted, false otherwise.
+     * @throws StudentNotFoundException If the Student could not be found.
+     * @throws StudentDeletionFailed If the Student could not be deleted.
+     */
     @Override
     public boolean deleteStudent(int studentId) throws StudentNotFoundException, StudentDeletionFailed {
         var student = studentRepository.getById(studentId);
@@ -156,8 +217,13 @@ public class StudentsService implements IStudentsService {
         return true;
     }
 
+    /**
+     * Deletes all Students.
+     * @return True if the Students were deleted, false otherwise.
+     * @throws StudentDeletionFailed If the Students could not be deleted.
+     */
     @Override
-    public boolean deleteStudents(String registrationNumber) throws StudentNotFoundException, StudentDeletionFailed {
+    public boolean deleteStudents(String registrationNumber) throws StudentDeletionFailed {
         var students = studentRepository.readAll().stream().filter(s -> s.getRegistrationNumber().equals(registrationNumber)).toList();
 
         try {
@@ -169,6 +235,11 @@ public class StudentsService implements IStudentsService {
         return true;
     }
 
+    /**
+     * Deletes all Students.
+     * @return True if the Students were deleted, false otherwise.
+     * @throws StudentDeletionFailed If the Students could not be deleted.
+     */
     @Override
     public boolean deleteAll() throws StudentDeletionFailed {
         try {
@@ -180,6 +251,13 @@ public class StudentsService implements IStudentsService {
         return true;
     }
 
+    /**
+     * Deletes the Student with the given registration number.
+     * @param registrationNumber The registration number of the Student to delete.
+     * @return True if the Student was deleted, false otherwise.
+     * @throws StudentNotFoundException If the Student could not be found.
+     * @throws StudentDeletionFailed If the Student could not be deleted.
+     */
     @Override
     public boolean deleteStudent(String registrationNumber) throws StudentNotFoundException, StudentDeletionFailed {
         var students = studentRepository.readAll().stream().filter(s -> s.getRegistrationNumber().equals(registrationNumber)).toList();
@@ -197,11 +275,21 @@ public class StudentsService implements IStudentsService {
         return true;
     }
 
+    /**
+     * Retrieves all Students.
+     * @return A list of all Students.
+     */
     @Override
     public List<Student> getStudents() {
         return studentRepository.readAll();
     }
 
+    /**
+     * Retrieves all Students in the group with the given group name and year.
+     * @param groupName The name of the group to get the Students from.
+     * @param year The year of the group to get the Students from.
+     * @return A list of all Students in the group with the given group name and year.
+     */
     @Override
     public List<Student> getStudentsByGroupNameAndYear(String groupName, int year) {
 

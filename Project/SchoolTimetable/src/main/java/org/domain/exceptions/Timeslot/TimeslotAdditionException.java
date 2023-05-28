@@ -6,7 +6,8 @@ package org.domain.exceptions.Timeslot;
 public class TimeslotAdditionException extends Exception {
 
     /**
-     * This is the default constructor of TimeslotAdditionException.
+     * This is the constructor of TimeslotAdditionException.
+     * @param message The message.
      */
     public TimeslotAdditionException(String message) {
         super(message);

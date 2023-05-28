@@ -255,8 +255,10 @@ public class Room implements Serializable {
 
     /**
      * The type of the room.
+     * It can be a course or a laboratory.
      */
     public enum Type {
-        COURSE, LABORATORY
+        COURSE,
+        LABORATORY
     }
 }

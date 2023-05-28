@@ -14,9 +14,15 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Objects;
 
-
+/**
+ * This class represents the student settings.
+ */
 public class StudentSettings extends JFrame implements BaseSettings {
-    public StudentSettings(){
+
+    /**
+     * Default constructor for the student settings.
+     */
+    public StudentSettings() {
     }
 
     /**
@@ -117,6 +123,7 @@ public class StudentSettings extends JFrame implements BaseSettings {
 
         return currentPanel;
     }
+
     /**
      * Creates a form panel for deleting a student.
      *
@@ -186,6 +193,7 @@ public class StudentSettings extends JFrame implements BaseSettings {
 
         return currentPanel;
     }
+
     /**
      * Creates a panel for displaying a labeled field component.
      *
@@ -203,6 +211,7 @@ public class StudentSettings extends JFrame implements BaseSettings {
         panel.setMaximumSize(new Dimension(Short.MAX_VALUE, component.getPreferredSize().height));
         return panel;
     }
+
     /**
      * Creates a left JPanel containing the addStudentForm and deleteStudentForm.
      *
@@ -238,9 +247,9 @@ public class StudentSettings extends JFrame implements BaseSettings {
         currentPanel.add(imageLabel, BorderLayout.CENTER);
         return currentPanel;
     }
+
     /**
      * Creates a JPanel with left and right panels merged into the main panel.
-     *
      * @param main      The JPanel representing the main panel. Must not be empty.
      * @param labelText The text for the label. Must not be blank.
      * @return The JPanel with the left and right panels merged into the main panel.

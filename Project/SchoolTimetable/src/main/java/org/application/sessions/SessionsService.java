@@ -19,13 +19,39 @@ import org.domain.models.Session;
 import java.text.MessageFormat;
 import java.util.List;
 
+/**
+ * Represents a service class for managing Session entities.
+ * This class defines the service operations that can be performed, specific to session service.
+ */
 public class SessionsService implements ISessionsService {
 
+    /**
+     * The session repository.
+     */
     private final ISessionRepository sessionRepository;
+
+    /**
+     * The discipline repository.
+     */
     private final IDisciplineRepository disciplineRepository;
+
+    /**
+     * The teacher repository.
+     */
     private final ITeacherRepository teacherRepository;
+
+    /**
+     * The student group repository.
+     */
     private final IStudentGroupRepository studentGroupRepository;
 
+    /**
+     * Initializes a new instance of the {@link SessionsService} class.
+     * @param sessionRepository The session repository.
+     * @param disciplineRepository The discipline repository.
+     * @param teacherRepository The teacher repository.
+     * @param studentGroupRepository The student group repository.
+     */
     @Inject
     public SessionsService(ISessionRepository sessionRepository, IDisciplineRepository disciplineRepository, ITeacherRepository teacherRepository, IStudentGroupRepository studentGroupRepository) {
         this.sessionRepository = sessionRepository;
@@ -34,6 +60,16 @@ public class SessionsService implements ISessionsService {
         this.studentGroupRepository = studentGroupRepository;
     }
 
+    /**
+     * Adds a new Session with the given type, half year and discipline name.
+     * @param type The type of the new Session.
+     * @param halfYear The half year of the new Session.
+     * @param disciplineName The discipline name of the new Session.
+     * @return The newly created Session.
+     * @throws SessionAdditionException If the Session could not be added.
+     * @throws DisciplineNotFoundException If the discipline could not be found.
+     * @throws ValidationException If the provided type, half year or discipline name are invalid.
+     */
     @Override
     public Session addSession(Session.Type type, String halfYear, String disciplineName) throws SessionAdditionException, DisciplineNotFoundException, ValidationException {
 
@@ -64,6 +100,14 @@ public class SessionsService implements ISessionsService {
         return session;
     }
 
+    /**
+     * Deletes the Session with the given id.
+     * @param sessionId The id of the Session to delete.
+     * @return True if the Session was deleted, false otherwise.
+     * @throws SessionNotFoundException If the Session could not be found.
+     * @throws SessionDeletionFailed If the Session could not be deleted.
+     * @throws ValidationException If the provided id is invalid.
+     */
     @Override
     public boolean deleteSession(int sessionId) throws SessionNotFoundException, SessionDeletionFailed, ValidationException {
 
@@ -83,6 +127,14 @@ public class SessionsService implements ISessionsService {
         return true;
     }
 
+    /**
+     * Deletes the Session with the given discipline name.
+     * @param disciplineName The discipline name of the Session to delete.
+     * @return True if the Session was deleted, false otherwise.
+     * @throws DisciplineNotFoundException If the discipline could not be found.
+     * @throws SessionNotFoundException If the Session could not be found.
+     * @throws SessionDeletionFailed If the Session could not be deleted.
+     */
     @Override
     public boolean deleteSession(String disciplineName) throws DisciplineNotFoundException, SessionNotFoundException, SessionDeletionFailed {
         var disciplines = disciplineRepository.readAll().stream().filter(d -> d.getName().equals(disciplineName)).toList();
@@ -104,6 +156,11 @@ public class SessionsService implements ISessionsService {
         return true;
     }
 
+    /**
+     * Deletes all Sessions.
+     * @return True if the Sessions were deleted, false otherwise.
+     * @throws SessionDeletionFailed If the Sessions could not be deleted.
+     */
     public boolean deleteAll() throws SessionDeletionFailed {
         try {
             sessionRepository.deleteMany(sessionRepository.readAll());
@@ -114,6 +171,13 @@ public class SessionsService implements ISessionsService {
         return true;
     }
 
+    /**
+     * Gets the Session with the given id.
+     * @param sessionId The id of the Session to get.
+     * @return The Session with the given id.
+     * @throws SessionNotFoundException If the Session could not be found.
+     * @throws ValidationException If the provided id is invalid.
+     */
     @Override
     public Session getSessionById(int sessionId) throws SessionNotFoundException, ValidationException {
 
@@ -126,11 +190,21 @@ public class SessionsService implements ISessionsService {
         return session;
     }
 
+    /**
+     * Gets all Sessions.
+     * @return A list of all Sessions.
+     */
     @Override
     public List<Session> getSessions() {
         return sessionRepository.readAll();
     }
 
+    /**
+     * Retrieves all Sessions with the given half year.
+     * @param hf The half year of the Session entities to retrieve.
+     * @return A list of Sessions with the given half year.
+     * @throws ValidationException If the provided half year is invalid.
+     */
     @Override
     public List<Session> getSessionsByHalfYear(String hf) throws ValidationException {
 
@@ -139,6 +213,15 @@ public class SessionsService implements ISessionsService {
         return sessionRepository.readAll().stream().filter(session -> session.getHalfYear().equals(hf)).toList();
     }
 
+    /**
+     * Adds a teacher to the Session with the given id.
+     * @param disciplineName The discipline name of the session.
+     * @param teacherName The name of the teacher.
+     * @return The Session with the given id.
+     * @throws DisciplineNotFoundException If the discipline could not be found.
+     * @throws SessionNotFoundException If the Session could not be found.
+     * @throws TeacherNotFoundException If the teacher could not be found.
+     */
     @Override
     public Session addTeacherToSession(String disciplineName, String teacherName) throws DisciplineNotFoundException, SessionNotFoundException, TeacherNotFoundException {
         var disciplines = disciplineRepository.readAll().stream().filter(d -> d.getName().equals(disciplineName)).toList();
@@ -175,6 +258,14 @@ public class SessionsService implements ISessionsService {
         return session;
     }
 
+    /**
+     * Adds a teacher to the Session with the given id.
+     * @param sessionId The id of the Session.
+     * @param teacherName The name of the teacher.
+     * @return The Session with the given id.
+     * @throws SessionNotFoundException If the Session could not be found.
+     * @throws TeacherNotFoundException If the teacher could not be found.
+     */
     @Override
     public Session addTeacherToSession(int sessionId, String teacherName) throws SessionNotFoundException, TeacherNotFoundException {
 
@@ -211,8 +302,16 @@ public class SessionsService implements ISessionsService {
         return session;
     }
 
+    /**
+     *
+     * @param disciplineName The discipline name of the session.
+     * @param groupName The name of the group.
+     * @return The Session with the given id.
+     * @throws StudentGroupNotFoundException If the student group could not be found.
+     * @throws DisciplineNotFoundException If the discipline could not be found.
+     */
     @Override
-    public Session addGroupToSession(String disciplineName, String groupName) throws StudentGroupNotFoundException, DisciplineNotFoundException, SessionNotFoundException {
+    public Session addGroupToSession(String disciplineName, String groupName) throws StudentGroupNotFoundException, DisciplineNotFoundException {
 
         if (groupName == null || groupName.isBlank()) {
             throw new StudentGroupNotFoundException("[Session Service] Group name is invalid");
