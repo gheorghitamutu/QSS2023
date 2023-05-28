@@ -16,12 +16,11 @@
     - [HTML Generator (Templates \& Vanilla)](#html-generator-templates--vanilla)
     - [Architecture (separation of concerns \& modularization)](#architecture-separation-of-concerns--modularization)
     - [Putting all together (writing models in Java for Hibernate \& Apache Derby)](#putting-all-together-writing-models-in-java-for-hibernate--apache-derby)
-    - [Presentation of GUI (technical)](#presentation-of-gui-technical)
-    - [HTML table generator (technical)](#html-table-generator-technical)
+    - [Technical documentation for developers (Javadoc)](#technical-documentation-for-developers-javadoc)
     - [CI/CD (Github Workflows)](#cicd-github-workflows)
   - [Unit Testing - design \& implementation (Phase 2: libraries \& validators)](#unit-testing---design--implementation-phase-2-libraries--validators)
     - [Frameworks (Mokito \& JaCoCo)](#frameworks-mokito--jacoco)
-    - [Hibernate Validartors (along with Jakarta)](#hibernate-validartors-along-with-jakarta)
+    - [Hibernate Validators (along with Jakarta)](#hibernate-validators-along-with-jakarta)
   - [Use of Assertions (Phase 3: doing things a bit different)](#use-of-assertions-phase-3-doing-things-a-bit-different)
     - [Putting everything together (Validators \& pre/post conditions along with class/loop invariants)](#putting-everything-together-validators--prepost-conditions-along-with-classloop-invariants)
   - [Documentation (technical \& customer side) \& Specific Contribution (Phase 4)](#documentation-technical--customer-side--specific-contribution-phase-4)
@@ -192,21 +191,7 @@ We didn't use any library for HTML table generation. We created a series of temp
 
 ### Architecture (separation of concerns & modularization)
 
-TODO: Cosmin (placeholder below for now)
-
-The architecture of this project is designed using a layered architecture pattern, with several distinct layers responsible for different functionalities. Here's an overview of the proposed architecture:
-
-**Presentation Layer**: This layer handles the user interface and interaction. It includes graphical interfaces (GUI) that allows users to interact with the application. The presentation layer communicates with the business layer to retrieve and display data, as well as to capture user input.
-
-**Business Layer**: The business layer contains the core logic of the application. It is responsible for processing and manipulating the data, enforcing business rules, and coordinating interactions between different components. In this project, the business layer would handle tasks such as managing the timetable entities, validating inputs, applying restrictions, and generating notifications for issues or conflicts.
-
-**Persistence Layer**: The persistence layer is responsible for interacting with the database and handling data storage and retrieval. It utilizes Hibernate as the Object-Relational Mapping (ORM) framework to map Java objects to the underlying Apache Derby database. This layer handles tasks like persisting entity objects, executing database queries, and managing transactions.
-
-**Domain/Model Layer**: The domain or model layer represents the core entities and data structures of the application. It encapsulates the business logic and defines the relationships between different entities, such as students, teachers, disciplines, and rooms. This layer provides the foundation for the application's functionality and serves as the bridge between the business and persistence layers.
-
-**Utilities/Supporting Components**: Apart from the main layers, there are additional supporting components and utilities. We have logging modules for capturing and logging application events, exception handling components for managing errors and exceptions, and configuration components for managing application settings.
-
-The proposed architecture promotes separation of concerns and modularization, enabling easier maintenance, testing, and scalability. It allows for the independent development and testing of different layers, promoting code reusability and flexibility. Additionally, the use of Hibernate with Apache Derby provides a seamless integration between the business and persistence layers, simplifying database operations and ensuring data consistency.
+An extended explanation of the chosen architecture cand be found [](./Project/docs/report/architecture.md).
 
 ### Putting all together (writing models in Java for Hibernate & Apache Derby)
 
@@ -229,11 +214,28 @@ Writing classes for Hibernate and Apache Derby using Java is relatively straight
 8. Querying: Hibernate provides various options for querying the database. You can use Hibernate Query Language (HQL), a powerful object-oriented query language similar to SQL, or Criteria API, which allows you to build queries programmatically using a type-safe API.
 
 9. Testing and Integration: It's crucial to test your classes and database interactions. You can write unit tests using frameworks like JUnit to verify the correctness of your Hibernate and Apache Derby code. Integration testing can be performed by running the application against a test database to ensure seamless interaction between Hibernate and Apache Derby.
-    
-TODO: Roberta & Radu
 
-### Presentation of GUI (technical)
-### HTML table generator (technical)
+### Technical documentation for developers (Javadoc)
+
+Using Javadoc for this project came with several benefits:
+
+1. Code Documentation: Javadoc enables you to generate comprehensive documentation directly from your source code. By documenting your classes, methods, and fields using Javadoc comments, you can provide clear explanations, descriptions, and usage instructions for each component of your application. This documentation serves as a valuable resource for developers who need to understand and work with the codebase.
+
+2. API Reference: Javadoc generates an API reference that outlines the public interfaces and functionalities of your application. This reference becomes a reliable source of information for other developers or team members who need to integrate or extend your faculty timetable management application. It helps them understand how to interact with your code, what classes and methods are available, and the purpose and behavior of each component.
+
+3. Automatic Generation: Javadoc simplifies the process of generating documentation by providing tools that automatically extract the Javadoc comments from your source code and generate HTML or other formats of documentation. This saves you time and effort that would otherwise be spent on creating and maintaining separate documentation files manually.
+
+4. Consistency and Standardization: Javadoc encourages a standardized format for documenting code across your project. By following Javadoc conventions and guidelines, you ensure consistency in the way information is presented, making it easier for developers to navigate and understand the codebase. It also promotes good coding practices and documentation habits within your development team.
+
+5. Readability and Clarity: Javadoc documentation is designed to be easily readable and structured. It includes sections for class descriptions, method summaries, parameter details, return values, exceptions, and more. This well-organized format enhances the clarity and comprehension of the code, making it easier for developers to consume and work with the faculty timetable management application.
+
+6. Integration with IDEs and Tools: Javadoc integrates seamlessly with popular Java IDEs (Integrated Development Environments) such as Eclipse, IntelliJ IDEA, and NetBeans. This allows developers to access the Javadoc documentation directly within their development environment, enabling them to view documentation tooltips, navigate to the corresponding documentation pages, and gain quick insights into the code's purpose and usage.
+
+7. Collaboration and Knowledge Sharing: Javadoc serves as a valuable communication tool within development teams. It helps team members share knowledge about the codebase, understand each other's contributions, and collaborate more effectively. It also aids in onboarding new team members by providing them with a comprehensive overview of the faculty timetable management application's architecture, components, and usage patterns.
+
+Overall, using Javadoc in the project ensures that your code is well-documented, promotes collaboration, and provides a reliable source of information for developers working on an application. It enhances the maintainability, readability, and overall quality of your codebase while facilitating effective communication and knowledge sharing within your development team.
+
+The full Javadoc documentation can be found [here](./Project/docs/site/apidocs/).
 
 ### CI/CD (Github Workflows)
 
@@ -252,6 +254,8 @@ We used GitHub CI/CD (Continuous Integration/Continuous Deployment) workflows an
 6. Visibility and Traceability: GitHub CI/CD workflows provide clear visibility into the status and progress of the build, test, and deployment processes. You can view detailed logs, artifacts, and reports generated during each workflow run. This visibility helps track the history of changes, diagnose issues, and trace back to specific commits or changesets, facilitating troubleshooting and debugging.
 
 7. Integration with Other Tools and Services: GitHub CI/CD workflows can be integrated with various tools and services, such as code coverage tools, static code analysis tools, and deployment services. This allows you to incorporate additional checks, generate reports, and deploy the application to different environments seamlessly.
+
+The workflows used in this project can be found [here](./.github/workflows/).
 
 ## Unit Testing - design & implementation (Phase 2: libraries & validators)
 
@@ -287,7 +291,9 @@ We used GitHub CI/CD (Continuous Integration/Continuous Deployment) workflows an
 
 Overall, JaCoCo offers a comprehensive set of tools and reports for measuring and improving code coverage in Java applications. By using JaCoCo in the project, you can enhance the reliability, quality, and maintainability of the faculty timetable management application through more thorough testing and code optimization.
 
-### Hibernate Validartors (along with Jakarta)
+The testing coverage report can be found [here](https://gheorghitamutu.github.io/QSS2023).
+
+### Hibernate Validators (along with Jakarta)
 
 Using Hibernate Validators, which are based on the Jakarta Bean Validation API (previously known as JSR 303), brings several benefits to the project:
 
