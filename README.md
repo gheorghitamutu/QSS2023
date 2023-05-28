@@ -195,7 +195,7 @@ We didn't use any library for HTML table generation. We created a series of temp
 
 ### Architecture (separation of concerns & modularization)
 
-An extended explanation of the chosen architecture cand be found [](./Project/docs/report/architecture.md).
+An extended explanation of the chosen architecture cand be found [here](./Project/docs/report/architecture.md).
 
 ### Putting all together (writing models in Java for Hibernate & Apache Derby)
 
