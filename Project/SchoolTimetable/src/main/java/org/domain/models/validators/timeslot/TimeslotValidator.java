@@ -4,7 +4,6 @@ import com.google.inject.Injector;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import org.GuiceInjectorSingleton;
-import org.dataaccess.room.IRoomRepository;
 import org.dataaccess.session.ISessionRepository;
 import org.dataaccess.timeslot.ITimeslotRepository;
 import org.domain.models.Room;
@@ -16,24 +15,41 @@ import java.util.Date;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+/**
+ * This class is the validator for the ValidTimeslot annotation.
+ */
 public class TimeslotValidator implements ConstraintValidator<ValidTimeslot, Timeslot> {
 
-
-    private IRoomRepository roomRepository;
+    /**
+     * The session repository.
+     */
     private ISessionRepository sessionRepository;
+
+    /**
+     * The timeslot repository.
+     */
     private ITimeslotRepository timeslotRepository;
 
+    /**
+     * This method initializes the session repository and the timeslot repository.
+     * @param constraintAnnotation The annotation.
+     */
     @Override
     public void initialize(ValidTimeslot constraintAnnotation) {
 
         Injector injector = GuiceInjectorSingleton.INSTANCE.getInjector();
         if (injector != null) {
-            roomRepository = injector.getInstance(IRoomRepository.class);
             sessionRepository = injector.getInstance(ISessionRepository.class);
             timeslotRepository = injector.getInstance(ITimeslotRepository.class);
         }
     }
 
+    /**
+     * This method checks if the timeslot is valid.
+     * @param value The timeslot.
+     * @param context The context.
+     * @return True if the timeslot is valid, false otherwise.
+     */
     @Override
     public boolean isValid(Timeslot value, ConstraintValidatorContext context) {
 

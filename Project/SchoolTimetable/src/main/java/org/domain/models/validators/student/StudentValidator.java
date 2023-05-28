@@ -12,12 +12,24 @@ import org.domain.models.Discipline;
 
 import java.util.Set;
 
+/**
+ * This class is the validator for the ValidStudent annotation.
+ */
 public class StudentValidator implements ConstraintValidator<ValidStudent, Student> {
 
+    /**
+     * The discipline repository.
+     */
     private IDisciplineRepository disciplineRepository;
+    /**
+     * The student group repository.
+     */
     private IStudentGroupRepository studentGroupRepository;
 
-
+    /**
+     * This method initializes the discipline repository and the student group repository.
+     * @param constraintAnnotation The annotation.
+     */
     @Override
     public void initialize(ValidStudent constraintAnnotation) {
         Injector injector = GuiceInjectorSingleton.INSTANCE.getInjector();
@@ -28,6 +40,12 @@ public class StudentValidator implements ConstraintValidator<ValidStudent, Stude
         }
     }
 
+    /**
+     * This method checks if the student is valid.
+     * @param value The student.
+     * @param context The context.
+     * @return True if the student is valid, false otherwise.
+     */
     @Override
     public boolean isValid(Student value, ConstraintValidatorContext context) {
 
