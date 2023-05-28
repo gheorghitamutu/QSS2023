@@ -12,6 +12,11 @@ import org.presentation.generators.*;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+
+/**
+ * The main generator class responsible for generating and saving various data as HTML files.
+ * This class contains methods for generating content lists, timetables, and saving all generated data in HTML format.
+ */
 public class MainGenerator {
     @Min(value = 1, message = "Version must be greater than 0")
     private final int version;
@@ -36,6 +41,11 @@ public class MainGenerator {
     private boolean listsGenerated;
     private boolean timetablesGenerated;
 
+    /**
+     * Constructs a MainGenerator object with a specified version for the timetable.
+     *
+     * @param version The version of the timetable. Must be greater than 0.
+     */
     public MainGenerator(
             @Min(value = 1, message = "Version must be greater than 0")
             int version) {
@@ -58,6 +68,11 @@ public class MainGenerator {
         this.separator = System.getProperty("file.separator");
     }
 
+    /**
+     * Generates lists for timetable pages content using different generators.
+     * This method creates instances of various generator classes and invokes the generate() method on each generator to perform specific tasks.
+     * After generating the lists, it sets the listsGenerated flag to true.
+     */
     public void generateLists(){
         List<BaseGenerator> generators = new ArrayList<>();
 
@@ -74,6 +89,12 @@ public class MainGenerator {
         this.listsGenerated = true;
     }
 
+    /**
+     * Generates timetables and free room lists.
+     * This method creates an instance of the TimetablesGenerator class and invokes the generate() method to generate timetables based on the provided data.
+     * It also creates an instance of the FreeRoomsGenerator class and invokes the generate() method to generate a list of free rooms.
+     * After generating the timetables and free rooms, it sets the timetablesGenerated flag to true.
+     */
     public void generateTimetables(){
         BaseGenerator timetablesGenerator = new TimetablesGenerator(generationDateString, timetablesDays, timetablesNames, timetablesData, freeRooms);
         timetablesGenerator.generate();
@@ -84,6 +105,12 @@ public class MainGenerator {
         this.timetablesGenerated = true;
     }
 
+    /**
+     * Saves data from a map with content from database to HTML files.
+     *
+     * @param dataMap   The map containing some data from database to be saved. Must not be empty.
+     * @param savePath  The path where the HTML files will be saved. Must not be blank.
+     */
     private void saveMap(
             @NotEmpty(message = "Data map must not be empty")
             Map<String, String> dataMap,
@@ -98,6 +125,13 @@ public class MainGenerator {
         }
     }
 
+    /**
+     * Saves all generated data.
+     * This method saves the content lists data and timetables data (if generated) to the specified save path.
+     * It also copies the style files to the save path.
+     *
+     * @param savePath  The path where the data will be saved as HTML files. Must not be blank.
+     */
     public void saveAllData(
             @NotBlank(message = "Save path must not be blank")
             String savePath){
