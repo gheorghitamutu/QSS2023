@@ -2,7 +2,6 @@
 
 - [Architecture](#architecture)
   - [Overview](#overview)
-      - [It encapsulates:](#it-encapsulates)
   - [Motivation](#motivation)
   - [Generic repository pattern](#generic-repository-pattern)
     - [Repositories](#repositories)
@@ -23,7 +22,8 @@ Image by [Daniel Rusnok](https://dev.to/danielrusnok).
 
 **1. Domain layer**
 - contains the **core business logic** of the application.
-##### It encapsulates: 
+
+**It encapsulates:** 
 - the **entities** that describe the **main concepts and rules** of the business domain
 - contains the **details neccesary about every concept (entity)** as well as **constraints** (such as validation logic) or the **relationships** between them
 - contains the **domain - related exceptions** that can be thrown by the application for custom **error handling** in the `application` layer
