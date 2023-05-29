@@ -1,5 +1,15 @@
 ## Architecture
 
+- [Architecture](#architecture)
+  - [Overview](#overview)
+      - [It encapsulates:](#it-encapsulates)
+  - [Motivation](#motivation)
+  - [Generic repository pattern](#generic-repository-pattern)
+    - [Repositories](#repositories)
+    - [Multiple database configuration environments](#multiple-database-configuration-environments)
+    - [Validation](#validation)
+    - [Dependency injection](#dependency-injection)
+    - [Error handling](#error-handling)
 
 ### Overview
 
