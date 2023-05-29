@@ -367,14 +367,21 @@ We were all involved in reviews and decisional aspects of the projects but ultim
     User-Guide Manual.
 
 #### Rosu Radu-Andrei
-    Use Case Diagram and Use Case Documentation.
-    Timetable HTML Generation part.
-    Backend integration on generator.
-    Generator integration to frontend.
-    Unit Tests for multiple services (Disciplines, Rooms, Sessions, StudentGroups, Teachers).
-    Preconditions, Postconditions and Invariants for all HTML Generator classes and methods.
-    Document the personal implementation with javadoc comments.
-    User-Guide Manual.
+    Phase 1:
+      - Use Case Diagram
+      - Use Case Documentation
+      - HTML Templates
+      - Timetable HTML Generation part
+      - Backend integration on generator
+      - Generator integration to frontend
+    Phase 2:
+      - Unit Tests for multiple services (Disciplines, Rooms, Sessions, StudentGroups, Teachers)
+    Phase 3:
+      - Preconditions, Postconditions and Invariants for all HTML Generator classes and methods
+    Phase 4:
+      - Document the personal implementation with javadoc comments
+      - User-Guide Manual
+
 
 #### Cosmin Modoranu
     Implementare:
