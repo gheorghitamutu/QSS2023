@@ -136,7 +136,7 @@ jobs:
     - name: Add tag data to enviroment
       run: echo "VERSION=0.0.1" >> $GITHUB_ENV
      
-    - uses: actions/download-artifact@v2
+    - uses: actions/download-artifact@v4.1.7
       with:
         name: Package
         path: staging
